@@ -1,0 +1,45 @@
+schema_version: "2.0"
+title: "Neuro: Single Neuron"
+description: "Single Izhikevich neuron with current injection and monitors."
+models:
+  - repo: Biosimulant/biomodels
+    alias: current
+    manifest_path: models/neuro-step-current/model.yaml
+    parameters:
+      I: 10.0
+  - repo: Biosimulant/biomodels
+    alias: neuron
+    manifest_path: models/neuro-izhikevich-population/model.yaml
+    parameters:
+      n: 1
+      preset: "RS"
+      sample_indices: [0]
+  - repo: Biosimulant/biomodels
+    alias: spike_mon
+    manifest_path: models/neuro-spike-monitor/model.yaml
+    parameters:
+      max_neurons: 1
+      width: 600
+      height: 200
+  - repo: Biosimulant/biomodels
+    alias: state_mon
+    manifest_path: models/neuro-state-monitor/model.yaml
+    parameters:
+      max_points: 5000
+  - repo: Biosimulant/biomodels
+    alias: metrics
+    manifest_path: models/neuro-metrics/model.yaml
+    parameters:
+      n_neurons: 1
+runtime:
+  duration: 0.5
+  tick_dt: 0.0001
+  initial_inputs: {}
+wiring:
+  - from: current.current
+    to: [neuron.current]
+  - from: neuron.spikes
+    to: [spike_mon.spikes, metrics.spikes]
+  - from: neuron.state
+    to: [state_mon.state]
+

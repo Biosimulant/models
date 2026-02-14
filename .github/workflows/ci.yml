@@ -30,7 +30,10 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install validation dependencies
-        run: pip install pyyaml
+        run: |
+          pip install pyyaml
+          # Needed to import bsim entrypoints referenced by curated model manifests.
+          pip install "bsim @ git+https://github.com/Pledre/bsim.git@main"
       - name: Validate manifest schema
         run: python scripts/validate_manifests.py
       - name: Check entrypoints
@@ -44,7 +47,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install validation dependencies
-        run: pip install pyyaml
+        run: |
+          pip install pyyaml
+          pip install "bsim @ git+https://github.com/Pledre/bsim.git@main"
       - name: Smoke run checks (sandbox-compatible image)
         run: |
           python scripts/validate_manifests.py

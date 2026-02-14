@@ -1,0 +1,29 @@
+schema_version: "2.0"
+title: "Brain: Vision Pipeline (Example)"
+description: "Minimal example pipeline: Eye -> LGN -> SC."
+models:
+  - repo: Biosimulant/biomodels
+    alias: eye
+    manifest_path: models/brain-eye/model.yaml
+    parameters: {}
+    min_dt: 0.1
+  - repo: Biosimulant/biomodels
+    alias: lgn
+    manifest_path: models/brain-lgn/model.yaml
+    parameters: {}
+    min_dt: 0.1
+  - repo: Biosimulant/biomodels
+    alias: sc
+    manifest_path: models/brain-sc/model.yaml
+    parameters: {}
+    min_dt: 0.1
+runtime:
+  duration: 0.2
+  tick_dt: 0.1
+  initial_inputs: {}
+wiring:
+  - from: eye.visual_stream
+    to: [lgn.retina]
+  - from: lgn.thalamus
+    to: [sc.vision]
+

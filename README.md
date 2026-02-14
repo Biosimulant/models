@@ -6,6 +6,7 @@ Public curated monorepo for `bsim` model packs and composed spaces.
 - `models/<model-slug>/`: one model package per folder, each with `model.yaml`.
 - `spaces/<space-slug>/`: composed spaces with `space.yaml`.
 - `libs/`: shared helper code for curated models.
+- `examples/`: deprecated pointer (content moved under `models/` and `spaces/`).
 - `templates/model-pack/`: starter template for new model packs.
 - `scripts/`: manifest and entrypoint validation scripts.
 

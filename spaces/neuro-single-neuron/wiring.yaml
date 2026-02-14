@@ -1,0 +1,22 @@
+# Wiring-spec (local) equivalent of spaces/neuro-single-neuron/space.yaml
+modules:
+  current:
+    class: bsim.packs.neuro.StepCurrent
+    args: { I: 10.0 }
+  neuron:
+    class: bsim.packs.neuro.IzhikevichPopulation
+    args: { n: 1, preset: "RS", sample_indices: [0] }
+  spike_mon:
+    class: bsim.packs.neuro.SpikeMonitor
+    args: { max_neurons: 1, width: 600, height: 200 }
+  state_mon:
+    class: bsim.packs.neuro.StateMonitor
+    args: { max_points: 5000 }
+  metrics:
+    class: bsim.packs.neuro.NeuroMetrics
+    args: { n_neurons: 1 }
+wiring:
+  - { from: "current.current", to: ["neuron.current"] }
+  - { from: "neuron.spikes", to: ["spike_mon.spikes", "metrics.spikes"] }
+  - { from: "neuron.state", to: ["state_mon.state"] }
+
