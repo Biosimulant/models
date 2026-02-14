@@ -1,28 +1,161 @@
 # biomodels
 
-Public curated monorepo for `bsim` model packs and composed spaces.
+Public curated monorepo of biological simulation model packs and composed spaces for the **bsim** platform. Models are modular, composable components that can be wired together into full simulation scenarios without writing code — just YAML.
+
+## What's Inside
+
+### Models (18 packages)
+
+Each model is a self-contained simulation component with a `model.yaml` manifest.
+
+**Neuroscience** — spiking neural networks, synaptic dynamics, and neural monitoring:
+
+| Model | Description |
+|-------|-------------|
+| `neuro-izhikevich-population` | Spiking neuron population (Regular Spiking, Fast Spiking presets) |
+| `neuro-exp-synapse-current` | Exponential-decay synapses with configurable connectivity |
+| `neuro-step-current` | Constant/step current injection into neurons |
+| `neuro-poisson-input` | Poisson-distributed spike train generator |
+| `neuro-spike-monitor` | Spike raster visualization |
+| `neuro-rate-monitor` | Firing rate computation and display |
+| `neuro-state-monitor` | Neuron state variable tracking (membrane potential, etc.) |
+| `neuro-metrics` | Summary statistics from spike streams |
+
+**Ecology** — population dynamics, environments, and ecosystem interactions:
+
+| Model | Description |
+|-------|-------------|
+| `ecology-environment` | Broadcasts environmental conditions (temperature, water, food, sunlight) |
+| `ecology-organism-population` | Population dynamics with birth, death, and predation |
+| `ecology-predator-prey-interaction` | Predation rates and functional response |
+| `ecology-population-monitor` | Population size tracking over time |
+| `ecology-phase-space-monitor` | Predator vs prey phase-space visualization |
+| `ecology-metrics` | Ecosystem summary statistics |
+
+**Brain / Vision** — sensory processing pipeline (custom Python):
+
+| Model | Description |
+|-------|-------------|
+| `brain-eye` | Synthetic retinal visual stream generator |
+| `brain-lgn` | Lateral geniculate nucleus relay (retina → thalamus) |
+| `brain-sc` | Superior colliculus visual signal processor |
+
+**Example / Template**:
+
+| Model | Description |
+|-------|-------------|
+| `example-hh` | Reference Hodgkin-Huxley model demonstrating pack layout |
+
+### Spaces (6 composed simulations)
+
+Spaces wire multiple models into runnable simulation scenarios.
+
+| Space | Models | Description |
+|-------|--------|-------------|
+| `neuro-single-neuron` | 5 | Single Izhikevich neuron with step current, monitors, and metrics |
+| `neuro-microcircuit` | 12 | Balanced E/I microcircuit: 40 excitatory + 10 inhibitory neurons, Poisson input, recurrent synaptic connectivity |
+| `brain-vision-pipeline` | 3 | Sensory processing chain: Eye → LGN → Superior Colliculus |
+| `ecology-predator-prey` | 8 | Classic Lotka-Volterra dynamics (800 rabbits, 100 foxes) with environmental coupling |
+| `ecology-temperature-control` | 8 | Temperature-sensitive ecosystem with exposed parameter sweeps |
+| `example-space` | 1 | Minimal tutorial space with the example Hodgkin-Huxley model |
 
 ## Layout
-- `models/<model-slug>/`: one model package per folder, each with `model.yaml`.
-- `spaces/<space-slug>/`: composed spaces with `space.yaml`.
-- `libs/`: shared helper code for curated models.
-- `examples/`: deprecated pointer (content moved under `models/` and `spaces/`).
-- `templates/model-pack/`: starter template for new model packs.
-- `scripts/`: manifest and entrypoint validation scripts.
 
-## Linking in bsim-platform
-- Root manifests can be linked with `manifest_path=model.yaml` or `space.yaml`.
-- Subdirectory manifests must be linked with explicit `manifest_path`, for example:
-  - `models/hodgkin-huxley/model.yaml`
-  - `spaces/ecosystem/space.yaml`
+```
+biomodels/
+├── models/<model-slug>/     # One model package per folder, each with model.yaml
+├── spaces/<space-slug>/     # Composed spaces with space.yaml
+├── libs/                    # Shared helper code for curated models
+├── templates/model-pack/    # Starter template for new model packs
+├── scripts/                 # Manifest and entrypoint validation scripts
+├── docs/                    # Governance documentation
+└── .github/workflows/       # CI/CD pipeline
+```
 
-## External Repos
-External authors can keep models in independent repositories and link them directly in `bsim-platform`.
-This monorepo is curated, not exclusive.
+## How It Works
 
-## bsim Install
-Model authors should install `bsim` from GitHub:
+### Model Interface
+
+Every model implements the `bsim.BioModule` interface:
+
+- **`inputs()`** — declares named input signals the module consumes
+- **`outputs()`** — declares named output signals the module produces
+- **`advance_to(t)`** — advances the model's internal state to time `t`
+
+Most models (14 of 18) are configuration-only — they reference built-in `bsim.packs` classes and customize behavior through `init_kwargs` in `model.yaml`. Four models (`brain-eye`, `brain-lgn`, `brain-sc`, `example-hh`) include custom Python source.
+
+### Wiring
+
+Spaces connect models by routing outputs to inputs in `space.yaml`:
+
+```yaml
+wiring:
+  - from: current_source.current
+    to: [neuron.input_current]
+  - from: neuron.spikes
+    to: [spike_monitor.spikes, rate_monitor.spikes]
+```
+
+No code changes needed to recombine models into new configurations.
+
+### Running a Space
+
+Spaces are loaded and executed by the `bsim-platform`. The platform reads `space.yaml`, instantiates models from their manifests, wires signals, and runs the simulation loop at the configured `tick_dt` timestep for the specified `duration`.
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.11+
+- `bsim` framework
+
+### Install bsim
 
 ```bash
-pip install "bsim @ git+https://github.com/<org>/bsim.git@<ref>"
+pip install "bsim @ git+https://github.com/BioSimulant/bsim.git@main"
 ```
+
+### Create a New Model
+
+1. Copy `templates/model-pack/` to `models/<your-model-slug>/`
+2. Edit `model.yaml` with metadata, entrypoint, and pinned dependencies
+3. Implement your module (subclass `bsim.BioModule` or use a built-in pack)
+4. Validate: `python scripts/validate_manifests.py && python scripts/check_entrypoints.py`
+
+### Create a New Space
+
+1. Create `spaces/<your-space-slug>/space.yaml`
+2. Reference models by `manifest_path` (e.g., `models/neuro-step-current/model.yaml`)
+3. Define wiring between model outputs and inputs
+4. Set `runtime.duration` and `runtime.tick_dt`
+
+## Linking in bsim-platform
+
+- Root manifests can be linked with `manifest_path=model.yaml` or `space.yaml`
+- Subdirectory manifests require explicit paths:
+  - `models/neuro-izhikevich-population/model.yaml`
+  - `spaces/neuro-microcircuit/space.yaml`
+
+## External Repos
+
+External authors can keep models in independent repositories and link them directly in `bsim-platform`. This monorepo is curated, not exclusive.
+
+## Validation & CI
+
+Three scripts enforce repository integrity on every push:
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/validate_manifests.py` | Schema validation for all model.yaml and space.yaml files |
+| `scripts/check_entrypoints.py` | Verifies Python entrypoints are importable and callable |
+| `scripts/check_public_boundary.sh` | Prevents business-sensitive content in this public repo |
+
+The CI pipeline (`.github/workflows/ci.yml`) runs: **secret scan** → **manifest validation** → **smoke sandbox** (Docker).
+
+## Contributing
+
+- All dependencies must use exact version pinning (`==`)
+- Model slugs use kebab-case with domain prefix (`neuro-`, `ecology-`, `brain-`)
+- Custom modules must follow the `bsim.BioModule` interface
+- Pre-commit hooks enforce trailing whitespace, EOF newlines, YAML syntax, and secret detection
+- See [docs/PUBLIC_INTERNAL_BOUNDARY.md](docs/PUBLIC_INTERNAL_BOUNDARY.md) for content policy

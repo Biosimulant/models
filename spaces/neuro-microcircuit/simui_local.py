@@ -8,7 +8,7 @@ Demonstrates:
 - Config-driven simulation via SimUI controls
 
 Run:
-    pip install "bsim[ui] @ git+https://github.com/Pledre/bsim.git@<ref>"
+    pip install "bsim[ui] @ git+https://github.com/BioSimulant/bsim.git@<ref>"
     python spaces/neuro-microcircuit/simui_local.py
 
 Then open http://localhost:8765 in your browser.

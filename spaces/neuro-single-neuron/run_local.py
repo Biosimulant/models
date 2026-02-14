@@ -9,7 +9,7 @@ Demonstrates:
 - Spike collection and raster plot generation
 
 Run:
-    pip install "bsim @ git+https://github.com/Pledre/bsim.git@<ref>"
+    pip install "bsim @ git+https://github.com/BioSimulant/bsim.git@<ref>"
     python spaces/neuro-single-neuron/run_local.py
 """
 from __future__ import annotations
