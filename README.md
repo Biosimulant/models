@@ -1,4 +1,4 @@
-# biomodels
+# models
 
 Public curated monorepo of biological simulation model packs and composed spaces for the **bsim** platform. Models are modular, composable components that can be wired together into full simulation scenarios without writing code — just YAML.
 
@@ -62,7 +62,7 @@ Spaces wire multiple models into runnable simulation scenarios.
 ## Layout
 
 ```
-biomodels/
+models/
 ├── models/<model-slug>/     # One model package per folder, each with model.yaml
 ├── spaces/<space-slug>/     # Composed spaces with space.yaml
 ├── libs/                    # Shared helper code for curated models
@@ -159,3 +159,12 @@ The CI pipeline (`.github/workflows/ci.yml`) runs: **secret scan** → **manifes
 - Custom modules must follow the `bsim.BioModule` interface
 - Pre-commit hooks enforce trailing whitespace, EOF newlines, YAML syntax, and secret detection
 - See [docs/PUBLIC_INTERNAL_BOUNDARY.md](docs/PUBLIC_INTERNAL_BOUNDARY.md) for content policy
+
+## License
+
+This repository is dual-licensed:
+
+- **Code** (scripts, templates, Python modules): Apache-2.0 (`LICENSE-CODE.txt`)
+- **Model/content** (manifests, docs, wiring/config): CC BY 4.0 (`LICENSE-CONTENT.txt`)
+
+Attribution guidance: `ATTRIBUTION.md`

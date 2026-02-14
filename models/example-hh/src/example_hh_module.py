@@ -1,4 +1,4 @@
-"""Example model entrypoint for biomodels monorepo validation."""
+"""Example model entrypoint for models monorepo validation."""
 
 
 def create_model(**kwargs):

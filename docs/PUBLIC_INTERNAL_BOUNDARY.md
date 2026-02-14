@@ -1,6 +1,6 @@
 # Public/Internal Boundary
 
-`biomodels` is public.
+`models` is public.
 
 ## Allowed
 - Model manifests (`model.yaml`) and space manifests (`space.yaml`)

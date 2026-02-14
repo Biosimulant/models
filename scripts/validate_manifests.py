@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate model.yaml and space.yaml manifests in biomodels."""
+"""Validate model.yaml and space.yaml manifests in models."""
 
 from __future__ import annotations
 

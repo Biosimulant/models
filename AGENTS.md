@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Instructions for AI agents working in the biomodels repository.
+Instructions for AI agents working in the models repository.
 
 ## Repository Purpose
 
@@ -9,7 +9,7 @@ This is a **public** curated monorepo of biological simulation model packs and c
 ## Repository Structure
 
 ```
-biomodels/
+models/
 ├── models/          # 18 model packages, each with a model.yaml manifest
 ├── spaces/          # 6 composed simulation spaces, each with a space.yaml manifest
 ├── libs/            # Shared helper code for curated models
