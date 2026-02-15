@@ -10,7 +10,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from bsim.visuals import VisualSpec
 
 from bsim import BioModule
-from bsim.signals import BioSignal
+from bsim.signals import BioSignal, SignalMetadata
 
 
 class RateMonitor(BioModule):
@@ -37,17 +37,21 @@ class RateMonitor(BioModule):
         self._spike_times: List[float] = []
         self._rate_series: List[List[float]] = []  # [[t, rate], ...]
         self._last_t: float = 0.0
+        self._last_rate: float = 0.0
+        self._outputs: Dict[str, BioSignal] = {}
 
     def inputs(self) -> Set[str]:
         return {"spikes"}
 
     def outputs(self) -> Set[str]:
-        return set()
+        return {"rate_state"}
 
     def reset(self) -> None:
         self._spike_times = []
         self._rate_series = []
         self._last_t = 0.0
+        self._last_rate = 0.0
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         signal = signals.get("spikes")
@@ -69,15 +73,32 @@ class RateMonitor(BioModule):
         rate = n_in_window / (self.window_size * self.n_neurons) if self.n_neurons > 0 else 0.0
         self._rate_series.append([t, rate])
         self._last_t = t
+        self._last_rate = float(rate)
 
         # Trim old spike times for memory efficiency
         self._spike_times = [st for st in self._spike_times if st >= window_start]
 
     def advance_to(self, t: float) -> None:
-        return
+        source = getattr(self, "_world_name", self.__class__.__name__)
+        recent = self._rate_series[-min(500, len(self._rate_series)):] if self._rate_series else []
+        self._outputs = {
+            "rate_state": BioSignal(
+                source=source,
+                name="rate_state",
+                value={
+                    "t": t,
+                    "rate_hz": self._last_rate,
+                    "window_s": float(self.window_size),
+                    "n_neurons": int(self.n_neurons),
+                    "recent": [[float(tt), float(r)] for tt, r in recent],
+                },
+                time=t,
+                metadata=SignalMetadata(description="Population firing rate state", kind="state", units="Hz"),
+            )
+        }
 
     def get_outputs(self) -> Dict[str, BioSignal]:
-        return {}
+        return dict(self._outputs)
 
     def visualize(self) -> Optional["VisualSpec"]:
         if not self._rate_series:

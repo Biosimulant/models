@@ -67,6 +67,9 @@ def _validate_space_manifest(path: Path) -> list[str]:
         if not isinstance(entry, dict):
             errors.append(f"{path}: models[{idx}] must be a mapping")
             continue
+        alias = entry.get("alias")
+        if not isinstance(alias, str) or not alias.strip():
+            errors.append(f"{path}: models[{idx}] missing required alias")
         repo = entry.get("repo") or entry.get("repo_full_name")
         if not isinstance(repo, str) or not repo.strip():
             errors.append(f"{path}: models[{idx}] missing repo/repo_full_name")
@@ -80,10 +83,16 @@ def _validate_space_manifest(path: Path) -> list[str]:
         if not isinstance(repo, str):
             continue
         manifest_path = entry.get("manifest_path")
-        if refs.get(repo, 0) > 1 and (not isinstance(manifest_path, str) or not manifest_path.strip()):
-            errors.append(
-                f"{path}: models[{idx}] requires manifest_path because repo '{repo}' appears multiple times"
-            )
+        if not isinstance(manifest_path, str) or not manifest_path.strip():
+            errors.append(f"{path}: models[{idx}] missing required manifest_path")
+            continue
+
+        target = (ROOT / manifest_path).resolve()
+        # Ensure manifest_path is repo-relative and exists.
+        if ROOT not in target.parents and target != ROOT:
+            errors.append(f"{path}: models[{idx}].manifest_path must be repo-relative: {manifest_path}")
+        elif not target.exists():
+            errors.append(f"{path}: models[{idx}].manifest_path does not exist: {manifest_path}")
 
     return errors
 

@@ -11,7 +11,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from bsim.visuals import VisualSpec
 
 from bsim import BioModule
-from bsim.signals import BioSignal
+from bsim.signals import BioSignal, SignalMetadata
 
 
 class PopulationMonitor(BioModule):
@@ -27,16 +27,18 @@ class PopulationMonitor(BioModule):
         self.min_dt = min_dt
         self.max_points = max_points
         self._data: Dict[str, List[Dict[str, float]]] = {}
+        self._outputs: Dict[str, BioSignal] = {}
 
     def inputs(self) -> Set[str]:
         return {"population_state"}
 
     def outputs(self) -> Set[str]:
-        return set()
+        return {"population_summary"}
 
     def reset(self) -> None:
         """Reset collected data."""
         self._data = {}
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         signal = signals.get("population_state")
@@ -56,10 +58,28 @@ class PopulationMonitor(BioModule):
             self._data[species] = self._data[species][-self.max_points:]
 
     def advance_to(self, t: float) -> None:
-        return
+        latest: Dict[str, int] = {}
+        for species, hist in self._data.items():
+            if hist:
+                latest[species] = int(hist[-1]["count"])
+
+        source = getattr(self, "_world_name", self.__class__.__name__)
+        self._outputs = {
+            "population_summary": BioSignal(
+                source=source,
+                name="population_summary",
+                value={
+                    "t": float(t),
+                    "latest_counts": latest,
+                    "n_species": int(len(latest)),
+                },
+                time=float(t),
+                metadata=SignalMetadata(description="Population monitor summary", kind="state"),
+            )
+        }
 
     def get_outputs(self) -> Dict[str, BioSignal]:
-        return {}
+        return dict(self._outputs)
 
     def visualize(self) -> Optional["VisualSpec"]:
         """Generate combined population timeseries for all species."""

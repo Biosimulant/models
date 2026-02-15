@@ -10,7 +10,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from bsim.visuals import VisualSpec
 
 from bsim import BioModule
-from bsim.signals import BioSignal
+from bsim.signals import BioSignal, SignalMetadata
 
 
 class StateMonitor(BioModule):
@@ -27,15 +27,17 @@ class StateMonitor(BioModule):
         self.min_dt = min_dt
         self.max_points = max_points
         self._series: Dict[int, List[List[float]]] = {}  # neuron_idx -> [[t, v], ...]
+        self._outputs: Dict[str, BioSignal] = {}
 
     def inputs(self) -> Set[str]:
         return {"state"}
 
     def outputs(self) -> Set[str]:
-        return set()
+        return {"voltage_summary"}
 
     def reset(self) -> None:
         self._series = {}
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         signal = signals.get("state")
@@ -56,10 +58,31 @@ class StateMonitor(BioModule):
                 self._series[idx] = self._series[idx][-self.max_points:]
 
     def advance_to(self, t: float) -> None:
-        return
+        # Emit a compact summary signal (latest samples + bounded recent traces).
+        latest: Dict[int, float] = {}
+        recent: Dict[int, List[List[float]]] = {}
+        for idx, points in self._series.items():
+            if points:
+                latest[idx] = float(points[-1][1])
+                recent[idx] = points[-min(200, len(points)):]
+
+        source = getattr(self, "_world_name", self.__class__.__name__)
+        self._outputs = {
+            "voltage_summary": BioSignal(
+                source=source,
+                name="voltage_summary",
+                value={
+                    "t": t,
+                    "latest_v_mV": latest,
+                    "recent": recent,
+                },
+                time=t,
+                metadata=SignalMetadata(description="Voltage trace summary", kind="state", units="mV"),
+            )
+        }
 
     def get_outputs(self) -> Dict[str, BioSignal]:
-        return {}
+        return dict(self._outputs)
 
     def visualize(self) -> Optional["VisualSpec"]:
         if not self._series:

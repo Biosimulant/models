@@ -67,6 +67,7 @@ class PredatorPreyInteraction(BioModule):
         self._predator_count = 0
         self._time = 0.0
         self._history = []
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         prey = signals.get("prey_state")
@@ -220,6 +221,7 @@ class CompetitionInteraction(BioModule):
         self._populations = {}
         self._time = 0.0
         self._history = []
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         signal = signals.get("population_state")
@@ -338,6 +340,7 @@ class MutualismInteraction(BioModule):
         self._species_a_count = 0
         self._species_b_count = 0
         self._time = 0.0
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         a_state = signals.get("species_a_state")

@@ -169,6 +169,7 @@ class OrganismPopulation(BioModule):
         self._current_conditions = {}
         self._pending_deaths = 0
         self._food_from_predation = 0.0
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         signal = signals.get("conditions")

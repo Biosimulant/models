@@ -12,7 +12,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from bsim.visuals import VisualSpec
 
 from bsim import BioModule
-from bsim.signals import BioSignal
+from bsim.signals import BioSignal, SignalMetadata
 
 
 class PhaseSpaceMonitor(BioModule):
@@ -43,12 +43,13 @@ class PhaseSpaceMonitor(BioModule):
         self._current_x: int = 0
         self._current_y: int = 0
         self._time: float = 0.0
+        self._outputs: Dict[str, BioSignal] = {}
 
     def inputs(self) -> Set[str]:
         return {"population_state"}
 
     def outputs(self) -> Set[str]:
-        return set()
+        return {"phase_point"}
 
     def reset(self) -> None:
         self._x_values = []
@@ -56,6 +57,7 @@ class PhaseSpaceMonitor(BioModule):
         self._current_x = 0
         self._current_y = 0
         self._time = 0.0
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         signal = signals.get("population_state")
@@ -79,8 +81,25 @@ class PhaseSpaceMonitor(BioModule):
             self._x_values = self._x_values[-self.max_points:]
             self._y_values = self._y_values[-self.max_points:]
 
+        source = getattr(self, "_world_name", self.__class__.__name__)
+        self._outputs = {
+            "phase_point": BioSignal(
+                source=source,
+                name="phase_point",
+                value={
+                    "t": float(t),
+                    "x_species": self.x_species,
+                    "y_species": self.y_species,
+                    "x": int(self._current_x),
+                    "y": int(self._current_y),
+                },
+                time=float(t),
+                metadata=SignalMetadata(description="Phase space current point", kind="state"),
+            )
+        }
+
     def get_outputs(self) -> Dict[str, BioSignal]:
-        return {}
+        return dict(self._outputs)
 
     def visualize(self) -> Optional["VisualSpec"]:
         """Generate SVG phase space plot."""

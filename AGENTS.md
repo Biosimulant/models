@@ -4,13 +4,13 @@ Instructions for AI agents working in the models repository.
 
 ## Repository Purpose
 
-This is a **public** curated monorepo of biological simulation model packs and composed simulation spaces for the [bsim](https://github.com/BioSimulant/bsim) platform. It provides reusable, composable biomodules across neuroscience, ecology, and brain/vision domains.
+This is a **public** curated monorepo of biological simulation model packs and composed simulation spaces for the [bsim](https://github.com/BioSimulant/bsim) platform. It provides reusable, composable biomodules across neuroscience, ecology, and cellular domains.
 
 ## Repository Structure
 
 ```
 models/
-├── models/          # 18 model packages, each with a model.yaml manifest
+├── models/          # 20 model packages, each with a model.yaml manifest
 ├── spaces/          # 6 composed simulation spaces, each with a space.yaml manifest
 ├── libs/            # Shared helper code for curated models
 ├── templates/       # Starter template for new model packs
@@ -60,12 +60,10 @@ All new models and spaces must satisfy the acceptance criteria in [STANDARDS.md]
 5. Ensure all dependencies use exact version pinning (`==`)
 6. Run validation: `python scripts/validate_manifests.py && python scripts/check_entrypoints.py`
 
-### Built-in vs Custom Models
+### Model Implementation Notes
 
-- **14 models** use built-in `bsim.packs` entrypoints (no custom Python needed — configuration only via `model.yaml`)
-- **4 models** have custom Python source code (brain-retina-encoder, brain-lgn-relay, brain-sc-integrator, example-hh)
-- When editing built-in models, only modify `model.yaml` parameters
-- When editing custom models, modify both the Python source and `model.yaml`
+- Most curated models include Python source in `src/` (entrypoint `src.<module>:<ClassName>`).
+- When making changes, keep `outputs()` accurate (monitors/metrics must emit real output signals in addition to visuals).
 
 ### Creating a New Space
 
@@ -106,7 +104,7 @@ Full conventions, interface contracts, and acceptance checklists are in [STANDAR
 - All YAML manifests use `schema_version: "2.0"`
 - Python dependencies must be pinned with exact versions (`==`)
 - Custom Python modules follow the `bsim.BioModule` interface contract
-- Model slugs use kebab-case with domain prefix (e.g., `neuro-`, `ecology-`, `brain-`)
+- Model slugs use kebab-case with domain prefix (e.g., `neuro-`, `ecology-`, `virtualcell-`)
 - Every model must include unit tests in `tests/test_<module>.py`
 - Pre-commit hooks enforce trailing whitespace, EOF newlines, YAML syntax, and secret detection
 
@@ -116,9 +114,7 @@ Full conventions, interface contracts, and acceptance checklists are in [STANDAR
 |--------|--------|---------|
 | `neuro-` | Neuroscience (spiking neurons, synapses, monitors) | `neuro-izhikevich-population` |
 | `ecology-` | Ecosystem dynamics (populations, environment) | `ecology-predator-prey-interaction` |
-| `brain-` | Brain/sensory processing pipelines | `brain-retina-encoder`, `brain-lgn-relay` |
 | `virtualcell-` | Cellular and molecular biology | `virtualcell-arc-grn`, `virtualcell-perturbation-source` |
-| `example-` | Templates and reference implementations | `example-hh` |
 
 ## Dependencies
 

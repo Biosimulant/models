@@ -4,7 +4,7 @@ Public curated monorepo of biological simulation model packs and composed spaces
 
 ## What's Inside
 
-### Models (18 packages)
+### Models (20 packages)
 
 Each model is a self-contained simulation component with a `model.yaml` manifest.
 
@@ -13,6 +13,8 @@ Each model is a self-contained simulation component with a `model.yaml` manifest
 | Model | Description |
 |-------|-------------|
 | `neuro-izhikevich-population` | Spiking neuron population (Regular Spiking, Fast Spiking presets) |
+| `neuro-hodgkin-huxley-population` | Conductance-based Hodgkin-Huxley neuron population |
+| `neuro-hodgkin-huxley-state-monitor` | Detailed HH state monitor (V, gates, ionic currents) |
 | `neuro-exp-synapse-current` | Exponential-decay synapses with configurable connectivity |
 | `neuro-step-current` | Constant/step current injection into neurons |
 | `neuro-poisson-input` | Poisson-distributed spike train generator |
@@ -32,19 +34,14 @@ Each model is a self-contained simulation component with a `model.yaml` manifest
 | `ecology-phase-space-monitor` | Predator vs prey phase-space visualization |
 | `ecology-population-metrics` | Ecosystem summary statistics |
 
-**Brain / Vision** — sensory processing pipeline (custom Python):
+**Virtual Cell** — gene regulatory networks, perturbations, and expression monitoring:
 
 | Model | Description |
 |-------|-------------|
-| `brain-retina-encoder` | Synthetic retinal visual stream generator |
-| `brain-lgn-relay` | Lateral geniculate nucleus relay (retina → thalamus) |
-| `brain-sc-integrator` | Superior colliculus visual signal processor |
-
-**Example / Template**:
-
-| Model | Description |
-|-------|-------------|
-| `example-hh` | Reference Hodgkin-Huxley model demonstrating pack layout |
+| `virtualcell-perturbation-source` | Defines gene perturbations (knockout/overexpression) over time |
+| `virtualcell-arc-grn` | Toy GRN-based virtual cell producing expression profiles |
+| `virtualcell-expression-translator` | Translates expression profiles into neural input currents |
+| `virtualcell-expression-monitor` | Visualizes gene expression fold-changes and timeseries |
 
 ### Spaces (6 composed simulations)
 
@@ -53,11 +50,10 @@ Spaces wire multiple models into runnable simulation scenarios.
 | Space | Models | Description |
 |-------|--------|-------------|
 | `neuro-single-neuron` | 5 | Single Izhikevich neuron with step current, monitors, and metrics |
-| `neuro-microcircuit` | 12 | Balanced E/I microcircuit: 40 excitatory + 10 inhibitory neurons, Poisson input, recurrent synaptic connectivity |
-| `brain-vision-pipeline` | 3 | Sensory processing chain: Eye → LGN → Superior Colliculus |
-| `ecology-predator-prey` | 8 | Classic Lotka-Volterra dynamics (800 rabbits, 100 foxes) with environmental coupling |
-| `ecology-temperature-control` | 8 | Temperature-sensitive ecosystem with exposed parameter sweeps |
-| `example-space` | 1 | Minimal tutorial space with the example Hodgkin-Huxley model |
+| `neuro-microcircuit` | 13 | Balanced E/I microcircuit: 40 excitatory + 10 inhibitory neurons, Poisson input, recurrent synaptic connectivity |
+| `ecology-predator-prey` | 7 | Classic predator-prey dynamics with environment broadcast and monitors |
+| `ecology-temperature-control` | 7 | Predator-prey ecosystem where environment temperature is an exposed parameter |
+| `virtualcell-drug-neural-effect` | 8 | Virtual cell perturbation translated into a neural spiking response |
 
 ## Layout
 
@@ -82,7 +78,7 @@ Every model implements the `bsim.BioModule` interface:
 - **`outputs()`** — declares named output signals the module produces
 - **`advance_to(t)`** — advances the model's internal state to time `t`
 
-Most models (14 of 18) are configuration-only — they reference built-in `bsim.packs` classes and customize behavior through `init_kwargs` in `model.yaml`. Four models (`brain-retina-encoder`, `brain-lgn-relay`, `brain-sc-integrator`, `example-hh`) include custom Python source.
+Most curated models include Python source under `src/` and are wired together via `space.yaml` without additional code.
 
 ### Wiring
 
@@ -155,7 +151,7 @@ The CI pipeline (`.github/workflows/ci.yml`) runs: **secret scan** → **manifes
 ## Contributing
 
 - All dependencies must use exact version pinning (`==`)
-- Model slugs use kebab-case with domain prefix (`neuro-`, `ecology-`, `brain-`)
+- Model slugs use kebab-case with domain prefix (`neuro-`, `ecology-`, `virtualcell-`)
 - Custom modules must follow the `bsim.BioModule` interface
 - Pre-commit hooks enforce trailing whitespace, EOF newlines, YAML syntax, and secret detection
 - See [docs/PUBLIC_INTERNAL_BOUNDARY.md](docs/PUBLIC_INTERNAL_BOUNDARY.md) for content policy

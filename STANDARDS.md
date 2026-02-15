@@ -327,7 +327,7 @@ Every model slug has three parts:
 
 | Part | What it is | Examples |
 |------|-----------|---------|
-| **domain** | Domain prefix (see table below) | `neuro-`, `ecology-`, `brain-`, `virtualcell-` |
+| **domain** | Domain prefix (see table below) | `neuro-`, `ecology-`, `virtualcell-` |
 | **subject** | The specific model, algorithm, or biological entity being simulated. Always a **noun or noun phrase**. | `hodgkin-huxley`, `izhikevich`, `lotka-volterra`, `poisson`, `retina`, `abiotic` |
 | **role** | What the module does in the simulation. Always a **noun**. | `population`, `monitor`, `input`, `source`, `interaction`, `encoder`, `relay` |
 
@@ -375,7 +375,6 @@ implementation of the same concept is added.
 | `ecology-phase-space-monitor` | Good | Specific visualization type + role |
 | `neuro-metrics` | Bad | Missing subject — *which* metrics? For what? |
 | `ecology-environment` | Bad | Too generic — *what kind* of environment? |
-| `brain-eye` | Bad | Too terse — says nothing about the algorithm or approach |
 | `neuro-monitor` | Bad | Missing subject — could be anything |
 | `ecology-model` | Bad | Says nothing useful |
 | `neuro-generate-spikes` | Bad | Verb phrase, not a noun |
@@ -386,7 +385,6 @@ implementation of the same concept is added.
 |--------|--------|
 | `neuro-` | Neuroscience (neurons, synapses, monitors) |
 | `ecology-` | Ecosystem dynamics (populations, environment) |
-| `brain-` | Brain/sensory processing pipelines |
 | `virtualcell-` | Cellular and molecular biology (gene regulation, perturbations) |
 | `example-` | Templates and reference implementations |
 

@@ -10,7 +10,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from bsim.visuals import VisualSpec
 
 from bsim import BioModule
-from bsim.signals import BioSignal
+from bsim.signals import BioSignal, SignalMetadata
 
 
 class NeuroMetrics(BioModule):
@@ -35,12 +35,13 @@ class NeuroMetrics(BioModule):
         self._spike_times_by_neuron: Dict[int, List[float]] = {}
         self._t_start: Optional[float] = None
         self._t_end: float = 0.0
+        self._outputs: Dict[str, BioSignal] = {}
 
     def inputs(self) -> Set[str]:
         return {"spikes"}
 
     def outputs(self) -> Set[str]:
-        return set()
+        return {"metrics"}
 
     def reset(self) -> None:
         self._spike_count = 0
@@ -48,6 +49,7 @@ class NeuroMetrics(BioModule):
         self._spike_times_by_neuron = {}
         self._t_start = None
         self._t_end = 0.0
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         signal = signals.get("spikes")
@@ -70,10 +72,37 @@ class NeuroMetrics(BioModule):
             self._spike_times_by_neuron[nid].append(t)
 
     def advance_to(self, t: float) -> None:
-        return
+        # Emit incremental metrics as a state signal to enable downstream analysis.
+        self._t_end = max(self._t_end, float(t))
+        duration = self._t_end - (self._t_start or 0.0) if self._t_start is not None else 0.0
+        mean_rate_hz = (
+            self._spike_count / (duration * self.n_neurons)
+            if duration > 0 and self.n_neurons > 0
+            else 0.0
+        )
+        cv = self._compute_cv()
+
+        source = getattr(self, "_world_name", self.__class__.__name__)
+        self._outputs = {
+            "metrics": BioSignal(
+                source=source,
+                name="metrics",
+                value={
+                    "t": float(t),
+                    "total_spikes": int(self._spike_count),
+                    "active_neurons": int(len(self._active_neurons)),
+                    "duration_s": float(duration),
+                    "mean_rate_hz": float(mean_rate_hz),
+                    "isi_cv": None if cv is None else float(cv),
+                    "n_neurons": int(self.n_neurons),
+                },
+                time=float(t),
+                metadata=SignalMetadata(description="Neural spike stream summary metrics", kind="state"),
+            )
+        }
 
     def get_outputs(self) -> Dict[str, BioSignal]:
-        return {}
+        return dict(self._outputs)
 
     def _compute_cv(self) -> Optional[float]:
         """Compute coefficient of variation of inter-spike intervals."""

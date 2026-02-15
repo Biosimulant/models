@@ -11,7 +11,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from bsim.visuals import VisualSpec
 
 from bsim import BioModule
-from bsim.signals import BioSignal
+from bsim.signals import BioSignal, SignalMetadata
 
 
 def _escape_svg_text(s: str) -> str:
@@ -50,12 +50,13 @@ class SpikeMonitor(BioModule):
         self._t_min: float = float("inf")
         self._t_max: float = float("-inf")
         self._neuron_max: int = 0
+        self._outputs: Dict[str, BioSignal] = {}
 
     def inputs(self) -> Set[str]:
         return {"spikes"}
 
     def outputs(self) -> Set[str]:
-        return set()
+        return {"spike_summary"}
 
     def reset(self) -> None:
         """Reset collected data for a new simulation run."""
@@ -63,6 +64,7 @@ class SpikeMonitor(BioModule):
         self._t_min = float("inf")
         self._t_max = float("-inf")
         self._neuron_max = 0
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         signal = signals.get("spikes")
@@ -87,10 +89,29 @@ class SpikeMonitor(BioModule):
                 self._t_min = min(e[0] for e in self._events)
 
     def advance_to(self, t: float) -> None:
-        return
+        # Emit a bounded summary signal so downstream modules/platform can persist
+        # metrics even if they choose to ignore visualization specs.
+        recent = self._events[-min(200, len(self._events)):] if self._events else []
+        source = getattr(self, "_world_name", self.__class__.__name__)
+        self._outputs = {
+            "spike_summary": BioSignal(
+                source=source,
+                name="spike_summary",
+                value={
+                    "t": t,
+                    "n_events": len(self._events),
+                    "t_min": None if self._t_min == float("inf") else self._t_min,
+                    "t_max": None if self._t_max == float("-inf") else self._t_max,
+                    "neuron_max": self._neuron_max,
+                    "recent_events": [[float(et), int(nid)] for et, nid in recent],
+                },
+                time=t,
+                metadata=SignalMetadata(description="Spike monitor summary", kind="state"),
+            )
+        }
 
     def get_outputs(self) -> Dict[str, BioSignal]:
-        return {}
+        return dict(self._outputs)
 
     def visualize(self) -> Optional["VisualSpec"]:
         """Generate an SVG raster plot of collected spikes."""

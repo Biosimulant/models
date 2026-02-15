@@ -72,6 +72,7 @@ class Environment(BioModule):
         self._history = []
         self._temperature = self._base_temperature
         self.temperature = self._base_temperature
+        self._outputs = {}
 
     def _compute_temperature(self, t: float) -> float:
         """Compute current temperature with optional seasonal cycle."""

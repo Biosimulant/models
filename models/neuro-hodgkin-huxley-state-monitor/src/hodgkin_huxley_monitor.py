@@ -16,7 +16,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from bsim.visuals import VisualSpec
 
 from bsim import BioModule
-from bsim.signals import BioSignal
+from bsim.signals import BioSignal, SignalMetadata
 
 
 class HHStateMonitor(BioModule):
@@ -48,12 +48,13 @@ class HHStateMonitor(BioModule):
         self._I_Na_series: List[List[float]] = []   # [[t, I_Na], ...]
         self._I_K_series: List[List[float]] = []    # [[t, I_K], ...]
         self._I_L_series: List[List[float]] = []    # [[t, I_L], ...]
+        self._outputs: Dict[str, BioSignal] = {}
 
     def inputs(self) -> Set[str]:
         return {"state"}
 
     def outputs(self) -> Set[str]:
-        return set()
+        return {"hh_state_summary"}
 
     def reset(self) -> None:
         self._v_series = []
@@ -63,6 +64,7 @@ class HHStateMonitor(BioModule):
         self._I_Na_series = []
         self._I_K_series = []
         self._I_L_series = []
+        self._outputs = {}
 
     def set_inputs(self, signals: Dict[str, BioSignal]) -> None:
         signal = signals.get("state")
@@ -114,10 +116,34 @@ class HHStateMonitor(BioModule):
                 del series[:-self.max_points]
 
     def advance_to(self, t: float) -> None:
-        return
+        # Emit a compact summary for persistence / downstream analysis.
+        latest = {
+            "V_mV": self._v_series[-1][1] if self._v_series else None,
+            "m": self._m_series[-1][1] if self._m_series else None,
+            "h": self._h_series[-1][1] if self._h_series else None,
+            "n": self._n_series[-1][1] if self._n_series else None,
+            "I_Na": self._I_Na_series[-1][1] if self._I_Na_series else None,
+            "I_K": self._I_K_series[-1][1] if self._I_K_series else None,
+            "I_L": self._I_L_series[-1][1] if self._I_L_series else None,
+        }
+
+        source = getattr(self, "_world_name", self.__class__.__name__)
+        self._outputs = {
+            "hh_state_summary": BioSignal(
+                source=source,
+                name="hh_state_summary",
+                value={
+                    "t": float(t),
+                    "neuron_index": int(self.neuron_index),
+                    "latest": latest,
+                },
+                time=float(t),
+                metadata=SignalMetadata(description="Hodgkin-Huxley state monitor summary", kind="state"),
+            )
+        }
 
     def get_outputs(self) -> Dict[str, BioSignal]:
-        return {}
+        return dict(self._outputs)
 
     def visualize(self) -> Optional[List["VisualSpec"]]:
         """Generate 3-panel HH state visualization."""
