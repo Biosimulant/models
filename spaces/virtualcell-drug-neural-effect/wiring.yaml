@@ -1,0 +1,31 @@
+# Wiring-spec (local) equivalent of spaces/virtualcell-drug-neural-effect/space.yaml
+modules:
+  perturbation:
+    class: src.perturbation_source:PerturbationSource
+    args: { gene: "SCN1A", pert_type: "knockout", magnitude: 0.0, apply_at: 0.1 }
+  virtual_cell:
+    class: src.virtual_cell:VirtualCell
+    args: { n_genes: 20, decay_rate: 0.3, response_speed: 5.0, seed: 42 }
+  translator:
+    class: src.expression_translator:ExpressionTranslator
+    args: { base_current: 8.0 }
+  expr_mon:
+    class: src.expression_monitor:ExpressionMonitor
+    args: { max_points: 5000 }
+  neuron:
+    class: src.izhikevich:IzhikevichPopulation
+    args: { n: 20, preset: "RS", sample_indices: [0, 1, 2] }
+  spike_mon:
+    class: src.spike_monitor:SpikeMonitor
+    args: { max_neurons: 20, width: 600, height: 200 }
+  rate_mon:
+    class: src.rate_monitor:RateMonitor
+    args: { window_size: 0.02, n_neurons: 20 }
+  metrics:
+    class: src.neuro_metrics:NeuroMetrics
+    args: { n_neurons: 20 }
+wiring:
+  - { from: "perturbation.perturbation", to: ["virtual_cell.perturbation"] }
+  - { from: "virtual_cell.expression_profile", to: ["translator.expression_profile", "expr_mon.expression_profile"] }
+  - { from: "translator.current", to: ["neuron.current"] }
+  - { from: "neuron.spikes", to: ["spike_mon.spikes", "rate_mon.spikes", "metrics.spikes"] }

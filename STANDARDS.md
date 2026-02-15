@@ -35,7 +35,7 @@ New contributions **must** satisfy all items marked **REQUIRED**. Items marked
 **REQUIRED** — every model directory must contain at minimum:
 
 ```
-models/<domain>-<component>/
+models/<domain>-<subject>-<role>/
 ├── model.yaml            # Manifest (metadata + entrypoint)
 ├── src/
 │   └── <module>.py       # Single Python module with the BioModule class
@@ -314,21 +314,84 @@ pytest models/models/
 
 | Element | Pattern | Example |
 |---------|---------|---------|
-| Model directory (slug) | `<domain>-<component-name>` (kebab-case) | `neuro-spike-monitor` |
-| Manifest title | `"<Domain>: <PascalCaseName>"` | `"Neuro: SpikeMonitor"` |
-| Python module file | `<snake_case>.py` | `spike_monitor.py` |
-| Python class name | `PascalCase` | `SpikeMonitor` |
+| Model directory (slug) | `<domain>-<subject>-<role>` (kebab-case) | `neuro-hodgkin-huxley-population` |
+| Manifest title | `"<Domain>: <PascalCaseName>"` | `"Neuro: HodgkinHuxleyPopulation"` |
+| Python module file | `<snake_case>.py` | `hodgkin_huxley_population.py` |
+| Python class name | `PascalCase` | `HodgkinHuxleyPopulation` |
 | Tags | lowercase, no spaces | `neuroscience`, `monitor`, `ecology` |
 | Signal names | `snake_case` | `population_state`, `spikes` |
 
-**Domain prefixes**:
+#### Slug Structure: `<domain>-<subject>-<role>`
+
+Every model slug has three parts:
+
+| Part | What it is | Examples |
+|------|-----------|---------|
+| **domain** | Domain prefix (see table below) | `neuro-`, `ecology-`, `brain-`, `virtualcell-` |
+| **subject** | The specific model, algorithm, or biological entity being simulated. Always a **noun or noun phrase**. | `hodgkin-huxley`, `izhikevich`, `lotka-volterra`, `poisson`, `retina`, `abiotic` |
+| **role** | What the module does in the simulation. Always a **noun**. | `population`, `monitor`, `input`, `source`, `interaction`, `encoder`, `relay` |
+
+The subject is the most important part — it is what makes a slug unique and
+self-describing. A slug without a clear subject (e.g., `neuro-metrics`,
+`ecology-environment`) is ambiguous and will collide when a second
+implementation of the same concept is added.
+
+**REQUIRED** — slug naming rules:
+
+1. **Use nouns, not verbs.** The slug names what the model *is*, not what it
+   *does*. Use `neuro-poisson-input` (noun: Poisson input source), not
+   `neuro-generate-spikes`.
+
+2. **Include the model or algorithm name when one exists.** If the module
+   implements a named model (Hodgkin-Huxley, Izhikevich, Lotka-Volterra,
+   Poisson, Ricker, Kuramoto), that name must appear in the slug.
+
+3. **Be specific enough to be globally unique.** The slug must distinguish this
+   model from any other model that could plausibly fill a similar role. Ask:
+   *"If someone contributed a second model with the same role, would the slug
+   still be unambiguous?"*
+
+4. **Disambiguate by subject first, then by author/institution if needed.**
+   - Same role, different algorithms: `neuro-hodgkin-huxley-population` vs `neuro-izhikevich-population`
+   - Same algorithm, different implementations: add the author, institution, or variant — e.g., `neuro-allen-hh-population` vs `neuro-markram-hh-population`
+   - Same algorithm, different configurations: add a qualifier — e.g., `neuro-hodgkin-huxley-fast-population` vs `neuro-hodgkin-huxley-detailed-population`
+
+5. **Abbreviations.** Well-known abbreviations within the domain are allowed
+   (HH for Hodgkin-Huxley, LGN for Lateral Geniculate Nucleus, GRN for Gene
+   Regulatory Network) but must be used consistently across the entire repo.
+   When in doubt, spell it out.
+
+6. **Keep it concise but not cryptic.** Three to four segments (domain + 2-3
+   words) is typical. Avoid going beyond five segments unless clarity demands it.
+
+#### Good and Bad Examples
+
+| Slug | Verdict | Why |
+|------|---------|-----|
+| `neuro-hodgkin-huxley-population` | Good | Named algorithm + clear role |
+| `neuro-izhikevich-population` | Good | Named algorithm + clear role |
+| `neuro-poisson-input` | Good | Named distribution + clear role |
+| `ecology-predator-prey-interaction` | Good | Specific subject + role |
+| `ecology-phase-space-monitor` | Good | Specific visualization type + role |
+| `neuro-metrics` | Bad | Missing subject — *which* metrics? For what? |
+| `ecology-environment` | Bad | Too generic — *what kind* of environment? |
+| `brain-eye` | Bad | Too terse — says nothing about the algorithm or approach |
+| `neuro-monitor` | Bad | Missing subject — could be anything |
+| `ecology-model` | Bad | Says nothing useful |
+| `neuro-generate-spikes` | Bad | Verb phrase, not a noun |
+
+#### Domain Prefixes
 
 | Prefix | Domain |
 |--------|--------|
 | `neuro-` | Neuroscience (neurons, synapses, monitors) |
 | `ecology-` | Ecosystem dynamics (populations, environment) |
 | `brain-` | Brain/sensory processing pipelines |
+| `virtualcell-` | Cellular and molecular biology (gene regulation, perturbations) |
 | `example-` | Templates and reference implementations |
+
+New domains can be added as the repository grows. Propose a prefix in your PR
+description and get approval before merging.
 
 ---
 
@@ -572,7 +635,7 @@ Use this checklist before submitting a new model or space.
 
 ### New Model Checklist
 
-- [ ] Directory follows `models/<domain>-<name>/` structure
+- [ ] Directory follows `models/<domain>-<subject>-<role>/` structure (see [Naming Conventions](#naming-conventions))
 - [ ] `model.yaml` contains all required fields (`schema_version`, `title`,
       `description`, `standard`, `tags`, `authors`, `bsim.entrypoint`)
 - [ ] `src/<module>.py` exists with SPDX header, module docstring, and

@@ -1,0 +1,74 @@
+schema_version: "2.0"
+title: "VirtualCell: Drug Effect on Neural Circuit"
+description: "Multi-scale simulation: gene perturbation -> transcriptional response -> biophysical current -> spiking neurons."
+models:
+  - repo: Biosimulant/models
+    alias: perturbation
+    manifest_path: models/virtualcell-perturbation-source/model.yaml
+    parameters:
+      gene: "SCN1A"
+      pert_type: "knockout"
+      magnitude: 0.0
+      apply_at: 0.1
+  - repo: Biosimulant/models
+    alias: virtual_cell
+    manifest_path: models/virtualcell-grn/model.yaml
+    parameters:
+      n_genes: 20
+      decay_rate: 0.3
+      response_speed: 5.0
+      seed: 42
+  - repo: Biosimulant/models
+    alias: translator
+    manifest_path: models/virtualcell-expression-translator/model.yaml
+    parameters:
+      base_current: 8.0
+  - repo: Biosimulant/models
+    alias: expr_mon
+    manifest_path: models/virtualcell-expression-monitor/model.yaml
+    parameters:
+      max_points: 5000
+  - repo: Biosimulant/models
+    alias: neuron
+    manifest_path: models/neuro-izhikevich-population/model.yaml
+    parameters:
+      n: 20
+      preset: "RS"
+      sample_indices: [0, 1, 2]
+  - repo: Biosimulant/models
+    alias: spike_mon
+    manifest_path: models/neuro-spike-monitor/model.yaml
+    parameters:
+      max_neurons: 20
+      width: 600
+      height: 200
+  - repo: Biosimulant/models
+    alias: rate_mon
+    manifest_path: models/neuro-rate-monitor/model.yaml
+    parameters:
+      window_size: 0.02
+      n_neurons: 20
+  - repo: Biosimulant/models
+    alias: metrics
+    manifest_path: models/neuro-metrics/model.yaml
+    parameters:
+      n_neurons: 20
+runtime:
+  duration: 1.0
+  tick_dt: 0.001
+  initial_inputs: {}
+wiring:
+  # Perturbation -> VirtualCell
+  - from: perturbation.perturbation
+    to: [virtual_cell.perturbation]
+  # VirtualCell -> ExpressionTranslator + ExpressionMonitor
+  - from: virtual_cell.expression_profile
+    to: [translator.expression_profile, expr_mon.expression_profile]
+  # ExpressionTranslator -> Neurons
+  - from: translator.current
+    to: [neuron.current]
+  # Neurons -> Monitors
+  - from: neuron.spikes
+    to: [spike_mon.spikes, rate_mon.spikes, metrics.spikes]
+  - from: neuron.state
+    to: []
