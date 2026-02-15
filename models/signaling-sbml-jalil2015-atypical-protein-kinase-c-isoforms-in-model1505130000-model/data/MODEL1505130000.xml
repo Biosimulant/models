@@ -1,0 +1,2382 @@
+function paper_figs_Jalil_Sacktor_Shouval_supplemental_new
+
+% This file has all scripts for producing figures in the supplement of the paper: "Atypical PKCs in memory maintenance: the roles of feedback and redundancy" by Sajiya Jalil, Todd Sacktor
+% and Harel Shouval that will be published in the journal Learning & Memory (2015). Each sections need to be uncommented to produce the .eps file contained in that section. The .eps file
+% is the plot used for further processing in photoshop. All function files are provided at the end and containes the ordinarly differential equations for the models considered in the paper.
+%
+%
+%*************************************************************************%
+%***** some figures modify specific parameter values to produce appropriate
+%***** results. After modifications original values are not restored unless
+%***** needed in the same block of the code. Hence, each section should be
+%***** uncommented and run separately. Otherwise figures may not match those
+%***** in the paper.
+%*****
+%***** the size of the monitor may break up lines of codes, if that happens
+%***** add Matlab continuation code "..." to avaoid error messages due to
+%***** what the interpreter may think are incomplete lines
+%*************************************************************************%
+
+
+%%%% Reaction rates and other constants for single kinase hybrid model %%%%
+r1      = 1;
+rm1     = 0.02;
+r2      = 1;
+r3      = 0.05;
+rm3     = 0.1;
+r4      = 0.05;
+r5      = 0;
+Pt      = 25;
+alpha   = 0.00025;
+lambda1 = 0.0005;
+lambda2 = 0.0000045;
+epsilon = 0.0005;
+K_half  = 200; 
+gamma   = 0.002;  %%%%% remember to report as gamma/alpha which is labeled as gamma in the paper
+beta    = 0.1;
+
+%%%%%%%%%%%%%%%% Parameter combination for the figures %%%%%%%%%%%%%%%%%%%%
+%                                                                         %
+%%%%%%  test      NPSDD     NPS          APDD      %%%%%%%%%%%%%%%%%%%%%%%%                      
+params=[r1        1         1            1;        %1     
+        rm1       0.02      0.02         0.02;     %2
+        r2        1         1            1;        %3
+        r3        0.05      0.05         0.05;     %4
+        rm3       0.1       0.1          0.1;      %5
+        r4        0.05      0.05         0.05;     %6
+        r5        0         0.1          0;        %7
+        Pt        25        25           25;       %8
+        alpha     0.00025   0.00025      0.005;    %9
+        lambda1   0.0005    0.0005       0.0005;   %10
+        lambda2   0.0000025 0.0005       0.0000015;%11
+        epsilon   0.005     0            0.00016;  %12
+        K_half    400       2            1000;     %13 
+        gamma     0.0055    gamma        0;        %14   %%%%%% appears as (alpha + gamma*H) in code which was relabeled to alpha(1+gamma*H) in the paper
+        beta      1         0            0.0112];  %15
+
+    
+%% figure_S1A
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% supplemental figure S1A (U/D) %%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % Ratio of stimulated to basal concentration in a single synapse
+% % It can be regulated by the magnitude of activity dependent synthesis
+%
+% figure1=figure('units','inches','position',[1,1,3.25,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 3.25 3.25]);
+% hFig=axes('Position',[0 0 1 1],'Visible','off');
+% fig1=axes('Position',[0.3 0.275 .65 .65]);
+% 
+% alpha=params(9,2);
+% params(11,2)=0.0005;   params(12,2)=0.00;   params(13,2)=2;   params(15,2)=0.1;
+% param_intervalD=0.1:-0.0001:0.0031;        Kpp_initialD=0;
+% param_intervalU=0.1:-0.0001:0.0031;        Kpp_initialU=200;
+% [Total_kinaseD, Fraction_phosphorylationD, All_speciesD, All_DS_valsD, All_eigenvaluesD]=bifurcation_vs_jth_parameter(param_intervalD,Kpp_initialD,params(:,2),14);
+% [Total_kinaseU, Fraction_phosphorylationU, All_speciesU, All_DS_valsU, All_eigenvaluesU]=bifurcation_vs_jth_parameter(param_intervalU,Kpp_initialU,params(:,2),14);
+% 
+% semilogy(param_intervalU./alpha,Total_kinaseU./Total_kinaseD,'color',[0.4,0.4,0.4],'Linestyle','-','Linewidth',3)
+% axis([12 400 9 1000])
+% xlabel('\gamma','Fontsize',20)
+% ylabel('U / D','Fontsize',20)
+% set(gca,'XTick',50:2*150:1000,'Fontsize',16)
+% print(figure1, '-depsc','-r600','fig_bif_UdivD_vs_gamma2alpha.eps')
+%
+%
+%%%%%%%%%%%%%%%%% end of supplemental figure S1A (U/D) %%%%%%%%%%%%%%%%%%%%
+
+
+%% figure_S1B
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% supplemental figure S1B (U/D) %%%%%%%%%%%%%%%%%%%%%%%
+%
+% % Ratio of stimulated to basal concentration in a single synapse
+% % It can be regulated by the ratio of dwell-times of each kinase state
+%
+% figure1=figure('units','inches','position',[1,1,3.25,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 3.25 3.25]);
+% hFig=axes('Position',[0 0 1 1],'Visible','off');
+% fig1=axes('Position',[0.3 0.275 .65 .65]);
+% 
+% 
+% lambda1=params(10,2); 
+% param_intervalD=0.000001:0.0000001:0.0000079;        Kpp_initialD=0;
+% param_intervalU=0.000001:0.0000001:0.0000079;        Kpp_initialU=20000;
+% [Total_kinaseD, Fraction_phosphorylationD, All_speciesD, All_DS_valsD, All_eigenvaluesD]=bifurcation_vs_jth_parameter(param_intervalD,Kpp_initialD,params(:,2),11);
+% [Total_kinaseU, Fraction_phosphorylationU, All_speciesU, All_DS_valsU, All_eigenvaluesU]=bifurcation_vs_jth_parameter(param_intervalU,Kpp_initialU,params(:,2),11);
+% 
+% semilogy(lambda1./param_intervalU,Total_kinaseU./Total_kinaseD,'color',[0.4,0.4,0.4],'Linestyle','-','Linewidth',3)
+% 
+% axis([60 500 9 1000])
+% xlabel('\tau_{pp} / \tau_p','Fontsize',20)
+% ylabel('U / D','Fontsize',20)
+% set(gca,'XTick',100:300:500,'Fontsize',16)
+% print(figure1, '-depsc','-r600','fig_bif_UdivD_vs_taus.eps')
+%
+%%%%%%%%%%%%%%%%%% end of supplemental figure S1B (U/D) %%%%%%%%%%%%%%%%%%%
+
+
+%% figure_S1C
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% supplemental figure S1C (U/D) %%%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%% figure made with photoshop %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%% shows tissue amount is a product of                      %%%%%%%%
+%%%%%%%%%    number of single stimulates synapse and U/D magnitude %%%%%%%%        
+
+
+%% figure_S1D
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% supplemental figure S1D (U/D) %%%%%%%%%%%%%%%%%%%%%%%
+%
+% % Range of U/D can be estimated by percentage of stimulated synapses
+% 
+% p_change_array=1:.01:2; % low end must be bigger than 0.76
+% 
+% rho=1.75;
+% p_synapses_before=0.005:.0001:0.01;
+% p_synapses_after_max=0.01.*ones(size(p_synapses_before));
+% 
+% % Following factor is calulated based on the assumption that the % synapse
+% % added by LLTP is exactly doubled 
+% multiple_factor1=(1./(rho-1)).*(p_change_array(1).*p_synapses_before) - p_synapses_before; %n_LTP small
+% 
+% 
+% multiple_factor2=(1./(rho-1)).*(p_synapses_after_max) - p_synapses_before;
+% 
+% 
+% plot(p_synapses_before,1./multiple_factor1,'Linewidth',2,'color',[0,0,1]); hold on
+% plot(p_synapses_before,1./multiple_factor2,'Linewidth',2,'color',[1,0,0]);
+% 
+% 
+%  axis([0.005 0.01 0 650])
+%  xlabel('pre U_t (%)','Fontsize',20)
+%  ylabel('U / D','Fontsize',20)
+%  legend('1','2')
+%  set(gca,'XTick',0.005:0.001:0.01,'Fontsize',16)
+%  set(gca,'XTicklabel',{'0.5','','','','','1'});
+%  set(gca,'YTick',100:100:650,'Fontsize',16)
+%  set(gca,'YTicklabel',{'100','','','','','600'});
+% 
+%  print(figure1, '-depsc','-r600','fig_homogenate_Up_Down_ratio_estimate.eps')
+%
+%%%%%%%%%%%%%%%%%% end of supplemental figure S1D (U/D) %%%%%%%%%%%%%%%%%%%
+    
+
+%% figure_S2A
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% Two kinase state without autophosphorylation model scheme made with photoshop
+
+
+%% figure_S2BC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% supplemental figures S2B,C %%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % Scheme, time-dynamics and bifurcation diagram for two-state model with constant phosphorylation (cis or external kinase)  
+% 
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.225 0.2 .7 .7]);
+% 
+% params(12,2)=0; params(15,2)=0; params(7,2)=2;
+% graph_line_thickness = 2;
+% [KtotalD, KfphosD, ssD, dsD, evalD]=find_ss_attributes(10,params(:,2));
+% 
+% hrs=2; extend=24*14;
+% T1=3600; T2=hrs*3600; T3=extend*3600;
+% 
+% params(14,2)=0.0055;  %%% gamma level 1
+% 
+% [Ts1,Ys1]     = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssD'   0 0 8000*0.00025 3600 1.25*3600]); 
+% [Ts1e,Ys1e]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T3],[Ys1(end,1:5)   0 0 0 0 0]);
+% [Ts1b,Ys1b]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssD'   0 0 10000*0.00025 3600 1.25*3600]); 
+% [Ts1eb,Ys1eb] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T3],[Ys1b(end,1:5)   0 0 0 0 0]);
+% [Ts1c,Ys1c]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssD'   0 0 1000*0.00025 3600 1.25*3600]); 
+% [Ts1ec,Ys1ec] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T3],[Ys1c(end,1:5)   0 0 0 0 0]);
+% 
+% [Ts2,Ys2] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2+T3],[ssD'   0 0 0 0 0]); 
+% 
+% params(14,2)=0.0075;  %%% gamma level 2
+% 
+% [Ts3,Ys3]     = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssD'   0 0 12000*0.00025 3600 1.25*3600]); 
+% [Ts3e,Ys3e]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T3],[Ys3(end,1:5)   0 0 0 0 0]);
+% [Ts3b,Ys3b]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssD'   0 0 14000*0.00025 3600 1.25*3600]); 
+% [Ts3eb,Ys3eb] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T3],[Ys3b(end,1:5)   0 0 0 0 0]);
+% 
+% 
+% %%%%%%%% time evolutions of figure B %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% subplot(1,2,1)
+% plot(Ts2,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0.5,1],'linestyle','--','Linewidth',graph_line_thickness); hold on;
+% 
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0,0,0],'linestyle','-','Linewidth',graph_line_thickness); hold on;
+% plot(Ts3(end)+Ts3e,Ys3e(:,1)+Ys3e(:,2)+2*Ys3e(:,3)+Ys3e(:,4)+2*Ys3e(:,5),'color',[0,0,0],'linestyle','-','Linewidth',graph_line_thickness); hold on;
+% plot(Ts3b,Ys3b(:,1)+Ys3b(:,2)+2*Ys3b(:,3)+Ys3b(:,4)+2*Ys3b(:,5),'color',[0,0,0],'linestyle','--','Linewidth',graph_line_thickness); hold on;
+% plot(Ts3b(end)+Ts3eb,Ys3eb(:,1)+Ys3eb(:,2)+2*Ys3eb(:,3)+Ys3eb(:,4)+2*Ys3eb(:,5),'color',[0,0,0],'linestyle','--','Linewidth',graph_line_thickness); hold on;
+% 
+% plot(Ts1,Ys1(:,1)+Ys1(:,2)+2*Ys1(:,3)+Ys1(:,4)+2*Ys1(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',graph_line_thickness); hold on;
+% plot(Ts1(end)+Ts1e,Ys1e(:,1)+Ys1e(:,2)+2*Ys1e(:,3)+Ys1e(:,4)+2*Ys1e(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',graph_line_thickness); hold on;
+% plot(Ts1b,Ys1b(:,1)+Ys1b(:,2)+2*Ys1b(:,3)+Ys1b(:,4)+2*Ys1b(:,5),'color',[0.7,0.7,0.7],'linestyle','--','Linewidth',graph_line_thickness); hold on;
+% plot(Ts1b(end)+Ts1eb,Ys1eb(:,1)+Ys1eb(:,2)+2*Ys1eb(:,3)+Ys1eb(:,4)+2*Ys1eb(:,5),'color',[0.7,0.7,0.7],'linestyle','--','Linewidth',graph_line_thickness); hold on;
+% plot(Ts1c,Ys1c(:,1)+Ys1c(:,2)+2*Ys1c(:,3)+Ys1c(:,4)+2*Ys1c(:,5),'color',[0,0.5,1],'linestyle','-','Linewidth',graph_line_thickness); hold on;
+% plot(Ts1c(end)+Ts1ec,Ys1ec(:,1)+Ys1ec(:,2)+2*Ys1ec(:,3)+Ys1ec(:,4)+2*Ys1ec(:,5),'color',[0,0.5,1],'linestyle','-','Linewidth',graph_line_thickness); hold on;
+% 
+% plot(Ts1(end)+Ts1e(end),Ys1e(end,1)+Ys1e(end,2)+2*Ys1e(end,3)+Ys1e(end,4)+2*Ys1e(end,5),'.','markersize',24,'color',[0.7 0.7 0.7])
+% plot(Ts3(end)+Ts3e(end),Ys3e(end,1)+Ys3e(end,2)+2*Ys3e(end,3)+Ys3e(end,4)+2*Ys3e(end,5),'.','markersize',24,'color',[0 0 0])
+% plot(Ts2(end),Ys2(end,1)+Ys2(end,2)+2*Ys2(end,3)+Ys2(end,4)+2*Ys2(end,5),'.','markersize',24,'color',[0,0.5,1])
+% 
+% axis([-12*3600 (hrs+extend)*3600 -500 4000])
+% xlabel('T [day]','Fontsize',20)
+% ylabel('K_{T} (\times 1000)','Fontsize',20)
+% set(gca,'XTick',0:3600*24*2:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','','6','','','12',''});
+% set(gca,'YTick',0:1000:4250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3','4'});
+% 
+% 
+% %%%%%%%% bifurcation diagram of figure C %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% subplot(1,2,2)
+% alpha=params(9,2);
+% param_intervalD=0.01:-0.0001:0.001;      Kpp_initialD=10;
+% param_intervalT=0.01:-0.0001:0.0019;     Kpp_initialT=191.62;
+% param_intervalU=0.01:-0.0001:0.0019;     Kpp_initialU=4087;
+% [Total_kinaseD, Fraction_phosphorylationD, All_speciesD, All_DS_valsD, All_eigenvaluesD]=bifurcation_vs_jth_parameter(param_intervalD,Kpp_initialD,params(:,2),14);
+% [Total_kinaseT, Fraction_phosphorylationT, All_speciesT, All_DS_valsT, All_eigenvaluesT]=bifurcation_vs_jth_parameter(param_intervalT,Kpp_initialT,params(:,2),14);
+% [Total_kinaseU, Fraction_phosphorylationU, All_speciesU, All_DS_valsU, All_eigenvaluesU]=bifurcation_vs_jth_parameter(param_intervalU,Kpp_initialU,params(:,2),14);
+% 
+% plot(param_intervalD/alpha,Total_kinaseD,'b-','Linewidth',graph_line_thickness); hold on;
+% plot(param_intervalT/alpha,Total_kinaseT,'r-.','Linewidth',graph_line_thickness); hold on; % stabilites separately checked with eigenvalues (not yet automated)
+% plot(param_intervalU/alpha,Total_kinaseU,'k-','Linewidth',graph_line_thickness); hold on;
+% 
+% plot(0.0055/alpha,Ys1e(end,1)+Ys1e(end,2)+2*Ys1e(end,3)+Ys1e(end,4)+2*Ys1e(end,5),'.','markersize',24,'color',[0.7 0.7 0.7])
+% plot(0.0075/alpha,Ys3e(end,1)+Ys3e(end,2)+2*Ys3e(end,3)+Ys3e(end,4)+2*Ys3e(end,5),'.','markersize',24,'color',[0 0 0])
+% plot(0.0055/alpha,Ys2(end,1)+Ys2(end,2)+2*Ys2(end,3)+Ys2(end,4)+2*Ys2(end,5),'.','markersize',24,'color',[0,0.5,1])
+% plot(0.0075/alpha,Ys2(end,1)+Ys2(end,2)+2*Ys2(end,3)+Ys2(end,4)+2*Ys2(end,5),'.','markersize',24,'color',[0,0.5,1])
+% 
+% % U/D value for the cases considered in the figure
+% % UdivD_1=(Ys1e(end,1)+Ys1e(end,2)+2*Ys1e(end,3)+Ys1e(end,4)+2*Ys1e(end,5))/(Ys2(end,1)+Ys2(end,2)+2*Ys2(end,3)+Ys2(end,4)+2*Ys2(end,5))
+% % UdivD_3=(Ys3e(end,1)+Ys3e(end,2)+2*Ys3e(end,3)+Ys3e(end,4)+2*Ys3e(end,5))/(Ys2(end,1)+Ys2(end,2)+2*Ys2(end,3)+Ys2(end,4)+2*Ys2(end,5))
+% 
+% axis([4 40 -500 4000])
+% set(gca,'XTick',0:10:40,'Fontsize',20)
+% set(gca,'XTicklabel',{'0','10','20','30','40'},'Fontsize',20)
+% set(gca,'YTick',0:1000:4250,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% xlabel('\gamma','Fontsize',20)
+% 
+% print(figure2, '-depsc','-r600','fig_simulation_corr_bifurcation_cis.eps') 
+% 
+%%%%%%%%%%%%%%%% end of supplemental figures S2B,C %%%%%%%%%%%%%%%%%%%%%%%%
+
+    
+%% figure_S2DEF
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% supplemental figures S2D,E,F %%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % Regulation of fractional phosphorylation depicted in synthesis dependent bifurcation diagrams
+% 
+% figure2=figure('units','inches','position',[1,1,3.25,4.5]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 3.25 4.5]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% 
+% 
+% %%%%%%%%%%%%%%%%%%%% bif vs gamma/alpha %%%%%%%%%%%%%%%%%%%%%%%
+% subplot(3,2,2)
+% params(15,2)=0; params(12,2)=0; params(7,2)=0.05;
+% param_intervalD=2*0.02125:-.0001:0;             Kpp_initialD=0;
+% param_intervalT=2*0.02125:-.0001:0.0155;        Kpp_initialT=230;
+% param_intervalU=2*0.02125:-.0001:0.0155;        Kpp_initialU=8000;
+% [Total_kinaseD, Fraction_phosphorylationD, All_speciesD, All_DS_valsD, All_eigenvaluesD]=bifurcation_vs_jth_parameter(param_intervalD,Kpp_initialD,params(:,2),14);
+% [Total_kinaseT, Fraction_phosphorylationT, All_speciesT, All_DS_valsT, All_eigenvaluesT]=bifurcation_vs_jth_parameter(param_intervalT,Kpp_initialT,params(:,2),14);
+% [Total_kinaseU, Fraction_phosphorylationU, All_speciesU, All_DS_valsU, All_eigenvaluesU]=bifurcation_vs_jth_parameter(param_intervalU,Kpp_initialU,params(:,2),14);
+% plot(param_intervalD/alpha,Total_kinaseD,'color',[0,0,1],'Linestyle','-','Linewidth',1.2); hold on;
+% plot(param_intervalU/alpha,Total_kinaseU,'color',[0,0,0],'Linestyle','-','Linewidth',1.2); hold on;
+% plot(param_intervalT/alpha,Total_kinaseT,'color',[1,0,0],'Linestyle','-.','Linewidth',1.8); hold on; % stabilites separately checked with eigenvalues (not yet automated)
+% axis([0.0/alpha 2*0.02125/alpha -1000 10000])
+% set(gca,'XTick',0:40:160,'Fontsize',12)
+% set(gca,'XTicklabel',[])
+% set(gca,'YTick',0:2000:8000,'Fontsize',12)
+% set(gca,'YTicklabel',{'0','','4','','8'});
+% ylabel('K_T (\times 1000)','Fontsize',14)
+% title('\epsilon = 0','Fontsize',14)
+% 
+% subplot(3,2,4)
+% params(15,2)=0;  params(12,2)=0; params(7,2)=0.05;
+% param_intervalD=2*0.02125:-.0001:0;             Kpp_initialD=0;
+% param_intervalT=2*0.02125:-.0001:0.0155;        Kpp_initialT=230;
+% param_intervalU=2*0.02125:-.0001:0.0155;        Kpp_initialU=8000;
+% [Total_kinaseD, Fraction_phosphorylationD, All_speciesD, All_DS_valsD, All_eigenvaluesD]=bifurcation_vs_jth_parameter(param_intervalD,Kpp_initialD,params(:,2),14);
+% [Total_kinaseT, Fraction_phosphorylationT, All_speciesT, All_DS_valsT, All_eigenvaluesT]=bifurcation_vs_jth_parameter(param_intervalT,Kpp_initialT,params(:,2),14);
+% [Total_kinaseU, Fraction_phosphorylationU, All_speciesU, All_DS_valsU, All_eigenvaluesU]=bifurcation_vs_jth_parameter(param_intervalU,Kpp_initialU,params(:,2),14);
+% plot(param_intervalD/alpha,Fraction_phosphorylationD,'color',[0,0,1],'Linestyle','-','Linewidth',1.2); hold on;
+% plot(param_intervalU/alpha,Fraction_phosphorylationU,'color',[0,0,0],'Linestyle','-','Linewidth',1.2); hold on;
+% plot(param_intervalT/alpha,Fraction_phosphorylationT,'color',[1,0,0],'Linestyle','-.','Linewidth',1.8); hold on; % stabilites separately checked with eigenvalues (not yet automated)
+% axis([0.0/alpha 2*0.02125/alpha -0.1 1.1])
+% set(gca,'XTick',0:40:160,'Fontsize',12)
+% set(gca,'XTicklabel',[])
+% set(gca,'YTick',0:0.25:1,'Fontsize',12)
+% set(gca,'YTicklabel',{'0','','0.5','','1'});
+% ylabel('F_{phos}','Fontsize',14)
+% 
+% subplot(3,2,6)
+% alpha=params(9,2);  
+% params(15,2)=0;  params(12,2)=0; params(7,2)=0.4;
+% param_intervalD=2*0.02125:-.0001:0;             Kpp_initialD=10;
+% param_intervalT=2*0.02125:-.0001:0.0035;        Kpp_initialT=230;
+% param_intervalU=2*0.02125:-.0001:0.0035;        Kpp_initialU=8000;
+% [Total_kinaseD, Fraction_phosphorylationD, All_speciesD, All_DS_valsD, All_eigenvaluesD]=bifurcation_vs_jth_parameter(param_intervalD,Kpp_initialD,params(:,2),14);
+% [Total_kinaseT, Fraction_phosphorylationT, All_speciesT, All_DS_valsT, All_eigenvaluesT]=bifurcation_vs_jth_parameter(param_intervalT,Kpp_initialT,params(:,2),14);
+% [Total_kinaseU, Fraction_phosphorylationU, All_speciesU, All_DS_valsU, All_eigenvaluesU]=bifurcation_vs_jth_parameter(param_intervalU,Kpp_initialU,params(:,2),14);
+% plot(param_intervalD/alpha,Fraction_phosphorylationD,'color',[0,0,1],'Linestyle','-','Linewidth',1.2); hold on;
+% plot(param_intervalU/alpha,Fraction_phosphorylationU,'color',[0,0,0],'Linestyle','-','Linewidth',1.2); hold on;
+% plot(param_intervalT/alpha,Fraction_phosphorylationT,'color',[1,0,0],'Linestyle','-.','Linewidth',1.8); hold on; % stabilites separately checked with eigenvalues (not yet automated)
+% axis([0.0/alpha 2*0.02125/alpha -0.1 1.1])
+% set(gca,'XTick',0:40:160,'Fontsize',12)
+% set(gca,'XTicklabel',{'','40','','120',''},'Fontsize',12)
+% set(gca,'YTick',0:0.25:1,'Fontsize',12)
+% set(gca,'YTicklabel',{'0','','0.5','','1'});
+% xlabel('\gamma','Fontsize',14)
+% ylabel('F_{phos}','Fontsize',14)
+% 
+% 
+% print(figure2, '-depsc','-r600','fig_bif_Kphos_vs_epsilon_and_gamma_new_1alt4_cis.eps')
+% 
+%%%%%%%%%%%%%%%% end of supplemental figures S2D,E,F %%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%% figure_S3AB
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%% Supplemental figure S3A,B %%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % multistability is revealed through weak and strong stimulation
+% 
+% figure2=figure('units','inches','position',[1,1,6.5,3]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+%                                                                          
+% params(12,2)=0.5;  params(15,2)=0.1;
+% [KtotalD1, KfphosD1, ssD1, dsD1, evalD1]=find_ss_attributes(1,params(:,2));
+% [KtotalD2, KfphosD2, ssD2, dsD2, evalD2]=find_ss_attributes(60,params(:,2));
+% [KtotalU,  KfphosU,  ssU,  dsU,  evalU] =find_ss_attributes(2000,params(:,2));
+% 
+% T1=3600;
+% 
+% [Ts1,Ys1] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 2*T1],[ssD1'          0 0 583*0.00025  3600 1.25*3600]); 
+% [Ts2,Ys2] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 3*T1],[Ys1(end,1:5)   0 0 9750*0.00025 3600 1.25*3600]); 
+% [Ts3,Ys3] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 3*T1],[Ys2(end,1:5)   T1 2.87*T1 0 0 0]);
+% [Ts4,Ys4] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 5*T1],[Ys3(end,1:5)   T1 3.5*T1 0 0 0]);   
+% 
+% shift1=Ts1(end);
+% shift2=Ts1(end)+Ts2(end);
+% shift3=Ts1(end)+Ts2(end)+Ts3(end);
+% Ts=Ts4(end)+shift3;
+% 
+% [TsD,YsD]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 Ts],[ssD1' 0 0 0 0 0]); 
+% [TsD2,YsD2] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 Ts],[ssD2' 0 0 0 0 0]); 
+% [TsU,YsU]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 Ts],[ssU'  0 0 0 0 0]); 
+% 
+% 
+% axes('Position',[0.13 0.25 .49 .68]);
+% 
+% plot( TsD,      YsD(:,1)+YsD(:,2)+2*YsD(:,3)+YsD(:,4)+2*YsD(:,5),'color',[0,0.8,1]    ,'linestyle','--','Linewidth',1.2); hold on;
+% plot(TsD2, YsD2(:,1)+YsD2(:,2)+2*YsD2(:,3)+YsD2(:,4)+2*YsD2(:,5),'color',[0,0.4,1]    ,'linestyle','--','Linewidth',1.2); hold on;
+% plot( TsU,      YsU(:,1)+YsU(:,2)+2*YsU(:,3)+YsU(:,4)+2*YsU(:,5),'color',[0.6,0.6,0.6],'linestyle','--','Linewidth',1.2); hold on;
+% 
+% plot(       Ts1,Ys1(:,1)+Ys1(:,2)+2*Ys1(:,3)+Ys1(:,4)+2*Ys1(:,5),'color',[0,0,0],'Linewidth',1.2); hold on;
+% plot(Ts2+shift1,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0,0],'Linewidth',1.2); hold on;
+% plot(Ts3+shift2,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0,0,0],'Linewidth',1.2); hold on;
+% plot(Ts4+shift3,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0,0,0],'Linewidth',1.2); hold on;
+% 
+% plot([shift2+T1 shift2+2.87*T1],[-350 -350],'color',[0.3,0.3,.3],'linestyle','-','Linewidth',5);
+% plot([shift3+T1 shift3+3.5*T1],[-350 -350],'color',[0.3,0.3,.3],'linestyle','-','Linewidth',5);
+% 
+% 
+% axis([0 Ts -500 3350])
+% xlabel('T [hr]','Fontsize',24)
+% ylabel('K_{T} (\times 1000)','Fontsize',24)
+% set(gca,'XTick',0:2*3600:Ts(end),'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','4','','8','','12',''});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% 
+% 
+% axes('Position',[0.7 0.25 .27 .68]);
+% 
+% params(15,2)=0.1;
+% param_intervalD1 =0.0:+.001:0.6320;             Kpp_initialD1=1;
+% param_intervalT1 =0.632:-.001:0.095;            Kpp_initialT1=3;
+% param_intervalD2 =0.095:+.001:1;                Kpp_initialD2=60;
+% param_intervalT2 =1:-.001:0;                    Kpp_initialT2=200;
+% param_intervalU1 =1:-.001:0.0;                  Kpp_initialU1=2300;
+% [Total_kinaseD1, Fraction_phosphorylationD1, All_speciesD1, All_DS_valsD1, All_eigenvaluesD1]=bifurcation_vs_jth_parameter(param_intervalD1,Kpp_initialD1,params(:,2),12);
+% [Total_kinaseT1, Fraction_phosphorylationT1, All_speciesT1, All_DS_valsT1, All_eigenvaluesT1]=bifurcation_vs_jth_parameter(param_intervalT1,Kpp_initialT1,params(:,2),12);
+% [Total_kinaseD2, Fraction_phosphorylationD2, All_speciesD2, All_DS_valsD2, All_eigenvaluesD2]=bifurcation_vs_jth_parameter(param_intervalD2,Kpp_initialD2,params(:,2),12);
+% [Total_kinaseT2, Fraction_phosphorylationT2, All_speciesT2, All_DS_valsT2, All_eigenvaluesT2]=bifurcation_vs_jth_parameter(param_intervalT2,Kpp_initialT2,params(:,2),12);
+% [Total_kinaseU1, Fraction_phosphorylationU1, All_speciesU1, All_DS_valsU1, All_eigenvaluesU1]=bifurcation_vs_jth_parameter(param_intervalU1,Kpp_initialU1,params(:,2),12);
+% 
+% plot(param_intervalD1,Total_kinaseD1,'color',[0,0.8,1],'Linestyle','-','Linewidth',1.2); hold on;
+% plot(param_intervalT1,Total_kinaseT1,'color',[1,0,0],'Linestyle','-.','Linewidth',1.2); hold on; % stabilites separately checked with eigenvalues (not yet automated)
+% plot(param_intervalD2,Total_kinaseD2,'color',[0,0.4,1],'Linestyle','-','Linewidth',1.2); hold on;
+% plot(param_intervalT2,Total_kinaseT2,'color',[1,0,0],'Linestyle','-.','Linewidth',1.2); hold on;
+% plot(param_intervalU1,Total_kinaseU1,'color',[0.6,0.6,0.6],'Linestyle','-','Linewidth',1.2); hold on;
+% 
+% plot(params(12,2),YsD(end,1)+YsD(end,2)+2*YsD(end,3)+YsD(end,4)+2*YsD(end,5),'.','markersize',24,'color',[0,0.8,1])
+% plot(params(12,2),YsD2(end,1)+YsD2(end,2)+2*YsD2(end,3)+YsD2(end,4)+2*YsD2(end,5),'.','markersize',24,'color',[0 0.4 1])
+% plot(params(12,2),YsU(end,1)+YsU(end,2)+2*YsU(end,3)+YsU(end,4)+2*YsU(end,5),'.','markersize',24,'color',[0.6,0.6,0.6])
+% 
+% axis([-0.025 1 -500 3350])
+% set(gca,'XTick',0.0:0.25:1,'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','0.5','','1'},'Fontsize',20)
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% xlabel('\epsilon','Fontsize',28)
+%  
+% print(figure2, '-depsc','-r600','fig_multistability_supp.eps')
+% 
+%%%%%%%%%%%%%%%%%%%%%% end of Supplemental figure S3A,B %%%%%%%%%%%%%%%%%%%
+
+
+
+%% figure_S3C
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%% Supplemental figure S3C %%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % Fractional phosphorylation for bifurcation diagram revealing multistability 
+% 
+% figure2=figure('units','inches','position',[1,1,6.5,3]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+%                                                                          
+% params(12,2)=0.5;  params(15,2)=0.1;
+% 
+% axes('Position',[0.2 0.62 .3 .3]);
+% 
+% param_intervalD1 =0.0:+.001:0.6320;             Kpp_initialD1=1;
+% param_intervalT1 =0.632:-.001:0.095;            Kpp_initialT1=3;
+% param_intervalD2 =0.095:+.001:1;                Kpp_initialD2=60;
+% param_intervalT2 =1:-.001:0;                    Kpp_initialT2=200;
+% param_intervalU1 =1:-.001:0.0;                  Kpp_initialU1=2300;
+% [Total_kinaseD1, Fraction_phosphorylationD1, All_speciesD1, All_DS_valsD1, All_eigenvaluesD1]=bifurcation_vs_jth_parameter(param_intervalD1,Kpp_initialD1,params(:,2),12);
+% [Total_kinaseT1, Fraction_phosphorylationT1, All_speciesT1, All_DS_valsT1, All_eigenvaluesT1]=bifurcation_vs_jth_parameter(param_intervalT1,Kpp_initialT1,params(:,2),12);
+% [Total_kinaseD2, Fraction_phosphorylationD2, All_speciesD2, All_DS_valsD2, All_eigenvaluesD2]=bifurcation_vs_jth_parameter(param_intervalD2,Kpp_initialD2,params(:,2),12);
+% [Total_kinaseT2, Fraction_phosphorylationT2, All_speciesT2, All_DS_valsT2, All_eigenvaluesT2]=bifurcation_vs_jth_parameter(param_intervalT2,Kpp_initialT2,params(:,2),12);
+% [Total_kinaseU1, Fraction_phosphorylationU1, All_speciesU1, All_DS_valsU1, All_eigenvaluesU1]=bifurcation_vs_jth_parameter(param_intervalU1,Kpp_initialU1,params(:,2),12);
+% 
+% plot(param_intervalU1,Fraction_phosphorylationU1,'color',[0.6,0.6,0.6],'Linestyle','-','Linewidth',2*1.2); hold on;
+% plot(param_intervalT2,Fraction_phosphorylationT2,'color',[1,0,0],'Linestyle','-.','Linewidth',1.2); hold on;
+% plot(param_intervalD2,Fraction_phosphorylationD2,'color',[0,0.4,1],'Linestyle','-','Linewidth',1.2); hold on;
+% 
+% axis([-0.025 1 0.9875 1.001])
+% set(gca,'XTick',0.0:0.25:1,'Fontsize',20)
+% set(gca,'XTicklabel',[])
+% set(gca,'YTick',0.9875:0.0125:1,'Fontsize',20)
+% set(gca,'YTicklabel',{'98.75','100'});
+% %ylabel('F_{phos}','Fontsize',24)
+% 
+% axes('Position',[0.2 0.25 .3 .3]);
+% 
+% plot(param_intervalT1,Fraction_phosphorylationT1,'color',[1,0,0],'Linestyle','-.','Linewidth',1.2); hold on; % stabilites separately checked with eigenvalues (not yet automated)
+% plot(param_intervalD1,Fraction_phosphorylationD1,'color',[0,0.8,1],'Linestyle','-','Linewidth',1.2); hold on;
+% %plot(param_intervalD2,Fraction_phosphorylationD2,'color',[0,0.4,1],'Linestyle','-','Linewidth',1.2); hold on;
+% axis([-0.025 1 -0.05 1.05])
+% set(gca,'XTick',0.0:0.25:1,'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','0.5','','1'},'Fontsize',20)
+% set(gca,'YTick',0:0.25:1,'Fontsize',20)
+% set(gca,'YTicklabel',{'','25','','75',''});
+% %ylabel('F_{phos}','Fontsize',24)
+% xlabel('\epsilon','Fontsize',28)
+% 
+% 
+% params(9,2)=0.001; params(11,2)=0.0000015; params(12,2)=0.1;  
+% params(13,2)=2000; params(14,2)=0.004; params(15,2)=0.000001;
+%  
+% axes('Position',[0.575 0.62 .3 .3]);
+% 
+% param_intervalD1 =0.0001:0.0001:0.2117;         Kpp_initialD1=2;
+% param_intervalT1 =0.0038:0.0001:0.2117;         Kpp_initialT1=300;
+% param_intervalD2 =1:-.0001:0.0038;              Kpp_initialD2=700;
+% param_intervalT2 =1:-.0001:0.0027;              Kpp_initialT2=2000;
+% param_intervalU1 =1:-.0001:0.0027;              Kpp_initialU1=3000;
+% [Total_kinaseD1, Fraction_phosphorylationD1, All_speciesD1, All_DS_valsD1, All_eigenvaluesD1]=bifurcation_vs_jth_parameter(param_intervalD1,Kpp_initialD1,params(:,2),12);
+% [Total_kinaseT1, Fraction_phosphorylationT1, All_speciesT1, All_DS_valsT1, All_eigenvaluesT1]=bifurcation_vs_jth_parameter(param_intervalT1,Kpp_initialT1,params(:,2),12);
+% [Total_kinaseD2, Fraction_phosphorylationD2, All_speciesD2, All_DS_valsD2, All_eigenvaluesD2]=bifurcation_vs_jth_parameter(param_intervalD2,Kpp_initialD2,params(:,2),12);
+% [Total_kinaseT2, Fraction_phosphorylationT2, All_speciesT2, All_DS_valsT2, All_eigenvaluesT2]=bifurcation_vs_jth_parameter(param_intervalT2,Kpp_initialT2,params(:,2),12);
+% [Total_kinaseU1, Fraction_phosphorylationU1, All_speciesU1, All_DS_valsU1, All_eigenvaluesU1]=bifurcation_vs_jth_parameter(param_intervalU1,Kpp_initialU1,params(:,2),12);
+% 
+% plot(param_intervalU1,Fraction_phosphorylationU1,'color',[0.6,0.6,0.6],'Linestyle','-' ,'Linewidth',2*1.2); hold on;
+% plot(param_intervalT2,Fraction_phosphorylationT2,'color',[1,0,0],'Linestyle','-.','Linewidth',1.2); hold on;
+% plot(param_intervalD2,Fraction_phosphorylationD2,'color',[0,0.4,1],'Linestyle','-' ,'Linewidth',1.2); hold on;
+% 
+% axis([-0.025 1 0.9875 1.001])
+% set(gca,'XTick',0.0:0.25:1,'Fontsize',20)
+% set(gca,'XTicklabel',[])
+% set(gca,'YTick',0.9875:0.0125:1,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% 
+% 
+% 
+% axes('Position',[0.575 0.25 .3 .3]);
+% 
+% param_intervalD1 =0.0001:0.0001:0.2117;         Kpp_initialD1=2;
+% param_intervalT1 =0.0038:0.0001:0.2117;         Kpp_initialT1=300;
+% param_intervalD2 =1:-.0001:0.0038;              Kpp_initialD2=700;
+% param_intervalT2 =1:-.0001:0.0027;              Kpp_initialT2=2000;
+% param_intervalU1 =1:-.0001:0.0027;              Kpp_initialU1=3000;
+% [Total_kinaseD1, Fraction_phosphorylationD1, All_speciesD1, All_DS_valsD1, All_eigenvaluesD1]=bifurcation_vs_jth_parameter(param_intervalD1,Kpp_initialD1,params(:,2),12);
+% [Total_kinaseT1, Fraction_phosphorylationT1, All_speciesT1, All_DS_valsT1, All_eigenvaluesT1]=bifurcation_vs_jth_parameter(param_intervalT1,Kpp_initialT1,params(:,2),12);
+% [Total_kinaseD2, Fraction_phosphorylationD2, All_speciesD2, All_DS_valsD2, All_eigenvaluesD2]=bifurcation_vs_jth_parameter(param_intervalD2,Kpp_initialD2,params(:,2),12);
+% [Total_kinaseT2, Fraction_phosphorylationT2, All_speciesT2, All_DS_valsT2, All_eigenvaluesT2]=bifurcation_vs_jth_parameter(param_intervalT2,Kpp_initialT2,params(:,2),12);
+% [Total_kinaseU1, Fraction_phosphorylationU1, All_speciesU1, All_DS_valsU1, All_eigenvaluesU1]=bifurcation_vs_jth_parameter(param_intervalU1,Kpp_initialU1,params(:,2),12);
+% 
+% plot(param_intervalT1,Fraction_phosphorylationT1,'color',[1,0,0],'Linestyle','-.','Linewidth',1.2); hold on; % stabilites separately checked with eigenvalues (not yet automated)
+% %plot(param_intervalD2,Fraction_phosphorylationD2,'color',[0,0.4,1],'Linestyle','-' ,'Linewidth',1.2); hold on;
+% plot(param_intervalD1,Fraction_phosphorylationD1,'color',[0,0.8,1],'Linestyle','-' ,'Linewidth',1.2); hold on;
+% 
+% axis([-0.025 1 -0.05 1.05])
+% set(gca,'XTick',0.0:0.25:1,'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','0.5','','1'},'Fontsize',20)
+% set(gca,'YTick',0:0.25:1,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% xlabel('\epsilon','Fontsize',28)
+%  
+% print(figure2, '-depsc','-r600','fig_multistability_Fphos.eps')
+% 
+%%%%%%%%%%%%%%%%%%%%% end of Supplemental figure S3C %%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%% figure_S4A
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% supplemental figure S4A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % 14 days long simulation of ZIP application during only induction
+% 
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.15 0.25 .775 .68]);
+% 
+% params(12,2)=0.00; params(15,2)=0; params(7,2)=1.2;
+% [KtotalD, KfphosD, ssD, dsD, evalD]=find_ss_attributes(10,params(:,2));
+% [KtotalU, KfphosU, ssU, dsU, evalU]=find_ss_attributes(2000,params(:,2));
+% 
+% 
+% 
+% hrs=1.25; extend=14*24-hrs;
+% T1=3600; T2=hrs*3600; T3=extend*3600;
+% 
+% [Ts2,Ys2]   = ode15s(@(t,s) hybrid9_stim_KIBRA(t,s,params(:,2)),[0 T2]   ,[ssD'   0 1.125*3600 8700*0.00025 3600 1.25*3600]); 
+% [Ts2e,Ys2e] = ode15s(@(t,s) hybrid9_stim_KIBRA(t,s,params(:,2)),[0 T3]   ,[Ys2(end,1:5)   0 0 0 0 0]);
+% [Ts3,Ys3]   = ode15s(@(t,s) hybrid9_stim_KIBRA(t,s,params(:,2)),[0 T2+T3],[ssU'   0 0 0 0 0]);
+% 
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1.2); hold on;
+% plot(Ts2,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1.2); hold on;
+% plot(Ts2(end)+Ts2e,Ys2e(:,1)+Ys2e(:,2)+2*Ys2e(:,3)+Ys2e(:,4)+2*Ys2e(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1.2); hold on;
+% 
+% plot([0 1.17*3600],[-350 -350],'color',[0.3,0.3,0.3],'linestyle','-','Linewidth',3);
+% 
+% 
+% axis([0 (hrs+extend)*3600 -500 3000])
+% xlabel('T [day]','Fontsize',24)
+% ylabel('K_{T} (\times 1000)','Fontsize',24)
+% set(gca,'XTick',0:3600*24*2:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'','2','','','8','','','14'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% set(gca,'TickLength',[0.015 0.015]);
+% print(figure2, '-depsc','-r600','fig_long_ZIP_during_induction_HYBRID_model.eps')
+% 
+%%%%%%%%%%%%%%%%%%%% end of supplemental figure S4A %%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% figure_S4B
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% supplemental figure S4B %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.225 0.2 .7 .7]);
+% 
+% 
+% params(12,2)=0.00; params(15,2)=0; params(7,2)=1.2;
+% [KtotalD, KfphosD, ssD, dsD, evalD]=find_ss_attributes(10,params(:,2));
+% [KtotalU, KfphosU, ssU, dsU, evalU]=find_ss_attributes(2000,params(:,2));
+% 
+% hrs=1.25; extend=3.75;
+% T1=3600; T2=hrs*3600; T3=extend*3600;
+% 
+% [Ts2,Ys2]   = ode15s(@(t,s) hybrid9_stim_KIBRA(t,s,params(:,2)),[0 T2]   ,[ssD'   0 1.125*3600 8700*0.00025 3600 1.25*3600]); 
+% [Ts2e,Ys2e] = ode15s(@(t,s) hybrid9_stim_KIBRA(t,s,params(:,2)),[0 T3]   ,[Ys2(end,1:5)   0 0 0 0 0]);
+% [Ts3,Ys3]   = ode15s(@(t,s) hybrid9_stim_KIBRA(t,s,params(:,2)),[0 T2+T3],[ssU'   0 0 0 0 0]);
+% [Ts4,Ys4]   = ode15s(@(t,s) hybrid9_stim_KIBRA(t,s,params(:,2)),[0 T2+T3],[ssU'   T1 T2+T3 0 0 0]);
+% 
+% subplot(1,2,1)
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1.2); hold on;
+% plot(Ts2,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1.2); hold on;
+% plot(Ts2(end)+Ts2e,Ys2e(:,1)+Ys2e(:,2)+2*Ys2e(:,3)+Ys2e(:,4)+2*Ys2e(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1.2); hold on;
+% 
+% plot([0 1.17*3600],[-350 -350],'color',[0,0,0],'linestyle','-','Linewidth',3);
+% 
+% axis([0 (hrs+extend)*3600 -500 3000])
+% xlabel('T [hr]','Fontsize',24)
+% ylabel('K_{T} (\times 1000)','Fontsize',24)
+% set(gca,'XTick',0:3600:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% set(gca,'TickLength',[0.03 0.03]);
+% 
+% subplot(1,2,2)
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1.2); hold on;
+% plot(Ts4,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1.2); hold on;
+% 
+% plot([T1 T2+T3],[-350 -350],'color',[0,0,0],'linestyle','-','Linewidth',3);
+% 
+% axis([0 (hrs+extend)*3600 -500 3000])
+% xlabel('T [hr]','Fontsize',24)
+% set(gca,'XTick',0:3600:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% set(gca,'TickLength',[0.03 0.03]);
+% print(figure2, '-depsc','-r600','fig_ZIP_blocking_HYBRID_model_KIBRA.eps')
+% 
+%%%%%%%%%%%%%%%%%%%% end of supplemental figure S4B %%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% figure_S5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% supplemental figure S5 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% paper figures 3C,D (supp2) ----vary phosphatase (Pt)-----%%%%%%%%%
+%
+% % Reduction of phosphatase activity during ZIP application
+% 
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.225 0.2 .7 .7]);
+% 
+% 
+% params(12,2)=0.00;
+% [KtotalU, KfphosU, ssU, dsU, evalU]=find_ss_attributes(2000,params(:,2));
+% 
+% hrs=1.25; extend=3.75;
+% T1=3600; T2=hrs*3600; T3=extend*3600;
+% 
+% 
+% [Ts4,Ys4]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2+T3],[ssU'   T1 T2+T3 0 T1 T2+T3]);
+% 
+% subplot(1,2,1)
+% plot(Ts4,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0,0,0],'linestyle','-','Linewidth',1.2); hold on;
+% 
+% 
+% params(8,2)=5;
+% [Ts4,Ys4]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2+T3],[ssU'   T1 T2+T3 0 T1 T2+T3]);
+% 
+% subplot(1,2,1)
+% plot(Ts4,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1.2); hold on;
+% plot([0 Ts4(end)], [KtotalU/2 KtotalU/2],'color',[1,0.5,0],'linestyle',':','Linewidth',2); hold on;
+% plot([T1 T2+T3],[-350 -350],'color',[0,0,0],'linestyle','-','Linewidth',3);
+% 
+% axis([0 (hrs+extend)*3600 -500 3000])
+% xlabel('T [hr]','Fontsize',20)
+% ylabel('(\times 1000)','Fontsize',20)
+% set(gca,'XTick',0:3600:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% 
+% 
+% subplot(1,2,2)
+% plot(Ts4,Ys4(:,2)+Ys4(:,3)+Ys4(:,4),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1.2); hold on;
+% 
+% params(8,2)=25;
+% [Ts4,Ys4]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2+T3],[ssU'   T1 T2+T3 0 T1 T2+T3]);
+% 
+% plot(Ts4,Ys4(:,2)+Ys4(:,3)+Ys4(:,4),'color',[0,0,0],'linestyle','-','Linewidth',1.2); hold on;
+% plot([0 Ts4(end)], [(ssU(2)+ssU(3)+ssU(4))/2 (ssU(2)+ssU(3)+ssU(4))/2],'color',[1,0.5,0],'linestyle',':','Linewidth',2); hold on;
+% plot([T1 T2+T3],[-350 -350],'color',[0,0,0],'linestyle','-','Linewidth',3);
+% 
+% params(9,2)=0; params(10,2)=0; params(11,2)=0; params(12,2)=0;
+% params(13,2)=0; params(14,2)=0; params(15,2)=0; 
+% 
+% params(8,2)=25;
+% [Ts4,Ys4]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2+T3],[ssU'   0 0 0 0 0]);
+% subplot(1,2,2)
+% plot(Ts4+T1,Ys4(:,2)+Ys4(:,3)+Ys4(:,4),'color',[0,1,1],'linestyle','--','Linewidth',2*1.2); hold on;
+% 
+% axis([0 (hrs+extend)*3600 -500 3000])
+% xlabel('T [hr]','Fontsize',20)
+% set(gca,'XTick',0:3600:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% 
+% subplot(1,2,1)
+% plot(Ts4+T1,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0,1,1],'linestyle','--','Linewidth',2*1.2); hold on;
+% 
+% print(figure2, '-depsc','-r600','fig_ZIP_blocking_HYBRID_model_varPt_supp2.eps')
+% 
+%%%%%%%%% paper figures 3C,D (supp2) ----vary phosphatase (Pt)-----%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% end of supplemental figure S5 %%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% figure_S6A
+%%%%%%%%%%%%%%%%%%%%% supplemental figure S6A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % 16 days long simulation showing 14 days long application of PSI
+% % compared with much shorter (5hr) ZIP application
+%
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.15 0.25 .775 .68]);
+% 
+% [KtotalD, KfphosD, ssD, dsD, evalD]=find_ss_attributes(10,params(:,2));
+% [KtotalU, KfphosU, ssU, dsU, evalU]=find_ss_attributes(2500,params(:,2));
+% 
+% hrs=16*24;
+% T1=3600; T2=hrs*3600;
+%
+% [Ts1,Ys1] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssU'   0 0 0 0 0]); 
+% [Ts2,Ys2] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssD'   0 0 0 0 0]); 
+% [Ts3,Ys3] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssU'   0 0 0 T1 14*24*3600]);  % PSI
+% [Ts4,Ys4] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssU'   T1 6*3600 0 0 0]);      % ZIP
+% 
+% plot(Ts1,Ys1(:,1)+Ys1(:,2)+2*Ys1(:,3)+Ys1(:,4)+2*Ys1(:,5),'color',[0.7,0.7,0.7],'Linewidth',1.2); hold on;
+% % plot(Ts2,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0.5,1],'Linewidth',1.2); hold on;
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0,0.5,1],'linestyle','--','Linewidth',1.2); hold on;
+% plot(Ts4,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1.2); hold on;
+% 
+% plot([T1 14*24*3600],[-500 -500],'color',[0,0.5,1],'linestyle','-','Linewidth',3);
+% plot([T1 6*3600],[-300 -300],'color',[0.3,0.3,0.3],'linestyle','-','Linewidth',3);
+% 
+% 
+% axis([0 Ts1(end) -700 3000])
+% xlabel('T [day]','Fontsize',24)
+% ylabel('K_{T} (\times 1000)','Fontsize',24)
+% set(gca,'XTick',0:3600*24*2:Ts1(end),'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','4','','8','','12','','16','','20'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% print(figure2, '-depsc','-r600','fig_long_PSI_ZIP_blocking_HYBRID_model_2.eps')
+%
+%%%%%%%%%%%%%%%%%%%%% end of supplemental figure S6A %%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% figure_S6B
+%%%%%%%%%%%%%%%%%%%%% supplemental figure S6B %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % Superimposed concentration of each kinase state on the dynamics of 
+% % total amount produced by ZIP and PSI application
+% 
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.15 0.25 .775 .68]);
+% 
+% 
+% [KtotalU, KfphosU, ssU, dsU, evalU]=find_ss_attributes(2000,params(:,2));
+% 
+% hrs=5*24;
+% T1=3600; T2=hrs*3600;
+% [Ts3,Ys3] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssU'   0 0 0 T1 T2]);          % PSI
+% [Ts4,Ys4] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssU'   T1 6*3600 0 0 0]);      % ZIP
+% 
+% semilogx(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0,0.5,1],'linestyle','-','Linewidth',2); hold on;
+% semilogx(Ts4,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0.6,0.6,0.6],'linestyle','-','Linewidth',2); hold on;
+% 
+% semilogx(Ts4,Ys4(:,1)+Ys4(:,3)+2*Ys4(:,5),'color',[1,0.4,0],'linestyle','--','Linewidth',2); hold on;
+% semilogx(Ts3,Ys3(:,2)+Ys3(:,3)+Ys3(:,4),'color',[1,0,0],'linestyle','--','Linewidth',2); hold on;
+% %plot(Ts4,Ys4(:,2)+Ys4(:,3)+Ys4(:,4),'color',[0,0,0],'linestyle','--','Linewidth',1.2); hold on;
+% 
+% 
+% semilogx([T1 T2],[-500 -500],'color',[0,0.5,1],'linestyle','-','Linewidth',4);
+% semilogx([T1 6*3600],[-300 -300],'color',[0.6,0.6,0.6],'linestyle','-','Linewidth',4);
+% 
+% 
+% axis([3000 Ts3(end) -700 3000])
+% xlabel('T [day]','Fontsize',24)
+% ylabel('(\times 1000)','Fontsize',24)
+% set(gca,'XTick',[3600*2.4 3600*24:3600*24:Ts3(end)],'Fontsize',20)
+% set(gca,'XTicklabel',{'0.1','1','2','','4','','','','','',''});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% 
+% print(figure2, '-depsc','-r600','fig_long_PSI_ZIP_blocking_HYBRID_model_Kpp.eps')
+%
+%%%%%%%%%%%%%%%%%%%%% end of supplemental figure S6B %%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+%% figure S7AB
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% Supplemental figure S7A,B %%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % Stimulated response of kinase L and corresponding bifurcation with
+% % respect to total phosphatase
+% 
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.225 0.2 .7 .7]);
+% 
+% graph_line_thickness = 2;
+% params(11,2)=0.0000045; params(12,2)=0.0005; params(13,2)=200; params(14,2)=0.002; params(15,2)=0.1;
+% params(8,2)=.5;
+% [KtotalD, KfphosD, ssD, dsD, evalD]=find_ss_attributes(10,params(:,2));
+% 
+% hrs=2; extend=24*14;
+% T1=3600; T2=hrs*3600; T3=extend*3600;
+% 
+% [Ts1,Ys1]     = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssD'   0 0 2250*0.00025 3600 1.25*3600]); 
+% [Ts1e,Ys1e]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T3],[Ys1(end,1:5)   0 0 0 0 0]);
+% 
+% [Ts1c,Ys1c]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssD'   0 0 0*0.00025 3600 1.25*3600]); 
+% [Ts1ec,Ys1ec] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T3],[Ys1c(end,1:5)   0 0 0 0 0]);
+% 
+% [Ts2,Ys2] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2+T3],[ssD'   0 0 0 0 0]); 
+% 
+% subplot(1,2,1)
+% %%%%%%%%%%%%%%%%%%%%%%% time evolutions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% plot(Ts1,Ys1(:,1)+Ys1(:,2)+2*Ys1(:,3)+Ys1(:,4)+2*Ys1(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',graph_line_thickness); hold on;
+% plot(Ts1(end)+Ts1e,Ys1e(:,1)+Ys1e(:,2)+2*Ys1e(:,3)+Ys1e(:,4)+2*Ys1e(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',graph_line_thickness); hold on;
+% plot(Ts1c,Ys1c(:,1)+Ys1c(:,2)+2*Ys1c(:,3)+Ys1c(:,4)+2*Ys1c(:,5),'color',[0,0.5,1],'linestyle',':','Linewidth',2*graph_line_thickness); hold on;
+% plot(Ts1c(end)+Ts1ec,Ys1ec(:,1)+Ys1ec(:,2)+2*Ys1ec(:,3)+Ys1ec(:,4)+2*Ys1ec(:,5),'color',[0,0.5,1],'linestyle',':','Linewidth',2*graph_line_thickness); hold on;
+% 
+% plot(Ts1(end)+Ts1e(end),Ys1e(end,1)+Ys1e(end,2)+2*Ys1e(end,3)+Ys1e(end,4)+2*Ys1e(end,5),'.','markersize',24,'color',[0.7 0.7 0.7])
+% plot(Ts2(end),Ys2(end,1)+Ys2(end,2)+2*Ys2(end,3)+Ys2(end,4)+2*Ys2(end,5),'.','markersize',24,'color',[0,0.5,1])
+% 
+% axis([0 (hrs+extend)*3600 -100 650])
+% xlabel('T [day]','Fontsize',24)
+% ylabel('L_{T} (\times 100)','Fontsize',24)
+% set(gca,'XTick',0:3600*24*2:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','','6','','','12',''});
+% set(gca,'YTick',0:100:600,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','','2','','4','','6'});
+% 
+% 
+% subplot(1,2,2)
+% %%%%%%%%%%%%%%%%%%%%%%% bifurcation diagram %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% param_intervalD=1:.01:25;          Kpp_initialD=0.1;
+% param_intervalT=1:.01:5.93;        Kpp_initialT=200;
+% param_intervalU=1:.01:5.93;        Kpp_initialU=450;
+% [Total_kinaseD, Fraction_phosphorylationD, All_speciesD, All_DS_valsD, All_eigenvaluesD]=bifurcation_vs_jth_parameter(param_intervalD,Kpp_initialD,params(:,2),8);
+% [Total_kinaseT, Fraction_phosphorylationT, All_speciesT, All_DS_valsT, All_eigenvaluesT]=bifurcation_vs_jth_parameter(param_intervalT,Kpp_initialT,params(:,2),8);
+% [Total_kinaseU, Fraction_phosphorylationU, All_speciesU, All_DS_valsU, All_eigenvaluesU]=bifurcation_vs_jth_parameter(param_intervalU,Kpp_initialU,params(:,2),8);
+% plot(param_intervalD/Pt,Total_kinaseD,'b-','Linewidth',graph_line_thickness); hold on;
+% plot(param_intervalT/Pt,Total_kinaseT,'r-.','Linewidth',graph_line_thickness); hold on; % stabilites separately checked with eigenvalues (not yet automated)
+% plot(param_intervalU/Pt,Total_kinaseU,'k-','Linewidth',graph_line_thickness); hold on;
+% 
+% param_intervalD=1:-.01:.01;        Kpp_initialD=0.1;
+% param_intervalT=1:-.01:.01;        Kpp_initialT=200;
+% param_intervalU=1:-.01:.01;        Kpp_initialU=450;
+% [Total_kinaseD, Fraction_phosphorylationD, All_speciesD, All_DS_valsD, All_eigenvaluesD]=bifurcation_vs_jth_parameter(param_intervalD,Kpp_initialD,params(:,2),8);
+% [Total_kinaseT, Fraction_phosphorylationT, All_speciesT, All_DS_valsT, All_eigenvaluesT]=bifurcation_vs_jth_parameter(param_intervalT,Kpp_initialT,params(:,2),8);
+% [Total_kinaseU, Fraction_phosphorylationU, All_speciesU, All_DS_valsU, All_eigenvaluesU]=bifurcation_vs_jth_parameter(param_intervalU,Kpp_initialU,params(:,2),8);
+% plot(param_intervalD/Pt,Total_kinaseD,'b-','Linewidth',graph_line_thickness); hold on;
+% plot(param_intervalT/Pt,Total_kinaseT,'r-.','Linewidth',graph_line_thickness); hold on; % stabilites separately checked with eigenvalues (not yet automated)
+% plot(param_intervalU/Pt,Total_kinaseU,'k-','Linewidth',graph_line_thickness); hold on;
+% 
+% plot(0.5/Pt,Ys1e(end,1)+Ys1e(end,2)+2*Ys1e(end,3)+Ys1e(end,4)+2*Ys1e(end,5),'.','markersize',24,'color',[0.7 0.7 0.7])
+% plot(0.5/Pt,Ys2(end,1)+Ys2(end,2)+2*Ys2(end,3)+Ys2(end,4)+2*Ys2(end,5),'.','markersize',24,'color',[0,0.5,1])
+% 
+% axis([-0.01 .5 -100 650])
+% set(gca,'XTick',0.05:0.1:0.5,'Fontsize',20)
+% set(gca,'XTicklabel',{'5','','','','45','','','','',''},'Fontsize',20)
+% set(gca,'YTick',0:100:600,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','','2','','4','','6'});
+% xlabel('P_{T} (%)','Fontsize',24)
+% 
+% 
+% print(figure2, '-depsc','-r600','fig_simulation_corr_bifurcation_2kinase_L_vs_Pt.eps') 
+% 
+%%%%%%%%%%%%%%%%%%%%% end of supplemental figure S7A,B %%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% figure_S7CD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%% Supplemental figure S7C,D %%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % In the absence of shared phosphatase interaction between kinases can be
+% % accomplished with cross-phosphorylation, which can turn kinase L from monostable to multistable.  
+% 
+% figure2=figure('units','inches','position',[1,1,6.5,3.5]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.5]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.225 0.2 .7 .7]);
+% 
+% subplot(1,2,1)
+% bifurcation_along_delta9_constant_plot(Ys_initial_UU,params,1,[0 0 0],'-',1,1)
+% bifurcation_along_delta9_constant_plot(Ys_initial_DD,params,1,[0,1,1],'--',1,1)
+% axis([0 1.025 -500 3000])
+% xlabel('{\it{cross}}-Phos','Fontsize',24)
+% ylabel('(\times 1000)','Fontsize',24)
+% set(gca,'XTick',0:0.25:1,'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','','','1'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% title('K_T')
+% 
+% subplot(1,2,2)
+% bifurcation_along_delta9_constant_plot(Ys_initial_UU,params,2,[0 0 0],'-',1,1)
+% bifurcation_along_delta9_constant_plot(Ys_initial_DD,params,2,[0,1,1],'--',1,1)
+% axis([0 1.025 -500 3000])
+% xlabel('{\it{cross}}-Phos','Fontsize',24)
+% set(gca,'XTick',0:0.25:1,'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','','','1'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% title('L_T')
+% 
+% print(figure2, '-depsc','-r600','fig_bif_zeta_lambda_vs_xPhos_0sharedP.eps')
+%
+%%%%%%%%%%%%%%%%%%%%% end of supplemental figure S7C,D %%%%%%%%%%%%%%%%%%%%
+ 
+
+
+
+%% figure_S8
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%% Supplement figure S8 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% 2D plot of nullclines used for .fig file %%%%%%%%%%%%%%%%%
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% if param_zeta(1+delta)=param_lambda then
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% delta = (param_lambda-param_zeta)/param_zeta
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% delta1 = (0.1-params(15,2))/params(15,2);           % beta
+% delta2 = (0.0005-params(12,2))/params(12,2);        % epsilon
+% delta3 = (0.002-params(14,2))/params(14,2);         % gamma
+% delta4 = (200-params(13,2))/params(13,2);           % K_half
+% delta5 = (0.00025-params(9,2))/params(9,2);         % alpha
+% delta6 = (0.0000045-params(11,2))/params(11,2);     % lambda2
+% delta7 = 1;                                         % total Xphos param, 0 or 1
+% delta8 = (0.0005-params(10,2))/params(10,2);        % lambda1
+% delta9 = 1;                                         % shared phosphatase, 0 or 1
+% 
+% params2K=[params(:,2);
+%         delta1;%16
+%         delta2;%17
+%         delta3;%18
+%         delta4;%19
+%         delta5;%20
+%         delta6;%21
+%         delta7;%22
+%         delta8;%23
+%         delta9];%24
+% 
+% K = linspace(0.1,3500,140);
+% L = linspace(0.1,500,20);
+% [Kpp,Lpp] = meshgrid(K,L);
+% 
+% [nK,nL]=two_hybrids_hetero2_null(Kpp,Lpp,params2K);
+%        
+% [CK,hK] = contour(Kpp,Lpp,nK);
+% set(hK,'ShowText','on','TextStep',get(hK,'LevelStep')*2)
+% colormap cool
+% hold on;
+% [CL,hL] = contour(Kpp,Lpp,nL);
+% set(hL,'ShowText','on','TextStep',get(hL,'LevelStep')*2)
+% colormap cool
+% 
+%%%%%%%%%%%%%%%%%%%%% end of supplemental figure S8 %%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% figure_S9AB
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%% Supplement figure S9A,B %%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% % Model with only autophosphorylation based feedback can produce
+% % different outcomes with different inhibitors (A,B - PSI)
+%
+% %%%%%%%%%%%%% PSI block - APDD
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.225 0.2 .7 .7]);
+% 
+% [KtotalD, KfphosD, ssD, dsD, evalD]=find_ss_attributes(20,params(:,4));
+% [KtotalU, KfphosU, ssU, dsU, evalU]=find_ss_attributes(2000,params(:,4));
+% 
+% hrs=2; extend=3;
+% T1=3600; T2=hrs*3600; T3=extend*3600;
+% [Ts1,Ys1]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,4)),[0 T2]   ,[ssD'   0 0 500*0.005 3600 1.25*3600]); 
+% [Ts1e,Ys1e] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,4)),[0 T3]   ,[Ys1(end,1:5)   0 0 0 0 0]);
+% [Ts2,Ys2]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,4)),[0 T2+T3],[ssD'   0 0 0 0 0]); 
+% [Ts3,Ys3]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,4)),[0 T2+T3],[ssU'   0 0 0 0 0]); 
+% [Ts4,Ys4]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,4)),[0 T2+T3],[ssU'   0 0 0 3600 3*3600]);  %PSI  
+% 
+% subplot(1,2,1)
+% plot(Ts1,Ys1(:,1)+Ys1(:,2)+2*Ys1(:,3)+Ys1(:,4)+2*Ys1(:,5),'color',[0.7,0.7,0.7],'Linewidth',1.2); hold on;
+% plot(Ts1(end)+Ts1e,Ys1e(:,1)+Ys1e(:,2)+2*Ys1e(:,3)+Ys1e(:,4)+2*Ys1e(:,5),'color',[0.7,0.7,0.7],'Linewidth',1.2); hold on;
+% plot(Ts2,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0.5,1],'Linewidth',1.2); hold on;
+% 
+% plot([0 2*3600],[-350 -350],'color',[0,0.5,1],'linestyle','-','Linewidth',3);
+% 
+% axis([0 (hrs+extend)*3600 -500 3000])
+% xlabel('T [hr]','Fontsize',24)
+% ylabel('K_{T} (\times 1000)','Fontsize',24)
+% set(gca,'XTick',0:3600:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% 
+% 
+% subplot(1,2,2)
+% plot(Ts2,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0.5,1],'Linewidth',1.2); hold on;
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1.2); hold on;
+% plot(Ts4,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1.2); hold on;
+% 
+% plot([3600 3*3600],[-350 -350],'color',[0,0.5,1],'linestyle','-','Linewidth',3);
+% 
+% axis([0 (hrs+extend)*3600 -500 3000])
+% xlabel('T [hr]','Fontsize',24)
+% set(gca,'XTick',0:3600:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% print(figure2, '-depsc','-r600','fig_PSI_blocking_APDD_model.eps') 
+% 
+%%%%%%%%%%%%%%%%%%% end of Supplement figure S9A,B %%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% figure S9CD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%% Supplement figure S9C,D %%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% % Model with only autophosphorylation based feedback can produce
+% % different outcomes with different inhibitors (C,D - ZIP)
+%
+%%%%%%%%%%%% ZIP block - APDD
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.225 0.2 .7 .7]);
+% 
+% [KtotalD, KfphosD, ssD, dsD, evalD]=find_ss_attributes(20,params(:,4));
+% [KtotalU, KfphosU, ssU, dsU, evalU]=find_ss_attributes(2000,params(:,4));
+% 
+% hrs=5;
+% T1=3600; T2=hrs*3600;
+% [Ts2,Ys2] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,4)),[0 T2],[ssD'   0 1.17*3600 500*0.005 3600 1.25*3600]); 
+% [Ts3,Ys3] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,4)),[0 T2],[ssU'   0 0 0 0 0]); 
+% [Ts4,Ys4] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,4)),[0 T2],[ssU'   T1 T2 0 0 0]);
+% 
+% subplot(1,2,1)
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1); hold on;
+% plot(Ts2,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1); hold on;
+% 
+% plot([0 1.17*3600],[-350 -350],'color',[0.3,0.3,0.3],'linestyle','-','Linewidth',3);
+% 
+% axis([0 Ts1(end) -500 3000])
+% xlabel('T [hr]','Fontsize',24)
+% ylabel('K_{T} (\times 1000)','Fontsize',24)
+% set(gca,'XTick',0:3600:Ts1(end),'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% 
+% 
+% subplot(1,2,2)
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1); hold on;
+% plot(Ts4,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1); hold on;
+% 
+% plot([T1 T2],[-350 -350],'color',[0.3,0.3,.3],'linestyle','-','Linewidth',3);
+% 
+% axis([0 Ts3(end) -500 3000])
+% xlabel('T [hr]','Fontsize',24)
+% set(gca,'XTick',0:3600:Ts1(end),'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% print(figure2, '-depsc','-r600','fig_ZIP_blocking_APDD_model.eps')
+% 
+%%%%%%%%%%%%%%%%%% end of Supplement figure S9C,D %%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%% figure_S10A
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% One kinase state without autophosphorylation model scheme made with photoshop
+
+
+
+%% figure_S10BC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% supplemental figures S10B,C %%%%%%%%%%%%%%%%%%%%%%%%%
+%                             %%%%%
+%    %%%%% Here both autophosphorylation pathways are eliminated %%%%%% 
+%          one kinase state non-linear protein synthesis based model
+%              dynamics and bifurcation showing molecular switch
+%                             %%%%%
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.225 0.2 .7 .7]);
+% 
+% params(12,2)=0; params(15,2)=0;
+% [KtotalD, KfphosD, ssD, dsD, evalD]=find_ss_attributes(10,params(:,2));
+% 
+% hrs=2; extend=3;
+% T1=3600; T2=hrs*3600; T3=extend*3600;
+% 
+% params(14,2)=1.25;  %%% gamma level 1
+% 
+% [Ts1,Ys1]     = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T2],[ssD(1)   8000*0.00025  3600  1.25*3600]); 
+% [Ts1e,Ys1e]   = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T3],[Ys1(end,1)     0        0       0     ]);
+% [Ts1b,Ys1b]   = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T2],[ssD(1)   14000*0.00025 3600  1.25*3600]); 
+% [Ts1eb,Ys1eb] = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T3],[Ys1b(end,1)    0        0       0     ]);
+% [Ts1c,Ys1c]   = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T2],[ssD(1)   1100*0.00025  3600  1.25*3600]); 
+% [Ts1ec,Ys1ec] = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T3],[Ys1c(end,1)    0        0       0     ]);
+% 
+% [Ts2,Ys2] = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T2+T3],[ssD(1)   0 0 0]); 
+% 
+% params(14,2)=1.75;  %%% gamma level 2
+% 
+% [Ts3,Ys3]     = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T2],[ssD(1)   12000*0.00025 3600 1.25*3600]); 
+% [Ts3e,Ys3e]   = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T3],[Ys3(end,1)     0        0       0    ]);
+% [Ts3b,Ys3b]   = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T2],[ssD(1)   19000*0.00025 3600 1.25*3600]); 
+% [Ts3eb,Ys3eb] = ode15s(@(t,s) nps_stim(t,s,params(:,2)),[0 T3],[Ys3b(end,1)    0        0       0    ]);
+% 
+% 
+% %%%%%%%%%%%%%%%% time evolutions of figure S1B %%%%%%%%%%%%%%%%%%%%%%%%%%
+% subplot(1,2,1)
+% plot(Ts2,Ys2(:,1),'color',[0,0.5,1],'linestyle','--','Linewidth',0.6); hold on;
+% 
+% plot(Ts3,Ys3(:,1),'color',[0,0,0],'linestyle','-','Linewidth',1.2); hold on;
+% plot(Ts3(end)+Ts3e,Ys3e(:,1),'color',[0,0,0],'linestyle','-','Linewidth',1.2); hold on;
+% plot(Ts3b,Ys3b(:,1),'color',[0,0,0],'linestyle','--','Linewidth',0.6); hold on;
+% plot(Ts3b(end)+Ts3eb,Ys3eb(:,1),'color',[0,0,0],'linestyle','--','Linewidth',0.6); hold on;
+% 
+% plot(Ts1,Ys1(:,1),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1.2); hold on;
+% plot(Ts1(end)+Ts1e,Ys1e(:,1),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1.2); hold on;
+% plot(Ts1b,Ys1b(:,1),'color',[0.7,0.7,0.7],'linestyle','--','Linewidth',.6); hold on;
+% plot(Ts1b(end)+Ts1eb,Ys1eb(:,1),'color',[0.7,0.7,0.7],'linestyle','--','Linewidth',.6); hold on;
+% plot(Ts1c,Ys1c(:,1),'color',[0,0.5,1],'linestyle','-','Linewidth',1.2); hold on;
+% plot(Ts1c(end)+Ts1ec,Ys1ec(:,1),'color',[0,0.5,1],'linestyle','-','Linewidth',1.2); hold on;
+% 
+% plot(Ts1(end)+Ts1e(end),Ys1e(end,1),'.','markersize',24,'color',[0.7 0.7 0.7])
+% plot(Ts3(end)+Ts3e(end),Ys3e(end,1),'.','markersize',24,'color',[0 0 0])
+% plot(Ts2(end),Ys2(end,1),'.','markersize',24,'color',[0,0.5,1])
+% 
+% axis([0 (hrs+extend)*3600 -500 4000])
+% xlabel('T [hr]','Fontsize',24)
+% ylabel('K_{T} (\times 1000)','Fontsize',24)
+% set(gca,'XTick',0:3600:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','2','','4','','6',''});
+% set(gca,'YTick',0:1000:4250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3','4'});
+% 
+% 
+% %%%%%%%%%%%%%%%% bifurcation diagram of figure S1C %%%%%%%%%%%%%%%%%%%%%%
+% subplot(1,2,2)
+% alpha=params(9,2);
+% param_intervalD=2:-0.001:0;     Kp_initialD=0.5;
+% param_intervalT=2:-0.001:0.351;     Kp_initialT=200;
+% param_intervalU=2:-0.001:0.351;     Kp_initialU=3851;
+% [Kp_D]=bifurcation_nps(param_intervalD,Kp_initialD,params(:,2),14,0);  %For stability output set 'display_tag' to 1
+% [Kp_T]=bifurcation_nps(param_intervalT,Kp_initialT,params(:,2),14,0);
+% [Kp_U]=bifurcation_nps(param_intervalU,Kp_initialU,params(:,2),14,0);
+% 
+% plot(param_intervalD/alpha,Kp_D,'b-','Linewidth',1.2); hold on;
+% plot(param_intervalT/alpha,Kp_T,'r-.','Linewidth',1.2); hold on; 
+% plot(param_intervalU(1:1578)/alpha,Kp_U(1:1578),'k-','Linewidth',1.2); hold on;
+% plot(param_intervalU(1579:end)/alpha,Kp_U(1579:end),'r-.','Linewidth',1.2); hold on;
+% 
+% plot(1.25/alpha,Ys1e(end,1),'.','markersize',24,'color',[0.7 0.7 0.7])
+% plot(1.75/alpha,Ys3e(end,1),'.','markersize',24,'color',[0 0 0])
+% plot(1.25/alpha,Ys2(end,1),'.','markersize',24,'color',[0,0.5,1])
+% plot(1.75/alpha,Ys2(end,1),'.','markersize',24,'color',[0,0.5,1])
+% 
+% axis([0 8000 -500 4000])
+% set(gca,'XTick',0:2000:8000,'Fontsize',20)
+% set(gca,'XTicklabel',{'0','','4','','8'},'Fontsize',20)
+% set(gca,'YTick',0:1000:4250,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% xlabel('\gamma (\times 1000)','Fontsize',24)
+% 
+% print(figure2, '-depsc','-r600','fig_simulation_corr_bifurcation_supp.eps') 
+% 
+%%%%%%%%%%%%%%%% end of supplemental figures S10B,C %%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+%% figure_S11AB
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% Supplemental figures S11A,B %%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % Different inhibitors results (PSI) for single state kinase model
+%
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.225 0.2 .7 .7]);
+% 
+% params(11,2)=0.0005; params(12,2)=1; params(14,2)=1.15; 
+% [KtotalD, KfphosD, ssD, dsD, evalD]=find_ss_attributes(.2,params(:,2))
+% [KtotalU, KfphosU, ssU, dsU, evalU]=find_ss_attributes(2000,params(:,2))
+% 
+% hrs=2; extend=3;
+% T1=3600; T2=hrs*3600; T3=extend*3600;
+% [Ts1,Ys1]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2]   ,[ssD'   0 0 10000*0.00025 3600 1.25*3600]); 
+% [Ts1e,Ys1e] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T3]   ,[Ys1(end,1:5)   0 0 0 0 0]);
+% [Ts2,Ys2]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2+T3],[ssD'   0 0 0 0 0]); 
+% [Ts3,Ys3]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2+T3],[ssU'   0 0 0 0 0]); 
+% [Ts4,Ys4]   = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2+T3],[ssU'   0 0 0 3600 5*3600]);  %PSI  
+% 
+% subplot(1,2,1)
+% plot(Ts1,Ys1(:,1)+Ys1(:,2)+2*Ys1(:,3)+Ys1(:,4)+2*Ys1(:,5),'color',[0.7,0.7,0.7],'Linewidth',1); hold on;
+% plot(Ts1(end)+Ts1e,Ys1e(:,1)+Ys1e(:,2)+2*Ys1e(:,3)+Ys1e(:,4)+2*Ys1e(:,5),'color',[0.7,0.7,0.7],'Linewidth',1); hold on;
+% plot(Ts2,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0.5,1],'Linewidth',1); hold on;
+% 
+% plot([0 2*3600],[-350 -350],'color',[0,0.5,1],'linestyle','-','Linewidth',3);
+% 
+% axis([0 (hrs+extend)*3600 -500 3000])
+% xlabel('T [hr]','Fontsize',24)
+% ylabel('K_{T} (\times 1000)','Fontsize',24)
+% set(gca,'XTick',0:3600:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% 
+% 
+% subplot(1,2,2)
+% plot(Ts2,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0.5,1],'Linewidth',1); hold on;
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1); hold on;
+% plot(Ts4,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1); hold on;
+% 
+% plot([3600 5*3600],[-350 -350],'color',[0,0.5,1],'linestyle','-','Linewidth',3);
+% 
+% axis([0 (hrs+extend)*3600 -500 3000])
+% xlabel('T [hr]','Fontsize',24)
+% set(gca,'XTick',0:3600:(hrs+extend)*3600,'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% print(figure2, '-depsc','-r600','fig_PSI_blocking_NPS_model_equal_degrade.eps')
+% 
+%%%%%%%%%%%%%%%%%%%% end of Supplemental figures S11A,B %%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% figure_S11CD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% Supplemental figures S11C,D %%%%%%%%%%%%%%%%%%%%%%%%
+%
+% % Different inhibitors results (ZIP) for single state kinase model
+%
+% figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+% set(gcf,'PaperType','A4');
+% set(gcf,'PaperPositionMode','manual');
+% set(gcf,'PaperUnits','inches');
+% set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+% hFig2=axes('Position',[0 0 1 1],'Visible','off');
+% fig2=axes('Position',[0.225 0.2 .7 .7]);
+% 
+% params(11,2)=0.0005; params(12,2)=1; params(14,2)=1.15; 
+% [KtotalD, KfphosD, ssD, dsD, evalD]=find_ss_attributes(.2,params(:,2));
+% [KtotalU, KfphosU, ssU, dsU, evalU]=find_ss_attributes(2000,params(:,2));
+% 
+% hrs=5;
+% T1=3600; T2=hrs*3600;
+% [Ts2,Ys2] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssD'   0 1.125*3600 500*0.005 3600 1.25*3600]); 
+% [Ts3,Ys3] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssU'   0 0 0 0 0]);
+% [Ts4,Ys4] = ode15s(@(t,s) hybrid9_stim(t,s,params(:,2)),[0 T2],[ssU'   T1 T2 0 T1 T2]);
+% 
+% subplot(1,2,1)
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1); hold on;
+% plot(Ts2,Ys2(:,1)+Ys2(:,2)+2*Ys2(:,3)+Ys2(:,4)+2*Ys2(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1); hold on;
+% 
+% plot([0 1.125*3600],[-350 -350],'color',[0.3,0.3,0.3],'linestyle','-','Linewidth',3);
+% 
+% axis([0 T2 -500 3000])
+% xlabel('T [hr]','Fontsize',24)
+% ylabel('K_{T} (\times 1000)','Fontsize',24)
+% set(gca,'XTick',0:3600:T2,'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',{'0','1','2','3'});
+% 
+% 
+% subplot(1,2,2)
+% plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+2*Ys3(:,5),'color',[0.7,0.7,0.7],'linestyle','-','Linewidth',1); hold on;
+% plot(Ts4,Ys4(:,1)+Ys4(:,2)+2*Ys4(:,3)+Ys4(:,4)+2*Ys4(:,5),'color',[0,0,0],'linestyle','--','Linewidth',1); hold on;
+% 
+% plot([T1 T2],[-350 -350],'color',[0.3,0.3,.3],'linestyle','-','Linewidth',3);
+% 
+% axis([0 T2 -500 3000])
+% xlabel('T [hr]','Fontsize',24)
+% set(gca,'XTick',0:3600:T2,'Fontsize',20)
+% set(gca,'XTicklabel',{'','1','','3','','5','6','7','8','9','10'});
+% set(gca,'YTick',0:1000:3250,'Fontsize',20)
+% set(gca,'YTicklabel',[]);
+% 
+% print(figure2, '-depsc','-r600','fig_ZIP_blocking_NPS_model_equal_degradation.eps')
+% 
+%%%%%%%%%%%%%%%%%%%% end of Supplemental figures S11C,D %%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% figure_S12
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% paper figure 5B,C ***cis/external***%%%%%%%%%%%%%%%%%%%%
+
+figure2=figure('units','inches','position',[1,1,6.5,3.25]);
+set(gcf,'PaperType','A4');
+set(gcf,'PaperPositionMode','manual');
+set(gcf,'PaperUnits','inches');
+set(gcf,'PaperPosition',[1 3.75 6.5 3.25]);
+hFig2=axes('Position',[0 0 1 1],'Visible','off');
+fig2=axes('Position',[0.225 0.2 .7 .7]);
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% if param_zeta(1+delta)=param_lambda then
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% delta = (param_lambda-param_zeta)/param_zeta
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+delta1 = (0.1-params(15,2))/params(15,2);           % beta
+delta2 = (0.0005-params(12,2))/params(12,2);        % epsilon
+delta3 = (0.002-params(14,2))/params(14,2);         % gamma
+delta4 = (200-params(13,2))/params(13,2);           % K_half
+delta5 = (0.00025-params(9,2))/params(9,2);         % alpha
+delta6 = (0.0000045-params(11,2))/params(11,2);     % lambda2
+delta7 = 1;                                         % total Xphos param, 0 or 1
+delta8 = (0.0005-params(10,2))/params(10,2);        % lambda1
+delta9 = 1;                                         % shared phosphatase, 0 or 1
+
+params2K=[params(:,2);
+        delta1;%16
+        delta2;%17
+        delta3;%18
+        delta4;%19
+        delta5;%20
+        delta6;%21
+        delta7;%22
+        delta8;%23
+        delta9];%24
+
+params2K(12)=0; params2K(15)=0; params2K(16)=0; params2K(17)=0; params2K(7)=0.5;
+
+Ys_ini_D = [0 0 0 0 0 0 0];
+[~,Ys] = ode15s(@(t,s) two_hybrids_hetero2(t,s,params2K),[0 5000*3600],[Ys_ini_D Ys_ini_D]);
+[totalDD, fphosDD, ssDD, dsDD, evalDD]=ss_attributes2K(Ys(end,:),params2K);
+Ys_initial_DD=ssDD
+
+
+hrs=2; extend=24*14;
+T1=3600; T2=hrs*3600; T3=extend*3600;
+
+graph_line_thickness = 2;
+
+[Ts1,Ys1]   = ode15s(@(t,s) two_hybrids_hetero2_stim(t,s,params2K),[0 T2],[ssDD'   3600  1.25*3600  10000*0.00025  2500*0.00025]); 
+[Ts1e,Ys1e] = ode15s(@(t,s) two_hybrids_hetero2_stim(t,s,params2K),[0 T3],[Ys1(end,1:14)   0 0 0 0]);
+%Lpp=Ys1e(end,9)
+%L_T=Ys1e(end,8)+Ys1e(end,9)+2*Ys1e(end,10)+Ys1e(end,11)+Ys1e(end,12)+2*Ys1e(end,13)+Ys1e(end,14)+Ys1e(end,4)+Ys1e(end,7)
+
+params(22)=0; params(24)=0;
+[Ts2,Ys2]   = ode15s(@(t,s) two_hybrids_hetero2_stim(t,s,params2K),[0 T2],[ssDD'   3600  1.25*3600  0*0.00025  2500*0.00025]); 
+[Ts2e,Ys2e] = ode15s(@(t,s) two_hybrids_hetero2_stim(t,s,params2K),[0 T3],[Ys2(end,1:14)   0 0 0 0]); 
+[Ts3,Ys3]   = ode15s(@(t,s) two_hybrids_hetero2_stim(t,s,params2K),[0 T2+T3],[ssDD'   0 0 0 0]); 
+
+subplot(1,2,1)
+%%%%%%%%%%%%%%%%%%%%%%% time evolution of 2 kinases %%%%%%%%%%%%%%%%%%%%%%%
+plot(Ts1,Ys1(:,1)+Ys1(:,2)+2*Ys1(:,3)+Ys1(:,4)+Ys1(:,5)+2*Ys1(:,6)+Ys1(:,7)+Ys1(:,11)+Ys1(:,14),'color',[0,0,0],'Linewidth',graph_line_thickness); hold on;
+plot(Ts1(end)+Ts1e,Ys1e(:,1)+Ys1e(:,2)+2*Ys1e(:,3)+Ys1e(:,4)+Ys1e(:,5)+2*Ys1e(:,6)+Ys1e(:,7)+Ys1e(:,11)+Ys1e(14),'color',[0,0,0],'Linewidth',graph_line_thickness); hold on;
+plot(Ts1,Ys1(:,8)+Ys1(:,9)+2*Ys1(:,10)+Ys1(:,11)+Ys1(:,12)+2*Ys1(:,13)+Ys1(:,14)+Ys1(:,4)+Ys1(:,7),'color',[0.6,0.6,0.6],'Linewidth',graph_line_thickness); hold on;
+plot(Ts1(end)+Ts1e,Ys1e(:,8)+Ys1e(:,9)+2*Ys1e(:,10)+Ys1e(:,11)+Ys1e(:,12)+2*Ys1e(:,13)+Ys1e(:,14)+Ys1e(:,4)+Ys1e(:,7),'color',[0.6,0.6,0.6],'Linewidth',graph_line_thickness); hold on;
+
+plot(Ts3,Ys3(:,1)+Ys3(:,2)+2*Ys3(:,3)+Ys3(:,4)+Ys3(:,5)+2*Ys3(:,6)+Ys3(:,7)+Ys3(:,11)+Ys3(:,14),'color',[0.3,0.8,1],'Linestyle',':','Linewidth',2*graph_line_thickness); hold on;
+plot(Ts3,Ys3(:,8)+Ys3(:,9)+2*Ys3(:,10)+Ys3(:,11)+Ys3(:,12)+2*Ys3(:,13)+Ys3(:,14)+Ys3(:,4)+Ys3(:,14),'color',[0.3,0.5,1],'Linestyle',':','Linewidth',2*graph_line_thickness); hold on;
+
+
+axis([-12*3600 (hrs+extend)*3600 -500 3000])
+xlabel('T [day]','Fontsize',20)
+ylabel('L, K_{T} (\times 1000)','Fontsize',20)
+set(gca,'XTick',0:3600*24*2:(hrs+extend)*3600,'Fontsize',20)
+set(gca,'XTicklabel',{'0','','','6','','','12',''});
+set(gca,'YTick',0:1000:3250,'Fontsize',20)
+set(gca,'YTicklabel',{'0','1','2','3'});
+
+
+subplot(1,2,2)
+%%%%%%%%%%%%%%%%%%%% time evolution of PKClambda alone %%%%%%%%%%%%%%%%%%%%
+plot(Ts3,Ys3(:,8)+Ys3(:,9)+2*Ys3(:,10)+Ys3(:,11)+Ys3(:,12)+2*Ys3(:,13)+Ys3(:,14)+Ys3(:,4)+Ys3(:,14),'color',[0.3,0.5,1],'Linestyle',':','Linewidth',2*graph_line_thickness); hold on;
+
+plot(Ts2,Ys2(:,8)+Ys2(:,9)+2*Ys2(:,10)+Ys2(:,11)+Ys2(:,12)+2*Ys2(:,13)+Ys2(:,14)+Ys2(:,4)+Ys2(:,7),'color',[0.6,0.6,0.6],'Linewidth',graph_line_thickness); hold on;
+plot(Ts2(end)+Ts2e,Ys2e(:,8)+Ys2e(:,9)+2*Ys2e(:,10)+Ys2e(:,11)+Ys2e(:,12)+2*Ys2e(:,13)+Ys2e(:,14)+Ys2e(:,4)+Ys2e(:,7),'color',[0.6,0.6,0.6],'Linewidth',graph_line_thickness); hold on;
+
+plot(Ts2(end)+Ts2e(end),Ys2e(end,1)+Ys2e(end,2)+2*Ys2e(end,3)+Ys2e(end,4)+2*Ys2e(end,5),'.','markersize',24,'color',[0.6 0.6 0.6])
+
+
+axis([-12*3600 (hrs+extend)*3600 -500 3000])
+xlabel('T [day]','Fontsize',20)
+set(gca,'XTick',0:3600*24*2:(hrs+extend)*3600,'Fontsize',20)
+set(gca,'XTicklabel',{'0','','','6','','','12',''});
+set(gca,'YTick',0:1000:3250,'Fontsize',20)
+set(gca,'YTicklabel',[]);
+print(figure2, '-depsc','-r600','fig_induction_zeta_lambda_2_cis.eps')
+
+%%%%%%%%%%%%%%%%%%%%%%% end of paper figure 5B,C %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+%% figure_functions
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%  Nullcline, steady states & stability functions  %%%%%%%%%%%%%%%%
+%%%%%%%%%          1-kinase hibrid model                   %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function null=nullcline_dKp_minus_dKpp(Kpp,params)
+% sum(Kp,Kpp) and difference(Kp,Kpp) nullclines reduced to single
+% nullcline, where zeros are the steady states
+r1 = params(1);
+rm1= params(2);
+r2= params(3);
+r3= params(4);
+rm3= params(5);
+r4= params(6);
+r5= params(7);
+Pt= params(8);
+alpha= params(9);
+lambda1= params(10);
+lambda2=params(11);
+epsilon= params(12);
+K_half= params(13);
+gamma= params(14);
+beta= params(15);
+
+% alpha + gamma*H is reported as alpha(1 + gamma*H/alpha) in poster/publication
+H_Kpp   = alpha + gamma.*(Kpp.^4)./(K_half.^4 + Kpp.^4); 
+Kp = (H_Kpp)./lambda1 - (lambda2./lambda1).*Kpp;
+
+% KC1 -> C2, KC2 -> C3, KC3 -> C1 in poster/publication, following
+% expressions are deduced from quasi steady state condions
+% (see syms_hybrid_odes.m for symbolic operations)
+KC1 = (Kp.*Kpp.*epsilon.*r1)./(r2 + rm1);                  % Kp*Kpp complex
+KC2 = (Kpp.*Pt.*r3)./(r4 + rm3 + Kpp.*r3);                 % Kp*P   complex
+KC3 = (Kp.^2.*beta.*r1)/(r2 + rm1);                        % Kp*Kp  complex
+
+null= H_Kpp - lambda1.*Kp + lambda2.*Kpp ...
+    - 2.*r5.*Kp ...
+    - 2.*r2.*KC1 ...
+    + 2.*r4.*KC2 ...
+    + 2.*rm1.*KC3 ...
+    - 2.*r1.*beta.*Kp.*Kp  ;
+
+
+
+function [Ktotal, Kfphos, ss, ds, eval]=find_ss_attributes(Kpp_estimate,params)
+% Given Kpp_interval, Kpp_estimate is the guess provided by the user by
+% visually inspecting the graph plotted by 1st subfunction. Output
+% displays total kinase, fraction of phosphorylation, steady state computed
+% and corresponding ODE evaluations and eigenvalues. 
+
+Kpp_ss = fzero(@(Kpp) nullcline_dKp_minus_dKpp(Kpp,params) , Kpp_estimate);
+[Ktotal, Kfphos, ss, ds, eval]=ss_attributes(Kpp_ss,params);
+
+function [Ktotal, Kfphos, ss, ds, eval]=ss_attributes(Kpp,params)
+% Given a Kpp value, other variables of the hybrid model are computed based
+% on steady state expressions and eigenvalues based on the Jacobian.
+
+r1 = params(1);
+rm1= params(2);
+r2= params(3);
+r3= params(4);
+rm3= params(5);
+r4= params(6);
+r5= params(7);
+Pt= params(8);
+alpha= params(9);
+lambda1= params(10);
+lambda2=params(11);
+epsilon= params(12);
+K_half= params(13);
+gamma= params(14);
+beta= params(15);
+% alpha + gamma*H is reported as alpha(1 + gamma*H/alpha) in poster/publication
+H_Kpp   = alpha + gamma.*(Kpp.^4)./(K_half.^4 + Kpp.^4);
+Kp = (H_Kpp)./lambda1 - (lambda2./lambda1).*Kpp;
+% KC1 -> C2, KC2 -> C3, KC3 -> C1 in poster/publication, following
+% expressions are deduced from quasi steady state condions
+% (see syms_hybrid_odes.m for symbolic operations)
+KC1 = (Kp.*Kpp.*epsilon.*r1)./(r2 + rm1);                 % Kp*Kpp complex
+KC2 = (Kpp.*Pt.*r3)./(r4 + rm3 + Kpp.*r3);                % Kpp*P  complex
+KC3 = (Kp.^2.*beta.*r1)/(r2 + rm1);                       % Kp*Kp  complex
+% Total amount of kinases, combining both forms
+Ktotal=(Kp + Kpp + 2*KC1 + KC2 + 2*KC3);
+% Fraction of phosphorylation = proportion of doubly phosphorylated kinase
+Kfphos= (Kpp+KC1+KC2)./Ktotal;
+% Steady states
+ss=[Kp Kpp KC1 KC2 KC3]';
+% ODEs
+ds = [...
+      H_Kpp + KC3*r2 + KC2*r4 + KC1*rm1 + 2*KC3*rm1 - Kp*(lambda1 + r5) - 2*Kp^2*beta*r1 - Kp*Kpp*epsilon*r1;
+      KC3*r2 - Kpp*lambda2 + Kp*r5 + KC2*rm3 + KC1*(2*r2 + rm1) + Kpp*r3*(KC2 - Pt) - Kp*Kpp*epsilon*r1;
+                                                                     Kp*Kpp*epsilon*r1 - KC1*(r2 + rm1);
+                                                                   - KC2*(r4 + rm3) - Kpp*r3*(KC2 - Pt);
+                                                                          beta*r1*Kp^2 - KC3*(r2 + rm1)];
+ 
+% Jacobian computed with symbolic toolbox
+R = [...
+ - lambda1 - r5 - 4*Kp*beta*r1 - Kpp*epsilon*r1,   (4*Kpp^3*gamma)/(K_half^4 + Kpp^4) - Kp*epsilon*r1 - (4*Kpp^7*gamma)/(K_half^4 + Kpp^4)^2,        rm1,                  r4, r2 + 2*rm1;
+                            r5 - Kpp*epsilon*r1,                                                     r3*(KC2 - Pt) - lambda2 - Kp*epsilon*r1, 2*r2 + rm1,        rm3 + Kpp*r3,         r2;
+                                 Kpp*epsilon*r1,                                                                               Kp*epsilon*r1, - r2 - rm1,                   0,          0;
+                                              0,                                                                              -r3*(KC2 - Pt),          0, - r4 - rm3 - Kpp*r3,          0;
+                                   2*Kp*beta*r1,                                                                                           0,          0,                   0, - r2 - rm1];
+
+% Eigenvalues 
+eval = eig(R);
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%   Bifurcation diagram function follows    %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function [Total_kinase, Fraction_phosphorylation, All_species, All_DS_vals, All_eigenvalues]=bifurcation_vs_jkth_parameter(param_interval1,param_interval2,Kpp_initial,params,j,k,display_tag)
+% Given parameter interval and an initial estimate of Kpp, accurates steady
+% states and other attributes are found from nullcline_dKp_minus_dKpp function
+p1=param_interval1;
+p2=param_interval2;
+Kpp_array=zeros(size(p1));
+Total_kinase=zeros(size(p1));
+Fraction_phosphorylation=zeros(size(p1));
+All_species=zeros(5,length(p1));
+All_DS_vals=zeros(5,length(p1));
+All_eigenvalues=zeros(5,length(p1));
+
+% Initial values computed based on provided estimate
+bif_param1=p1(1);
+bif_param2=p2(1);
+% bifurcation parameter identified to "jth parameter"
+params(j)=bif_param1;
+params(k)=bif_param2;
+Kpp_array(1)=fzero(@(Kpp) nullcline_dKp_minus_dKpp(Kpp,params), Kpp_initial);
+[Ktotal, Kfphos, ss, ds, eval]=ss_attributes(Kpp_array(1),params);
+Total_kinase(1) = Ktotal;
+Fraction_phosphorylation(1) = Kfphos;
+All_species(:,1) = ss;
+All_DS_vals(:,1) = ds;
+All_eigenvalues(:,1) = eval;
+% Remaining values computed based on the previous ones
+for n=1:length(p1)-1;
+    bif_param1=p1(n+1);
+    bif_param2=p2(n+1);
+    % bifurcation parameter identified to "jth parameter"
+    params(j)=bif_param1;
+    params(k)=bif_param2;
+    Kpp_array(n+1)=fzero(@(Kpp) nullcline_dKp_minus_dKpp(Kpp,params), Kpp_array(n));
+    [Ktotal, Kfphos, ss, ds, eval]=ss_attributes(Kpp_array(n+1),params);
+    Total_kinase(n+1) = Ktotal;
+    Fraction_phosphorylation(n+1) = Kfphos;
+    All_species(:,n+1) = ss;
+    All_DS_vals(:,n+1) = ds;
+    All_eigenvalues(:,n+1) = eval;
+end
+if display_tag==1; max_eval=max(real(All_eigenvalues)); display([param_interval1; param_interval2; max_eval]'); end;
+
+
+function [Total_kinase, Fraction_phosphorylation, All_species, All_DS_vals, All_eigenvalues]=bifurcation_vs_jth_parameter(param_interval,Kpp_initial,params,j,display_tag)
+% Given parameter interval and an initial estimate of Kpp, accurates steady
+% states and other attributes are found from nullcline_dKp_minus_dKpp function
+p=param_interval;
+Kpp_array=zeros(size(p));
+Total_kinase=zeros(size(p));
+Fraction_phosphorylation=zeros(size(p));
+All_species=zeros(5,length(p));
+All_DS_vals=zeros(5,length(p));
+All_eigenvalues=zeros(5,length(p));
+
+% Initial values computed based on provided estimate
+bif_param=p(1);
+% bifurcation parameter identified to "jth parameter"
+params(j)=bif_param;
+Kpp_array(1)=fzero(@(Kpp) nullcline_dKp_minus_dKpp(Kpp,params), Kpp_initial);
+[Ktotal, Kfphos, ss, ds, eval]=ss_attributes(Kpp_array(1),params);
+Total_kinase(1) = Ktotal;
+Fraction_phosphorylation(1) = Kfphos;
+All_species(:,1) = ss;
+All_DS_vals(:,1) = ds;
+All_eigenvalues(:,1) = eval;
+% Remaining values computed based on the previous ones
+for n=1:length(p)-1;
+    bif_param=p(n+1);
+    % bifurcation parameter identified to "jth parameter"
+    params(j)=bif_param;
+    %n
+    Kpp_array(n+1)=fzero(@(Kpp) nullcline_dKp_minus_dKpp(Kpp,params), Kpp_array(n));
+    [Ktotal, Kfphos, ss, ds, eval]=ss_attributes(Kpp_array(n+1),params);
+    Total_kinase(n+1) = Ktotal;
+    Fraction_phosphorylation(n+1) = Kfphos;
+    All_species(:,n+1) = ss;
+    All_DS_vals(:,n+1) = ds;
+    All_eigenvalues(:,n+1) = eval;
+end
+if display_tag==1; max_eval=max(real(All_eigenvalues)); display([param_interval; max_eval]'); end;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% ODEs for dynamics %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function ds=hybrid9(t,s,params)
+r1 = params(1);
+rm1= params(2);
+r2= params(3);
+r3= params(4);
+rm3= params(5);
+r4= params(6);
+r5= params(7);
+Pt= params(8);
+alpha= params(9);
+lambda1= params(10);
+lambda2=params(11);
+epsilon= params(12);
+Kp_half= params(13);
+gamma= params(14);
+beta= params(15);
+
+Kp=s(1);  
+Kpp=s(2);
+KC1=s(3);  % Kpp*Kp
+KC2=s(4);  % Kpp*P
+KC3=s(5);  % Kp*Kp
+
+H_Kpp = alpha + gamma*(Kpp^4)/(Kp_half^4 + Kpp^4);
+
+dKp=  H_Kpp - (lambda1 + r5)*Kp + r4*KC2 ...
+    - epsilon*r1*Kp*Kpp + rm1*KC1 ...
+    - beta*2*r1*Kp*Kp + 2*rm1*KC3 + r2*KC3  ;
+dKpp= r5*Kp - lambda2*Kpp - r3*(Pt-KC2)*Kpp + rm3*KC2 + (rm1+2*r2)*KC1 ...
+    - epsilon*r1*Kpp*Kp + r2*KC3 ;
+dKC1= epsilon*r1*Kpp*Kp -(rm1+r2)*KC1 ;
+dKC2= r3*(Pt - KC2)*Kpp - (rm3+r4)*KC2 ;
+dKC3= r1*beta*Kp*Kp - (rm1+r2)*KC3 ;
+
+
+ds=[dKp dKpp dKC1 dKC2 dKC3]';
+
+function ds=hybrid9_stim(t,s,params)
+r1 = params(1);
+rm1= params(2);
+r2= params(3);
+r3= params(4);
+rm3= params(5);
+r4= params(6);
+r5= params(7);
+Pt= params(8);
+alpha= params(9);
+lambda1= params(10);
+lambda2=params(11);
+epsilon= params(12);
+Kp_half= params(13);
+gamma= params(14);
+beta= params(15);
+
+Kp=s(1);  
+Kpp=s(2);
+KC1=s(3);  % Kpp*Kp ----relabeled in paper as C2
+KC2=s(4);  % Kpp*P  ----relabeled in paper as C3
+KC3=s(5);  % Kp*Kp  ----relabeled in paper as C1
+
+T1=s(6);   % start "ZIP off"
+T2=s(7);   % end "ZIP off"
+mu=s(8);   %----- "synthesis pulse" amplitude
+T3=s(9);   % start "synthesis pulse"
+T4=s(10);  % end "synthesis pulse"
+
+r1 = r1*heaviside((T1-t)*(T2-t));
+H_Kpp = heaviside((T3-t)*(T4-t))*(alpha + gamma*(Kpp^4)/(Kp_half^4 + Kpp^4))... % note alpha(1 + gamma*H/alpha) is relabled in the paper as alpha(1+gamma*H)
+    + heaviside(-(T3-t)*(T4-t))*mu;                                             % where H = (Kpp^4)/(Kp_half^4 + Kpp^4)
+
+
+dKp=  H_Kpp - (lambda1 + r5)*Kp + r4*KC2 ...
+    - epsilon*r1*Kp*Kpp + rm1*KC1 ...
+    - beta*2*r1*Kp*Kp + 2*rm1*KC3 + r2*KC3  ;
+dKpp= r5*Kp - lambda2*Kpp - r3*(Pt-KC2)*Kpp + rm3*KC2 + (rm1+2*r2)*KC1 ...
+    - epsilon*r1*Kpp*Kp + r2*KC3 ;
+dKC1= epsilon*r1*Kpp*Kp -(rm1+r2)*KC1 ;
+dKC2= r3*(Pt - KC2)*Kpp - (rm3+r4)*KC2 ;
+dKC3= r1*beta*Kp*Kp - (rm1+r2)*KC3 ;
+
+
+ds=[dKp dKpp dKC1 dKC2 dKC3 0 0 0 0 0]';
+
+function ds=hybrid9_stim_event(t,s,params)
+% This code is for using events function below. It is used for Figure S8
+r1 = params(1);
+rm1= params(2);
+r2= params(3);
+r3= params(4);
+rm3= params(5);
+r4= params(6);
+r5= params(7);
+Pt= params(8);
+alpha= params(9);
+lambda1= params(10);
+lambda2=params(11);
+epsilon= params(12);
+Kp_half= params(13);
+gamma= params(14);
+beta= params(15);
+
+Kp=s(1);  
+Kpp=s(2);
+KC1=s(3);  % Kpp*Kp ----relabeled in paper as C2
+KC2=s(4);  % Kpp*P  ----relabeled in paper as C3
+KC3=s(5);  % Kp*Kp  ----relabeled in paper as C1
+
+T1=s(6);
+T2=s(7);
+mu=s(8);
+T3=s(9);
+T4=s(10);
+
+r1 = r1*heaviside((T1-t)*(T2-t));
+H_Kpp = heaviside((T3-t)*(T4-t))*(alpha + gamma*(Kpp^4)/(Kp_half^4 + Kpp^4))... % note alpha(1 + gamma*H/alpha) is relabled in the paper as alpha(1+gamma*H)
+    + heaviside(-(T3-t)*(T4-t))*mu;                                             % where H = (Kpp^4)/(Kp_half^4 + Kpp^4)
+
+
+dKp=  H_Kpp - (lambda1 + r5)*Kp + r4*KC2 ...
+    - epsilon*r1*Kp*Kpp + rm1*KC1 ...
+    - beta*2*r1*Kp*Kp + 2*rm1*KC3 + r2*KC3  ;
+dKpp= r5*Kp - lambda2*Kpp - r3*(Pt-KC2)*Kpp + rm3*KC2 + (rm1+2*r2)*KC1 ...
+    - epsilon*r1*Kpp*Kp + r2*KC3 ;
+dKC1= epsilon*r1*Kpp*Kp -(rm1+r2)*KC1 ;
+dKC2= r3*(Pt - KC2)*Kpp - (rm3+r4)*KC2 ;
+dKC3= r1*beta*Kp*Kp - (rm1+r2)*KC3 ;
+
+
+ds=[dKp dKpp dKC1 dKC2 dKC3 0 0 0 0 0 0]';
+
+function [value,isterminal,direction] = events(t,y)
+value      = (y(1)+y(2)+2.*y(3)+y(4)+2.*y(5)) - y(11)./2;
+isterminal = 1;
+direction  = -1;
+
+
+function ds=hybrid9_stim_KIBRA(t,s,params)
+r1 = params(1);
+rm1= params(2);
+r2= params(3);
+r3= params(4);
+rm3= params(5);
+r4= params(6);
+r5= params(7);
+Pt= params(8);
+alpha= params(9);
+lambda1= params(10);
+lambda2=params(11);
+epsilon= params(12);
+Kp_half= params(13);
+gamma= params(14);
+beta= params(15);
+
+Kp=s(1);  
+Kpp=s(2);
+KC1=s(3);  % Kpp*Kp ----relabeled in paper as C2
+KC2=s(4);  % Kpp*P  ----relabeled in paper as C3
+KC3=s(5);  % Kp*Kp  ----relabeled in paper as C1
+
+T1=s(6);   % start "ZIP off"
+T2=s(7);   % end "ZIP off"
+mu=s(8);   %----- "synthesis pulse" amplitude
+T3=s(9);   % start "synthesis pulse"
+T4=s(10);  % end "synthesis pulse"
+
+lambda2 = lambda2*heaviside((T1-t)*(T2-t))+lambda1*heaviside(-(T1-t)*(T2-t));
+H_Kpp = heaviside((T3-t)*(T4-t))*(alpha + gamma*(Kpp^4)/(Kp_half^4 + Kpp^4))... % note alpha(1 + gamma*H/alpha) is relabled in the paper as alpha(1+gamma*H)
+    + heaviside(-(T3-t)*(T4-t))*mu;                                             % where H = (Kpp^4)/(Kp_half^4 + Kpp^4)
+
+
+dKp=  H_Kpp - (lambda1 + r5)*Kp + r4*KC2 ...
+    - epsilon*r1*Kp*Kpp + rm1*KC1 ...
+    - beta*2*r1*Kp*Kp + 2*rm1*KC3 + r2*KC3  ;
+dKpp= r5*Kp - lambda2*Kpp - r3*(Pt-KC2)*Kpp + rm3*KC2 + (rm1+2*r2)*KC1 ...
+    - epsilon*r1*Kpp*Kp + r2*KC3 ;
+dKC1= epsilon*r1*Kpp*Kp -(rm1+r2)*KC1 ;
+dKC2= r3*(Pt - KC2)*Kpp - (rm3+r4)*KC2 ;
+dKC3= r1*beta*Kp*Kp - (rm1+r2)*KC3 ;
+
+
+ds=[dKp dKpp dKC1 dKC2 dKC3 0 0 0 0 0]';
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% non-linear protein synthesis based model %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%          ODEs & bifurcation functions    %%%%%%%%%%%%%%%%%%%
+
+function ds=nps_stim(t,s,params)
+% This is a one-state model based on non-linear protein synthesis feedback
+alpha= params(9);
+lambda1= params(10);
+Kp_half= params(13);
+gamma= params(14);
+
+Kp=s(1);  
+
+mu=s(2);
+T3=s(3);
+T4=s(4);
+
+H_Kp = heaviside((T3-t)*(T4-t))*(alpha + gamma*(Kp^4)/(Kp_half^4 + Kp^4))...
+    + heaviside(-(T3-t)*(T4-t))*mu;
+
+dKp  = H_Kp - lambda1*Kp;
+
+ds=[dKp 0 0 0]';
+
+
+function null=nullcline_dKp(Kp,params)
+% Nullcline is based on 1-ODE from one-state nps based model
+alpha= params(9);
+lambda1= params(10);
+K_half= params(13);
+gamma= params(14);
+
+% alpha + gamma*H is reported as alpha(1 + gamma*H/alpha) in poster/publication
+H_Kp   = alpha + gamma.*(Kp.^4)./(K_half.^4 + Kp.^4); 
+
+null= H_Kp - lambda1.*Kp  ;
+
+
+function [Kp_array]=bifurcation_nps(param_interval,Kp_initial,params,j,display_tag)
+% Given parameter interval and an initial estimate of Kp, accurate steady
+% states and other attributes are found from nullcline_dKp function
+p=param_interval;
+Kp_array=zeros(size(p));
+Jac_Kp_array=zeros(size(p)); 
+alpha= params(9);
+lambda1= params(10);
+K_half= params(13);
+gamma= params(14);
+% Initial values computed based on provided estimate
+bif_param=p(1);
+% bifurcation parameter identified to "jth parameter"
+params(j)=bif_param;
+Kp_array(1)=fzero(@(Kp) nullcline_dKp(Kp,params), Kp_initial);
+Kp=Kp_array(1);
+
+Jac_Kp_array(1)=(4*Kp^3*gamma)/(K_half^4 + Kp^4) - lambda1 - (4*Kp^7*gamma)/(K_half^4 + Kp^4)^2;
+% Remaining values computed based on the previous ones
+for n=1:length(p)-1;
+    bif_param=p(n+1);
+    % bifurcation parameter identified to "jth parameter"
+    params(j)=bif_param;
+    %n
+    Kp_array(n+1)=fzero(@(Kp) nullcline_dKp(Kp,params), Kp_array(n));
+    Kp=Kp_array(n+1);
+    Jac_Kp_array(n+1)=(4*Kp^3*gamma)/(K_half^4 + Kp^4) - lambda1 - (4*Kp^7*gamma)/(K_half^4 + Kp^4)^2;
+end
+if display_tag==1; display('    param         Kp        Jacobian'); display([param_interval; Kp_array; Jac_Kp_array]'); end;
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% two-kinases model ODEs & bifurcation functions %%%%%%%%%%%%
+
+function []=bifurcation_along_delta9_constant_plot(Ys_initial,params,plot_variable,trace_color,trace_style,trace_type,delta9_level,display_tag)
+% delta7 (cross-phosphorylation parameter) varies AND delta9 (shared phosphatase parameter) is constant
+% 2D-plane generated by parameter delta7 & delta9 is decomposed into lines
+% plot_variable = 1 for kinase K and = 2 for kinase L
+% trace_color & trace_style controls color and linestyle of plotted lines
+% trace_type = 1 plots total kinase, otherwise plots fraction of phosphorylation
+% delta9_level = 0 or 1 for 0 or 100% shared phosphatase
+% display_tag = 0 does not print eigenvalues and = 1 prints eigenvalues 
+delta9_range=ones(1,101);
+m9=0:1; % upto 2 levels accepted for shared phosphatase 0 or 100%
+b9=1:-0.01:0;
+delta7_indep = zeros(1,101);
+for n=delta9_level; 
+    delta7_indep(1,:) = b9; %varies
+    [Total_kinase, Fraction_phosphorylation, All_species, All_DS_vals, All_eigenvalues]=bifurcation_vs_jkth_parameter2K(delta7_indep,m9(n)*delta9_range,Ys_initial,params,22,24,display_tag);
+    %P_total=All_species(5,:)+All_species(12,:); %% For checking conservation of phosphatases 
+    if trace_type==1;
+        plot(b9,Total_kinase(plot_variable,:),'linewidth',2,'color',trace_color,'linestyle',trace_style); hold on;
+    else
+        plot(b9,Fraction_phosphorylation(plot_variable,:),'linewidth',2,'color',trace_color,'linestyle',trace_style); hold on;
+    end;    
+end;
+
+
+function [Total_kinase, Fraction_phosphorylation, All_species, All_DS_vals, All_eigenvalues]=bifurcation_vs_jkth_parameter2K(param_interval1,param_interval2,Ys_initial,params,j,k,display_tag)
+% Given parameter interval and an initial estimate of Kpp, accurates steady
+% states and other attributes are found from nullcline_dKp_minus_dKpp function
+p1=param_interval1;
+p2=param_interval2;
+Ys_initial_array=zeros(14,length(p1));
+Total_kinase=zeros(2,length(p1));
+Fraction_phosphorylation=zeros(2,length(p1));
+All_species=zeros(14,length(p1));
+All_DS_vals=zeros(14,length(p1));
+All_eigenvalues=zeros(14,length(p1));
+
+% Initial values computed based on provided estimate
+bif_param1=p1(1);
+bif_param2=p2(1);
+% bifurcation parameter identified to "jth parameter"
+params(j)=bif_param1;
+params(k)=bif_param2;
+Ys_initial_temp=Ys_initial;
+%Ys_initial_temp([4 7 11 14])=0;
+[~,Ys] = ode15s(@(t,s) two_hybrids_hetero2(t,s,params),[0 5000*3600],Ys_initial_temp);
+Ys_initial_array(:,1)=Ys(end,:);
+[total, fphos, ss, ds, eval]=ss_attributes2K(Ys(end,:),params);
+Total_kinase(:,1) = total;
+Fraction_phosphorylation(:,1) = fphos;
+All_species(:,1) = ss;
+All_DS_vals(:,1) = ds;
+All_eigenvalues(:,1) = eval;
+% Remaining values computed based on the previous ones
+for n=1:length(p1)-1;
+    bif_param1=p1(n+1);
+    bif_param2=p2(n+1);
+    % bifurcation parameter identified to "jth parameter"
+    params(j)=bif_param1;
+    params(k)=bif_param2;
+    [~,Ys] = ode15s(@(t,s) two_hybrids_hetero2(t,s,params),[0 1000*3600],Ys_initial_array(:,n));
+    Ys_initial_temp=Ys(end,:);
+    %Ys_initial_temp([4 7 11 14])=0;
+    Ys_initial_array(:,n+1)=Ys_initial_temp;
+    [total, fphos, ss, ds, eval]=ss_attributes2K(Ys(end,:),params);
+    Total_kinase(:,n+1) = total;
+    Fraction_phosphorylation(:,n+1) = fphos;
+    All_species(:,n+1) = ss;
+    All_DS_vals(:,n+1) = ds;
+    All_eigenvalues(:,n+1) = eval;
+end
+if display_tag==1; max_eval=max(real(All_eigenvalues)); display('    parameter1       parameter2       eigenvalues'); display([param_interval1; param_interval2; max_eval]'); end;
+
+function ds=two_hybrids_hetero2(t,s,params)
+
+Kp = s(1);
+Kpp = s(2);
+KC1 = s(3);
+KCx1 = s(4);
+KC2 = s(5);
+KC3 = s(6);
+KCx3 = s(7);
+Lp = s(8);
+Lpp = s(9);
+LC1 = s(10);
+LCx1 = s(11);
+LC2 = s(12);
+LC3 = s(13);
+LCx3 = s(14);
+
+r1 = params(1);
+rm1= params(2);
+r2= params(3);
+r3= params(4);
+rm3= params(5);
+r4= params(6);
+r5= params(7);
+Pt= params(8);
+alpha= params(9);
+lambda1= params(10);
+lambda2=params(11);
+epsilon= params(12);
+K_half= params(13);
+gamma= params(14);
+beta= params(15);
+delta1= params(16);
+delta2= params(17);
+delta3= params(18);
+delta4= params(19);
+delta5= params(20);
+delta6= params(21);
+delta7= params(22);
+delta8= params(23);
+delta9= params(24);
+
+
+H_Kpp  = alpha + gamma*(Kpp^4)/(K_half^4 + Kpp^4);
+H_Lpp  = alpha*(1+delta5) + gamma*(1+delta3)*(Lpp^4)/((K_half*(1+delta4))^4 + Lpp^4);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+dKp = H_Kpp - (lambda1 + r5)*Kp + r4*KC2 - (2*r1*beta*Kp*Kp + epsilon*r1*Kp*Kpp) + 2*rm1*KC3 + r2*KC3 + rm1*KC1 ...
+                                         + delta7*(-((2*r1*beta*(1+delta1)*Kp*Lp) + epsilon*(1+delta2)*r1*Kp*Lpp) + rm1*KCx3 + r2*LCx3 + rm1*KCx1 + rm1*LCx3) ;
+
+dKpp = r5*Kp - lambda2*Kpp - r3*(Pt-KC2-delta9*LC2)*Kpp + rm3*KC2 - epsilon*r1*Kpp*Kp + r2*KC3 + (rm1+2*r2)*KC1 + delta7*(- epsilon*(1+delta2)*r1*Lp*Kpp + r2*KCx1 + rm1*LCx1 + r2*LCx1 + r2*KCx3) ;
+
+dKC1 = epsilon*r1*Kpp*Kp -(rm1+r2)*KC1 ;  % Kp*Kpp
+
+dKCx1 = delta7*(epsilon*(1+delta2)*r1*Kp*Lpp -(rm1+r2)*KCx1) ;  % Kp*Lpp
+
+dKC2 = r3*(Pt - KC2 - delta9*LC2)*Kpp - (rm3+r4)*KC2;  % Kpp*P
+
+dKC3 = r1*beta*Kp*Kp - (rm1+r2)*KC3 ;  % Kp*Kp
+
+dKCx3 = delta7*(r1*beta*(1+delta1)*Kp*Lp - (rm1+r2)*KCx3) ;  % Kp*Lp
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+dLp = H_Lpp - (lambda1*(1+delta8) + r5)*Lp + r4*LC2 - (2*r1*beta*(1+delta1)*Lp*Lp + epsilon*(1+delta2)*r1*Lp*Lpp) + 2*rm1*LC3 + r2*LC3 + rm1*LC1 ...
+                                         + delta7*(- ((2*r1*beta*(1+delta1)*Lp*Kp) + epsilon*(1+delta2)*r1*Lp*Kpp) + rm1*LCx3 + r2*KCx3 + rm1*LCx1 + rm1*KCx3) ;
+
+dLpp = r5*Lp - (lambda2*(1+delta6))*Lpp - r3*(Pt-delta9*KC2-LC2)*Lpp + rm3*LC2 - epsilon*(1+delta2)*r1*Lpp*Lp + r2*LC3 + (rm1+2*r2)*LC1 ...
+                                         + delta7*(- epsilon*(1+delta2)*r1*Kp*Lpp + r2*LCx1 + rm1*KCx1 + r2*KCx1 + r2*LCx3) ;
+
+dLC1 = epsilon*(1+delta2)*r1*Lpp*Lp -(rm1+r2)*LC1 ;  % Lp*Lpp
+
+dLCx1 = delta7*(epsilon*(1+delta2)*r1*Lp*Kpp -(rm1+r2)*LCx1) ;  % Lp*Kpp
+
+dLC2 = r3*(Pt - delta9*KC2 - LC2)*Lpp - (rm3+r4)*LC2;  % Lpp*P
+
+dLC3 = r1*beta*(1+delta1)*Lp*Lp - (rm1+r2)*LC3 ;  % Lp*Lp
+
+dLCx3 = delta7*(r1*beta*(1+delta1)*Lp*Kp - (rm1+r2)*LCx3) ;  % Lp*Kp
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ds=[dKp dKpp dKC1 dKCx1 dKC2 dKC3 dKCx3 dLp dLpp dLC1 dLCx1 dLC2 dLC3 dLCx3]';
+
+
+function ds=two_hybrids_hetero2_stim(t,s,params)
+
+Kp = s(1);
+Kpp = s(2);
+KC1 = s(3);
+KCx1 = s(4);
+KC2 = s(5);
+KC3 = s(6);
+KCx3 = s(7);
+Lp = s(8);
+Lpp = s(9);
+LC1 = s(10);
+LCx1 = s(11);
+LC2 = s(12);
+LC3 = s(13);
+LCx3 = s(14);
+
+T1 = s(15);
+T2 = s(16);
+mu_z = s(17);
+mu_l = s(18);
+
+r1 = params(1);
+rm1= params(2);
+r2= params(3);
+r3= params(4);
+rm3= params(5);
+r4= params(6);
+r5= params(7);
+Pt= params(8);
+alpha= params(9);
+lambda1= params(10);
+lambda2=params(11);
+epsilon= params(12);
+K_half= params(13);
+gamma= params(14);
+beta= params(15);
+delta1= params(16);
+delta2= params(17);
+delta3= params(18);
+delta4= params(19);
+delta5= params(20);
+delta6= params(21);
+delta7= params(22);
+delta8= params(23);
+delta9= params(24);
+
+H_Kpp = heaviside((T1-t)*(T2-t))*(alpha + gamma*(Kpp^4)/(K_half^4 + Kpp^4))...
+      + heaviside(-(T1-t)*(T2-t))*mu_z;
+H_Lpp = heaviside((T1-t)*(T2-t))*(alpha*(1+delta5) + gamma*(1+delta3)*(Lpp^4)/((K_half*(1+delta4))^4 + Lpp^4))...
+      + heaviside(-(T1-t)*(T2-t))*mu_l;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+dKp = H_Kpp - (lambda1 + r5)*Kp + r4*KC2 - (2*r1*beta*Kp*Kp + epsilon*r1*Kp*Kpp) + 2*rm1*KC3 + r2*KC3 + rm1*KC1 ...
+                                         + delta7*(-((2*r1*beta*(1+delta1)*Kp*Lp) + epsilon*(1+delta2)*r1*Kp*Lpp) + rm1*KCx3 + r2*LCx3 + rm1*KCx1 + rm1*LCx3) ;
+
+dKpp = r5*Kp - lambda2*Kpp - r3*(Pt-KC2-delta9*LC2)*Kpp + rm3*KC2 - epsilon*r1*Kpp*Kp + r2*KC3 + (rm1+2*r2)*KC1 + delta7*(- epsilon*(1+delta2)*r1*Lp*Kpp + r2*KCx1 + rm1*LCx1 + r2*LCx1 + r2*KCx3) ;
+
+dKC1 = epsilon*r1*Kpp*Kp -(rm1+r2)*KC1 ;  % Kp*Kpp
+
+dKCx1 = delta7*(epsilon*(1+delta2)*r1*Kp*Lpp -(rm1+r2)*KCx1) ;  % Kp*Lpp
+
+dKC2 = r3*(Pt - KC2 - delta9*LC2)*Kpp - (rm3+r4)*KC2;  % Kpp*P
+
+dKC3 = r1*beta*Kp*Kp - (rm1+r2)*KC3 ;  % Kp*Kp
+
+dKCx3 = delta7*(r1*beta*(1+delta1)*Kp*Lp - (rm1+r2)*KCx3) ;  % Kp*Lp
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+dLp = H_Lpp - (lambda1*(1+delta8) + r5)*Lp + r4*LC2 - (2*r1*beta*(1+delta1)*Lp*Lp + epsilon*(1+delta2)*r1*Lp*Lpp) + 2*rm1*LC3 + r2*LC3 + rm1*LC1 ...
+                                         + delta7*(- ((2*r1*beta*(1+delta1)*Lp*Kp) + epsilon*(1+delta2)*r1*Lp*Kpp) + rm1*LCx3 + r2*KCx3 + rm1*LCx1 + rm1*KCx3) ;
+
+dLpp = r5*Lp - (lambda2*(1+delta6))*Lpp - r3*(Pt-delta9*KC2-LC2)*Lpp + rm3*LC2 - epsilon*(1+delta2)*r1*Lpp*Lp + r2*LC3 + (rm1+2*r2)*LC1 ...
+                                         + delta7*(- epsilon*(1+delta2)*r1*Kp*Lpp + r2*LCx1 + rm1*KCx1 + r2*KCx1 + r2*LCx3) ;
+
+dLC1 = epsilon*(1+delta2)*r1*Lpp*Lp -(rm1+r2)*LC1 ;  % Lp*Lpp
+
+dLCx1 = delta7*(epsilon*(1+delta2)*r1*Lp*Kpp -(rm1+r2)*LCx1) ;  % Lp*Kpp
+
+dLC2 = r3*(Pt - delta9*KC2 - LC2)*Lpp - (rm3+r4)*LC2;  % Lpp*P
+
+dLC3 = r1*beta*(1+delta1)*Lp*Lp - (rm1+r2)*LC3 ;  % Lp*Lp
+
+dLCx3 = delta7*(r1*beta*(1+delta1)*Lp*Kp - (rm1+r2)*LCx3) ;  % Lp*Kp
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ds=[dKp dKpp dKC1 dKCx1 dKC2 dKC3 dKCx3 dLp dLpp dLC1 dLCx1 dLC2 dLC3 dLCx3 0 0 0 0]';
+
+              
+function [nK,nL]=two_hybrids_hetero2_null(Kpp,Lpp,params)
+r1 = params(1);
+rm1= params(2);
+r2= params(3);
+r3= params(4);
+rm3= params(5);
+r4= params(6);
+r5= params(7);
+Pt= params(8);
+alpha= params(9);
+lambda1= params(10);
+lambda2=params(11);
+epsilon= params(12);
+K_half= params(13);
+gamma= params(14);
+beta= params(15);
+delta1= params(16);
+delta2= params(17);
+delta3= params(18);
+delta4= params(19);
+delta5= params(20);
+delta6= params(21);
+delta7= params(22);
+delta8= params(23);
+delta9= params(24);
+
+
+H_Kpp  = alpha + gamma.*(Kpp.^4)./(K_half.^4 + Kpp.^4); 
+H_Lpp  = alpha.*(1+delta5) + gamma.*(1+delta3).*(Lpp.^4)./((K_half.*(1+delta4)).^4 + Lpp.^4);
+
+Kp = (H_Kpp - Kpp.*lambda2)./lambda1;
+Lp = -(Lpp.*lambda2 - H_Lpp + Lpp.*delta6.*lambda2)./(lambda1 + delta8.*lambda1);
+
+KC1 = (Kp.*Kpp.*epsilon.*r1)./(r2 + rm1);
+KCx1 = (Kp.*Lpp.*epsilon.*r1.*(delta2 + 1))./(r2 + rm1);
+KC2 = (Kpp.*Pt.*r3)./(r4 + rm3 + Kpp.*r3 + Lpp.*r3);
+KC3 = (Kp.^2.*beta.*r1)./(r2 + rm1);
+KCx3 = (Kp.*Lp.*beta*r1*(delta1 + 1))./(r2 + rm1);
+
+LC1 = (Lp.*Lpp.*epsilon.*r1.*(delta2 + 1))./(r2 + rm1);
+LCx1 = (Kpp.*Lp.*epsilon.*r1.*(delta2 + 1))./(r2 + rm1);
+LC2 = (Lpp.*Pt.*r3)./(r4 + rm3 + Kpp.*r3 + Lpp.*r3);
+LC3 = (Lp.^2.*beta.*r1.*(delta1 + 1))./(r2 + rm1);
+LCx3 = (Kp.*Lp.*beta.*r1.*(delta1 + 1))./(r2 + rm1);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+nK = H_Kpp + Kpp.*lambda2 + KC2.*r4 - Kp.*r5 + KC1.*rm1 + 2.*KC3.*rm1 - KC2.*rm3 ...
+           - delta7.*(KCx1.*r2 + KCx3.*r2 + LCx1.*r2 + LCx1.*rm1 - Kpp.*Lp.*epsilon.*r1.*(delta2 + 1)) ...
+           - KC1.*(2.*r2 + rm1) + delta7.*(KCx1.*rm1 + KCx3.*rm1 + LCx3.*r2 + LCx3.*rm1 - 2.*Kp.*Lp.*beta.*r1.*(delta1 + 1) ...
+           - Kp.*Lpp.*epsilon.*r1.*(delta2 + 1)) - Kp.*(lambda1 + r5) - Kpp.*r3.*(KC2 + LC2 - Pt) - 2.*Kp.^2.*beta.*r1;
+
+
+nL = H_Lpp - Lp.*(r5 + lambda1.*(delta8 + 1)) + LC2.*r4 - Lp.*r5 + LC1.*rm1 + 2.*LC3.*rm1 - LC2.*rm3 ...
+           - delta7.*(KCx1.*r2 + KCx1.*rm1 + LCx1.*r2 + LCx3.*r2 - Kp.*Lpp.*epsilon*r1.*(delta2 + 1)) ...
+           - LC1.*(2.*r2 + rm1) + delta7.*(KCx3.*r2 + KCx3.*rm1 + LCx1.*rm1 + LCx3.*rm1 - 2.*Kp.*Lp.*beta.*r1.*(delta1 + 1) ...
+           - Kpp.*Lp.*epsilon.*r1.*(delta2 + 1)) - Lpp.*r3.*(LC2 - Pt + KC2) + Lpp.*lambda2.*(delta6 + 1) - 2.*Lp.^2.*beta.*r1.*(delta1 + 1);
+
+function [total, fphos, ss, ds, eval]=ss_attributes2K(Ys,params)
+% This model shares same total Pt
+
+r1=params(1);
+rm1=params(2);
+r2=params(3);
+r3=params(4);
+rm3=params(5);
+r4=params(6);
+r5=params(7);
+Pt=params(8);
+alpha=params(9);
+lambda1=params(10);
+lambda2=params(11);
+epsilon=params(12);
+K_half=params(13);
+gamma=params(14);
+beta=params(15);
+delta1=params(16);
+delta2=params(17);
+delta3=params(18);
+delta4=params(19);
+delta5=params(20);
+delta6=params(21);
+delta7=params(22);
+delta8=params(23);
+delta9=params(24);
+
+Kp = Ys(end,1);
+Kpp = Ys(end,2);
+KC1 = Ys(end,3);       % Kp*Kpp
+KCx1 = Ys(end,4);      % Kp*Lpp
+KC2 = Ys(end,5);       % Kpp*P
+KC3 = Ys(end,6);       % Kp*Kp
+KCx3 = Ys(end,7);      % Kp*Lp
+Lp = Ys(end,8);
+Lpp = Ys(end,9);
+LC1 = Ys(end,10);      % Lp*Lpp
+LCx1 = Ys(end,11);     % Lp*Kpp
+LC2 = Ys(end,12);      % Lpp*P
+LC3 = Ys(end,13);      % Lp*Lp
+LCx3 = Ys(end,14);     % Lp*Kp
+                      
+fphos = [(Kpp + KC1 + KC2 + LCx1)/(Kp+Kpp+2*KC1+KCx1+KC2+2*KC3+KCx3+LCx1+LCx3)...
+                  (Lpp + LC1 + LC2 + KCx1)/(Lp+Lpp+2*LC1+LCx1+LC2+2*LC3+LCx3+KCx1+KCx3)]';
+
+
+total = [(Kp+Kpp+2*KC1+KCx1+KC2+2*KC3+KCx3+LCx1+LCx3)...
+                  (Lp+Lpp+2*LC1+LCx1+LC2+2*LC3+LCx3+KCx1+KCx3)]';
+              
+ss = [Kp Kpp KC1 KCx1 KC2 KC3 KCx3 Lp Lpp LC1 LCx1 LC2 LC3 LCx3]';
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+H_Kpp  = alpha + gamma*(Kpp^4)/(K_half^4 + Kpp^4);
+H_Lpp  = alpha*(1+delta5) + gamma*(1+delta3)*(Lpp^4)/((K_half*(1+delta4))^4 + Lpp^4);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+dKp = H_Kpp - (lambda1 + r5)*Kp + r4*KC2 - (2*r1*beta*Kp*Kp + epsilon*r1*Kp*Kpp) + 2*rm1*KC3 + r2*KC3 + rm1*KC1 ...
+                                         + delta7*(-((2*r1*beta*(1+delta1)*Kp*Lp) + epsilon*(1+delta2)*r1*Kp*Lpp) + rm1*KCx3 + r2*LCx3 + rm1*KCx1 + rm1*LCx3) ;
+
+dKpp = r5*Kp - lambda2*Kpp - r3*(Pt-KC2-delta9*LC2)*Kpp + rm3*KC2 - epsilon*r1*Kpp*Kp + r2*KC3 + (rm1+2*r2)*KC1 + delta7*(- epsilon*(1+delta2)*r1*Lp*Kpp + r2*KCx1 + rm1*LCx1 + r2*LCx1 + r2*KCx3) ;
+
+dKC1 = epsilon*r1*Kpp*Kp -(rm1+r2)*KC1 ;  % Kp*Kpp
+
+dKCx1 = delta7*(epsilon*(1+delta2)*r1*Kp*Lpp -(rm1+r2)*KCx1) ;  % Kp*Lpp
+
+dKC2 = r3*(Pt - KC2 - delta9*LC2)*Kpp - (rm3+r4)*KC2;  % Kpp*P
+
+dKC3 = r1*beta*Kp*Kp - (rm1+r2)*KC3 ;  % Kp*Kp
+
+dKCx3 = delta7*(r1*beta*(1+delta1)*Kp*Lp - (rm1+r2)*KCx3) ;  % Kp*Lp
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+dLp = H_Lpp - (lambda1*(1+delta8) + r5)*Lp + r4*LC2 - (2*r1*beta*(1+delta1)*Lp*Lp + epsilon*(1+delta2)*r1*Lp*Lpp) + 2*rm1*LC3 + r2*LC3 + rm1*LC1 ...
+                                         + delta7*(- ((2*r1*beta*(1+delta1)*Lp*Kp) + epsilon*(1+delta2)*r1*Lp*Kpp) + rm1*LCx3 + r2*KCx3 + rm1*LCx1 + rm1*KCx3) ;
+
+dLpp = r5*Lp - (lambda2*(1+delta6))*Lpp - r3*(Pt-delta9*KC2-LC2)*Lpp + rm3*LC2 - epsilon*(1+delta2)*r1*Lpp*Lp + r2*LC3 + (rm1+2*r2)*LC1 + delta7*(- epsilon*(1+delta2)*r1*Kp*Lpp + r2*LCx1 + rm1*KCx1 + r2*KCx1 + r2*LCx3) ;
+
+dLC1 = epsilon*(1+delta2)*r1*Lpp*Lp -(rm1+r2)*LC1 ;  % Lp*Lpp
+
+dLCx1 = delta7*(epsilon*(1+delta2)*r1*Lp*Kpp -(rm1+r2)*LCx1) ;  % Lp*Kpp
+
+dLC2 = r3*(Pt - delta9*KC2 - LC2)*Lpp - (rm3+r4)*LC2;  % Lpp*P
+
+dLC3 = r1*beta*(1+delta1)*Lp*Lp - (rm1+r2)*LC3 ;  % Lp*Lp
+
+dLCx3 = delta7*(r1*beta*(1+delta1)*Lp*Kp - (rm1+r2)*LCx3) ;  % Lp*Kp
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ds=[dKp dKpp dKC1 dKCx1 dKC2 dKC3 dKCx3 dLp dLpp dLC1 dLCx1 dLC2 dLC3 dLCx3]';
+
+
+
+R =...
+[ - lambda1 - r5 - delta7*(2*Lp*beta*r1*(delta1 + 1) + Lpp*epsilon*r1*(delta2 + 1)) - 4*Kp*beta*r1 - Kpp*epsilon*r1, (4*Kpp^3*gamma)/(K_half^4 + Kpp^4) - Kp*epsilon*r1 ...
+     - (4*Kpp^7*gamma)/(K_half^4 + Kpp^4)^2,        rm1,         delta7*rm1,                  r4, r2 + 2*rm1,         delta7*rm1,           ...                                                                                                             -2*Kp*beta*delta7*r1*(delta1 + 1),         -Kp*delta7*epsilon*r1*(delta2 + 1),          0,                  0,                   0,          0,  delta7*(r2 + rm1);
+    r5 - Kpp*epsilon*r1,  r3*(KC2 - Pt + LC2*delta9) - lambda2 - Kp*epsilon*r1 - Lp*delta7*epsilon*r1*(delta2 + 1), 2*r2 + rm1,          delta7*r2,        rm3 + Kpp*r3,      ...
+         r2,          delta7*r2,               -Kpp*delta7*epsilon*r1*(delta2 + 1),        0,          0,  delta7*(r2 + rm1),       Kpp*delta9*r3,          0,                  0;
+    Kpp*epsilon*r1,       Kp*epsilon*r1, - r2 - rm1,                  0,                   0,          0,                  0,             0,         ...                                                                                                                                                     0,          0,                  0,                   0,          0,                  0;
+    Lpp*delta7*epsilon*r1*(delta2 + 1),       0,          0, -delta7*(r2 + rm1),                   0,          0,                  0,  ...                                                                                                                                                      0,                          Kp*delta7*epsilon*r1*(delta2 + 1),          0,                  0,                   0,          0,                  0;
+    0,        -r3*(KC2 - Pt + LC2*delta9),          0,                  0, - r4 - rm3 - Kpp*r3,          0,                  0,      ...                                                                                                                                                  0,               0,          0,                  0,      -Kpp*delta9*r3,          0,                  0;
+    2*Kp*beta*r1,           0,          0,                  0,                   0, - r2 - rm1,                  0,      ...                                                                                                                                                  0,                      0,          0,                  0,                   0,          0,                  0;
+    Lp*beta*delta7*r1*(delta1 + 1),         0,          0,                  0,                   0,          0, -delta7*(r2 + rm1),        ...                                                                                                                   Kp*beta*delta7*r1*(delta1 + 1),             0,          0,                  0,                   0,          0,                  0;
+    -2*Lp*beta*delta7*r1*(delta1 + 1),        -Lp*delta7*epsilon*r1*(delta2 + 1),          0,                  0,                   0,          0,  delta7*(r2 + rm1), - r5 ...
+        - lambda1*(delta8 + 1) - delta7*(2*Kp*beta*r1*(delta1 + 1) + Kpp*epsilon*r1*(delta2 + 1)) - 4*Lp*beta*r1*(delta1 + 1) - Lpp*epsilon*r1*(delta2 + 1), ...
+        (4*Lpp^3*gamma*(delta3 + 1))/(K_half^4*(delta4 + 1)^4 + Lpp^4) - Lp*epsilon*r1*(delta2 + 1) - (4*Lpp^7*gamma*(delta3 + 1))/(K_half^4*(delta4 + 1)^4 + Lpp^4)^2,    ...
+        rm1,         delta7*rm1,                  r4, r2 + 2*rm1,         delta7*rm1;
+    -Lpp*delta7*epsilon*r1*(delta2 + 1),        0,          0,  delta7*(r2 + rm1),       Lpp*delta9*r3,          0,                  0,           ...                                                                                                              r5 - Lpp*epsilon*r1*(delta2 + 1),      r3*(LC2 - Pt + KC2*delta9) - lambda2*(delta6 + 1) - Lp*epsilon*r1*(delta2 + 1) - Kp*delta7*epsilon*r1*(delta2 + 1), 2*r2 + rm1,   ...
+        delta7*r2,        rm3 + Lpp*r3,         r2,          delta7*r2;
+    0,       0,          0,                  0,                   0,          0,                  0,                Lpp*epsilon*r1*(delta2 + 1),           ...                                                                                                                          Lp*epsilon*r1*(delta2 + 1), - r2 - rm1,                  0,                   0,          0,                  0;
+    0,            Lp*delta7*epsilon*r1*(delta2 + 1),          0,                  0,                   0,          0,          0,         Kpp*delta7*epsilon*r1*(delta2 + 1),     ...                                                                                                                                                         0,          0, -delta7*(r2 + rm1),                   0,          0,                  0;
+    0,           0,          0,                  0,      -Lpp*delta9*r3,          0,                  0,               0,       ...                                                                                                                             -r3*(LC2 - Pt + KC2*delta9),          0,                  0, - r4 - rm3 - Lpp*r3,          0,                  0;
+    0,           0,          0,                  0,                   0,          0,                  0,        2*Lp*beta*r1*(delta1 + 1),       ...                                                                                                                                                       0,          0,                  0,                   0, - r2 - rm1,                  0;
+    Lp*beta*delta7*r1*(delta1 + 1),          0,          0,                  0,                   0,          0,           0,          Kp*beta*delta7*r1*(delta1 + 1),      ...                                                                                                                                                        0,          0,                  0,                   0,          0, -delta7*(r2 + rm1)];
+                      
+eval = eig(R);

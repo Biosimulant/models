@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<MorpheusModel version="4">
+    <Description>
+        <Details>Full title: Mutual Zonated Interactions of Wnt and Hh Signaling Are Orchestrating the Metabolism of the Adult Liver in Mice and Human
+Date: December 24, 2019
+Author: michael.kuecken@tu-dresden.de and lutz.brusch@tu-dresden.de
+Software: Morpheus (open-source), download from https://morpheus.gitlab.io
+Reference: This model is described in the peer-reviewed publication "Mutual Zonated Interactions of Wnt and Hh Signaling Are Orchestrating the Metabolism of the Adult Liver in Mice and Human" by E. Kolbe, S. Aleithe, C. Rennert, L. Spormann, F. Ott, D. Meierhofer, R. Gajowski, C. Stöpel, S. Hoehme, M. Kücken, L. Brusch, M. Seifert, W. von Schoenfels, C. Schafmayer, M. Brosch, U. Hofmann, G. Damm, D. Seehofer, J. Hampe, R. Gebhardt, M. Matz-Soja. 
+Cell Reports 29, 4553, 2019.
+https://doi.org/10.1016/j.celrep.2019.11.104
+</Details>
+        <Title>Liver zonation</Title>
+    </Description>
+    <Space>
+        <Lattice class="square">
+            <Neighborhood>
+                <Order>1</Order>
+            </Neighborhood>
+            <Size symbol="size" value="256,256, 0"/>
+            <NodeLength value="0.1"/>
+            <BoundaryConditions>
+                <Condition boundary="x" type="periodic"/>
+                <Condition boundary="-x" type="periodic"/>
+                <Condition boundary="y" type="periodic"/>
+                <Condition boundary="-y" type="periodic"/>
+            </BoundaryConditions>
+        </Lattice>
+        <SpaceSymbol symbol="s"/>
+    </Space>
+    <Time>
+        <StartTime value="0"/>
+        <StopTime value="100"/>
+        <TimeSymbol symbol="t"/>
+    </Time>
+    <Global>
+        <System solver="Runge-Kutta [fixed, O(4)]" time-step="0.1">
+            <DiffEqn symbol-ref="w">
+                <Expression>0.001-k1*w + cvein</Expression>
+            </DiffEqn>
+            <DiffEqn symbol-ref="b">
+                <Expression>b*(w-a)*(1/(1+k2*h)-b) </Expression>
+            </DiffEqn>
+            <DiffEqn symbol-ref="h">
+                <Expression>k3*c-k4*w*h-h</Expression>
+            </DiffEqn>
+            <DiffEqn symbol-ref="i">
+                <Expression>b*c*c-k5*i</Expression>
+            </DiffEqn>
+            <DiffEqn symbol-ref="g">
+                <Expression>k6*i+k7*h-k8*g</Expression>
+            </DiffEqn>
+        </System>
+        <Field symbol="w" value="0.0" name="Wnt">
+            <Diffusion rate="1.0"/>
+            <BoundaryValue value="0" boundary="x"/>
+            <BoundaryValue value="0" boundary="-x"/>
+        </Field>
+        <Field symbol="b" value="0.01" name="betaCatenin">
+            <Diffusion rate="0.001"/>
+            <BoundaryValue value="0.1" boundary="x"/>
+            <BoundaryValue value="0" boundary="x"/>
+        </Field>
+        <Field symbol="h" value="0.01" name="SHH">
+            <Diffusion rate="0.5"/>
+        </Field>
+        <Field symbol="g" value="0.01" name="Gli3">
+            <Diffusion rate="1.0"/>
+        </Field>
+        <Field symbol="i" value="0.001" name="IHH"/>
+        <Field symbol="cvein" value="if((s.x-128)*(s.x-128)+(s.y-128)*(s.y-128)&lt;=25, 1, 0) + if((s.x-28)*(s.x-28)+(s.y-128)*(s.y-128)&lt;=25, 1, 0) + if((s.x-228)*(s.x-228)+(s.y-128)*(s.y-128)&lt;=25, 1, 0) + if((s.x-78)*(s.x-78)+(s.y-215)*(s.y-215)&lt;=25, 1, 0) + if((s.x-78)*(s.x-78)+(s.y-41)*(s.y-41)&lt;=25, 1, 0) + if((s.x-178)*(s.x-178)+(s.y-215)*(s.y-215)&lt;=25, 1, 0) + if((s.x-178)*(s.x-178)+(s.y-41)*(s.y-41)&lt;=25, 1, 0)" name="Wnt source at CV"/>
+        <Field symbol="portal" value="if((s.x-180)*(s.x-180)+(s.y-100)*(s.y-100)&lt;=25, 1, 0) + if((s.x-20)*(s.x-20)+(s.y-100)*(s.y-100)&lt;=25, 1, 0) + if((s.x-60)*(s.x-60)+(s.y-30)*(s.y-30)&lt;=25, 1, 0)+ if((s.x-60)*(s.x-60)+(s.y-170)*(s.y-170)&lt;=25, 1, 0)+ if((s.x-140)*(s.x-140)+(s.y-30)*(s.y-30)&lt;=25, 1, 0)+ if((s.x-140)*(s.x-140)+(s.y-170)*(s.y-170)&lt;=25, 1, 0)" name="passive PV locations"/>
+        <Constant symbol="a" value="0.2"/>
+        <Constant symbol="c" value="1.0"/>
+        <Constant symbol="k2" value="12.0"/>
+        <Constant symbol="k1" value="0.1"/>
+        <Constant symbol="k3" value="0.2"/>
+        <Constant symbol="k4" value="12.0"/>
+        <Constant symbol="k5" value="1.0"/>
+        <Constant symbol="k6" value="0.5"/>
+        <Constant symbol="k7" value="2.0"/>
+        <Constant symbol="k8" value="1.0"/>
+    </Global>
+    <Analysis>
+        <Gnuplotter decorate="true" log-commands="false" time-step="10">
+            <Plot>
+                <Field min="0" max="0.3" symbol-ref="w">
+                    <ColorMap>
+                        <Color value="1" color="green"/>
+                        <Color value="0" color="white"/>
+                    </ColorMap>
+                </Field>
+            </Plot>
+            <Terminal name="png"/>
+            <Plot>
+                <Field min="0" max="0.7" symbol-ref="b">
+                    <ColorMap>
+                        <Color value="0.7" color="orange"/>
+                        <Color value="0" color="white"/>
+                    </ColorMap>
+                </Field>
+            </Plot>
+            <Plot>
+                <Field min="0" max="0.2" symbol-ref="h">
+                    <ColorMap>
+                        <Color value="0.2" color="red"/>
+                        <Color value="0" color="white"/>
+                    </ColorMap>
+                </Field>
+            </Plot>
+            <Plot>
+                <Field symbol-ref="cvein"/>
+            </Plot>
+            <!--    <Disabled>
+        <Plot>
+            <Field symbol-ref="portal"/>
+        </Plot>
+    </Disabled>
+-->
+            <Plot>
+                <Field min="0" max="0.5" symbol-ref="i">
+                    <ColorMap>
+                        <Color value="0.5" color="violet"/>
+                        <Color value="0" color="white"/>
+                    </ColorMap>
+                </Field>
+            </Plot>
+            <Plot>
+                <Field min="0" max="0.4" symbol-ref="g">
+                    <ColorMap>
+                        <Color value="0.4" color="brown4"/>
+                        <Color value="0" color="white"/>
+                    </ColorMap>
+                </Field>
+            </Plot>
+        </Gnuplotter>
+        <DependencyGraph reduced="false" include-tags="#untagged" format="svg"/>
+    </Analysis>
+</MorpheusModel>
