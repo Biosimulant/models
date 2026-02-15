@@ -27,7 +27,7 @@ import bsim
 MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
 for _model in [
     "virtualcell-perturbation-source",
-    "virtualcell-arc-grn",
+    "virtualcell-grn-predictor",
     "virtualcell-expression-translator",
     "virtualcell-expression-monitor",
     "neuro-izhikevich-population",

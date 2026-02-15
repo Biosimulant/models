@@ -1,22 +1,17 @@
 # SPDX-FileCopyrightText: 2025-present Demi <bjaiye1@gmail.com>
 #
 # SPDX-License-Identifier: MIT
-"""Virtual cell model using gene regulatory network dynamics.
+"""Classical gene regulatory network predictor.
 
-Implements a simplified virtual cell that predicts how gene expression
-changes in response to perturbations (gene knockouts, overexpression,
-drug effects). The model uses a gene regulatory network (GRN) represented
-as an interaction matrix, where each entry encodes the regulatory
-influence of one gene on another.
+Predicts how gene expression changes in response to perturbations (gene
+knockouts, overexpression, drug effects) using coupled ODEs with a
+biologically-motivated interaction matrix.
 
-When a perturbation is applied, the GRN evolves toward a new steady
-state via coupled ODEs, producing time-resolved gene expression profiles.
+The GRN dynamics follow:
+    dx/dt = W @ x + b - decay * x + perturbation_effect
 
-This module demonstrates the concept pioneered by the Arc Institute's
-Virtual Cell project (State/Stack models), using a classical GRN approach
-rather than transformer-based inference. The BioModule interface is
-identical, so the built-in GRN can be replaced with Arc's State Transition
-model for production use.
+where x is the expression vector, W is the interaction matrix, b is the
+basal transcription rate, and decay controls turnover.
 
 Reference genes include ion channels, receptors, and signaling molecules
 relevant to neuroscience, enabling downstream translation to biophysical
@@ -139,11 +134,7 @@ def _build_default_interaction_matrix(n: int, seed: int) -> np.ndarray:
 
 
 def _build_default_baseline(n: int, seed: int) -> np.ndarray:
-    """Build a realistic baseline expression profile.
-
-    Values represent log-normalized expression in arbitrary units,
-    roughly calibrated to single-cell RNA-seq magnitudes.
-    """
+    """Build a realistic baseline expression profile."""
     rng = np.random.default_rng(seed + 100)
     baseline = rng.uniform(1.0, 5.0, size=n)
 
@@ -173,38 +164,26 @@ def _build_default_baseline(n: int, seed: int) -> np.ndarray:
 
 
 class VirtualCell(BioModule):
-    """Simplified virtual cell predicting gene expression responses.
+    """GRN-based virtual cell predicting gene expression responses.
 
     Models a cell's transcriptional state as a vector of gene expression
-    levels governed by a gene regulatory network (GRN). Perturbations
+    levels governed by a gene regulatory network (GRN).  Perturbations
     modify expression directly (knockout sets to zero, overexpression
     multiplies) and the network relaxes toward a new steady state.
 
-    The GRN dynamics follow:
-        dx/dt = W @ x + b - decay * x + perturbation_effect
-
-    where x is the expression vector, W is the interaction matrix,
-    b is the basal transcription rate, and decay controls turnover.
-
     Parameters:
         n_genes: Number of genes in the model.
-        gene_names: List of gene name strings. Defaults to a curated
-            set of 20 neuroscience-relevant genes.
-        interaction_matrix: Flattened or nested list for the N x N GRN
-            weight matrix. None uses the built-in network.
+        gene_names: Custom gene name list (defaults to 20 neuro genes).
+        interaction_matrix: Custom N x N GRN weight matrix (flat or nested).
         baseline_expression: Initial steady-state expression levels.
-            None uses built-in defaults.
         decay_rate: Global mRNA decay rate constant.
         response_speed: How quickly expression responds to perturbation.
-            Higher values mean faster settling.
         seed: Random seed for reproducible default matrices.
         min_dt: Minimum time step.
 
     Emits:
-        expression_profile: {"gene_names": [...], "expression": [...],
-            "baseline": [...], "fold_change": [...]}
-        expression_summary: {"top_up": [...], "top_down": [...],
-            "mean_fold_change": float}
+        expression_profile: {gene_names, expression, baseline, fold_change}
+        expression_summary: {top_up, top_down, mean_fold_change}
     """
 
     def __init__(
@@ -294,13 +273,10 @@ class VirtualCell(BioModule):
         idx = self.gene_names.index(gene)
 
         if pert_type == "knockout":
-            # magnitude = fraction remaining (0.0 = full knockout)
             self._perturbation_mask[idx] = float(magnitude)
         elif pert_type == "overexpression":
-            # magnitude = fold-change multiplier
             self._perturbation_mask[idx] = float(magnitude)
         elif pert_type == "drug":
-            # Drug effect: scale expression by dose-response
             self._perturbation_mask[idx] = max(0.0, 1.0 - float(magnitude))
 
         self._perturbation_active = True

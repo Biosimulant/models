@@ -114,7 +114,7 @@ Full conventions, interface contracts, and acceptance checklists are in [STANDAR
 |--------|--------|---------|
 | `neuro-` | Neuroscience (spiking neurons, synapses, monitors) | `neuro-izhikevich-population` |
 | `ecology-` | Ecosystem dynamics (populations, environment) | `ecology-predator-prey-interaction` |
-| `virtualcell-` | Cellular and molecular biology | `virtualcell-arc-grn`, `virtualcell-perturbation-source` |
+| `virtualcell-` | Cellular and molecular biology | `virtualcell-grn-predictor`, `virtualcell-arc-state-predictor`, `virtualcell-perturbation-source` |
 
 ## Dependencies
 

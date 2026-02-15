@@ -1,7 +1,8 @@
-"""Tests for VirtualCell GRN model."""
+"""Tests for VirtualCell Arc State predictor."""
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 
 def test_instantiation(bsim):
@@ -17,6 +18,7 @@ def test_instantiation(bsim):
 
 
 def test_advance_produces_outputs(bsim):
+    """Advance without perturbation should emit baseline expression."""
     from src.virtual_cell import VirtualCell
 
     module = VirtualCell(min_dt=0.01)
@@ -42,11 +44,11 @@ def test_reset(bsim):
 
     module = VirtualCell(min_dt=0.01)
     module.advance_to(0.1)
-    module.advance_to(0.2)
     module.reset()
     assert module._time == 0.0
     assert len(module._expression_history) == 0
-    # Should match baseline after reset
+    assert module._current_gene is None
+    assert module._needs_inference is False
     np.testing.assert_array_almost_equal(module._expression, module._baseline)
 
 
@@ -79,112 +81,6 @@ def test_expression_summary_structure(bsim):
     assert isinstance(summary["mean_fold_change"], float)
 
 
-def test_knockout_reduces_expression(bsim):
-    """A gene knockout should reduce that gene's expression toward zero."""
-    from src.virtual_cell import VirtualCell
-    from bsim.signals import BioSignal
-
-    module = VirtualCell(min_dt=0.01)
-
-    # Apply SCN1A knockout
-    module.set_inputs({
-        "perturbation": BioSignal(
-            source="test", name="perturbation",
-            value={"gene": "SCN1A", "type": "knockout", "magnitude": 0.0, "active": True},
-            time=0.0,
-        ),
-    })
-
-    # Advance several steps for the GRN to respond
-    for step in range(1, 51):
-        module.advance_to(step * 0.01)
-
-    profile = module.get_outputs()["expression_profile"].value
-    scn1a_idx = profile["gene_names"].index("SCN1A")
-    fc = profile["fold_change"][scn1a_idx]
-
-    # SCN1A should be significantly downregulated
-    assert fc < 0.5, f"SCN1A fold-change should be < 0.5 after knockout, got {fc}"
-
-
-def test_overexpression_increases_expression(bsim):
-    """Overexpression should increase the target gene."""
-    from src.virtual_cell import VirtualCell
-    from bsim.signals import BioSignal
-
-    module = VirtualCell(min_dt=0.01)
-
-    module.set_inputs({
-        "perturbation": BioSignal(
-            source="test", name="perturbation",
-            value={"gene": "BDNF", "type": "overexpression", "magnitude": 3.0, "active": True},
-            time=0.0,
-        ),
-    })
-
-    for step in range(1, 51):
-        module.advance_to(step * 0.01)
-
-    profile = module.get_outputs()["expression_profile"].value
-    bdnf_idx = profile["gene_names"].index("BDNF")
-    fc = profile["fold_change"][bdnf_idx]
-
-    assert fc > 1.5, f"BDNF fold-change should be > 1.5 after overexpression, got {fc}"
-
-
-def test_network_propagation(bsim):
-    """Perturbation should propagate through the GRN to downstream genes."""
-    from src.virtual_cell import VirtualCell
-    from bsim.signals import BioSignal
-
-    module = VirtualCell(min_dt=0.01)
-
-    # Knockout CREB1 — should affect its targets (BDNF, FOS, SYN1)
-    module.set_inputs({
-        "perturbation": BioSignal(
-            source="test", name="perturbation",
-            value={"gene": "CREB1", "type": "knockout", "magnitude": 0.0, "active": True},
-            time=0.0,
-        ),
-    })
-
-    for step in range(1, 101):
-        module.advance_to(step * 0.01)
-
-    profile = module.get_outputs()["expression_profile"].value
-    gene_names = profile["gene_names"]
-    fc = profile["fold_change"]
-
-    creb1_fc = fc[gene_names.index("CREB1")]
-    bdnf_fc = fc[gene_names.index("BDNF")]
-
-    # CREB1 should be strongly reduced
-    assert creb1_fc < 0.3, f"CREB1 fc = {creb1_fc}"
-    # BDNF should also be somewhat affected (CREB1 activates BDNF)
-    assert bdnf_fc < 0.95, f"BDNF fc = {bdnf_fc}, expected some reduction"
-
-
-def test_expression_non_negative(bsim):
-    """Gene expression should never go negative."""
-    from src.virtual_cell import VirtualCell
-    from bsim.signals import BioSignal
-
-    module = VirtualCell(min_dt=0.01)
-
-    module.set_inputs({
-        "perturbation": BioSignal(
-            source="test", name="perturbation",
-            value={"gene": "SCN1A", "type": "knockout", "magnitude": 0.0, "active": True},
-            time=0.0,
-        ),
-    })
-
-    for step in range(1, 201):
-        module.advance_to(step * 0.01)
-        expr = module.get_outputs()["expression_profile"].value["expression"]
-        assert all(v >= 0.0 for v in expr), f"Negative expression at t={step * 0.01}"
-
-
 def test_unknown_gene_ignored(bsim):
     """Perturbation of unknown gene should be silently ignored."""
     from src.virtual_cell import VirtualCell
@@ -204,9 +100,80 @@ def test_unknown_gene_ignored(bsim):
     module.advance_to(0.02)
     fc_after = module.get_outputs()["expression_profile"].value["fold_change"]
 
-    # Should be essentially unchanged (small floating point drift is ok)
     for i in range(len(baseline_fc)):
         assert abs(fc_after[i] - baseline_fc[i]) < 0.1
+
+
+def test_perturbation_sets_needs_inference(bsim):
+    """Setting a perturbation should flag that inference is needed."""
+    from src.virtual_cell import VirtualCell
+    from bsim.signals import BioSignal
+
+    module = VirtualCell(min_dt=0.01)
+    assert module._needs_inference is False
+
+    module.set_inputs({
+        "perturbation": BioSignal(
+            source="test", name="perturbation",
+            value={"gene": "SCN1A", "type": "knockout", "magnitude": 0.0, "active": True},
+            time=0.0,
+        ),
+    })
+    assert module._needs_inference is True
+    assert module._current_gene == "SCN1A"
+
+
+def test_same_perturbation_no_retrigger(bsim):
+    """Repeating the same perturbation should not re-trigger inference."""
+    from src.virtual_cell import VirtualCell
+    from bsim.signals import BioSignal
+
+    module = VirtualCell(min_dt=0.01)
+
+    module.set_inputs({
+        "perturbation": BioSignal(
+            source="test", name="perturbation",
+            value={"gene": "SCN1A", "type": "knockout", "magnitude": 0.0, "active": True},
+            time=0.0,
+        ),
+    })
+    module._needs_inference = False  # simulate inference completed
+
+    module.set_inputs({
+        "perturbation": BioSignal(
+            source="test", name="perturbation",
+            value={"gene": "SCN1A", "type": "knockout", "magnitude": 0.0, "active": True},
+            time=0.01,
+        ),
+    })
+    assert module._needs_inference is False
+
+
+def test_different_perturbation_retriggers(bsim):
+    """Changing the perturbation gene should re-trigger inference."""
+    from src.virtual_cell import VirtualCell
+    from bsim.signals import BioSignal
+
+    module = VirtualCell(min_dt=0.01)
+
+    module.set_inputs({
+        "perturbation": BioSignal(
+            source="test", name="perturbation",
+            value={"gene": "SCN1A", "type": "knockout", "magnitude": 0.0, "active": True},
+            time=0.0,
+        ),
+    })
+    module._needs_inference = False
+
+    module.set_inputs({
+        "perturbation": BioSignal(
+            source="test", name="perturbation",
+            value={"gene": "BDNF", "type": "knockout", "magnitude": 0.0, "active": True},
+            time=0.01,
+        ),
+    })
+    assert module._needs_inference is True
+    assert module._current_gene == "BDNF"
 
 
 def test_visualize_none_before_advance(bsim):

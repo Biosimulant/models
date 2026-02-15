@@ -39,7 +39,8 @@ Each model is a self-contained simulation component with a `model.yaml` manifest
 | Model | Description |
 |-------|-------------|
 | `virtualcell-perturbation-source` | Defines gene perturbations (knockout/overexpression) over time |
-| `virtualcell-arc-grn` | Toy GRN-based virtual cell producing expression profiles |
+| `virtualcell-grn-predictor` | Classical GRN-based virtual cell producing expression profiles |
+| `virtualcell-arc-state-predictor` | Arc Institute State Transition ML model for expression prediction |
 | `virtualcell-expression-translator` | Translates expression profiles into neural input currents |
 | `virtualcell-expression-monitor` | Visualizes gene expression fold-changes and timeseries |
 
