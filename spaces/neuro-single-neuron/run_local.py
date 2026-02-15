@@ -16,14 +16,18 @@ from __future__ import annotations
 
 import bsim
 
-from bsim.packs.neuro import (
-    StepCurrent,
-    IzhikevichPopulation,
-    SpikeMonitor,
-    StateMonitor,
-    NeuroMetrics,
-    PRESETS,
-)
+import sys
+from pathlib import Path
+
+MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
+for _model in ["neuro-step-current", "neuro-izhikevich-population", "neuro-spike-monitor", "neuro-state-monitor", "neuro-metrics"]:
+    sys.path.insert(0, str(MODELS_DIR / _model))
+
+from src.step_current import StepCurrent
+from src.izhikevich import IzhikevichPopulation, PRESETS
+from src.spike_monitor import SpikeMonitor
+from src.state_monitor import StateMonitor
+from src.neuro_metrics import NeuroMetrics
 
 
 def run_single_neuron(preset_name: str = "RS", I_current: float = 10.0) -> dict:

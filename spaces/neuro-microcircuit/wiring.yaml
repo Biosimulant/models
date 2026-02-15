@@ -1,43 +1,43 @@
 # Wiring-spec (local) equivalent of spaces/neuro-microcircuit/space.yaml
 modules:
   poisson:
-    class: bsim.packs.neuro.PoissonInput
+    class: src.poisson_input:PoissonInput
     args: { n: 40, rate_hz: 15.0, seed: 42 }
   exc:
-    class: bsim.packs.neuro.IzhikevichPopulation
+    class: src.izhikevich:IzhikevichPopulation
     args: { n: 40, preset: "RS", I_bias: 0.0, sample_indices: [0, 1, 2] }
   inh:
-    class: bsim.packs.neuro.IzhikevichPopulation
+    class: src.izhikevich:IzhikevichPopulation
     args: { n: 10, preset: "FS", I_bias: 0.0, sample_indices: [0] }
   syn_ext_e:
-    class: bsim.packs.neuro.ExpSynapseCurrent
+    class: src.exp_synapse:ExpSynapseCurrent
     args: { n_pre: 40, n_post: 40, p_connect: 0.1, weight: 1.0, tau: 0.005, seed: 42 }
   syn_ee:
-    class: bsim.packs.neuro.ExpSynapseCurrent
+    class: src.exp_synapse:ExpSynapseCurrent
     args: { n_pre: 40, n_post: 40, p_connect: 0.1, weight: 0.3, tau: 0.005, seed: 43 }
   syn_ei:
-    class: bsim.packs.neuro.ExpSynapseCurrent
+    class: src.exp_synapse:ExpSynapseCurrent
     args: { n_pre: 40, n_post: 10, p_connect: 0.1, weight: 0.5, tau: 0.005, seed: 44 }
   syn_ie:
-    class: bsim.packs.neuro.ExpSynapseCurrent
+    class: src.exp_synapse:ExpSynapseCurrent
     args: { n_pre: 10, n_post: 40, p_connect: 0.1, weight: -1.5, tau: 0.010, seed: 45 }
   syn_ii:
-    class: bsim.packs.neuro.ExpSynapseCurrent
+    class: src.exp_synapse:ExpSynapseCurrent
     args: { n_pre: 10, n_post: 10, p_connect: 0.1, weight: -0.5, tau: 0.010, seed: 46 }
   spike_mon_e:
-    class: bsim.packs.neuro.SpikeMonitor
+    class: src.spike_monitor:SpikeMonitor
     args: { max_neurons: 40, width: 600, height: 200 }
   spike_mon_i:
-    class: bsim.packs.neuro.SpikeMonitor
+    class: src.spike_monitor:SpikeMonitor
     args: { max_neurons: 10, width: 600, height: 100 }
   rate_mon:
-    class: bsim.packs.neuro.RateMonitor
+    class: src.rate_monitor:RateMonitor
     args: { window_size: 0.02, n_neurons: 50 }
   state_mon:
-    class: bsim.packs.neuro.StateMonitor
+    class: src.state_monitor:StateMonitor
     args: { max_points: 5000 }
   metrics:
-    class: bsim.packs.neuro.NeuroMetrics
+    class: src.neuro_metrics:NeuroMetrics
     args: { n_neurons: 50 }
 wiring:
   - { from: "poisson.spikes", to: ["syn_ext_e.spikes"] }

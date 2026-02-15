@@ -17,16 +17,21 @@ from __future__ import annotations
 
 import bsim
 
-from bsim.packs.neuro import (
-    PoissonInput,
-    StepCurrent,
-    IzhikevichPopulation,
-    ExpSynapseCurrent,
-    SpikeMonitor,
-    RateMonitor,
-    StateMonitor,
-    NeuroMetrics,
-)
+import sys
+from pathlib import Path
+
+MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
+for _model in ["neuro-poisson-input", "neuro-izhikevich-population", "neuro-exp-synapse-current", "neuro-spike-monitor", "neuro-rate-monitor", "neuro-state-monitor", "neuro-metrics", "neuro-step-current"]:
+    sys.path.insert(0, str(MODELS_DIR / _model))
+
+from src.poisson_input import PoissonInput
+from src.step_current import StepCurrent
+from src.izhikevich import IzhikevichPopulation
+from src.exp_synapse import ExpSynapseCurrent
+from src.spike_monitor import SpikeMonitor
+from src.rate_monitor import RateMonitor
+from src.state_monitor import StateMonitor
+from src.neuro_metrics import NeuroMetrics
 
 
 def setup_single_neuron_world() -> bsim.BioWorld:

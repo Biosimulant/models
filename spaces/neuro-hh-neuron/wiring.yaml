@@ -1,22 +1,24 @@
-# Wiring-spec (local) equivalent of spaces/neuro-single-neuron/space.yaml
+# Wiring-spec (local) equivalent of spaces/neuro-hh-neuron/space.yaml
 modules:
   current:
     class: src.step_current:StepCurrent
     args: { I: 10.0 }
   neuron:
-    class: src.izhikevich:IzhikevichPopulation
-    args: { n: 1, preset: "RS", sample_indices: [0] }
+    class: src.hodgkin_huxley:HodgkinHuxleyPopulation
+    args: { n: 1, sample_indices: [0] }
   spike_mon:
     class: src.spike_monitor:SpikeMonitor
     args: { max_neurons: 1, width: 600, height: 200 }
   state_mon:
     class: src.state_monitor:StateMonitor
     args: { max_points: 5000 }
+  hh_mon:
+    class: src.hh_state_monitor:HHStateMonitor
+    args: { max_points: 5000, neuron_index: 0 }
   metrics:
     class: src.neuro_metrics:NeuroMetrics
     args: { n_neurons: 1 }
 wiring:
   - { from: "current.current", to: ["neuron.current"] }
   - { from: "neuron.spikes", to: ["spike_mon.spikes", "metrics.spikes"] }
-  - { from: "neuron.state", to: ["state_mon.state"] }
-
+  - { from: "neuron.state", to: ["state_mon.state", "hh_mon.state"] }

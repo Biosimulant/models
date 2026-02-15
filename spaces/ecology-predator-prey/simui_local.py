@@ -18,14 +18,19 @@ from __future__ import annotations
 
 import bsim
 
-from bsim.packs.ecology import (
-    Environment,
-    OrganismPopulation,
-    PredatorPreyInteraction,
-    PopulationMonitor,
-    EcologyMetrics,
-    PhaseSpaceMonitor,
-)
+import sys
+from pathlib import Path
+
+MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
+for _model in ["ecology-environment", "ecology-organism-population", "ecology-predator-prey-interaction", "ecology-population-monitor", "ecology-phase-space-monitor", "ecology-metrics"]:
+    sys.path.insert(0, str(MODELS_DIR / _model))
+
+from src.environment import Environment
+from src.organism_population import OrganismPopulation
+from src.predator_prey import PredatorPreyInteraction
+from src.population_monitor import PopulationMonitor
+from src.phase_space import PhaseSpaceMonitor
+from src.ecology_metrics import EcologyMetrics
 
 
 def setup_predator_prey_world() -> bsim.BioWorld:

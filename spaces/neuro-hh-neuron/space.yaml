@@ -1,0 +1,49 @@
+schema_version: "2.0"
+title: "Neuro: Hodgkin-Huxley Neuron"
+description: "Single Hodgkin-Huxley conductance-based neuron with current injection and detailed monitors."
+models:
+  - repo: Biosimulant/models
+    alias: current
+    manifest_path: models/neuro-step-current/model.yaml
+    parameters:
+      I: 10.0
+  - repo: Biosimulant/models
+    alias: neuron
+    manifest_path: models/neuro-hh-population/model.yaml
+    parameters:
+      n: 1
+      sample_indices: [0]
+  - repo: Biosimulant/models
+    alias: spike_mon
+    manifest_path: models/neuro-spike-monitor/model.yaml
+    parameters:
+      max_neurons: 1
+      width: 600
+      height: 200
+  - repo: Biosimulant/models
+    alias: state_mon
+    manifest_path: models/neuro-state-monitor/model.yaml
+    parameters:
+      max_points: 5000
+  - repo: Biosimulant/models
+    alias: hh_mon
+    manifest_path: models/neuro-hh-state-monitor/model.yaml
+    parameters:
+      max_points: 5000
+      neuron_index: 0
+  - repo: Biosimulant/models
+    alias: metrics
+    manifest_path: models/neuro-metrics/model.yaml
+    parameters:
+      n_neurons: 1
+runtime:
+  duration: 0.1
+  tick_dt: 0.00005
+  initial_inputs: {}
+wiring:
+  - from: current.current
+    to: [neuron.current]
+  - from: neuron.spikes
+    to: [spike_mon.spikes, metrics.spikes]
+  - from: neuron.state
+    to: [state_mon.state, hh_mon.state]
