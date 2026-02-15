@@ -10,13 +10,13 @@ _MODELS_DIR = _SPACE_DIR.parent.parent / "models"
 
 _DEPS = [
     "virtualcell-perturbation-source",
-    "virtualcell-grn",
+    "virtualcell-arc-grn",
     "virtualcell-expression-translator",
     "virtualcell-expression-monitor",
     "neuro-izhikevich-population",
     "neuro-spike-monitor",
     "neuro-rate-monitor",
-    "neuro-metrics",
+    "neuro-spike-metrics",
 ]
 
 

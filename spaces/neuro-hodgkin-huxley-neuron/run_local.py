@@ -26,7 +26,7 @@ for _model in [
     "neuro-spike-monitor",
     "neuro-state-monitor",
     "neuro-hodgkin-huxley-state-monitor",
-    "neuro-metrics",
+    "neuro-spike-metrics",
 ]:
     sys.path.insert(0, str(MODELS_DIR / _model))
 

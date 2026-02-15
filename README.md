@@ -19,26 +19,26 @@ Each model is a self-contained simulation component with a `model.yaml` manifest
 | `neuro-spike-monitor` | Spike raster visualization |
 | `neuro-rate-monitor` | Firing rate computation and display |
 | `neuro-state-monitor` | Neuron state variable tracking (membrane potential, etc.) |
-| `neuro-metrics` | Summary statistics from spike streams |
+| `neuro-spike-metrics` | Summary statistics from spike streams |
 
 **Ecology** — population dynamics, environments, and ecosystem interactions:
 
 | Model | Description |
 |-------|-------------|
-| `ecology-environment` | Broadcasts environmental conditions (temperature, water, food, sunlight) |
+| `ecology-abiotic-environment` | Broadcasts environmental conditions (temperature, water, food, sunlight) |
 | `ecology-organism-population` | Population dynamics with birth, death, and predation |
 | `ecology-predator-prey-interaction` | Predation rates and functional response |
 | `ecology-population-monitor` | Population size tracking over time |
 | `ecology-phase-space-monitor` | Predator vs prey phase-space visualization |
-| `ecology-metrics` | Ecosystem summary statistics |
+| `ecology-population-metrics` | Ecosystem summary statistics |
 
 **Brain / Vision** — sensory processing pipeline (custom Python):
 
 | Model | Description |
 |-------|-------------|
-| `brain-eye` | Synthetic retinal visual stream generator |
-| `brain-lgn` | Lateral geniculate nucleus relay (retina → thalamus) |
-| `brain-sc` | Superior colliculus visual signal processor |
+| `brain-retina-encoder` | Synthetic retinal visual stream generator |
+| `brain-lgn-relay` | Lateral geniculate nucleus relay (retina → thalamus) |
+| `brain-sc-integrator` | Superior colliculus visual signal processor |
 
 **Example / Template**:
 
@@ -82,7 +82,7 @@ Every model implements the `bsim.BioModule` interface:
 - **`outputs()`** — declares named output signals the module produces
 - **`advance_to(t)`** — advances the model's internal state to time `t`
 
-Most models (14 of 18) are configuration-only — they reference built-in `bsim.packs` classes and customize behavior through `init_kwargs` in `model.yaml`. Four models (`brain-eye`, `brain-lgn`, `brain-sc`, `example-hh`) include custom Python source.
+Most models (14 of 18) are configuration-only — they reference built-in `bsim.packs` classes and customize behavior through `init_kwargs` in `model.yaml`. Four models (`brain-retina-encoder`, `brain-lgn-relay`, `brain-sc-integrator`, `example-hh`) include custom Python source.
 
 ### Wiring
 

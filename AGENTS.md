@@ -63,7 +63,7 @@ All new models and spaces must satisfy the acceptance criteria in [STANDARDS.md]
 ### Built-in vs Custom Models
 
 - **14 models** use built-in `bsim.packs` entrypoints (no custom Python needed — configuration only via `model.yaml`)
-- **4 models** have custom Python source code (brain-eye, brain-lgn, brain-sc, example-hh)
+- **4 models** have custom Python source code (brain-retina-encoder, brain-lgn-relay, brain-sc-integrator, example-hh)
 - When editing built-in models, only modify `model.yaml` parameters
 - When editing custom models, modify both the Python source and `model.yaml`
 
@@ -116,7 +116,8 @@ Full conventions, interface contracts, and acceptance checklists are in [STANDAR
 |--------|--------|---------|
 | `neuro-` | Neuroscience (spiking neurons, synapses, monitors) | `neuro-izhikevich-population` |
 | `ecology-` | Ecosystem dynamics (populations, environment) | `ecology-predator-prey-interaction` |
-| `brain-` | Brain/sensory processing pipelines | `brain-eye`, `brain-lgn` |
+| `brain-` | Brain/sensory processing pipelines | `brain-retina-encoder`, `brain-lgn-relay` |
+| `virtualcell-` | Cellular and molecular biology | `virtualcell-arc-grn`, `virtualcell-perturbation-source` |
 | `example-` | Templates and reference implementations | `example-hh` |
 
 ## Dependencies

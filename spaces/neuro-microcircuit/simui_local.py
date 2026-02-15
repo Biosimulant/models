@@ -21,7 +21,7 @@ import sys
 from pathlib import Path
 
 MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
-for _model in ["neuro-poisson-input", "neuro-izhikevich-population", "neuro-exp-synapse-current", "neuro-spike-monitor", "neuro-rate-monitor", "neuro-state-monitor", "neuro-metrics", "neuro-step-current"]:
+for _model in ["neuro-poisson-input", "neuro-izhikevich-population", "neuro-exp-synapse-current", "neuro-spike-monitor", "neuro-rate-monitor", "neuro-state-monitor", "neuro-spike-metrics", "neuro-step-current"]:
     sys.path.insert(0, str(MODELS_DIR / _model))
 
 from src.poisson_input import PoissonInput

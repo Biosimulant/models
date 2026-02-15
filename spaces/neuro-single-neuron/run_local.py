@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 
 MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
-for _model in ["neuro-step-current", "neuro-izhikevich-population", "neuro-spike-monitor", "neuro-state-monitor", "neuro-metrics"]:
+for _model in ["neuro-step-current", "neuro-izhikevich-population", "neuro-spike-monitor", "neuro-state-monitor", "neuro-spike-metrics"]:
     sys.path.insert(0, str(MODELS_DIR / _model))
 
 from src.step_current import StepCurrent

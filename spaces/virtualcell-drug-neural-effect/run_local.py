@@ -27,13 +27,13 @@ import bsim
 MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
 for _model in [
     "virtualcell-perturbation-source",
-    "virtualcell-grn",
+    "virtualcell-arc-grn",
     "virtualcell-expression-translator",
     "virtualcell-expression-monitor",
     "neuro-izhikevich-population",
     "neuro-spike-monitor",
     "neuro-rate-monitor",
-    "neuro-metrics",
+    "neuro-spike-metrics",
 ]:
     sys.path.insert(0, str(MODELS_DIR / _model))
 

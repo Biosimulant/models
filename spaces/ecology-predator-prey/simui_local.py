@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
-for _model in ["ecology-environment", "ecology-organism-population", "ecology-predator-prey-interaction", "ecology-population-monitor", "ecology-phase-space-monitor", "ecology-metrics"]:
+for _model in ["ecology-abiotic-environment", "ecology-organism-population", "ecology-predator-prey-interaction", "ecology-population-monitor", "ecology-phase-space-monitor", "ecology-population-metrics"]:
     sys.path.insert(0, str(MODELS_DIR / _model))
 
 from src.environment import Environment
