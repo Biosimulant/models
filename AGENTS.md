@@ -51,11 +51,14 @@ Required fields:
 
 ### Adding a New Model
 
+All new models and spaces must satisfy the acceptance criteria in [STANDARDS.md](STANDARDS.md). Use the checklist at the bottom of that file before submitting.
+
 1. Copy `templates/model-pack/` to `models/<your-model-slug>/`
 2. Edit `model.yaml` with your model's metadata, entrypoint, and dependencies
 3. Implement your module by subclassing `bsim.BioModule`
-4. Ensure all dependencies use exact version pinning (`==`)
-5. Run validation: `python scripts/validate_manifests.py && python scripts/check_entrypoints.py`
+4. Add tests in `tests/test_<module>.py` (see [STANDARDS.md § Tests](STANDARDS.md#tests))
+5. Ensure all dependencies use exact version pinning (`==`)
+6. Run validation: `python scripts/validate_manifests.py && python scripts/check_entrypoints.py`
 
 ### Built-in vs Custom Models
 
@@ -66,10 +69,14 @@ Required fields:
 
 ### Creating a New Space
 
+See [STANDARDS.md § Space Standards](STANDARDS.md#space-standards) for full requirements.
+
 1. Create `spaces/<your-space-slug>/space.yaml`
-2. Reference models by `manifest_path` relative to the repo root
-3. Define wiring to connect model outputs to inputs
-4. Set `runtime.duration` and `runtime.tick_dt`
+2. Add `wiring.yaml` with local-equivalent module classes and args
+3. Reference models by `manifest_path` relative to the repo root
+4. Define wiring to connect model outputs to inputs
+5. Set `runtime.duration` and `runtime.tick_dt`
+6. Add `run_local.py` for CLI testing (recommended)
 
 ## Validation and CI
 
@@ -94,10 +101,13 @@ See [docs/PUBLIC_INTERNAL_BOUNDARY.md](docs/PUBLIC_INTERNAL_BOUNDARY.md) for the
 
 ## Code Style and Conventions
 
+Full conventions, interface contracts, and acceptance checklists are in [STANDARDS.md](STANDARDS.md).
+
 - All YAML manifests use `schema_version: "2.0"`
 - Python dependencies must be pinned with exact versions (`==`)
 - Custom Python modules follow the `bsim.BioModule` interface contract
 - Model slugs use kebab-case with domain prefix (e.g., `neuro-`, `ecology-`, `brain-`)
+- Every model must include unit tests in `tests/test_<module>.py`
 - Pre-commit hooks enforce trailing whitespace, EOF newlines, YAML syntax, and secret detection
 
 ## Domain Prefixes

@@ -10,7 +10,7 @@ Demonstrates:
 
 Run:
     pip install "bsim @ git+https://github.com/BioSimulant/bsim.git@<ref>"
-    python spaces/neuro-hh-neuron/run_local.py
+    python spaces/neuro-hodgkin-huxley-neuron/run_local.py
 """
 from __future__ import annotations
 
@@ -22,10 +22,10 @@ import bsim
 MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
 for _model in [
     "neuro-step-current",
-    "neuro-hh-population",
+    "neuro-hodgkin-huxley-population",
     "neuro-spike-monitor",
     "neuro-state-monitor",
-    "neuro-hh-state-monitor",
+    "neuro-hodgkin-huxley-state-monitor",
     "neuro-metrics",
 ]:
     sys.path.insert(0, str(MODELS_DIR / _model))
@@ -34,7 +34,7 @@ from src.step_current import StepCurrent
 from src.hodgkin_huxley import HodgkinHuxleyPopulation
 from src.spike_monitor import SpikeMonitor
 from src.state_monitor import StateMonitor
-from src.hh_state_monitor import HHStateMonitor
+from src.hodgkin_huxley_monitor import HHStateMonitor
 from src.neuro_metrics import NeuroMetrics
 
 
