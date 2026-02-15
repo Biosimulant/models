@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
+  <model metaid="b5fdaae2-ae4c-4ec2-a364-69ac8adf2112" name="Model-based prediction of SARS-CoV-2 in Ethiopia: Extended SEIR model">
+    <notes>
+      <body xmlns="http://www.w3.org/1999/xhtml">
+     <p>One of three models used to describe dynamics of COVID-19 spread in Ethiopia. Here the two investigated population groups healthcare workers and community members are modeled as separate but interacting groups.
+Results are published in https://www.thelancet.com/journals/langlo/article/PIIS2214-109X(21)00386-7/fulltext</p>
+  </body>
+    </notes>
+    <annotation>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+        <rdf:Description rdf:about="#b5fdaae2-ae4c-4ec2-a364-69ac8adf2112">
+	<bqbiol:hasProperty>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/mamo/MAMO_0000028"/>
+	</rdf:Bag>
+	</bqbiol:hasProperty>
+	</rdf:Description>
+	
+	
+	</rdf:RDF>
+	</annotation>
+      <listOfCompartments>
+      <compartment constant="true" id="ethiopia" name="ethiopia" size="1" units="dimensionless"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species boundaryCondition="false" compartment="ethiopia" constant="false" hasOnlySubstanceUnits="false" id="Sus_hcw" initialAmount="0" name="Sus_hcw" substanceUnits="dimensionless"/>
+      <species boundaryCondition="false" compartment="ethiopia" constant="false" hasOnlySubstanceUnits="false" id="Exp_hcw" initialAmount="0" name="Exp_hcw" substanceUnits="dimensionless"/>
+      <species boundaryCondition="false" compartment="ethiopia" constant="false" hasOnlySubstanceUnits="false" id="Infc_hcw" initialAmount="0" name="Infc_hcw" substanceUnits="dimensionless"/>
+      <species boundaryCondition="false" compartment="ethiopia" constant="false" hasOnlySubstanceUnits="false" id="Rec_hcw" initialAmount="0" name="Rec_hcw" substanceUnits="dimensionless"/>
+      <species boundaryCondition="false" compartment="ethiopia" constant="false" hasOnlySubstanceUnits="false" id="Sus_com" initialAmount="0" name="Sus_com" substanceUnits="dimensionless"/>
+      <species boundaryCondition="false" compartment="ethiopia" constant="false" hasOnlySubstanceUnits="false" id="Exp_com" initialAmount="0" name="Exp_com" substanceUnits="dimensionless"/>
+      <species boundaryCondition="false" compartment="ethiopia" constant="false" hasOnlySubstanceUnits="false" id="Infc_com" initialAmount="0" name="Infc_com" substanceUnits="dimensionless"/>
+      <species boundaryCondition="false" compartment="ethiopia" constant="false" hasOnlySubstanceUnits="false" id="Rec_com" initialAmount="0" name="Rec_com" substanceUnits="dimensionless"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter constant="true" id="beta_0" name="beta_0" units="dimensionless" value="0.13"/>
+      <parameter constant="true" id="kappa_inverse" name="kappa_inverse" units="dimensionless" value="2.77777777777778"/>
+      <parameter constant="true" id="I_0" name="I_0" units="dimensionless" value="10"/>
+      <parameter constant="false" id="gamma_inverse" name="gamma_inverse" units="dimensionless" value="10"/>
+      <parameter constant="false" id="alpha_0" name="alpha_0" units="dimensionless" value="2"/>
+    </listOfParameters>
+    <listOfInitialAssignments>
+      <initialAssignment name="S_0_hcw" symbol="Sus_hcw">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <cn type="integer"> 510 </cn>
+        </math>
+            </initialAssignment>
+      <initialAssignment name="S_0_com" symbol="Sus_com">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <cn type="integer"> 100000 </cn>
+        </math>
+            </initialAssignment>
+      <initialAssignment name="I_0_com" symbol="Infc_com">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <ci> I_0 </ci>
+        </math>
+            </initialAssignment>
+    </listOfInitialAssignments>
+    <listOfReactions>
+      <reaction id="infection_hcw" reversible="false">
+        <listOfReactants>
+          <speciesReference constant="true" species="Exp_hcw" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="Infc_hcw" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <cn type="integer"> 1 </cn>
+                <ci> kappa_inverse </ci>
+              </apply>
+              <ci> Exp_hcw </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="recovery_hcw" reversible="false">
+        <listOfReactants>
+          <speciesReference constant="true" species="Infc_hcw" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="Rec_hcw" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <cn type="integer"> 1 </cn>
+                <ci> gamma_inverse </ci>
+              </apply>
+              <ci> Infc_hcw </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="infection_com" reversible="false">
+        <listOfReactants>
+          <speciesReference constant="true" species="Exp_com" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="Infc_com" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <cn type="integer"> 1 </cn>
+                <ci> kappa_inverse </ci>
+              </apply>
+              <ci> Exp_com </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="recovery_com" reversible="false">
+        <listOfReactants>
+          <speciesReference constant="true" species="Infc_com" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="Rec_com" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <cn type="integer"> 1 </cn>
+                <ci> gamma_inverse </ci>
+              </apply>
+              <ci> Infc_com </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="exposure_hcw" reversible="false">
+        <listOfReactants>
+          <speciesReference constant="true" species="Sus_hcw" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="Exp_hcw" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="Sus_hcw"/>
+          <modifierSpeciesReference species="Infc_hcw"/>
+          <modifierSpeciesReference species="Exp_hcw"/>
+          <modifierSpeciesReference species="Rec_hcw"/>
+          <modifierSpeciesReference species="Sus_com"/>
+          <modifierSpeciesReference species="Infc_com"/>
+          <modifierSpeciesReference species="Exp_com"/>
+          <modifierSpeciesReference species="Rec_com"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> beta_0 </ci>
+                  <apply>
+                    <plus/>
+                    <apply>
+                      <times/>
+                      <ci> alpha_0 </ci>
+                      <ci> Infc_com </ci>
+                    </apply>
+                    <ci> Infc_hcw </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <ci> Sus_hcw </ci>
+                  <ci> Exp_hcw </ci>
+                  <ci> Infc_hcw </ci>
+                  <ci> Rec_hcw </ci>
+                  <ci> Sus_com </ci>
+                  <ci> Exp_com </ci>
+                  <ci> Infc_com </ci>
+                  <ci> Rec_com </ci>
+                </apply>
+              </apply>
+              <ci> Sus_hcw </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="exposure_com" reversible="false">
+        <listOfReactants>
+          <speciesReference constant="true" species="Sus_com" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="Exp_com" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="Sus_hcw"/>
+          <modifierSpeciesReference species="Infc_hcw"/>
+          <modifierSpeciesReference species="Exp_hcw"/>
+          <modifierSpeciesReference species="Rec_hcw"/>
+          <modifierSpeciesReference species="Sus_com"/>
+          <modifierSpeciesReference species="Infc_com"/>
+          <modifierSpeciesReference species="Exp_com"/>
+          <modifierSpeciesReference species="Rec_com"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> beta_0 </ci>
+                  <apply>
+                    <plus/>
+                    <ci> Infc_com </ci>
+                    <ci> Infc_hcw </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <ci> Sus_hcw </ci>
+                  <ci> Exp_hcw </ci>
+                  <ci> Infc_hcw </ci>
+                  <ci> Rec_hcw </ci>
+                  <ci> Sus_com </ci>
+                  <ci> Exp_com </ci>
+                  <ci> Infc_com </ci>
+                  <ci> Rec_com </ci>
+                </apply>
+              </apply>
+              <ci> Sus_com </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

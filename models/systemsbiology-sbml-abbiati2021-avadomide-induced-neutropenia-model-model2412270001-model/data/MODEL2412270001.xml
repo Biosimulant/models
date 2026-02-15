@@ -1,0 +1,162 @@
+# Supplementary Material
+# Abbiati et al, (2021).
+
+# This script allows reproducing selected ANC longitudinal profiles of Fig. 4. 
+
+# This script was prepared with R 3.6.1
+# Packages: deSolve_1.28
+
+
+
+# Locate this R script and related input csv file in the same directory and set as working directory
+rm(list=ls()) # Clear environment
+cat("\f") # clear console
+# path = dirname(rstudioapi::getActiveDocumentContext()$path) # find directory path
+# setwd(path) # set working directory path
+
+library(deSolve) # load deSolve library
+
+
+## Load PK --------------------------------------------
+PK.col.names = c("time.day", "conc.ng.ml")
+PK = read.table("CC122_PK_dose5mg_schedule5of7.csv", header = FALSE, sep = ",", dec = ".", stringsAsFactors = FALSE, col.names = PK.col.names)
+PK$time.day = as.numeric(PK$time.day)
+PK$conc.ng.ml = as.numeric(PK$conc.ng.ml)
+
+PK$time.hour = PK$time.day*24
+
+plot(PK$time.day, PK$conc.ng.ml, type = "l", main = "AvadomidePK, dose=5mg, schedule=5/7") # Avadomide 5 mg 5/7
+
+## Create PK function by interpolation -----------------------------------------
+
+timeseq.h = seq(from = 0, to = 50, by = 0.1)*24
+
+PK.func=approxfun(PK$time.hour, PK$conc.ng.ml,rule=2,method = "linear")
+# plot(timeseq.h,PK.func(timeseq.h),main="PK.func",xlab='Time (day)',type='l',ylab="Drug concentration in plasma ng/ml")
+# grid()
+
+## Neutrophil life cycle model--------------------------------------------
+
+neutropenia = function (t, state, parameters) {
+  with(as.list(c(state, parameters)),{
+    Effect_CC122 = 1-(EmaxPD*PK.func(t)^n_PD)/(EC50PD^n_PD + PK.func(t)^n_PD)
+    dProl = k_prol*((Transit_2homeostatic/Transit_2)^gamma)*Prol - k_tr1*Prol
+    dTransit_1 = k_tr1*Prol-(k_tr2+k_d )*Transit_1
+    dTransit_2 = k_tr2*Transit_1 - ((V_max*Effect_CC122*Transit_2)/(K_M+Transit_2)) - k_d*Transit_2
+    dTransit_3 = ((V_max*Effect_CC122*Transit_2)/(K_M+Transit_2)) - (k_tr4+k_d)*Transit_3
+    dReserv = k_tr4*Transit_3 - (k_d+k_out*(Circ_homeostatic/Circ)^beta)*Reserv
+    dCirc = k_out*((Circ_homeostatic/Circ)^beta)*Reserv -k_elim*Circ
+    list(c(dProl,dTransit_1,dTransit_2,dTransit_3,dReserv,dCirc))
+  })
+}
+
+## Model parameters GBM--------------------------------------------
+
+# Input (See Table 1)
+EC50PD	=	15
+n_PD	=	2
+EmaxPD	=	0.9
+gamma	=	0.02
+beta	=	20
+Circ_0	=	7E9 # [cell/liter] neutrophil level in blood
+k_d	=	0.001
+Ratio_reserv_0_Circ_0	=	3
+K_Mfraction	=	0.6
+neutrophil_t_half_blood = 30
+
+# Derived
+k_elim = log(2)/neutrophil_t_half_blood # [h-1]
+
+Reserv_0 = Ratio_reserv_0_Circ_0*Circ_0 # [cell/l]
+Tran_0 = Circ_0
+Prol_0 = Tran_0
+
+k_out = k_elim*Circ_0/Reserv_0
+k_tr4 = (k_d + k_out)*Reserv_0/Circ_0
+k_tr3 = k_d + k_tr4
+k_tr2 = k_d + k_tr3
+k_tr1 = k_d + k_tr2
+k_prol = k_tr1
+
+K_M = K_Mfraction*Circ_0
+V_max = k_tr3*(K_M + Tran_0)
+
+
+## Output data GBM --------------------------------------------
+params = c(
+  EC50PD	=	EC50PD,
+  n_PD	=	n_PD,
+  EmaxPD	=	EmaxPD,
+  gamma	=	gamma,
+  beta	=	beta,
+  k_elim	=	k_elim,
+  k_d	=	k_d,
+  k_out = k_out,
+  k_tr4 = k_tr4,
+  k_tr3 = k_tr3,
+  k_tr2 = k_tr2,
+  k_tr1 = k_tr1,
+  k_prol = k_prol,
+  K_M = K_M,
+  V_max = V_max,
+  Transit_2homeostatic=Tran_0,
+  Circ_homeostatic=Circ_0
+)
+
+s0 = c(Prol=Prol_0,Transit_1=Tran_0,Transit_2=Tran_0,Transit_3=Tran_0,Reserv=Reserv_0,Circ=Circ_0) # Initial conditions
+out.neutropenia = as.data.frame(ode(s0,time=timeseq.h,neutropenia,parms=params,method = c("bdf"))) # ODE solver
+plot(out.neutropenia$time/24,out.neutropenia$Circ,xlab='Time [days]',ylab='ANC [cell/l]',main="GBM 5mg 5/7D Figure 4A", type = "l", ylim=c(0, 10E9))
+grid()
+
+
+## Model parameters DLBCL--------------------------------------------
+gamma	=	0.01
+Ratio_reserv_0_Circ_0	=	2.5
+K_Mfraction	=	0.1
+Circ_0	=	4E9 # [cell/liter] Normal neutrophils level in blood
+
+# Derived
+k_elim = log(2)/neutrophil_t_half_blood # [h-1]
+
+Reserv_0 = Ratio_reserv_0_Circ_0*Circ_0 # [cell/l]
+Tran_0 = Circ_0
+Prol_0 = Tran_0
+
+k_out = k_elim*Circ_0/Reserv_0
+k_tr4 = (k_d + k_out)*Reserv_0/Circ_0
+k_tr3 = k_d + k_tr4
+k_tr2 = k_d + k_tr3
+k_tr1 = k_d + k_tr2
+k_prol = k_tr1
+
+K_M = K_Mfraction*Circ_0
+V_max = k_tr3*(K_M + Tran_0)
+
+
+## Output data DLBCL --------------------------------------------
+
+params = c(
+  EC50PD	=	EC50PD,
+  n_PD	=	n_PD,
+  EmaxPD	=	EmaxPD,
+  gamma	=	gamma,
+  beta	=	beta,
+  k_elim	=	k_elim,
+  k_d	=	k_d,
+  k_out = k_out,
+  k_tr4 = k_tr4,
+  k_tr3 = k_tr3,
+  k_tr2 = k_tr2,
+  k_tr1 = k_tr1,
+  k_prol = k_prol,
+  K_M = K_M,
+  V_max = V_max,
+  Transit_2homeostatic=Tran_0,
+  Circ_homeostatic=Circ_0
+)
+
+s0 = c(Prol=Prol_0,Transit_1=Tran_0,Transit_2=Tran_0,Transit_3=Tran_0,Reserv=Reserv_0,Circ=Circ_0) # Initial conditions
+out.neutropenia = as.data.frame(ode(s0,time=timeseq.h,neutropenia,parms=params,method = c("bdf"))) # ODE solver
+plot(out.neutropenia$time/24,out.neutropenia$Circ,xlab='Time [days]',ylab='ANC [cell/l]',main="DLBCL 5mg 5/7D Figure 4B", type = "l", ylim=c(0, 10E9))
+grid()
+

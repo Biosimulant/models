@@ -1,0 +1,136 @@
+clear all;clc;close all;
+cputime
+tic
+initCobraToolbox
+load model_T.mat
+model1 =model;
+
+ye_p =[6.2 3 1 5.9 0.2 11 0.1 3.3 1.4 4.7 6.2 4.9 1.1 4.4 2.3 1.9 1.8 0.7 1.2 4.8]/100;%content of each aa in the yeast extract
+mw_aa=[89 174 132 132 121 147 146 75 155 131 131 146 149 165 115 105 119 204 181 117];%MW of each aa
+msg  =0.6;      %concentration of monosodium glutamate
+t0   =0;del_t=0.5;tag0=0;
+g0   =20;       %initial glucose concentration g/L
+x0   =0.4;      %initial biomass concentration g/L; run 8 at 15°C
+ye   =10.4;     %initial yeast extract concentration g/L; run 8
+%p    =[0.146 0.116];%curva 8 a 15°C
+p    =[0.150 0.119];            %kinetic parameters for run 8 at 15°C
+load curva8.txt;curva=curva8;   %experimental data run 8 at 5°C
+
+%condition for run 8 at 5°C
+% x0   =0.1;
+% ye   =11.4;
+% p    =[0.057 0.071];
+% load curva8_5.txt;curva=curva8_5;
+
+aa0   =ye*ye_p;
+aa0(6)=aa0(6)+msg*0.87; %g/L
+aat   =sum(aa0);        %g/L
+AA    =[t0 x0 g0 aat tag0 zeros(1,4)];
+f     =0.9;
+o2lb  =10;
+
+rxnList ={'ex_nh4[e]','ex_o2[e]' ,'ex_co2[e]','ex_ala[e]','ex_arg[e]','ex_asn[e]','ex_asp[e]','ex_cys[e]','ex_glu[e]','ex_gln[e]',...
+          'ex_gly[e]','ex_his[e]','ex_ile[e]','ex_leu[e]','ex_lys[e]','ex_met[e]','ex_phe[e]','ex_pro[e]','ex_ser[e]','ex_thr[e]',...
+          'ex_trp[e]','ex_tyr[e]','ex_val[e]','ex_dglc[e]','TAG'};
+
+t0=0;
+fl=0;
+%To test the effect of ATP for non growth maintenance
+model1 =changeRxnBounds(model1,{'ATPM(NGAM)'},3.,'b');
+while t0<=0.
+   conc     =[g0 aa0];%g/L
+   [model2,rGl]=uptake_r(conc,p,f,o2lb,model1);
+   reaccion ='BIOMASS LF';    
+   model2   =changeObjective(model2,reaccion);    
+   solution1=optimizeCbModel(model2,'max');%optimizeCbModel(model,osenseStr, minNorm, allowLoops) minimiza valores de los flujos        
+   mu       =solution1.f;   
+   model2   =changeRxnBounds(model2,{'BIOMASS LF'},mu,'b');   
+   if (solution1.stat==0) && (fl==0)
+     fl=1;
+     ip=findRxnIDs(model2,'ATPM(NGAM)');
+     disp(['t ',num2str(t0),' ATPM(NGAM) lb ',num2str(model2.lb(ip))]);
+     model2=changeRxnBounds(model2,{'ATPM(NGAM)'},0.,'b');
+     model1=changeRxnBounds(model1,{'ATPM(NGAM)'},0.,'b');
+     solution1=optimizeCbModel(model2,'max');%optimizeCbModel(model,osenseStr, minNorm, allowLoops) minimiza valores de los flujos        
+     mu    =solution1.f;
+     model2=changeRxnBounds(model2,{'BIOMASS LF'},mu,'b');
+   elseif (solution1.stat==0) && (fl==1)
+     break
+   end
+   if f~=1
+      model2   =changeRxnBounds(model2,{'ex_dglc[e]'},-rGl,'l');
+      reaccion ='TAG';    
+      model2   =changeObjective(model2,reaccion);%
+      solution2=optimizeCbModel(model2,'max');%optimizeCbModel(model,osenseStr, minNorm, allowLoops) minimiza valores de los flujos    
+      rtag     =solution2.f;
+      model2   =changeRxnBounds(model2,{'TAG'},rtag,'b');
+      solution =solution2;
+      if isempty(solution2.x)==0
+         [minFlux1,maxFlux1]=fluxVariability(model2,100,'max',rxnList);%(model, optPercentage, osenseStr, rxnNameList, printLevel, allowLoops, method, cpxControl, advind)
+         raa =maxFlux1(4:23);
+         rglu=maxFlux1(24);
+         rtag=maxFlux1(25);
+         ro2 =maxFlux1(2);
+      end
+   elseif f==1
+      reaccion ='TAG';    
+      model2   =changeObjective(model2,reaccion);%
+      solution2=optimizeCbModel(model2,'max');%optimizeCbModel(model,osenseStr, minNorm, allowLoops) minimiza valores de los flujos    
+      rtag     =solution2.f;
+      model2   =changeRxnBounds(model2,{'TAG'},rtag,'b');       
+      [minFlux1,maxFlux1]=fluxVariability(model2,100,'max',rxnList);%(model, optPercentage, osenseStr, rxnNameList, printLevel, allowLoops, method, cpxControl, advind)
+      raa  =maxFlux1(4:23);
+      rglu =maxFlux1(24);
+      rtag =maxFlux1(25);
+      ro2  =maxFlux1(2);
+      solution =solution2;
+   end
+   aa =max(aa0 +del_t*x0*raa'.*(mw_aa/1000),0);%g/L
+   aat=sum(aa);%g/L        
+   g  =max(g0  +del_t*x0*rglu*(180/1000),0);%g/L
+   x  =max(x0  +del_t*x0*mu,0);%g/L
+   tag=max(tag0+del_t*x0*rtag,0);%mM
+   g0 =g;x0=x;aa0=aa;tag0=tag;t0=t0+del_t;
+   AB =[t0 x0 g0 aat tag0 mu rglu rtag ro2];
+   AA =[AA;AB];
+   disp(['t ',num2str(t0),'  x ',num2str(x0),'  g ',num2str(g0),'  aa ',num2str(aat),'  tag ',num2str(tag0),'  mu ',num2str(mu),'  rtag ',num2str(rtag),...
+            '  rG ',num2str(rglu) ,'  rO2max ',num2str(ro2)]);
+end
+ 
+if isempty(solution.x)==0
+   %tabla=imprimeResultadosDual(model2.mets,solution.y);
+   uv=1;
+   if uv>0
+      [minFlux1,maxFlux1]=fluxVariability(model2,100,'max');
+      tabla    =imprimeResultadosMinMax(minFlux1,maxFlux1,model1.rxns,model2.lb,model2.ub);
+    end
+end
+
+f1=0;
+if f1>0 %if 1 plot the results
+   lipid =AA(:,2)*0.1891+AA(:,5);
+   bio_lf=AA(:,2)*(1-0.1891);
+   AA   =[AA(:,1:5) bio_lf lipid AA(:,6:end)];
+   [a,b] =size(AA);
+   rango2=['A1',':','K',num2str(a)];
+   xlswrite('res.xlsx',AA,rango2)   
+   curva(:,1)=curva(:,1)*24;
+   subplot(1,2,1),plot(curva(:,1),curva(:,2),'or',AA(:,1),AA(:,6),'-r',curva(:,1),curva(:,3),'ob',AA(:,1),AA(:,7),'-b')
+   xlabel('Time (d)');ylabel('Bio, total lip (g/L)');
+   subplot(1,2,2),plot(curva(:,1),curva(:,4),'oc',AA(:,1),AA(:,3),'-c',curva(:,1),curva(:,5),'og',AA(:,1),AA(:,4),'-g')
+   xlabel('Time (d)');ylabel('Gluc, total aa (g/L)');
+   eb=0;eg=0;ea=0;el=0;mm=0;
+   %n=6;%15°C
+   n=length(curva(:,1));
+   for j=2:n
+       j2  =find(~(AA(:,1)-curva(j,1)));
+       if ~isempty(j2)
+          eb=eb+(AA(j2,2)-curva(j,2))^2;%bio_lf
+          eg=eg+(AA(j2,4)-curva(j,4))^2;%glu
+          ea=ea+(AA(j2,5)-curva(j,5))^2;%aa
+          el=el+(AA(j2,3)-curva(j,3))^2;%tlip
+          mm=mm+1;
+       end
+   end
+   [toc (eb/mm)^0.5 (el/mm)^0.5 (eg/mm)^0.5 (ea/mm)^0.5]
+end

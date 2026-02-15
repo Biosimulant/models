@@ -1,0 +1,160 @@
+%Mathematical model for simulating an immunotherapy treatment (DC vaccine)
+%against melanoma microtumor. DOI: 10.1038/srep24967
+%
+%Developed by Guido Santos (gsantos@ull.edu.es) and
+% Dr. Julio Vera (julio.vera-gonzalez@uk-erlangen.de).
+%Version 1.0. April, 20th 2016
+%
+%It simulates 30 randomly selected solutions from the data file "data.mat".
+%10 solutions taken from each of the following groups of solutions: 
+%immune-sensitive, vaccine-sensitive and vaccine-resistant.
+%
+% immune-sensitive: solutions in which melanoma microtumor is sensitive to
+% the patient immune system.
+% vaccine-sensitive: solutions in which melanoma microtumor is resistant to
+% the patient immune system but sensitive to the imunotherapy treatment.
+% vaccine-resistant: solutions in whoch the melanoma microtumor is
+% resistant to both patient immune system and imunotherapy treatment.
+%
+%Solutions in blue represent the situation with immunotherapy treatment
+%Solutions in red represent the situation without immunotherapy treatment
+% For further details onthe model, please see DOI: 10.1038/srep24967
+
+function vacSim
+
+    %Vaccine parameters
+    entra.Tauvac = 180;  %Timing of the vaccinse doses in days
+    entra.Repvac = 5;    %Number of vaccine injections           
+    entra.Dosvac = 1;    %Vaccine dose
+    
+    global count
+    
+    close all
+    load('data.mat')   
+    titles    = {'immune-sensitive','vaccine-sensitive','vaccine-resistant'};
+    entra.par = par;
+    
+    for n = 2:4 %Bucle for simulating each group of solutions: immune-sensitive, vaccine-sensitive and vaccine-resistant
+        group = eval(names{n});
+        
+        for m = randsample(1:length(group(:,1)),10) %Select 10 solutions for each group randomly
+
+            for v = 1:2 %Loop for simulations with vaccine (v = 1) and without vaccine (v = 2)
+                entra.parMod = group(m,1:5);
+                entra.n      = n;
+                entra.v      = v;
+                col          = {'-r','--r','-.r','.r'};
+                
+                if v == 1
+                    col = {'-b','--b','-.b','.b'};
+                end
+
+                try
+                    %Plotting the solutions
+                    figure(1)
+                    subplot(2,2,entra.n)
+                    neqs   = 20;
+                    count  = 0;
+                    [t,y]  = ode15s(@vaccine,tspan,[history(1:2);zeros(neqs,1)],options_ode,entra);
+                    memory = y(:,end);
+                    y      = y(:,1:2);
+                    y      = [y memory];
+                    plot(t,y(:,2),col{1})
+                    hold on
+                    plot(t,y(:,1),col{2})
+                    xlabel('time (days)')
+                    ylabel('Population cells (n.u.)')
+                    title(titles{entra.n - 1})
+                    legend('T-cells','Melanoma cells')
+                end
+                
+            end
+            
+        fprintf('%s solution: %g\n',titles{entra.n - 1},m)
+        drawnow
+        end
+ 
+    end
+
+end
+
+function dx = vaccine(t,x,entra)
+
+    global count
+    
+    count = count + 1;
+    
+    if count > 1e3
+        doctorwho
+    end
+    
+    Vaccine_period = round(t/entra.Tauvac);
+
+    if entra.v == 1
+        if Vaccine_period <= entra.Repvac && t > Vaccine_period*entra.Tauvac + 0.26  && t < Vaccine_period*entra.Tauvac + 5
+            Vc = entra.Dosvac;
+        else
+            Vc = 0;
+        end
+    elseif entra.v == 2
+        Vc = 0;
+    end
+    
+    Kapc  = entra.par(1);
+    Kgir  = entra.par(2);
+    Katg  = entra.par(3);
+    Ktapc = entra.par(4);
+    G1    = entra.par(5);
+    Katc  = entra.par(6);
+    Ktatc = entra.par(7);
+    G2    = entra.par(8);
+    Kdtc  = entra.par(9);
+    Kx    = entra.par(10);
+    Tdtc  = entra.par(11);
+    Kpmc  = entra.par(12);
+    Kiap  = entra.par(13);
+    Mt    = entra.par(14);
+    Kiev  = entra.par(15);
+    M0    = entra.par(16);
+    G3    = entra.par(17);
+    Knkc  = entra.par(18);
+    
+    Kpmc = log(2)/(30/24)*entra.parMod(1);
+    Kiap = -log(1/3)*5*entra.parMod(2);
+    Katg = entra.parMod(3);
+    Kiev = entra.parMod(4);
+    Kgir = entra.parMod(5);
+    
+    x(x < 0) = 0;
+
+    T  = x(1);
+    M  = x(2);
+    Td = x(length(x));
+    
+    %Reaction rates
+    V1     = Kapc*(1 + Kgir*Vc)*(((Katg*M + Vc)^G1)/(Ktapc^G1 + (Katg*M + Vc)^G1)); %Immunotherapy T-cell activation 
+    V2     = Katc*T*(((Katg*M)^G2)/(Ktatc^G2 + (Katg*M)^G2)); %cytotoxic T-cell activation
+    V3     = Kdtc*(T^3 + Kx*(T^0.1)*(Td^0.9)); %T-cell inactivation
+    V4     = Kpmc*M*(Mt - M); %Melanoma cell growth
+    V5     = Kiap*T*((Katg*M)/(1 + Kiev*M)); %Melanoma cell death by citotoxic T-cell
+    V6     = 50*Kiap*M*((Katg^-G3)/(Knkc^G3 + Katg^-G3)); %Melanoma cell death by NKC
+    
+    dT    = V1 + V2 - V3; %T cell population
+    dM    = V4 - V5 - V6; %Melanoma cell population
+
+    dx     = zeros(length(x),1);
+    dx(1)  = dT;
+    dx(2)  = dM;
+
+    % Delay in T clearance synthesis
+    eqs           = 20;                 %Number of equations for chain delay definition
+    timedel       = entra.par(11);      %Time delay in days
+    neq           = (length(x) - eqs);
+    kdl           = (neq + 1)/timedel;
+    dx(eqs + 1)   = kdl*(T - x(eqs + 1));
+
+    for n = 2:neq
+        dx(eqs + n) = kdl*(x(eqs - 1 + n) - x(eqs + n));
+    end
+
+end

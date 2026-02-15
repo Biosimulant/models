@@ -1,0 +1,420 @@
+MODEL HepatoNet1_EMM_14122016.sfba
+NUMBER_OF_SAMPLES 1
+SEED 761 
+
+TIME_MAX 600	 
+MAXIMAL_TIMESTEP 0.01
+MAX_CHANGE 0.01 
+OUTPUT output.xls
+LOG log.txt
+
+MONITOR 100
+PROGRESS 100
+
+INITIAL_STATE
+GR_gene 0.5
+cortisol_blood 0.0
+cortisol 1.14
+cortisol_deg 0
+CYP_mRNA_deg 0
+GR 16.1833
+GR_mRNA_deg 0
+PXR_gene 0.78
+PXR_mRNA_deg 0
+PXR_mRNA 0.0150906
+CYP3A4_mRNA 0.423433
+GR_mRNA 0.000902312
+PXR 50.2991
+PXR_active 0.055
+GR_cort 9.4
+CYP3A4_gene 0.82976
+CYP_deg 0
+GR_deg 0
+PXR_deg 0
+CYP3A4 705.721
+ligand2 0.001
+
+Aad 0
+Abo 0
+Abr 0
+Agu 0
+Aki 0
+Ahe 0
+Ali 0
+Alu 0
+Amu 0
+Ask 0
+Asp 0
+Ate 0
+Ave 0
+Aar 0
+Are 0
+
+BW 65
+
+FVad 0.213
+FVve 0.0514
+FVhe 0.0047
+FVar 0.0257
+FVlu 0.0076
+FVli 0.021
+FVgu 0.0171
+FVbr 0.02
+FVbo 0.085629
+FVmu 0.4
+FVsk 0.0371
+FVsp 0.0026
+FVre 0.009971
+FVki 0.0044
+
+Qad 19.494 
+Qlu 389.988
+Qhe 15.59952
+Qha 20.15926
+Qh 83.99757
+Qgu 57.11842
+Qbr 46.79856
+Qbo 19.4994
+Qmu 66.29796
+Qsk 19.4994
+Qsp 6.719883
+Qre 40.5022
+Qki 74.09772
+
+Kpad 1.0
+Kphe 1.0
+Kplu 1.0
+Kpli 1.0
+Kpgu 1.0
+Kpbr 1.0
+Kpbo 1.0
+Kpmu 1.0
+Kpsk 1.0
+Kpsp 1.0
+Kpre 1.0
+Kpki 1.0
+
+BP 1.0
+Ka 0.01667
+F 1.0
+fumic 1
+fup 1.0
+HLM_CLint 10
+MPPGL 45
+D 0.0
+CLrenal 0.0
+
+END
+
+/* Parameter calculations */
+RESET_FUNCTION BW_times_FVad
+BW*FVad
+END
+
+RESET_FUNCTION BW_times_Fve
+BW*FVve
+END
+
+RESET_FUNCTION BW_times_FVhe
+BW*FVhe
+END
+
+RESET_FUNCTION BW_times_FVar
+BW*FVar
+END
+
+RESET_FUNCTION BW_times_FVlu
+BW*FVlu
+END
+
+RESET_FUNCTION BW_times_FVli
+BW*FVli
+END
+
+RESET_FUNCTION BW_times_FVgu
+BW*FVgu
+END
+
+RESET_FUNCTION BW_times_FVbr
+BW*FVbr
+END
+
+RESET_FUNCTION BW_times_FVbo
+BW*FVbo
+END
+
+RESET_FUNCTION BW_times_FVmu
+BW*FVmu
+END
+
+RESET_FUNCTION BW_times_FVsk
+BW*FVsk
+END
+
+RESET_FUNCTION BW_times_FVsp
+BW*FVsp
+END
+
+RESET_FUNCTION BW_times_FVre
+BW*FVre
+END
+
+RESET_FUNCTION BW_times_FVki
+BW*FVki
+END
+
+RESET_FUNCTION CLmet_scaling
+(HLM_CLint/fumic)*MPPGL*BW*FVli*1/1000
+END
+
+RESET_FUNCTION perturbation
+50.0
+END
+
+/* Flow equations */
+
+PROPENSITY_FUNCTION Ave_to_Alu
+Qlu*Ave/Vve
+END
+
+PROPENSITY_FUNCTION Alu_to_Aar
+Qlu*((Alu/Vlu)/Kplu*BP)
+END
+
+PROPENSITY_FUNCTION Aar_to_Ahe
+Qhe*Aar/Var
+END
+
+PROPENSITY_FUNCTION Ahe_to_Ave
+Qhe*((Ahe/Vhe)/Kphe*BP)
+END
+
+PROPENSITY_FUNCTION Aar_to_Ali
+Qha*Aar/Var
+END
+
+PROPENSITY_FUNCTION Ali_to_Ave
+Qh*((Ali/Vli)/Kpli*BP)
+END
+
+PROPENSITY_FUNCTION Aar_to_Agu
+Qgu*Aar/Var
+END
+
+PROPENSITY_FUNCTION Agu_to_Ali
+Qgu*((Agu/Vgu)/Kpgu*BP)
+END
+
+PROPENSITY_FUNCTION liver_metabolism
+(fup*Ali/Vli)*CLmet 
+END
+
+PROPENSITY_FUNCTION Aar_to_Aki
+Qki * Aar/Var
+END
+
+PROPENSITY_FUNCTION Aki_to_Ave
+Qki *((Aki/Vki)/Kpki*BP) -(CLrenal *(Aki/Vki)*fup)
+END
+
+PROPENSITY_FUNCTION Aar_to_Are
+Qre * Aar/Var
+END
+
+PROPENSITY_FUNCTION Are_to_Ave
+Qre * ((Are/Vre)/Kpre*BP)
+END
+
+PROPENSITY_FUNCTION Renal_clearance
+CLrenal
+END
+
+PROPENSITY_FUNCTION Aar_to_Asp
+Qsp * Aar/Var
+END
+
+PROPENSITY_FUNCTION Asp_to_Ali
+Qsp * ((Asp/Vsp)/Kpsp *BP)
+END
+
+PROPENSITY_FUNCTION Aar_to_Abr
+Qbr*Aar/Var
+END
+
+PROPENSITY_FUNCTION Abr_to_Ave
+Qbr *((Abr/Vbr)/Kpbr*BP)
+END
+
+PROPENSITY_FUNCTION Aar_to_Amu
+Qmu * Aar/Var
+END
+
+PROPENSITY_FUNCTION Amu_to_Ave
+Qmu * ((Amu/Vmu)/Kpmu * BP)
+END
+
+PROPENSITY_FUNCTION Aar_to_Aad
+Qad*Aar/Var
+END
+
+PROPENSITY_FUNCTION Aad_to_Ave
+Qad*((Aad/Vad)/Kpad*BP)
+END
+
+PROPENSITY_FUNCTION Aar_to_Abo
+Qbo * Aar/Var
+END
+
+PROPENSITY_FUNCTION Abo_to_Ave
+Qbo *((Abo/Vbo)/Kpbo*BP)
+END
+
+PROPENSITY_FUNCTION Aar_to_Ask
+Qsk * Aar/Var
+END
+
+PROPENSITY_FUNCTION Ask_to_Ave
+Qsk *((Ask/Vsk)/Kpsk*BP)
+END
+
+PROPENSITY_FUNCTION GSH_conjugation
+GSH*CLmet*(Atox/Vli)*fup
+END
+
+*/Nucleor receptor network */
+
+PROPENSITY_FUNCTION GR_transcription
+GR_gene*0.0000032
+END 
+
+PROPENSITY_FUNCTION GR_transcription_GRcort
+GR_gene*GR_cort*0.0000012
+END
+
+PROPENSITY_FUNCTION PXR_transcription
+PXR_gene*0.0000552
+END
+
+PROPENSITY_FUNCTION PXR_transcription_GRcort
+PXR_gene*GR_cort*0.0.000033
+END
+
+PROPENSITY_FUNCTION CYP3A4_transcription
+CYP3A4_gene*0.00321
+END
+
+PROPENSITY_FUNCTION CYP3A4_transcription_PXRcort
+CYP3A4_gene*PXR_active*0.3
+END
+
+PROPENSITY_FUNCTION GR_translation
+GR_mRNA*19.98
+END
+
+PROPENSITY_FUNCTION PXR_translation
+PXR_mRNA*10
+END
+
+PROPENSITY_FUNCTION CYP3A4_translation
+CYP3A4_mRNA*2.5
+END
+
+PROPENSITY_FUNCTION GR_mRNA_degradation
+GR_mRNA*0.003
+END
+
+PROPENSITY_FUNCTION GR_degradation
+GR*0.001
+END
+
+PROPENSITY_FUNCTION PXR_degradation
+PXR*0.003
+END
+
+PROPENSITY_FUNCTION PXR_mRNA_degradation
+PXR_mRNA*0.006
+END
+
+PROPENSITY_FUNCTION PXR_ligand2_degradation
+PXR_active*0.0015
+END
+
+PROPENSITY_FUNCTION GR_cort_degradation
+GR_cort*0.0015
+END
+
+PROPENSITY_FUNCTION PXR_cort_degradation
+PXR_active*0.0015
+END
+
+PROPENSITY_FUNCTION CYP3A4_mRNA_degradation
+CYP3A4_mRNA*0.04
+END
+
+PROPENSITY_FUNCTION cortisol_degradation_CYP3A4
+CYP3A4*(0.083*cortisol/15000)/(1 + cortisol/15000)
+END 
+
+PROPENSITY_FUNCTION CYP3A4_degradation
+CYP3A4*0.0015
+END
+
+PROPENSITY_FUNCTION GR_cort_disassociation
+GR_cort*0.1
+END
+
+PROPENSITY_FUNCTION PXR_ligand2_disassociation
+PXR_active*100
+END
+
+PROPENSITY_FUNCTION PXR_cort_disassociation
+PXR_active*100
+END
+
+PROPENSITY_FUNCTION GR_cort_association
+GR*cortisol*0.01
+END
+
+PROPENSITY_FUNCTION PXR_ligand2_association
+PXR*ligand2*0.01
+END
+
+PROPENSITY_FUNCTION PXR_cort_association
+PXR*cortisol*0.01
+END
+
+
+
+*/ MONITORS */
+
+PETRI_NET_MONITORS
+Aad
+Abo
+Abr
+Agu
+Aki
+Ahe
+Ali
+Alu
+Amu
+Ask
+Asp
+Ave
+Aar
+Are
+Atox
+D
+Vli
+GSH
+cortisol_blood
+cortisol
+GR
+GR_cort
+PXR
+PXR_active
+ligand2
+CYP3A4
+GR_mRNA
+END
+
+SIMULATION

@@ -1,0 +1,363 @@
+############################################
+###Scripts for Inova Publication ###
+############################################
+
+# Load pkgs
+library(ggplot2)
+library(ggfortify)
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(ggpubr)
+library(survival)
+library(survminer)
+library(reshape2)
+library(maftools)
+
+theme_set(theme_classic()) 
+########################
+#
+#
+# FIGURE 2
+#
+#
+########################
+go_nes_gene_list <- read.csv("/data/combined_pathways.csv")
+DEG_list <- read.csv("/data/Diff_genes_R_Inova-NR_Inova_TOP_50.csv")
+TCR_report_Inova <- read.csv("/data/TCR_report.csv", na.strings=c("","NA"))
+
+TILs_data <- read.csv("/data/TILS_input.csv")
+TILs_data.1 <- TILs_data[c(2, 4:11)]
+df.m.tils <- melt(TILs_data.1, id.var = "Response")
+df.m.tils$Response <- factor(df.m.tils$Response, levels = c("Responder","Non_Responder"))
+
+#2A
+fig2.a <- ggplot(data=DEG_list, aes(x=reorder(Symbol, log2_Fold_Change), y=log2_Fold_Change, fill = Adj_Pval)) + 
+  geom_bar(stat="identity") +
+  scale_fill_gradient(name = "Adjusted P Value", low="#81bc00", high="#898b8e") +
+  theme(legend.position="right", legend.text = element_text(size=12, face="bold"),
+        legend.title = element_text(size=12, face="bold"),
+        axis.text = element_text(color="black", size=14, face="bold"),
+        axis.text.x = element_text(angle = 90, hjust = 1),
+        axis.title.x = element_text(color="black", size=18, face="bold"),
+        axis.title.y = element_text(color="black", size=18, face="bold")) + 
+  xlab("Gene") + ylab("Log2 Expression") +
+  coord_flip()
+
+ggsave('../results/fig2a.tiff', fig2.a)
+
+#2B
+fig2.b <- ggplot(data=go_nes_gene_list, aes(x=reorder(Pathways, NES), y=NES, fill = adj_pval)) + 
+  geom_bar(stat="identity") +
+  coord_flip()+
+  scale_fill_gradient(name = "Adjusted P Value", low="#3b8ede", high="#898b8e") +
+  theme(legend.position="right", legend.text = element_text(size=12, face="bold"),
+        legend.title = element_text(size=12, face="bold"),
+        axis.text = element_text(color="black", size=14, face="bold"),
+        axis.title.x = element_text(color="black", size=18, face="bold"),
+        axis.title.y = element_text(color="black", size=18, face="bold")) + 
+  xlab("Enriched Pathways") + ylab("Normalized Enrichment Score")
+
+ggsave('../results/fig2b.tiff', fig2.b)
+
+#2C
+TCR_report_Inova$Response <- factor(TCR_report_Inova$Response, levels = c("Responder","Non_Responder"))
+
+fig2.c <- Clonality_plot <- ggplot(TCR_report_Inova, aes(Response, Clonality)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(aes(colour = Response), size = 5, position = position_jitterdodge()) +
+  scale_color_manual(values = c("#81bc00", "#898b8e")) +
+  stat_compare_means(method = "wilcox.test", label.x = 1.4, label.y.npc = "top", size = 5, aes(label = paste0("p = ", ..p.format..))) + 
+  theme(legend.position="none",
+        axis.text = element_text(color="black", size=14, face="bold"),
+        axis.title.x = element_text(color="black", size=18, face="bold"),
+        axis.title.y = element_text(color="black", size=18, face="bold")) + 
+  xlab("Clinical Benefit") + ylab("TCRB Clonality") +
+  scale_x_discrete(labels=c("Responder", "Non-Responder"))
+
+ggsave('../results/fig2c.tiff', fig2.c)
+
+#2D
+surv_object <- Surv(time = TCR_report_Inova$PFS_Month, event = TCR_report_Inova$progression_event)
+fit.clonality <- survfit(surv_object ~ Clonality_level, data = TCR_report_Inova)
+
+fig2.d <- ggsurvplot(fit.clonality, data = TCR_report_Inova, pval = TRUE, size = 2, risk.table.y.text.col = F,
+                        risk.table.y.text = FALSE, 
+                        palette = c("#81bc00", "#898b8e"),
+                        font.tickslab = c(18, "bold", "#54565b"),
+                        font.x = c(22, "bold", "#54565b"),
+                        font.y = c(22, "bold", "#54565b"),
+                        xlab = "Months",
+                        ylab = "Progression free survival probability")
+
+ggsave('../results/fig2d.tiff', print(fig2.d))
+
+#2E
+fig2.e <- ggplot(df.m.tils, aes(variable, value)) + 
+  geom_boxplot(aes(fill=Response), outlier.shape = NA) +
+  scale_shape_manual(values=c(19, 17)) +
+  theme(legend.position="top",
+        axis.text = element_text(color="black", size=14, face="bold"),
+        axis.title.x = element_text(color="black", size=18, face="bold"),
+        axis.title.y = element_text(color="black", size=18, face="bold")) + 
+  xlab("") + ylab("Enrichment Score") +
+  scale_fill_manual(values = c("#81bc00", "#898b8e")) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_discrete(labels=c("B cell", "Dendritic cell", "Macrophage","NK cell","Plasmacytoid DC", "CD4+ T cell", "CD8+ T cell","TREG"))
+
+ggsave('../results/fig2e.tiff', fig2.e)
+
+
+NK.cell.significance <- wilcox.test(NKCE ~ Response, data = TILs_data)
+print(NK.cell.significance)
+
+
+
+########################
+#
+#
+# FIGURE 3
+#
+#
+########################
+laml.maf <- read.csv("/data/Inova_MAF_File_v5.txt", header=T, sep = "\t")
+TMB_data <- read.csv("/data/TMB_data.txt", sep = '\t', na.strings=c("","NA"))
+
+laml = read.maf(maf = laml.maf, clinicalData = TMB_data)
+
+TMB_data$Disease_origin <- factor(TMB_data$Disease_origin, levels = c("acral","extremity","head_neck","mucosal","trunk","occult"))
+TMB_data$driver_mutation <- factor(TMB_data$driver_mutation, levels = c("BRAF","NRAS","NF1","WT"))
+TMB_data$Response <- factor(TMB_data$Response, levels = c("Responder","Non_Responder"))
+
+my_comparisons <- list( c("acral", "extremity"), c("acral", "head_neck"), c("acral", "mucosal"), 
+                        c("acral", "trunk"), c("extremity", "head_neck"), c("extremity", "trunk"), 
+                        c("head_neck", "mucosal"), c("head_neck", "trunk") )
+
+driver_comparisons <- list( c("BRAF", "NRAS"), c("BRAF", "NF1"), c("BRAF", "WT"), 
+                            c("NRAS", "NF1"), c("NRAS", "WT"), c("NF1", "WT"))
+
+#3A
+png(filename = "../results/fig3a.png")
+fig3.a <- oncoplot(maf = laml, clinicalFeatures = c('Response', 'Disease_origin'), writeMatrix = TRUE, sortByAnnotation = TRUE, genes = c('BRAF', 'KIT', 'NRAS','TP53', 'BRCA1', 'BRCA2','ARID2','NF1'))
+dev.off()
+
+#3B
+fig3.b <- ggplot(TMB_data, aes(driver_mutation, TMB)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(aes(colour = driver_mutation), size = 5, position = position_jitterdodge()) +
+  scale_shape_manual(values=c(19, 17)) +
+  scale_color_manual(values = c("#81bc00","#000000", "#898b8e", "#ffd200", "#92c0ea", "#b5b4e0")) +
+  stat_compare_means(label.y = 50) +   
+  theme(legend.position="none",
+        axis.text = element_text(color="black", size=14, face="bold"),
+        axis.title.x = element_text(color="black", size=18, face="bold"),
+        axis.title.y = element_text(color="black", size=18, face="bold")) + 
+  xlab("Driver mutation") + ylab("Tumor mutational burden/MB") +
+  scale_x_discrete(labels=c("BRAF","NRAS","NF1","WT"))
+ggsave('../results/fig3b.tiff', fig3.b)
+
+#3C
+fig3.c <- ggplot(TMB_data, aes(Disease_origin, TMB)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(aes(colour = Disease_origin), size = 5, position = position_jitterdodge()) +
+  scale_shape_manual(values=c(19, 17)) +
+  scale_color_manual(values = c("#81bc00","#000000", "#898b8e", "#ffd200", "#92c0ea", "#b5b4e0")) +
+  #stat_compare_means(method = "wilcox.test", label.x = 1.4, label.y.npc = "top", size = 5, aes(label = paste0("p = ", ..p.format..))) + 
+  stat_compare_means(comparisons = my_comparisons) + 
+  stat_compare_means(label.y = 50) +   
+  theme(legend.position="none",
+        axis.text = element_text(color="black", size=16, face="bold"),
+        axis.title.x = element_text(color="black", size=21, face="bold"),
+        axis.title.y = element_text(color="black", size=21, face="bold")) + 
+  xlab("Disease Site") + ylab("Tumor mutational burden/MB") +
+  scale_x_discrete(labels=c("acral","extremity","head/neck","mucosal","trunk","occult"))
+ggsave('../results/fig3c.tiff', fig3.c)
+
+#3D
+fig3.d <- ggplot(TMB_data, aes(Response, TMB)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(aes(colour = Response), size = 5, position = position_jitterdodge()) +
+  scale_shape_manual(values=c(19, 17)) +
+  scale_color_manual(values = c("#81bc00", "#898b8e")) +
+  stat_compare_means(method = "wilcox.test", label.x = 1.4, label.y.npc = "top", size = 5, aes(label = paste0("p = ", ..p.format..))) + 
+  theme(legend.position="none",
+        axis.text = element_text(color="black", size=16, face="bold"),
+        axis.title.x = element_text(color="black", size=21, face="bold"),
+        axis.title.y = element_text(color="black", size=21, face="bold")) + 
+  xlab("Clinical Benefit") + ylab("Tumor mutational burden/MB") +
+  scale_x_discrete(labels=c("Responder", "Non-Responder"))
+ggsave('../results/fig3d.tiff', fig3.d)
+
+
+########################
+#
+#
+# FIGURE 4
+#
+#
+########################
+
+Neo_burden_inova <- read.csv("/data/neaontigen_data.txt", sep = '\t', na.strings=c("","NA"))
+Neo_burden_inova$Response <- factor(Neo_burden_inova$Response, levels = c("Responder","Non_Responder"))
+
+liu_data <- read.csv("/data/liu_data_full.csv", sep = ',', stringsAsFactors = FALSE, na.strings="NA")
+liu_data$response <- factor(liu_data$response, levels = c("responder","nonresponder"))
+
+#4A
+fig4.a <- ggplot(Neo_burden_inova, aes(Response, neo_per_MB_05_filter)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(aes(colour = Response), size = 5, position = position_jitterdodge()) +
+  scale_shape_manual(values=c(19, 17)) +
+  scale_color_manual(values = c("#81bc00", "#898b8e")) +
+  stat_compare_means(method = "wilcox.test", label.x = 1.4, label.y.npc = "top", size = 5, aes(label = paste0("p = ", ..p.format..))) + 
+  theme(plot.title = element_text(size = 16, family = "Helvetica", face = "bold"),
+        text=element_text(family="Helvetica"),
+        axis.text.x=element_text(colour="black", size = 14, face = "bold"),
+        axis.text.y=element_text(colour="black", size = 14, face = "bold"),
+        axis.title.x = element_text(color="black", size=18, face="bold"),
+        axis.title.y = element_text(color="black", size=18, face="bold"),
+        legend.key=element_rect(fill="white", colour="white"),
+        legend.position = "none") + 
+  xlab("Clinical benefit") + ylab("Neoantigen burden/MB") +
+  scale_x_discrete(labels=c("Responder", "Non-Responder"))
+ggsave('../results/fig4a.tiff', fig4.a)
+
+#4B
+fig4.b <- ggplot(liu_data, aes(response, neo_mb)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(aes(colour = response), size = 5, position = position_jitterdodge()) +
+  scale_shape_manual(values=c(19, 17)) +
+  scale_color_manual(values = c("#3399cc", "#898b8e")) +
+  stat_compare_means(method = "wilcox.test", label.x = 1.4, label.y.npc = "top", size = 5, aes(label = paste0("p = ", ..p.format..))) + 
+  theme(plot.title = element_text(size = 16, family = "Helvetica", face = "bold"),
+        text=element_text(family="Helvetica"),
+        axis.text.x=element_text(colour="black", size = 14, face = "bold"),
+        axis.text.y=element_text(colour="black", size = 14, face = "bold"),
+        axis.title.x = element_text(color="black", size=18, face="bold"),
+        axis.title.y = element_text(color="black", size=18, face="bold"),
+        legend.key=element_rect(fill="white", colour="white"),
+        legend.position = "none") + 
+  xlab("Clinical benefit") + ylab("Neoantigen burden/MB") +
+  scale_x_discrete(labels=c("Responder", "Non-Responder"))
+ggsave('../results/fig4b.tiff', fig4.b)
+
+#4C
+neo.surv <- subset(Neo_burden_inova, !is.na(PFS_Month))
+surv_object <- Surv(time = neo.surv$PFS_Month, event = neo.surv$progression_event)
+surv_object 
+
+fit1 <- survfit(surv_object ~ neo_level_uncorrrected_sherpa_05, data = neo.surv)
+summary(fit1)
+
+fig4.c <- ggsurvplot(fit1, data = neo.surv, pval = TRUE, size = 2, risk.table.y.text.col = F,
+                        risk.table.y.text = FALSE, # show bars instead of names in text annotations
+                        palette = c("#81bc00", "#898b8e", 'black'),
+                        font.tickslab = c(15, "bold", "#000000"),
+                        #legend = "none",
+                        legend.labs = c("High neoantigen burden", "Low neoantigen burden"),
+                        font.x = c(18, "bold", "#000000"),
+                        font.y = c(18, "bold", "#000000"),
+                        xlab = "Months",
+                        ylab = "Progression free survival probability")
+
+ggsave('../results/fig4c.tiff', print(fig4.c))
+
+########################
+#
+#
+# FIGURE 5
+#
+#
+########################
+
+#5A
+fig5.a <- ggplot(Neo_burden_inova, aes(Response, neo_per_MB_05_filter_loh_hla_mut_b2m)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(aes(colour = Response), size = 5, position = position_jitterdodge()) +
+  scale_shape_manual(values=c(19, 17)) +
+  scale_color_manual(values = c("#81bc00", "#898b8e")) +
+  stat_compare_means(method = "wilcox.test", label.x = 1.4, label.y.npc = "top", size = 5, aes(label = paste0("p = ", ..p.format..))) + 
+  theme(plot.title = element_text(size = 16, family = "Helvetica", face = "bold"),
+        text=element_text(family="Helvetica"),
+        axis.text.x=element_text(colour="black", size = 14, face = "bold"),
+        axis.text.y=element_text(colour="black", size = 14, face = "bold"),
+        axis.title.x = element_text(color="black", size=18, face="bold"),
+        axis.title.y = element_text(color="black", size=18, face="bold"),
+        legend.key=element_rect(fill="white", colour="white"),
+        legend.position = "none") + 
+  xlab("Clinical benefit") + ylab("NEOPS/MB") +
+  scale_x_discrete(labels=c("Responder", "Non-Responder"))
+ggsave('../results/fig5a.tiff', fig5.a)
+
+#5B
+fig5.b <- ggplot(liu_data, aes(response, neops_mb)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(aes(colour = response), size = 5, position = position_jitterdodge()) +
+  scale_shape_manual(values=c(19, 17)) +
+  scale_color_manual(values = c("#3399cc", "#898b8e")) +
+  stat_compare_means(method = "wilcox.test", label.x = 1.4, label.y.npc = "top", size = 5, aes(label = paste0("p = ", ..p.format..))) + 
+  #ggtitle("Liu 2019 pur") + 
+  theme(plot.title = element_text(size = 16, family = "Helvetica", face = "bold"),
+        text=element_text(family="Helvetica"),
+        axis.text.x=element_text(colour="black", size = 14, face = "bold"),
+        axis.text.y=element_text(colour="black", size = 14, face = "bold"),
+        axis.title.x = element_text(color="black", size=18, face="bold"),
+        axis.title.y = element_text(color="black", size=18, face="bold"),
+        legend.key=element_rect(fill="white", colour="white"),
+        legend.position = "none") + 
+  xlab("Clinical benefit") + ylab("NEOPS/MB") +
+  scale_x_discrete(labels=c("Responder", "Non-Responder"))
+ggsave('../results/fig5b.tiff', fig5.b)
+
+#5C
+neo.surv <- subset(Neo_burden_inova, !is.na(PFS_Month))
+surv_object <- Surv(time = neo.surv$PFS_Month, event = neo.surv$progression_event)
+surv_object 
+
+fit2 <- survfit(surv_object ~ composite_neo_score_level, data = neo.surv)
+summary(fit2)
+
+fig5.c <- ggsurvplot(fit2, data = neo.surv, pval = TRUE, size = 2, risk.table.y.text.col = F,
+                        risk.table.y.text = FALSE, # show bars instead of names in text annotations
+                        palette = c("#81bc00", "#898b8e", 'black'),
+                        font.tickslab = c(15, "bold", "#000000"),
+                        #legend = "none",
+                        legend.labs = c("High NEOPS", "Low NEOPS"),
+                        font.x = c(18, "bold", "#000000"),
+                        font.y = c(18, "bold", "#000000"),
+                        xlab = "Months",
+                        ylab = "Progression free survival probability")
+
+ggsave('../results/fig5c.tiff', print(fig5.c))
+
+
+########################
+#
+#
+# FIGURE 6
+#
+#
+########################
+
+
+hla.df <- data.frame(HLA=c("A01:01", "A02:01", "B15:01", "B40:01", "C01:02", "C03:04"),
+                     relative_frequencies=c(16.3, 19.1, 19.8, 22.5, 6.4, 15.8)) #these are the percentages of neoantigens predicted to be presented by each HLA in patient 25
+
+
+fig6.b <- ggplot(hla.df, aes(HLA, relative_frequencies)) + 
+  geom_bar(stat="identity", fill="#898b8e") +
+  geom_text(aes(label=relative_frequencies), vjust=1.6, color="white", size=4, fontface = 'bold') +
+  theme(legend.position="right",
+        axis.text = element_text(color="black", size=14, face="bold"),
+        axis.title.x = element_text(color="black", size=18, face="bold"),
+        axis.title.y = element_text(color="black", size=18, face="bold")) + 
+  xlab("HLA") + ylab("Relative Frequencies") +
+  scale_y_continuous(labels = function(x) paste0(x * 1, '%')) +
+  coord_cartesian(ylim = c(0,25)) +
+  geom_rect(aes(xmin = 2 - 0.5, xmax = 3 + 0.5, ymin = 2 - 2.5, ymax = 19.8 + 0.5),
+            fill = "transparent", color = "#81bc00", size = 1.5) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggsave('../results/fig6b.tiff', fig6.b)
+
+
+sessionInfo()
