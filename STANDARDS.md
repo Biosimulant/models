@@ -314,22 +314,44 @@ pytest models/models/
 
 | Element | Pattern | Example |
 |---------|---------|---------|
-| Model directory (slug) | `<domain>-<subject>-<role>` (kebab-case) | `neuro-hodgkin-huxley-population` |
+| Model directory (slug) | Native/handcrafted: `<domain>-<subject>-<role>`; Public-catalog faithful: `<science_domain>-<format>-<subject>-<catalog_token>-<role>` (kebab-case) | `neuro-hodgkin-huxley-population`; `epidemiology-sbml-ghanbari2020-second-wave-covid-iran-biomd0000000976-model` |
 | Manifest title | `"<Domain>: <PascalCaseName>"` | `"Neuro: HodgkinHuxleyPopulation"` |
 | Python module file | `<snake_case>.py` | `hodgkin_huxley_population.py` |
 | Python class name | `PascalCase` | `HodgkinHuxleyPopulation` |
 | Tags | lowercase, no spaces | `neuroscience`, `monitor`, `ecology` |
 | Signal names | `snake_case` | `population_state`, `spikes` |
 
-#### Slug Structure: `<domain>-<subject>-<role>`
+#### Slug Structure (Native/Handcrafted): `<domain>-<subject>-<role>`
 
 Every model slug has three parts:
 
 | Part | What it is | Examples |
 |------|-----------|---------|
-| **domain** | Domain prefix (see table below) | `neuro-`, `ecology-`, `virtualcell-` |
+| **domain** | Domain prefix (see table below) | `neuro-`, `ecology-`, `virtualcell-` (legacy), `epidemiology-` |
 | **subject** | The specific model, algorithm, or biological entity being simulated. Always a **noun or noun phrase**. | `hodgkin-huxley`, `izhikevich`, `lotka-volterra`, `poisson`, `retina`, `abiotic` |
 | **role** | What the module does in the simulation. Always a **noun**. | `population`, `monitor`, `input`, `source`, `interaction`, `encoder`, `relay` |
+
+#### Slug Structure (Public-Catalog Faithful): `<domain>-<format>-<subject>-<catalog_token>-<role>`
+
+For models that are faithful wrappers of upstream artifacts (SBML/CellML/NeuroML, etc.) and include `upstream:` metadata in
+`model.yaml`, the slug must make the upstream format visible as the 2nd segment:
+
+| Part | What it is | Examples |
+|------|-----------|---------|
+| **science_domain** | Science-domain prefix (see table below) | `signaling-`, `epidemiology-`, `neuroscience-` |
+| **format** | Upstream format token | `sbml`, `cellml`, `neuroml`, `other` |
+| **subject** | Short descriptive subject (noun phrase); may be multi-segment | `goldbeter2013-cdk-oscillations`, `noble1962-cardiac-ap` |
+| **catalog_token** | Upstream catalog `source_id` normalized (lowercase; strip non-alphanumerics) | `biomd0000000944`, `model2003190005` |
+| **role** | What the module does in the simulation (noun) | `model`, `network`, `population` |
+
+Examples:
+- Public SBML (epidemiology): `epidemiology-sbml-ghanbari2020-forecasting-the-second-wave-of-covid-19-in-iran-biomd0000000976-model`
+- Public SBML (signaling): `signaling-sbml-radulescu2008-nfkb-hierarchy-...-model7743212613-model`
+- Public CellML (cardiovascular): `cardiovascular-cellml-noble1962-cardiac-ap-<cellml_id>-model`
+- Legacy native: `neuro-hodgkin-huxley-population` (still valid)
+
+**Grandfathered legacy slugs:** existing directories already in `models/models/` may keep older prefixes and the native 3-part form.
+New public-catalog models should use science-domain + format-visible slugs.
 
 The subject is the most important part — it is what makes a slug unique and
 self-describing. A slug without a clear subject (e.g., `neuro-metrics`,
@@ -379,14 +401,38 @@ implementation of the same concept is added.
 | `ecology-model` | Bad | Says nothing useful |
 | `neuro-generate-spikes` | Bad | Verb phrase, not a noun |
 
-#### Domain Prefixes
+#### Science Domain Prefixes
+
+For **new** models, the first slug segment should be a **science domain** (single token, no hyphens).
+
+Public-catalog faithful slugs use:
+
+- `<science_domain>-<format>-<subject>-<catalog_token>-<role>`
+
+Example (SBML, epidemiology):
+
+- `epidemiology-sbml-ghanbari2020-forecasting-the-second-wave-of-covid-19-in-iran-biomd0000000976-model`
 
 | Prefix | Domain |
 |--------|--------|
-| `neuro-` | Neuroscience (neurons, synapses, monitors) |
-| `ecology-` | Ecosystem dynamics (populations, environment) |
-| `virtualcell-` | Cellular and molecular biology (gene regulation, perturbations) |
-| `example-` | Templates and reference implementations |
+| `epidemiology-` | Infectious disease dynamics (SIR/SEIR, outbreaks, transmission) |
+| `immunology-` | Immune response (T-cells, cytokines, antibodies, vaccines) |
+| `oncology-` | Cancer and tumor dynamics |
+| `pharmacology-` | PK/PD, dosing, drug response |
+| `metabolism-` | Metabolic networks, genome-scale metabolism, FBA |
+| `signaling-` | Signaling pathways (MAPK, NFkB, receptors, phosphorylation) |
+| `generegulation-` | Gene regulation, transcription, translation, GRNs |
+| `cellcycle-` | Cell cycle checkpoints, cyclins/CDKs, mitosis |
+| `cardiovascular-` | Heart and circulation, cardiac electrophysiology |
+| `neuroscience-` | Neurons, synapses, spikes, brain regions |
+| `microbiology-` | Microbes (bacteria/yeast/pathogens; non-immune focus) |
+| `physiology-` | Organ/system homeostasis not covered above |
+| `biomechanics-` | Mechanics of tissues/systems (force, stress/strain) |
+| `development-` | Developmental biology (morphogens, patterning, differentiation) |
+| `ecology-` | Ecosystems and population interactions |
+| `systemsbiology-` | Fallback bucket for molecular/cellular models without a clearer category |
+
+**Legacy slugs:** existing `models/models/` directories may keep older prefixes (e.g. `neuro-`, `virtualcell-`, `example-`) without renaming.
 
 New domains can be added as the repository grows. Propose a prefix in your PR
 description and get approval before merging.
@@ -633,7 +679,9 @@ Use this checklist before submitting a new model or space.
 
 ### New Model Checklist
 
-- [ ] Directory follows `models/<domain>-<subject>-<role>/` structure (see [Naming Conventions](#naming-conventions))
+- [ ] Directory follows a valid model slug structure (see [Naming Conventions](#naming-conventions)):
+      - Native/handcrafted: `models/<domain>-<subject>-<role>/`
+      - Public-catalog faithful (has `upstream:` in `model.yaml`): `models/<domain>-<format>-<subject>-<catalog_token>-<role>/`
 - [ ] `model.yaml` contains all required fields (`schema_version`, `title`,
       `description`, `standard`, `tags`, `authors`, `bsim.entrypoint`)
 - [ ] `src/<module>.py` exists with SPDX header, module docstring, and

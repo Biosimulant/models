@@ -1,0 +1,544 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%       Homo-oligomerisation model without post-translational
+%       modifications. Running the code will generate figures
+%       2 and 3 from the publication:
+%        
+%       Koch, D (2020): Homo-Oligomerisation in Signal Transduction: 
+%       Dynamics, Homeostasis, Ultrasensitivity, Bistability. 
+%       bioArxiv, doi: https://doi.org/10.1101/758789 
+%       
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function HomoOligo_noPTMs
+clc
+clear
+close all
+%% model parameters
+global k1;  
+global k2;
+global k3;
+global k4;
+global k5;
+global k6;
+global k7;
+global k8;
+
+%% simulations and analyses
+ODEsystem=@model;
+opts = odeset('RelTol',1e-8,'AbsTol',1e-8, 'Refine', 3);
+defaultParams();
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Figure 2 - Timecourse simulations   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% dimer
+k3 = 0; k4 = 0; k5 = 0; k6 = 0; k7 = 0; k8 = 0;
+
+A = 1e-5;
+AA = 0;
+AAA = 0;
+AAAA = 0;
+ICs = [A, AA, AAA, AAAA];
+[t,s] = ode23s(ODEsystem, [0,1], ICs , opts);
+
+%% plot
+figure(1)
+subplot(2,3,1)
+hold on;
+box on;
+axis square;
+plot(t,s(:,1), '-r','Linewidth',3);
+plot(t,s(:,2), '-b','Linewidth',3);
+leg = legend('A','AA');
+set(leg,'Interpreter','latex','fontsize',15);
+xlabel('time (s)','Interpreter','latex','fontsize',15); 
+ylabel('concentration (M)','Interpreter','latex','fontsize',15);
+set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',16);
+ylim([0 max(s(:,1))])
+
+%% trimer
+defaultParams();
+k5 = 0; k6 = 0; k7 = 0; k8 = 0;
+opts = odeset('RelTol',1e-10,'AbsTol',1e-10, 'Refine', 3);
+
+A = 1e-5;
+AA = 0;
+AAA = 0;
+AAAA = 0;
+ICs = [A, AA, AAA, AAAA];
+[t,s] = ode23s(ODEsystem, [0,1], ICs , opts);
+
+%% plot
+figure(1)
+subplot(2,3,2)
+hold on;
+box on;
+axis square;
+plot(t,s(:,1), '-r','Linewidth',3);
+plot(t,s(:,2), '-b','Linewidth',3);
+plot(t,s(:,3), '-g','Linewidth',3);
+leg = legend('A','AA','AAA');
+set(leg,'Interpreter','latex','fontsize',15);
+xlabel('time (s)','Interpreter','latex','fontsize',15); 
+ylabel('concentration (M)','Interpreter','latex','fontsize',15);
+set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',16);
+% plot settings for the inset of fig 2B
+% set(gca, 'XScale', 'log','YScale', 'log') 
+%xlim([min(t) 1e2]);
+%xticks([1e-6 1e-5 1e-4 1e-3 1e-2 1e-1 1 10 1e2]);
+ylim([0 1e-5]);
+
+
+%Inset (dimer undulation)
+axes('Position',[.46 .71 .165 .165])
+set(gca,'YScale', 'log','XScale', 'log')
+hold on;
+box on;
+axis square;
+k3 = 1e8;
+[t,s] = ode23s(ODEsystem, [0,100], [1e-5, 0, 0, 0], opts);
+plot(t,s(:,1), '-r','Linewidth',3);
+plot(t,s(:,2), '-b','Linewidth',3);
+plot(t,s(:,3), '-g','Linewidth',3);
+xticks([1e-3 1])
+yticks([1e-9 1e-6])
+xlim([1e-4 100])
+ set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',12);
+ title('dimer undulation','Interpreter','latex', 'FontSize',13.5)
+
+%% tetramer
+defaultParams();
+
+A = 1e-5;
+AA = 0;
+AAA = 0;
+AAAA = 0;
+ICs = [A, AA, AAA, AAAA];
+[t,s] = ode23s(ODEsystem, [0,1], ICs , opts);
+
+%% plot
+figure(1)
+subplot(2,3,3)
+hold on;
+box on;
+axis square;
+plot(t,s(:,1), '-r','Linewidth',3);
+plot(t,s(:,2), '-b','Linewidth',3);
+plot(t,s(:,3), '-g','Linewidth',3);
+plot(t,s(:,4), '-k','Linewidth',3);
+leg = legend('A','AA','AAA','AAAA');
+set(leg,'Interpreter','latex','fontsize',15);
+xlabel('time (s)','Interpreter','latex','fontsize',15); 
+ylabel('concentration (M)','Interpreter','latex','fontsize',15);
+set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',16);
+ylim([0 max(s(:,1))])
+
+
+%Inset
+axes('Position',[.74 .71 .165 .165])
+set(gca,'YScale', 'log','XScale', 'log')
+hold on;
+box on;
+axis square;
+for i=1:4
+    [t,s] = ode23s(ODEsystem, [0,100], [1e-6*10^(i-1), 0, 0, 0], opts);
+    plot(t,s(:,2), '-b','Linewidth',3);
+end
+ xlim([1e-7 100])
+ xticks([1e-6 1e-3 1])
+ ylim([1e-8 1e-3])
+ yticks([1e-8 1e-6 1e-4])
+ set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',12);
+ title('dimer overshoot','Interpreter','latex', 'FontSize',13.5)
+ 
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%% Figure 2 - Steady state analysis    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Atot = logspace(-11,-1,50);   % create a logarithmically spaced vector of total protein concentrations
+A_SS = 1:length(Atot);      % create vectors for storing the steady state concentrations after each simulation
+AA_SS = 1:length(Atot);
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% dimer
+k3 = 0; k4 = 0; k5 = 0; k6 = 0; k7 = 0; k8 = 0;
+% numerical solution
+for i = 1:length(Atot)
+A = Atot(i);
+AA = 0;
+AAA = 0;
+AAAA = 0;
+ICs = [A, AA, AAA, AAAA];
+[t,s] = ode23s(ODEsystem, [0,1000], ICs , opts);
+A_SS(i) = s(length(s),1);
+AA_SS(i) = s(length(s),2);
+end
+
+%% plot SS dimer
+figure(1)
+subplot(2,3,4)
+hold on;
+box on;
+axis square;
+plot(Atot,A_SS, '-r','Linewidth',3);
+plot(Atot,AA_SS, '-b','Linewidth',3);
+set(gca, 'XScale', 'log','YScale', 'log')
+leg = legend('A','AA');
+set(leg,'Interpreter','latex','fontsize',15);
+xlabel('[A$_{tot}$] (M)','Interpreter','latex','fontsize',15); 
+ylabel('concentration (M) at SS','Interpreter','latex','fontsize',15);
+xlim([1e-10 1e-1])
+ylim([1e-12 1e-2])
+xticks([1e-9 1e-6 1e-3 1])
+yticks([1e-12 1e-9 1e-6 1e-3 1])
+set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',16);
+
+%% relative sensitivity monomer
+"relative sensitivities default parameters"
+A0 = 1e-8;
+delta = 0.02;
+[t,s] = ode23s(ODEsystem, [0,1000], [A0, 0, 0, 0] , opts);
+Alow_ss = s(length(s),1);
+[t,s] = ode23s(ODEsystem, [0,1000], [(1+delta)*A0, 0, 0, 0] , opts);
+Ahi_ss = s(length(s),1);
+rS_A = (A0/Alow_ss)*((Ahi_ss - Alow_ss )/(A0*delta))
+
+%% relative sensitivity dimer
+[t,s] = ode23s(ODEsystem, [0,1000], [A0, 0, 0, 0] , opts);
+Alow_ss = s(length(s),2);
+[t,s] = ode23s(ODEsystem, [0,1000], [(1+delta)*A0, 0, 0, 0] , opts);
+Ahi_ss = s(length(s),2);
+rS_AA = (A0/Alow_ss)*((Ahi_ss - Alow_ss )/(A0*delta))
+
+%% trimer
+defaultParams();
+k5 = 0; k6 = 0; k7 = 0; k8 = 0;
+
+% numerical solution
+for i = 1:length(Atot)
+A = Atot(i);
+AA = 0;
+AAA = 0;
+AAAA = 0;
+ICs = [A, AA, AAA, AAAA];
+[t,s] = ode23s(ODEsystem, [0,1000], ICs , opts);
+A_SS(i) = s(length(s),1);
+AA_SS(i) = s(length(s),2);
+AAA_SS(i) = s(length(s),3);
+end
+
+%% plot SS trimer
+figure(1)
+subplot(2,3,5)
+hold on;
+box on;
+axis square;
+plot(Atot,A_SS, '-r','Linewidth',3);
+plot(Atot,AA_SS, '-b','Linewidth',3);
+plot(Atot,AAA_SS, '-g','Linewidth',3);
+set(gca, 'XScale', 'log','YScale', 'log')
+leg = legend('A','AA','AAA');
+set(leg,'Interpreter','latex','fontsize',15);
+xlabel('[A$_{tot}$] (M)','Interpreter','latex','fontsize',15); 
+ylabel('concentration (M) at SS','Interpreter','latex','fontsize',15);
+xlim([1e-10 1e-1])
+ylim([1e-12 1e-2])
+xticks([1e-9 1e-6 1e-3 1])
+yticks([1e-12 1e-9 1e-6 1e-3 1])
+set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',16);
+
+%% relative sensitivity trimer
+A0 = 1e-8;
+delta = 0.02;
+[t,s] = ode23s(ODEsystem, [0,1000], [A0, 0, 0, 0] , opts);
+Alow_ss = s(length(s),3);
+[t,s] = ode23s(ODEsystem, [0,1000], [(1+delta)*A0, 0, 0, 0] , opts);
+Ahi_ss = s(length(s),3);
+rS_AAA = (A0/Alow_ss)*((Ahi_ss - Alow_ss )/(A0*delta))
+
+%% tetramer
+defaultParams();
+
+% numerical solution
+for i = 1:length(Atot)
+A = Atot(i);
+AA = 0;
+AAA = 0;
+AAAA = 0;
+ICs = [A, AA, AAA, AAAA];
+[t,s] = ode23s(ODEsystem, [0,1000], ICs , opts);
+A_SS(i) = s(length(s),1);
+AA_SS(i) = s(length(s),2);
+AAA_SS(i) = s(length(s),3);
+AAAA_SS(i) = s(length(s),4);
+end
+
+%% plot SS tetramer
+figure(1)
+subplot(2,3,6)
+hold on;
+box on;
+axis square;
+plot(Atot,A_SS, '-r','Linewidth',3);
+plot(Atot,AA_SS, '-b','Linewidth',3);
+plot(Atot,AAA_SS, '-g','Linewidth',3);
+plot(Atot,AAAA_SS, '-k','Linewidth',3);
+set(gca, 'XScale', 'log','YScale', 'log')
+leg = legend('A','AA','AAA','AAAA');
+set(leg,'Interpreter','latex','fontsize',15);
+xlabel('[A$_{tot}$] (M)','Interpreter','latex','fontsize',15); 
+ylabel('concentration (M) at SS','Interpreter','latex','fontsize',15);
+xlim([1e-10 1e-1])
+ylim([1e-12 1e-2])
+xticks([1e-9 1e-6 1e-3 1])
+yticks([1e-12 1e-9 1e-6 1e-3 1])
+set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',16);
+set(gcf, 'Position', [200 100 1300 700]);
+
+%% relative sensitivity tetramer
+A0 = 1e-8;
+delta = 0.02;
+[t,s] = ode23s(ODEsystem, [0,1000], [A0, 0, 0, 0] , opts);
+Alow_ss = s(length(s),4);
+[t,s] = ode23s(ODEsystem, [0,1000], [(1+delta)*A0, 0, 0, 0] , opts);
+Ahi_ss = s(length(s),4);
+rS_AAAA = (A0/Alow_ss)*((Ahi_ss - Alow_ss )/(A0*delta))
+
+"relative change in tetramers upon 10x change in total concentration below the Kd"
+[t,s1] = ode23s(ODEsystem, [0,1000], [1e-8 0 0 0] , opts);
+[t,s2] = ode23s(ODEsystem, [0,1000], [1e-7 0 0 0] , opts);
+s2(length(s2),4)/s1(length(s1),4)
+
+%% 2-dimensional parameter exploration trimerisation model
+% this section shows the dependence of the steady state concentrations of
+% monomers, dimers and trimers on both total protein concentration and
+% association rate constant
+
+% Atot = logspace(-11,-1,12);   % create a logarithmically spaced vector of total protein concentrations
+% A_SS = 1:length(Atot);      % create vectors for storing the steady state concentrations after each simulation
+% AA_SS = 1:length(Atot);
+% AAA_SS = 1:length(Atot);
+% k = logspace(3,8,5);       % variation of association rate constant (k3)
+% 
+% for i = 1:length(k)
+% defaultParams();
+% k5 = 0; k6 = 0; k7 = 0; k8 = 0;
+% k3 = k(i);
+% kx = 1:length(Atot);
+% kx(:) = k3;
+% % numerical solution
+% for i = 1:length(Atot)
+% A = Atot(i);
+% AA = 0;
+% AAA = 0;
+% AAAA = 0;
+% ICs = [A, AA, AAA, AAAA];
+% [t,s] = ode23s(ODEsystem, [0,1e12], ICs , opts);
+% A_SS(i) = s(length(s),1);
+% AA_SS(i) = s(length(s),2);
+% AAA_SS(i) = s(length(s),3);
+% end
+% 
+% % plot 
+% figure(99)
+% hold on;
+% box on;
+% axis square;
+% plot3(Atot,kx,A_SS, '-r','Linewidth',3);
+% plot3(Atot,kx,AA_SS, '-b','Linewidth',3);
+% plot3(Atot,kx,AAA_SS, '-g','Linewidth',3);
+% set(gca, 'XScale', 'log','YScale', 'log','ZScale', 'log')
+% leg = legend('A','AA','AAA');
+% set(leg,'Interpreter','latex','fontsize',15);
+% xlabel('[A$_{tot}$] (M)','Interpreter','latex','fontsize',13);
+% ylabel('[k$_3$] (mol$^{-1}$s$^{-1}$)','Interpreter','latex','fontsize',13); 
+% zlabel('concentration (M) at SS','Interpreter','latex','fontsize',13);
+%  xlim([1e-10 1e-1])
+%  ylim([1e3 1e8])
+%  zlim([1e-12 1e-2])
+%  xticks([1e-9 1e-6 1e-3 1])
+%  yticks([1e3 1e4 1e5 1e6 1e7 1e8])
+%  zticks([1e-12 1e-9 1e-6 1e-3 1])
+% set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',16);
+% end
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Figure 3 - Steady state analysis: parameter variation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% variation trimer
+defaultParams();
+k5 = 0; k7 = 0; k6 = 0; k8 = 0;
+k3 = 1e8;
+
+% numerical solution
+for i = 1:length(Atot)
+A = Atot(i);
+AA = 0;
+AAA = 0;
+AAAA = 0;
+ICs = [A, AA, AAA, AAAA];
+[t,s] = ode23s(ODEsystem, [0,100000], ICs , opts);
+A_SS(i) = s(length(s),1);
+AA_SS(i) = s(length(s),2);
+AAA_SS(i) = s(length(s),3);
+end
+
+%% plot
+figure(3)
+subplot(1,3,1)
+hold on;
+box on;
+axis square;
+plot(Atot,A_SS, '-r','Linewidth',3);
+plot(Atot,AA_SS, '-b','Linewidth',3);
+plot(Atot,AAA_SS, '-g','Linewidth',3);
+set(gca, 'XScale', 'log','YScale', 'log')
+leg = legend('A','AA','AAA');
+set(leg,'Interpreter','latex','fontsize',15);
+xlabel('[A$_{tot}$] (M)','Interpreter','latex','fontsize',15); 
+ylabel('concentration (M) at SS','Interpreter','latex','fontsize',15);
+xlim([1e-10 0.1])
+ylim([1e-12 1])
+xticks([1e-9 1e-6 1e-3 1])
+yticks([1e-12 1e-9 1e-6 1e-3 1])
+set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',16);
+
+%% variation tetramer
+opts = odeset('RelTol',3e-9,'AbsTol',3e-9, 'Refine', 3);
+defaultParams();
+    
+k1 =   3.2e+06
+k2 =   2400
+k3 =   3.45e+06
+k4 =    0.083
+k5 =   4.8e+06
+k6 =   0.525
+k7 =   3e+06
+
+% For thermodynamic consistency, the following relation needs to hold:
+% k3*k5/(k4*k6) = k1*k7/(k2*k8). After rearranging, we use this relation to
+% assign the value of k8
+
+k8 = (k1*k7*k4*k6)/(k3*k5*k2)
+
+% numerical solution
+for i = 1:length(Atot)
+A = Atot(i);
+AA = 0;
+AAA = 0;
+AAAA = 0;
+ICs = [A, AA, AAA, AAAA];
+[t,s] = ode23s(ODEsystem, [0,500000], ICs , opts);
+A_SS(i) = s(length(s),1);
+AA_SS(i) = s(length(s),2);
+AAA_SS(i) = s(length(s),3);
+AAAA_SS(i) = s(length(s),4);
+end
+
+%% plot
+figure(3)
+subplot(1,3,2)
+hold on;
+box on;
+axis square;
+plot(Atot,A_SS, '-r','Linewidth',3);
+plot(Atot,AA_SS, '-b','Linewidth',3);
+plot(Atot,AAA_SS, '-g','Linewidth',3);
+plot(Atot,AAAA_SS, '-k','Linewidth',3);
+set(gca, 'XScale', 'log','YScale', 'log')
+leg = legend('A','AA','AAA','AAAA');
+set(leg,'Interpreter','latex','fontsize',15);
+xlabel('[A$_{tot}$] (M)','Interpreter','latex','fontsize',15); 
+ylabel('concentration (M) at SS','Interpreter','latex','fontsize',15);
+xlim([1e-10 0.1])
+ylim([1e-12 1])
+xticks([1e-9 1e-6 1e-3 1])
+yticks([1e-12 1e-9 1e-6 1e-3 1])
+set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',16);
+set(gcf, 'Position', [200 100 1300 700]);
+
+%Inset
+axes('Position',[.427 .560 .122 .122])
+hold on;
+box on;
+axis square;
+xticks([])
+yticks([1e-7 1e-6 1e-5 1e-4])
+set(gca, 'XScale', 'log','YScale', 'log')
+plot(Atot,A_SS, '-r','Linewidth',3);
+xlim([1e-5 1e-2])
+ylim([1e-7 1e-4])
+set(gca, 'TickLabelInterpreter', 'latex', 'TickLength', [0.0225 0.035], 'FontSize',11);
+
+%% relative sensitivity tetramer variation
+"relative sensitivity tetramer variation"
+A0 = 1e-4;
+delta = 0.02;
+[t,s] = ode23s(ODEsystem, [0,500000], [A0, 0, 0, 0] , opts);
+Alow_ss = s(length(s),1);
+[t,s] = ode23s(ODEsystem, [0,500000], [(1+delta)*A0, 0, 0, 0] , opts);
+Ahi_ss = s(length(s),1);
+rS_A = (A0/Alow_ss)*((Ahi_ss - Alow_ss )/(A0*delta))
+
+% relative changes in monomer concentration above the Kd
+[t,s1] = ode23s(ODEsystem, [0,500000], [1e-5 0 0 0] , opts);
+[t,s2] = ode23s(ODEsystem, [0,500000], [1e-2 0 0 0] , opts);
+"relative change of monomers after 1000x change of Atot"
+s2(length(s2),1)/s1(length(s1),1)
+[t,s1] = ode23s(ODEsystem, [0,500000], [1e-4 0 0 0] , opts);
+[t,s2] = ode23s(ODEsystem, [0,500000], [1e-3 0 0 0] , opts);
+"relative change of monomers after 10x change of Atot"
+s2(length(s2),1)/s1(length(s1),1)
+
+%% auxilliary functions
+    function defaultParams()
+       % association and dissociation rates for dimerisation reactions
+       k1 = 1e6;    %dimerisation
+       k2 = 0.1;
+       k3 = 1e6;    %trimerisation
+       k4 = 0.1;
+       k5 = 1e6;    %tetramerisation via trimers
+       k6 = 0.1;
+       k7 = 1e6;    %tetramerisation via dimers
+       k8 = 0.1;
+    end
+end
+
+function dxdt = model(t,s)
+global k1;
+global k2;
+global k3;
+global k4;
+global k5;
+global k6;
+global k7;
+global k8;
+
+A = s(1);
+AA = s(2);
+AAA = s(3);
+AAAA = s(4);
+
+%rate expressions
+v1 = k1*A^2;
+v2 = k2*AA;
+v3 = k3*A*AA;
+v4 = k4*AAA;
+v5 = k5*A*AAA;
+v7 = k7*AA^2;
+v6 = k6*AAAA;
+v8 = k8*AAAA;
+
+%ODEs
+dA =  2*v2 + v4 + v6 - 2*v1 - v3 - v5;
+dAA = v1  + v4 + 2*v8 - v2 - v3 - 2*v7;
+dAAA = v3 + v6 - v4 - v5 ;
+dAAAA = v5 + v7 - v6 - v8;
+
+dxdt = [dA; dAA; dAAA; dAAAA];
+end

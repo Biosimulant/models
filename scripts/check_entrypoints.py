@@ -14,6 +14,13 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 sys.dont_write_bytecode = True
 
+# When running from the Biosimulant monorepo checkout (without installing bsim),
+# ensure `import bsim` resolves to the installable package at `bsim/src/bsim/`.
+REPO_ROOT = ROOT.parent
+BSIM_SRC = REPO_ROOT / "bsim" / "src"
+if BSIM_SRC.exists():
+    sys.path.insert(0, str(BSIM_SRC))
+
 
 def _load_yaml(path: Path) -> dict[str, Any]:
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
