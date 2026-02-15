@@ -1,0 +1,205 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                               %
+%   Phospholamban model v1.1 by Daniel Koch, 2019-2021                          %
+%                                                                               %
+%   Unphosphorylated Phospholamban inhibits the Ca2+-ATPase SERCA2a and is a    %
+%   crucial regulator of cardiac contractility and Ca2+-handling.               %
+%   Phosphorylation of Serine 16 by protein kinase A in response to             %
+%   beta-adrenergic stimulation reverses the inhibition of SERCA. The           %
+%   present model describes the regulation of the phosphorylation state of      %
+%   monomeric and pentameric Phospholamban at Serine 16 by protein kinase       %
+%   A, protein phosphatases 1 and 2A and Inhibitor-1.                           %
+%                                                                               %
+%   A full description of the model can be found in:                            %                               
+%   Koch D., Alexandrovich A., Funk F., Kho A.L., Schmitt J.P., Gautel M.       %
+%   (2021): Molecular Noise-Filtering in the beta-adrenergic Signaling Network  %
+%   by Phospholamban Pentamers. Cell Reports. (forthcoming)                     %
+%                                                                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function dxdt = PLN_model(t,s)
+%% global parameters
+global k1; global k2; global k3; global k4; global k5; global k6; global k7; global k8;
+
+global kcat_PKA_m;
+global Km_PKA_m;
+global kcat_PKA_p;
+global Km_PKA_p;
+global kcat_PP1_m;
+global Km_PP1_m;
+global kcat_PP1_p;
+global Km_PP1_p;
+global phi;
+global chi;
+global omega;
+global PKA;
+
+global kcat_PKA_I1;
+global Km_PKA_I1;
+global V_PP2A_I1;
+global V_PP2A_m;
+global V_PP2A_p;
+global Km_PP2A;
+
+global PLNtot;
+global PP1tot;
+global I1tot;
+
+%% assignment of initial conditions for state variables
+P1_0 = s(1);
+P2_0 = s(2);
+P2_1 = s(3);
+P2_2 = s(4);
+P4_0 = s(5); 
+P4_1 = s(6);
+P4_2 = s(7);
+P4_3 = s(8);
+P4_4 = s(9);
+P5_0 = s(10);
+P5_1 = s(11);
+P5_2 = s(12);
+P5_3 = s(13);
+P5_4 = s(14);
+P5_5 = s(15);
+I1p0 = s(16);
+PP1 = s(17);
+
+%% species assigment from conservation laws
+P1_1 = PLNtot - P1_0 - 2*(P2_0+P2_1+P2_2) - 4*(P4_0+P4_1+P4_2+P4_3+P4_4) - 5*(P5_0+P5_1+P5_2+P5_3+P5_4+P5_5);
+I1p1_PP1 = PP1tot - PP1;
+I1p1 = (I1tot - I1p0 - I1p1_PP1);
+
+%% reaction rates
+
+    %% Pentamerisation of PLN
+    v1 = k1*P1_0^2;
+    v2 = k2*P2_0;
+    v3 = 2*k1*P1_0*P1_1;
+    v4 = k2*P2_1;
+    v5 = k1*omega*P1_1^2;
+    v6 = k2*P2_2;
+    v7 = k3*P2_0^2;
+    v8 = k4*P4_0;
+    v9 = 2*k3*P2_0*P2_1;
+    v10 = k4*P4_1;
+    v11 = 2*k3*P2_0*P2_2;
+    v12 = 0.5*k4*P4_2;
+    v13 = k3*omega*P2_1^2;
+    v14 = 0.5*k4*P4_2;
+    v15 = 2*k3*omega^2*P2_1*P2_2;
+    v16 = k4*P4_3;
+    v17 = k3*omega^3*P2_2^2;
+    v18 = k4*P4_4;
+    v19 = k5*P1_0*P4_0;
+    v20 = k6*P5_0;
+    v21 = k5*P1_1*P4_0;
+    v22 = 0.5*k6*P5_1;
+    v23 = k5*P1_0*P4_1;
+    v24 = 0.5*k6*P5_1;
+    v25 = k5*omega*P1_1*P4_1;
+    v26 = 0.5*k6*P5_2;
+    v27 = k5*P1_0*P4_2;
+    v28 = 0.5*k6*P5_2;
+    v29 = k5*omega^2*P1_1*P4_2;
+    v30 = 0.5*k6*P5_3;
+    v31 = k5*P1_0*P4_3;
+    v32 = 0.5*k6*P5_3;
+    v33 = k5*omega^3*P1_1*P4_3;
+    v34 = 0.5*k6*P5_4;
+    v35 = k5*P1_0*P4_4;
+    v36 = 0.5*k6*P5_4;
+    v37 = k5*omega^4*P1_1*P4_4;
+    v38 = k6*P5_5;
+
+    %% Phosphorylation of PLN by PKA
+
+v39 =                                    (PKA*kcat_PKA_m*P1_0)/...
+        (Km_PKA_m*(1 + (P5_0 + P5_1 + P5_2 + P5_3 + P5_4)/Km_PKA_p  +  I1p0/Km_PKA_I1) + P1_0);
+v42 =                                    (PKA*kcat_PKA_p*P5_0)/...
+         (Km_PKA_p*(1 + (P5_1 + P5_2 + P5_3 + P5_4)/Km_PKA_p + P1_0/Km_PKA_m +  I1p0/Km_PKA_I1) + P5_0);
+v45 =                                    (PKA*kcat_PKA_p*P5_1)/...
+         (Km_PKA_p*(1 + (P5_0 + P5_2 + P5_3 + P5_4)/Km_PKA_p + P1_0/Km_PKA_m +  I1p0/Km_PKA_I1) + P5_1);
+v48 =                                    (PKA*kcat_PKA_p*P5_2)/...
+         (Km_PKA_p*(1 + (P5_0 + P5_1 + P5_3 + P5_4)/Km_PKA_p + P1_0/Km_PKA_m +  I1p0/Km_PKA_I1) + P5_2);
+v51 =                                    (PKA*kcat_PKA_p*P5_3)/...
+         (Km_PKA_p*(1 + (P5_0 + P5_1 + P5_2 + P5_4)/Km_PKA_p + P1_0/Km_PKA_m +  I1p0/Km_PKA_I1) + P5_3);            
+v54 =                                    (PKA*kcat_PKA_p*P5_4)/...
+         (Km_PKA_p*(1 + (P5_0 + P5_1 + P5_2 + P5_3)/Km_PKA_p + P1_0/Km_PKA_m +  I1p0/Km_PKA_I1) + P5_4);  
+
+    %% Dephosphorylation of PLN by PP1
+
+        %% increasing cooperativity implementation
+% 
+% v40 =                                                        (PP1*kcat_PP1_m*P1_1)/...
+%          (Km_PP1_m*(1 + P5_1/(chi^4*Km_PP1_p) + P5_2/(chi^3*Km_PP1_p) + P5_3/(chi^2*Km_PP1_p) + P5_4/(chi^1*Km_PP1_p)  + P5_5/(chi^0*Km_PP1_p)) + P1_1);
+% v43 =                                                       (PP1*phi^4*kcat_PP1_p*P5_1)/...
+%          (chi^4*Km_PP1_p*(1 + P1_1/Km_PP1_m + P5_2/(chi^3*Km_PP1_p) + P5_3/(chi^2*Km_PP1_p) + P5_4/(chi^1*Km_PP1_p)  + P5_5/(chi^0*Km_PP1_p)) + P5_1);                                                    
+% v46 =                                                       (PP1*phi^3*kcat_PP1_p*P5_2)/...
+%          (chi^3*Km_PP1_p*(1 + P1_1/Km_PP1_m + P5_1/(chi^4*Km_PP1_p) + P5_3/(chi^2*Km_PP1_p) + P5_4/(chi^1*Km_PP1_p)  + P5_5/(chi^0*Km_PP1_p)) + P5_2);
+% v49 =                                                       (PP1*phi^2*kcat_PP1_p*P5_3)/...
+%          (chi^2*Km_PP1_p*(1 + P1_1/Km_PP1_m + P5_1/(chi^4*Km_PP1_p) + P5_2/(chi^3*Km_PP1_p) + P5_4/(chi^1*Km_PP1_p)  + P5_5/(chi^0*Km_PP1_p)) + P5_3);
+% v52 =                                                       (PP1*phi^1*kcat_PP1_p*P5_4)/...
+%          (chi^1*Km_PP1_p*(1 + P1_1/Km_PP1_m + P5_1/(chi^4*Km_PP1_p) + P5_2/(chi^3*Km_PP1_p) + P5_3/(chi^2*Km_PP1_p)  + P5_5/(chi^0*Km_PP1_p)) + P5_4);
+% v55 =                                                       (PP1*phi^0*kcat_PP1_p*P5_5)/...
+%          (chi^0*Km_PP1_p*(1 + P1_1/Km_PP1_m + P5_1/(chi^4*Km_PP1_p) + P5_2/(chi^3*Km_PP1_p)+ P5_3/(chi^2*Km_PP1_p)  + P5_4/(chi^1*Km_PP1_p)) + P5_5);
+
+        %% upper limit cooperativity implementation
+v40 =                                                        (PP1*kcat_PP1_m*P1_1)/...
+         (Km_PP1_m*(1 + P5_1/(Km_PP1_p) + P5_2/(chi*Km_PP1_p) + P5_3/(chi^2*Km_PP1_p) + P5_4/(chi^3*Km_PP1_p)  + P5_5/(chi^4*Km_PP1_p)) + P1_1);
+v43 =                                                       (PP1*phi^0*kcat_PP1_p*P5_1)/...
+         (Km_PP1_p*(1 + P1_1/Km_PP1_m + P5_2/(chi*Km_PP1_p) + P5_3/(chi^2*Km_PP1_p) + P5_4/(chi^3*Km_PP1_p)  + P5_5/(chi^4*Km_PP1_p)) + P5_1);                                                    
+v46 =                                                       (PP1*phi^1*kcat_PP1_p*P5_2)/...
+         (chi*Km_PP1_p*(1 + P1_1/Km_PP1_m + P5_1/(Km_PP1_p) + P5_3/(chi^2*Km_PP1_p) + P5_4/(chi^3*Km_PP1_p)  + P5_5/(chi^4*Km_PP1_p)) + P5_2);
+v49 =                                                       (PP1*phi^2*kcat_PP1_p*P5_3)/...
+         (chi^2*Km_PP1_p*(1 + P1_1/Km_PP1_m + P5_1/(Km_PP1_p) + P5_2/(chi*Km_PP1_p) + P5_4/(chi^3*Km_PP1_p)  + P5_5/(chi^4*Km_PP1_p)) + P5_3);
+v52 =                                                       (PP1*phi^3*kcat_PP1_p*P5_4)/...
+         (chi^3*Km_PP1_p*(1 + P1_1/Km_PP1_m + P5_1/(Km_PP1_p) + P5_2/(chi*Km_PP1_p) + P5_3/(chi^2*Km_PP1_p)  + P5_5/(chi^4*Km_PP1_p)) + P5_4);
+v55 =                                                       (PP1*phi^4*kcat_PP1_p*P5_5)/...
+         (chi^4*Km_PP1_p*(1 + P1_1/Km_PP1_m + P5_1/(Km_PP1_p) + P5_2/(chi*Km_PP1_p)+ P5_3/(chi^2*Km_PP1_p)  + P5_4/(chi^3*Km_PP1_p)) + P5_5);
+
+     
+    %% Dephosphorylation of PLN by PP2A
+v41 =                         (V_PP2A_m*P1_1)/...
+         (Km_PP2A +  P5_1 + P5_2 + P5_3 + P5_4 + P5_5 + I1p1 + P1_1);
+v44 =                         (V_PP2A_p*P5_1)/...
+         (Km_PP2A +  P1_1 + P5_2 + P5_3 + P5_4 + P5_5 + I1p1 + P5_1);
+v47 =                         (V_PP2A_p*P5_2)/...
+         (Km_PP2A +  P1_1 + P5_1 + P5_3 + P5_4 + P5_5 + I1p1 + P5_2);
+v50 =                         (V_PP2A_p*P5_3)/...
+         (Km_PP2A +  P1_1 + P5_1 + P5_2 + P5_4 + P5_5 + I1p1 + P5_3);
+v53 =                         (V_PP2A_p*P5_4)/...
+         (Km_PP2A +  P1_1 + P5_1 + P5_2 + P5_3 + P5_5 + I1p1 + P5_4);
+v56 =                         (V_PP2A_p*P5_5)/...
+         (Km_PP2A +  P1_1 + P5_1 + P5_2 + P5_3 + P5_4 + I1p1 + P5_5);
+                                          
+    %% Phosphorylation and dephosphorylation of Inhibitor 1 and complexation of PP1 by phosphorylated Inhibitor 1
+v57 =                        (PKA*kcat_PKA_I1*I1p0)/...
+         (Km_PKA_I1*(1 +  P1_0/Km_PKA_m + (P5_0 + P5_1 + P5_2 + P5_3 + P5_4)/Km_PKA_p) + I1p0);                              
+v58 =                        (V_PP2A_I1*I1p1)/...
+         (Km_PP2A +  P1_1 + P5_1 + P5_2 + P5_3 + P5_4 + P5_5 + I1p1);
+v59 = k7*I1p1*PP1;
+v60 = k8*I1p1_PP1;
+
+%% ODEs
+
+dP1_0 = 2*v2 + v4 + v20 + v24 + v28 + v32 + v36 + v40 + v41 -2*v1 - v3 - v19 - v23 - v27 - v31 - v35 - v39;
+dP2_0 = v1 + 2*v8 + v10 + v12 - v2 - 2*v7 - v9 - v11;
+dP2_1 = v3 + v10 + 2*v14 + v16  - v4 - v9 - 2*v13 - v15;
+dP2_2 = v5 + v12 + v16 + 2*v18 - v6 - v11 - v15 - 2*v17; 
+dP4_0 = v7 + v20 + v22 - v8 - v19 - v21;
+dP4_1 = v9 + v24 + v26 - v10 - v23 - v25;
+dP4_2 = v11 + v13 + v28 + v30 - v12 - v14 - v27 - v29;
+dP4_3 = v15 + v32 + v34 - v16 - v31 - v33;
+dP4_4 = v17 + v36 + v38 - v18 - v35 - v37;
+dP5_0 = v19 + v43 + v44 - v20 - v42;
+dP5_1 = v21 + v23 + v42 + v46 + v47 - v22 - v24 - v43 - v44 - v45;
+dP5_2 = v25 + v27 + v45 + v49 + v50 - v26 - v28 - v46 - v47 - v48;
+dP5_3 = v29 + v31 + v48 + v52 + v53 - v30 - v32 - v49 - v50 - v51;
+dP5_4 = v33 + v35 + v51 + v55 + v56 - v34 - v36 - v52 - v53 - v54;
+dP5_5 = v37 + v54 - v38 - v55 - v56;
+dI1p0 = v58 - v57;
+dPP1 = v60 - v59;
+
+%% return
+dxdt = [dP1_0; dP2_0; dP2_1; dP2_2; dP4_0; dP4_1; dP4_2; dP4_3; dP4_4; dP5_0; dP5_1; dP5_2; dP5_3; dP5_4; dP5_5; dI1p0; dPP1];
+end

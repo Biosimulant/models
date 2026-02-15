@@ -1,0 +1,2819 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" fbc:required="false" groups:required="false" level="3" sboTerm="SBO:0000062" version="1" xmlns:fbc="http://www.sbml.org/sbml/level3/version1/fbc/version2" xmlns:groups="http://www.sbml.org/sbml/level3/version1/groups/version1">
+  <model fbc:strict="false" id="Glycolysis_Hb_PYK" metaid="meta_Glycolysis_Hb_PYK" name="Haiman2020 - Pyruvate Kinase Regulatory Model of Erythrocyte Glycolysis">
+    <notes>
+      <body xmlns="http://www.w3.org/1999/xhtml">
+     <p>Dynamic model utilizing mass action kinetics to elucidate network-level effects of allosteric regulation in erythrocyte metabolism. The pyruvate kinase regulatory model includes the glycolytic pathway, the Rapaport Leubering (R.L.) Shunt, hemoglobin-oxygen binding, and elementary reaction steps to represent the enzymatic mechanisms for Pyruvate Kinase (PYK). To demonstrate the sampling and ensemble handling capabilities of MASSpy, an  eensemble modeling approach is utilized to assess the dynamics of pyruvate kinase regulation. For the ensemble modeling feature demonstration, a range of parameter sets are generated through Markov-chain Monte Carlo (MCMC) sampling to represent the biological variability  across the ensemble of models. Transient dynamic behavior and model steady states are studied through dynamic simulation and analysis. All models associated with the ensemble-modeling example are found in the GitHub repository at (https://github.com/SBRG/MASSpy-publication), including iPython notebooks to construct all model variations presented in the publication.</p>
+  </body>
+    </notes>
+    <annotation>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+        <rdf:Description rdf:about="#meta_Glycolysis_Hb_PYK">
+          <bqmodel:isDescribedBy>
+	<rdf:Bag>
+	<rdf:li rdf:resource="https://identifiers.org/doi:10.1371/journal.pcbi.1008208"/>
+	</rdf:Bag>
+	</bqmodel:isDescribedBy>
+	<bqbiol:hasProperty>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/mamo/MAMO_0000046"/>
+	</rdf:Bag>
+	</bqbiol:hasProperty>
+	
+	<bqmodel:is>
+	<rdf:Bag>
+	<rdf:li rdf:resource="https://identifiers.org/biomodels.db:MODEL2012150002"/>
+	</rdf:Bag>
+	</bqmodel:is>
+	</rdf:Description>
+	
+	
+	
+	</rdf:RDF>
+	</annotation>
+      <groups:listOfGroups xmlns:groups="http://www.sbml.org/sbml/level3/version1/groups/version1">
+      <groups:group groups:id="PYK_Active" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="M_pyk_R0_c" groups:name="PYK"/>
+          <groups:member groups:idRef="M_pyk_R0_A_c" groups:name="PYK-adp complex"/>
+          <groups:member groups:idRef="M_pyk_R0_P_c" groups:name="PYK-pep complex"/>
+          <groups:member groups:idRef="M_pyk_R0_AP_c" groups:name="PYK-adp-pep complex"/>
+          <groups:member groups:idRef="M_pyk_R1_c" groups:name="PYK-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R1_A_c" groups:name="PYK-adp-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R1_P_c" groups:name="PYK-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R1_AP_c" groups:name="PYK-adp-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R2_c" groups:name="PYK-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R2_A_c" groups:name="PYK-adp-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R2_P_c" groups:name="PYK-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R2_AP_c" groups:name="PYK-adp-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R3_c" groups:name="PYK-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R3_A_c" groups:name="PYK-adp-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R3_P_c" groups:name="PYK-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R3_AP_c" groups:name="PYK-adp-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R4_c" groups:name="PYK-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R4_A_c" groups:name="PYK-adp-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R4_P_c" groups:name="PYK-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R4_AP_c" groups:name="PYK-adp-pep-fdp complex"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_Inhibited" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="M_pyk_T0_c" groups:name="PYK"/>
+          <groups:member groups:idRef="M_pyk_T1_c" groups:name="PYK-atp complex"/>
+          <groups:member groups:idRef="M_pyk_T2_c" groups:name="PYK-atp complex"/>
+          <groups:member groups:idRef="M_pyk_T3_c" groups:name="PYK-atp complex"/>
+          <groups:member groups:idRef="M_pyk_T4_c" groups:name="PYK-atp complex"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_activators" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="M_fdp_c" groups:name="D-Fructose 1,6-bisphosphate"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_cofactors" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="M_adp_c" groups:name="ADP"/>
+          <groups:member groups:idRef="M_h_c" groups:name="H+"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_inhibitors" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="M_atp_c" groups:name="ATP"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_products" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="M_pyr_c" groups:name="Pyruvate"/>
+          <groups:member groups:idRef="M_atp_c" groups:name="ATP"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_substrates" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="M_pep_c" groups:name="Phosphoenolpyruvate"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_adp_c_binding" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="R_PYK_R02" groups:name="pyk_R0-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R04" groups:name="pyk_R0_P-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R12" groups:name="pyk_R1-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R14" groups:name="pyk_R1_P-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R22" groups:name="pyk_R2-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R24" groups:name="pyk_R2_P-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R32" groups:name="pyk_R3-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R34" groups:name="pyk_R3_P-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R42" groups:name="pyk_R4-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R44" groups:name="pyk_R4_P-adp binding"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_atp_c_inhibition" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="R_PYK_T1" groups:name="pyk_T0-atp binding"/>
+          <groups:member groups:idRef="R_PYK_T2" groups:name="pyk_T1-atp binding"/>
+          <groups:member groups:idRef="R_PYK_T3" groups:name="pyk_T2-atp binding"/>
+          <groups:member groups:idRef="R_PYK_T4" groups:name="pyk_T3-atp binding"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_catalyzation" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="R_PYK_R05" groups:name="pyk_R0_AP catalyzation"/>
+          <groups:member groups:idRef="R_PYK_R15" groups:name="pyk_R1_AP catalyzation"/>
+          <groups:member groups:idRef="R_PYK_R25" groups:name="pyk_R2_AP catalyzation"/>
+          <groups:member groups:idRef="R_PYK_R35" groups:name="pyk_R3_AP catalyzation"/>
+          <groups:member groups:idRef="R_PYK_R45" groups:name="pyk_R4_AP catalyzation"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_fdp_c_activation" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="R_PYK_R10" groups:name="pyk_R0-fdp binding"/>
+          <groups:member groups:idRef="R_PYK_R20" groups:name="pyk_R1-fdp binding"/>
+          <groups:member groups:idRef="R_PYK_R30" groups:name="pyk_R2-fdp binding"/>
+          <groups:member groups:idRef="R_PYK_R40" groups:name="pyk_R3-fdp binding"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_pep_c_binding" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="R_PYK_R01" groups:name="pyk_R0-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R03" groups:name="pyk_R0_A-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R11" groups:name="pyk_R1-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R13" groups:name="pyk_R1_A-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R21" groups:name="pyk_R2-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R23" groups:name="pyk_R2_A-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R31" groups:name="pyk_R3-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R33" groups:name="pyk_R3_A-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R41" groups:name="pyk_R4-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R43" groups:name="pyk_R4_A-pep binding"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_rt_transition" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="R_PYK_L" groups:name="pyk_R0-pyk_T0 transition"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_enzyme_module_ligands" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="M_pep_c" groups:name="Phosphoenolpyruvate"/>
+          <groups:member groups:idRef="M_adp_c" groups:name="ADP"/>
+          <groups:member groups:idRef="M_fdp_c" groups:name="D-Fructose 1,6-bisphosphate"/>
+          <groups:member groups:idRef="M_atp_c" groups:name="ATP"/>
+          <groups:member groups:idRef="M_pyr_c" groups:name="Pyruvate"/>
+          <groups:member groups:idRef="M_h_c" groups:name="H+"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_enzyme_module_forms" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="M_pyk_R0_c" groups:name="PYK"/>
+          <groups:member groups:idRef="M_pyk_R0_A_c" groups:name="PYK-adp complex"/>
+          <groups:member groups:idRef="M_pyk_R0_P_c" groups:name="PYK-pep complex"/>
+          <groups:member groups:idRef="M_pyk_R0_AP_c" groups:name="PYK-adp-pep complex"/>
+          <groups:member groups:idRef="M_pyk_T0_c" groups:name="PYK"/>
+          <groups:member groups:idRef="M_pyk_R1_c" groups:name="PYK-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R1_A_c" groups:name="PYK-adp-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R1_P_c" groups:name="PYK-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R1_AP_c" groups:name="PYK-adp-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_T1_c" groups:name="PYK-atp complex"/>
+          <groups:member groups:idRef="M_pyk_R2_c" groups:name="PYK-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R2_A_c" groups:name="PYK-adp-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R2_P_c" groups:name="PYK-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R2_AP_c" groups:name="PYK-adp-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_T2_c" groups:name="PYK-atp complex"/>
+          <groups:member groups:idRef="M_pyk_R3_c" groups:name="PYK-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R3_A_c" groups:name="PYK-adp-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R3_P_c" groups:name="PYK-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R3_AP_c" groups:name="PYK-adp-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_T3_c" groups:name="PYK-atp complex"/>
+          <groups:member groups:idRef="M_pyk_R4_c" groups:name="PYK-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R4_A_c" groups:name="PYK-adp-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R4_P_c" groups:name="PYK-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_R4_AP_c" groups:name="PYK-adp-pep-fdp complex"/>
+          <groups:member groups:idRef="M_pyk_T4_c" groups:name="PYK-atp complex"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_enzyme_module_reactions" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="R_PYK_R01" groups:name="pyk_R0-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R02" groups:name="pyk_R0-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R03" groups:name="pyk_R0_A-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R04" groups:name="pyk_R0_P-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R05" groups:name="pyk_R0_AP catalyzation"/>
+          <groups:member groups:idRef="R_PYK_R10" groups:name="pyk_R0-fdp binding"/>
+          <groups:member groups:idRef="R_PYK_R11" groups:name="pyk_R1-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R12" groups:name="pyk_R1-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R13" groups:name="pyk_R1_A-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R14" groups:name="pyk_R1_P-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R15" groups:name="pyk_R1_AP catalyzation"/>
+          <groups:member groups:idRef="R_PYK_R20" groups:name="pyk_R1-fdp binding"/>
+          <groups:member groups:idRef="R_PYK_R21" groups:name="pyk_R2-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R22" groups:name="pyk_R2-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R23" groups:name="pyk_R2_A-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R24" groups:name="pyk_R2_P-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R25" groups:name="pyk_R2_AP catalyzation"/>
+          <groups:member groups:idRef="R_PYK_R30" groups:name="pyk_R2-fdp binding"/>
+          <groups:member groups:idRef="R_PYK_R31" groups:name="pyk_R3-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R32" groups:name="pyk_R3-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R33" groups:name="pyk_R3_A-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R34" groups:name="pyk_R3_P-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R35" groups:name="pyk_R3_AP catalyzation"/>
+          <groups:member groups:idRef="R_PYK_R40" groups:name="pyk_R3-fdp binding"/>
+          <groups:member groups:idRef="R_PYK_R41" groups:name="pyk_R4-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R42" groups:name="pyk_R4-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R43" groups:name="pyk_R4_A-pep binding"/>
+          <groups:member groups:idRef="R_PYK_R44" groups:name="pyk_R4_P-adp binding"/>
+          <groups:member groups:idRef="R_PYK_R45" groups:name="pyk_R4_AP catalyzation"/>
+          <groups:member groups:idRef="R_PYK_L" groups:name="pyk_R0-pyk_T0 transition"/>
+          <groups:member groups:idRef="R_PYK_T1" groups:name="pyk_T0-atp binding"/>
+          <groups:member groups:idRef="R_PYK_T2" groups:name="pyk_T1-atp binding"/>
+          <groups:member groups:idRef="R_PYK_T3" groups:name="pyk_T2-atp binding"/>
+          <groups:member groups:idRef="R_PYK_T4" groups:name="pyk_T3-atp binding"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_enzyme_module_ligands_categorized" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="PYK_activators"/>
+          <groups:member groups:idRef="PYK_cofactors"/>
+          <groups:member groups:idRef="PYK_inhibitors"/>
+          <groups:member groups:idRef="PYK_products"/>
+          <groups:member groups:idRef="PYK_substrates"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_enzyme_module_forms_categorized" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="PYK_Active"/>
+          <groups:member groups:idRef="PYK_Inhibited"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_enzyme_module_reactions_categorized" groups:kind="collection">
+        <groups:listOfMembers>
+          <groups:member groups:idRef="PYK_adp_c_binding"/>
+          <groups:member groups:idRef="PYK_atp_c_inhibition"/>
+          <groups:member groups:idRef="PYK_catalyzation"/>
+          <groups:member groups:idRef="PYK_fdp_c_activation"/>
+          <groups:member groups:idRef="PYK_pep_c_binding"/>
+          <groups:member groups:idRef="PYK_rt_transition"/>
+        </groups:listOfMembers>
+      </groups:group>
+      <groups:group groups:id="PYK_EnzymeModuleDict" groups:kind="collection">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>subsystem: Glycolysis</p>
+            <p>enzyme_concentration_total: 6.9e-05</p>
+            <p>enzyme_rate: 2.24</p>
+            <p>enzyme_concentration_total_equation: pyk_R0_AP_c(t) + pyk_R0_A_c(t) + pyk_R0_P_c(t) + pyk_R0_c(t) + pyk_R1_AP_c(t) + pyk_R1_A_c(t) + pyk_R1_P_c(t) + pyk_R1_c(t) + pyk_R2_AP_c(t) + pyk_R2_A_c(t) + pyk_R2_P_c(t) + pyk_R2_c(t) + pyk_R3_AP_c(t) + pyk_R3_A_c(t) + pyk_R3_P_c(t) + pyk_R3_c(t) + pyk_R4_AP_c(t) + pyk_R4_A_c(t) + pyk_R4_P_c(t) + pyk_R4_c(t) + pyk_T0_c(t) + pyk_T1_c(t) + pyk_T2_c(t) + pyk_T3_c(t) + pyk_T4_c(t)</p>
+            <p>enzyme_rate_equation: kf_PYK*(pyk_R0_AP_c(t) + pyk_R1_AP_c(t) + pyk_R2_AP_c(t) + pyk_R3_AP_c(t) + pyk_R4_AP_c(t))</p>
+          </html>
+        </notes>
+        <groups:listOfMembers>
+          <groups:member groups:idRef="PYK_enzyme_module_ligands"/>
+          <groups:member groups:idRef="PYK_enzyme_module_forms"/>
+          <groups:member groups:idRef="PYK_enzyme_module_reactions"/>
+          <groups:member groups:idRef="PYK_enzyme_module_ligands_categorized"/>
+          <groups:member groups:idRef="PYK_enzyme_module_forms_categorized"/>
+          <groups:member groups:idRef="PYK_enzyme_module_reactions_categorized"/>
+        </groups:listOfMembers>
+      </groups:group>
+    </groups:listOfGroups>
+    <listOfUnitDefinitions>
+      <unitDefinition id="mM" name="Millimolar">
+        <listOfUnits>
+          <unit exponent="1" kind="mole" multiplier="1" scale="-3"/>
+          <unit exponent="-1" kind="litre" multiplier="1" scale="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="hr" name="hour">
+        <listOfUnits>
+          <unit exponent="1" kind="second" multiplier="3600" scale="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="mmol_per_gDW_per_hr" name="cobra flux unit">
+        <listOfUnits>
+          <unit exponent="-1" kind="gram" multiplier="1" scale="0"/>
+          <unit exponent="-1" kind="second" multiplier="3600" scale="0"/>
+          <unit exponent="1" kind="mole" multiplier="1" scale="-3"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment constant="true" id="c" name="Cytosol" size="1" spatialDimensions="3"/>
+      <compartment constant="true" id="b" name="boundary" size="1" spatialDimensions="3"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="0" fbc:chemicalFormula="C6H12O6" hasOnlySubstanceUnits="false" id="M_glc__D_c" initialConcentration="1.24081917841505" name="D-Glucose"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-2" fbc:chemicalFormula="C6H11O9P" hasOnlySubstanceUnits="false" id="M_g6p_c" initialConcentration="0.0602185259654985" name="D-Glucose 6-phosphate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-2" fbc:chemicalFormula="C6H11O9P" hasOnlySubstanceUnits="false" id="M_f6p_c" initialConcentration="0.0245635954921956" name="D-Fructose 6-phosphate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-4" fbc:chemicalFormula="C6H10O12P2" hasOnlySubstanceUnits="false" id="M_fdp_c" initialConcentration="0.00923798760373767" name="D-Fructose 1,6-bisphosphate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-2" fbc:chemicalFormula="C3H5O6P" hasOnlySubstanceUnits="false" id="M_dhap_c" initialConcentration="0.130120897020308" name="Dihydroxyacetone phosphate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-2" fbc:chemicalFormula="C3H5O6P" hasOnlySubstanceUnits="false" id="M_g3p_c" initialConcentration="0.00557262533613528" name="Glyceraldehyde 3-phosphate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-4" fbc:chemicalFormula="C3H4O10P2" hasOnlySubstanceUnits="false" id="M__13dpg_c" initialConcentration="0.000240878963337448" name="3-Phospho-D-glyceroyl phosphate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-3" fbc:chemicalFormula="C3H4O7P" hasOnlySubstanceUnits="false" id="M__3pg_c" initialConcentration="0.0850687577450144" name="3-Phospho-D-glycerate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-3" fbc:chemicalFormula="C3H4O7P" hasOnlySubstanceUnits="false" id="M__2pg_c" initialConcentration="0.0124424793716632" name="D-Glycerate 2-phosphate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-3" fbc:chemicalFormula="C3H2O6P" hasOnlySubstanceUnits="false" id="M_pep_c" initialConcentration="0.0189364593131946" name="Phosphoenolpyruvate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-1" fbc:chemicalFormula="C3H3O3" hasOnlySubstanceUnits="false" id="M_pyr_c" initialConcentration="0.0603011377729847" name="Pyruvate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-1" fbc:chemicalFormula="C3H5O3" hasOnlySubstanceUnits="false" id="M_lac__L_c" initialConcentration="1.35998169379886" name="L-Lactate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-1" fbc:chemicalFormula="C21H26N7O14P2Moietynad" hasOnlySubstanceUnits="false" id="M_nad_c" initialConcentration="0.0767034227015308" name="Nicotinamide adenine dinucleotide"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-2" fbc:chemicalFormula="C21H27N7O14P2Moietynad" hasOnlySubstanceUnits="false" id="M_nadh_c" initialConcentration="0.030113777298469" name="Nicotinamide adenine dinucleotide - reduced"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-2" fbc:chemicalFormula="C10H12N5O7P" hasOnlySubstanceUnits="false" id="M_amp_c" initialConcentration="0.0867281197343595" name="AMP"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-3" fbc:chemicalFormula="C10H12N5O10P2" hasOnlySubstanceUnits="false" id="M_adp_c" initialConcentration="0.260341898604101" name="ADP"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-4" fbc:chemicalFormula="C10H12N5O13P3" hasOnlySubstanceUnits="false" id="M_atp_c" initialConcentration="1.28947269029971" name="ATP"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-2" fbc:chemicalFormula="HPO4" hasOnlySubstanceUnits="false" id="M_pi_c" initialConcentration="2.50000000000003" name="Phosphate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="1" fbc:chemicalFormula="H" hasOnlySubstanceUnits="false" id="M_h_c" initialConcentration="0.000116857750294528" name="H+"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="0" fbc:chemicalFormula="H2O" hasOnlySubstanceUnits="false" id="M_h2o_c" initialConcentration="1" name="H2O"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-5" fbc:chemicalFormula="C3H3O10P2" hasOnlySubstanceUnits="false" id="M__23dpg_c" initialConcentration="3.05598443377814" name="2,3-Disphospho-D-glycerate"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="0" fbc:chemicalFormula="O2Moietyhb" hasOnlySubstanceUnits="false" id="M_hb_1o2_c" initialConcentration="0.0500897637216409" name="Oxyhemoglobin (1)"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="0" fbc:chemicalFormula="Moietyhb" hasOnlySubstanceUnits="false" id="M_hb_c" initialConcentration="0.0596306275270797" name="Hemoglobin"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="0" fbc:chemicalFormula="O2" hasOnlySubstanceUnits="false" id="M_o2_c" initialConcentration="0.0200788" name="Oxygen"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="0" fbc:chemicalFormula="O4Moietyhb" hasOnlySubstanceUnits="false" id="M_hb_2o2_c" initialConcentration="0.0736319058969908" name="Oxyhemoglobin (2)"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="0" fbc:chemicalFormula="O6Moietyhb" hasOnlySubstanceUnits="false" id="M_hb_3o2_c" initialConcentration="0.262865209055424" name="Oxyhemoglobin (3)"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="0" fbc:chemicalFormula="O8Moietyhb" hasOnlySubstanceUnits="false" id="M_hb_4o2_c" initialConcentration="6.80822092642407" name="Oxyhemoglobin (4)"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-5" fbc:chemicalFormula="C3H3O10P2Moietyhb" hasOnlySubstanceUnits="false" id="M_dhb_c" initialConcentration="0.0455575673747944" name="Deoxyhemoglobin"/>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-3" fbc:chemicalFormula="C3H2O6P1Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R0_P_c" initialConcentration="1.03212120814249E-5" name="PYK-pep complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_pep_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="0" fbc:chemicalFormula="Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R0_c" initialConcentration="0.000122861747081354" name="PYK">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-3" fbc:chemicalFormula="C10H12N5O10P2Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R0_A_c" initialConcentration="6.74720777023577E-5" name="PYK-adp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_adp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-6" fbc:chemicalFormula="C13H14N5O16P3Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R0_AP_c" initialConcentration="5.6598029809278E-6" name="PYK-adp-pep complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_adp_c; 1 M_pep_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-4" fbc:chemicalFormula="C6H10O12P2Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R1_c" initialConcentration="0.000907996237208884" name="PYK-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_fdp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-7" fbc:chemicalFormula="C9H12O18P3Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R1_P_c" initialConcentration="7.62777834110006E-5" name="PYK-pep-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_fdp_c; 1 M_pep_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-7" fbc:chemicalFormula="C16H22N5O22P4Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R1_A_c" initialConcentration="0.000498644973930244" name="PYK-adp-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_adp_c; 1 M_fdp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-10" fbc:chemicalFormula="C19H24N5O28P5Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R1_AP_c" initialConcentration="4.18281518219268E-5" name="PYK-adp-pep-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_adp_c; 1 M_fdp_c; 1 M_pep_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-8" fbc:chemicalFormula="C12H20O24P4Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R2_c" initialConcentration="0.00251641739507284" name="PYK-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 2 M_fdp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-11" fbc:chemicalFormula="C15H22O30P5Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R2_P_c" initialConcentration="0.000211395965277423" name="PYK-pep-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 2 M_fdp_c; 1 M_pep_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-11" fbc:chemicalFormula="C22H32N5O34P6Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R2_A_c" initialConcentration="0.00138194282635011" name="PYK-adp-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_adp_c; 2 M_fdp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-14" fbc:chemicalFormula="C25H34N5O40P7Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R2_AP_c" initialConcentration="0.000115922384405465" name="PYK-adp-pep-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_adp_c; 2 M_fdp_c; 1 M_pep_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-12" fbc:chemicalFormula="C18H30O36P6Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R3_c" initialConcentration="0.00309955102686836" name="PYK-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 3 M_fdp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-15" fbc:chemicalFormula="C21H32O42P7Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R3_P_c" initialConcentration="0.000260383107561733" name="PYK-pep-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 3 M_fdp_c; 1 M_pep_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-15" fbc:chemicalFormula="C28H42N5O46P8Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R3_A_c" initialConcentration="0.00170218275985287" name="PYK-adp-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_adp_c; 3 M_fdp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-18" fbc:chemicalFormula="C31H44N5O52P9Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R3_AP_c" initialConcentration="0.00014278527335112" name="PYK-adp-pep-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_adp_c; 3 M_fdp_c; 1 M_pep_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-16" fbc:chemicalFormula="C24H40O48P8Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R4_c" initialConcentration="0.00143168069816811" name="PYK-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 4 M_fdp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-19" fbc:chemicalFormula="C27H42O54P9Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R4_P_c" initialConcentration="0.000120270795993899" name="PYK-pep-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 4 M_fdp_c; 1 M_pep_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-19" fbc:chemicalFormula="C34H52N5O58P10Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R4_A_c" initialConcentration="0.000786237161740837" name="PYK-adp-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_adp_c; 4 M_fdp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-22" fbc:chemicalFormula="C37H54N5O64P11Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_R4_AP_c" initialConcentration="6.59524292606971E-5" name="PYK-adp-pep-fdp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_adp_c; 4 M_fdp_c; 1 M_pep_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="0" fbc:chemicalFormula="Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_T0_c" initialConcentration="0.00233437319454573" name="PYK">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-4" fbc:chemicalFormula="C10H12N5O13P3Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_T1_c" initialConcentration="0.00355174976370562" name="PYK-atp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 1 M_atp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-8" fbc:chemicalFormula="C20H24N10O26P6Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_T2_c" initialConcentration="0.00202649576556424" name="PYK-atp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 2 M_atp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-12" fbc:chemicalFormula="C30H36N15O39P9Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_T3_c" initialConcentration="0.000513885688408809" name="PYK-atp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 3 M_atp_c</p>
+          </html>
+        </notes>
+      </species>
+      <species boundaryCondition="false" compartment="c" constant="false" fbc:charge="-16" fbc:chemicalFormula="C40H48N20O52P12Moietypyk" hasOnlySubstanceUnits="false" id="M_pyk_T4_c" initialConcentration="4.8867330228149E-5" name="PYK-atp complex">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>enzyme_module_id: PYK</p>
+            <p>bound_metabolites: 4 M_atp_c</p>
+          </html>
+        </notes>
+      </species>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter constant="true" id="cobra_default_lb" sboTerm="SBO:0000626" units="mmol_per_gDW_per_hr" value="-1000"/>
+      <parameter constant="true" id="cobra_default_ub" sboTerm="SBO:0000626" units="mmol_per_gDW_per_hr" value="1000"/>
+      <parameter constant="true" id="cobra_0_bound" sboTerm="SBO:0000626" units="mmol_per_gDW_per_hr" value="0"/>
+      <parameter constant="true" id="minus_inf" sboTerm="SBO:0000625" units="mmol_per_gDW_per_hr" value="-INF"/>
+      <parameter constant="true" id="plus_inf" sboTerm="SBO:0000625" units="mmol_per_gDW_per_hr" value="INF"/>
+      <parameter constant="false" id="v_R_HEX1" value="1.12"/>
+      <parameter constant="false" id="v_R_PGI" value="1.11999999999999"/>
+      <parameter constant="false" id="v_R_PFK" value="1.12"/>
+      <parameter constant="false" id="v_R_FBA" value="1.12"/>
+      <parameter constant="false" id="v_R_TPI" value="1.12"/>
+      <parameter constant="false" id="v_R_GAPD" value="2.24"/>
+      <parameter constant="false" id="v_R_PGK" value="1.80526176641968"/>
+      <parameter constant="false" id="v_R_PGM" value="2.24000000000005"/>
+      <parameter constant="false" id="v_R_ENO" value="2.24000000000001"/>
+      <parameter constant="false" id="v_R_LDH_L" value="2.01589748527362"/>
+      <parameter constant="false" id="v_R_DM_amp_c" value="0.0139999999999992"/>
+      <parameter constant="false" id="v_R_ADK1" value="-1.38777878078145E-12"/>
+      <parameter constant="false" id="v_R_SK_pyr_c" value="0.22410251472639"/>
+      <parameter constant="false" id="v_R_SK_lac__L_c" value="2.01589748527362"/>
+      <parameter constant="false" id="v_R_ATPM" value="1.8052617664196"/>
+      <parameter constant="false" id="v_R_DM_nadh" value="0.224102514726385"/>
+      <parameter constant="false" id="v_R_SK_glc__D_c" value="1.12"/>
+      <parameter constant="false" id="v_R_SK_amp_c" value="0.014"/>
+      <parameter constant="false" id="v_R_SK_h_c" value="2.68820502945277"/>
+      <parameter constant="false" id="v_R_SK_h2o_c" value="0"/>
+      <parameter constant="false" id="v_R_SK_pi_c" value="7.45625783338255E-15"/>
+      <parameter constant="false" id="v_R_DPGM" value="0.434738233580406"/>
+      <parameter constant="false" id="v_R_DPGase" value="0.43473823358041"/>
+      <parameter constant="false" id="v_R_HBO1" value="0"/>
+      <parameter constant="false" id="v_R_HBO2" value="0"/>
+      <parameter constant="false" id="v_R_HBO3" value="1.10424473384607E-13"/>
+      <parameter constant="false" id="v_R_HBO4" value="4.35064310966293E-13"/>
+      <parameter constant="false" id="v_R_HBDPG" value="0"/>
+      <parameter constant="false" id="v_R_SK_o2_c" value="0"/>
+      <parameter constant="false" id="v_R_PYK_R01" value="0.0171657366337236"/>
+      <parameter constant="false" id="v_R_PYK_R02" value="0.0169012400867718"/>
+      <parameter constant="false" id="v_R_PYK_R03" value="0.0169012400868125"/>
+      <parameter constant="false" id="v_R_PYK_R04" value="0.0171657366337355"/>
+      <parameter constant="false" id="v_R_PYK_R05" value="0.0340669767205323"/>
+      <parameter constant="false" id="v_R_PYK_R10" value="-8.470329472543E-16"/>
+      <parameter constant="false" id="v_R_PYK_R11" value="0.126861489785086"/>
+      <parameter constant="false" id="v_R_PYK_R12" value="0.124906757127609"/>
+      <parameter constant="false" id="v_R_PYK_R13" value="0.124906757127812"/>
+      <parameter constant="false" id="v_R_PYK_R14" value="0.126861489785181"/>
+      <parameter constant="false" id="v_R_PYK_R15" value="0.251768246912878"/>
+      <parameter constant="false" id="v_R_PYK_R20" value="-6.7762635780344E-15"/>
+      <parameter constant="false" id="v_R_PYK_R21" value="0.351583461007939"/>
+      <parameter constant="false" id="v_R_PYK_R22" value="0.346166122190683"/>
+      <parameter constant="false" id="v_R_PYK_R23" value="0.346166122190927"/>
+      <parameter constant="false" id="v_R_PYK_R24" value="0.351583461008129"/>
+      <parameter constant="false" id="v_R_PYK_R25" value="0.69774958319878"/>
+      <parameter constant="false" id="v_R_PYK_R30" value="6.7762635780344E-15"/>
+      <parameter constant="false" id="v_R_PYK_R31" value="0.433056487262717"/>
+      <parameter constant="false" id="v_R_PYK_R32" value="0.426383779417519"/>
+      <parameter constant="false" id="v_R_PYK_R33" value="0.426383779417844"/>
+      <parameter constant="false" id="v_R_PYK_R34" value="0.433056487262988"/>
+      <parameter constant="false" id="v_R_PYK_R35" value="0.859440266680461"/>
+      <parameter constant="false" id="v_R_PYK_R40" value="-3.3881317890172E-15"/>
+      <parameter constant="false" id="v_R_PYK_R41" value="0.20002852305255"/>
+      <parameter constant="false" id="v_R_PYK_R42" value="0.196946403434621"/>
+      <parameter constant="false" id="v_R_PYK_R43" value="0.196946403434844"/>
+      <parameter constant="false" id="v_R_PYK_R44" value="0.200028523052713"/>
+      <parameter constant="false" id="v_R_PYK_R45" value="0.396974926487355"/>
+      <parameter constant="false" id="v_R_PYK_L" value="0"/>
+      <parameter constant="false" id="v_R_PYK_T1" value="-1.73472347597681E-12"/>
+      <parameter constant="false" id="v_R_PYK_T2" value="-1.73472347597681E-12"/>
+      <parameter constant="false" id="v_R_PYK_T3" value="-1.73472347597681E-12"/>
+      <parameter constant="false" id="v_R_PYK_T4" value="-2.16840434497101E-13"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_HEX1" name="Hexokinase (D-glucose:ATP)" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_glc__D_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_g6p_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_HEX1 </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_atp_c </ci>
+                  <ci> M_glc__D_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> M_adp_c </ci>
+                    <ci> M_g6p_c </ci>
+                  </apply>
+                  <ci> Keq_R_HEX1 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_HEX1" value="0.700007"/>
+            <localParameter id="Keq_R_HEX1" value="850"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PGI" name="Glucose-6-phosphate isomerase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_g6p_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_f6p_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_PGI </ci>
+              <apply>
+                <minus/>
+                <ci> M_g6p_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> M_f6p_c </ci>
+                  <ci> Keq_R_PGI </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_PGI" value="0.41"/>
+            <localParameter id="kf_R_PGI" value="3644.44"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PFK" name="Phosphofructokinase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_f6p_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_fdp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_PFK </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_atp_c </ci>
+                  <ci> M_f6p_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> M_adp_c </ci>
+                    <ci> M_fdp_c </ci>
+                  </apply>
+                  <ci> Keq_R_PFK </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_PFK" value="35.3688"/>
+            <localParameter id="Keq_R_PFK" value="310"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_FBA" name="Fructose-bisphosphate aldolase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_fdp_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_dhap_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_g3p_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_FBA </ci>
+              <apply>
+                <minus/>
+                <ci> M_fdp_c </ci>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> M_dhap_c </ci>
+                    <ci> M_g3p_c </ci>
+                  </apply>
+                  <ci> Keq_R_FBA </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_FBA" value="0.082"/>
+            <localParameter id="kf_R_FBA" value="2834.57"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_TPI" name="Triose-phosphate isomerase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_dhap_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_g3p_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_TPI </ci>
+              <apply>
+                <minus/>
+                <ci> M_dhap_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> M_g3p_c </ci>
+                  <ci> Keq_R_TPI </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_TPI" value="34.3558"/>
+            <localParameter id="Keq_R_TPI" value="0.0571429"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_GAPD" name="Glyceraldehyde-3-phosphate dehydrogenase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_g3p_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_nad_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pi_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M__13dpg_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_nadh_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_GAPD </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_g3p_c </ci>
+                  <ci> M_nad_c </ci>
+                  <ci> M_pi_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> M__13dpg_c </ci>
+                    <ci> M_nadh_c </ci>
+                  </apply>
+                  <ci> Keq_R_GAPD </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_GAPD" value="3376.75"/>
+            <localParameter id="Keq_R_GAPD" value="0.0179"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PGK" name="Phosphoglycerate kinase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M__13dpg_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M__3pg_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_PGK </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M__13dpg_c </ci>
+                  <ci> M_adp_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> M__3pg_c </ci>
+                    <ci> M_atp_c </ci>
+                  </apply>
+                  <ci> Keq_R_PGK </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_PGK" value="1800"/>
+            <localParameter id="kf_R_PGK" value="1020000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PGM" name="Phosphoglycerate mutase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M__3pg_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M__2pg_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_PGM </ci>
+              <apply>
+                <minus/>
+                <ci> M__3pg_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> M__2pg_c </ci>
+                  <ci> Keq_R_PGM </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_PGM" value="4869.57"/>
+            <localParameter id="Keq_R_PGM" value="0.147059"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_ENO" name="Enolase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M__2pg_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_h2o_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_ENO </ci>
+              <apply>
+                <minus/>
+                <ci> M__2pg_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> M_pep_c </ci>
+                  <ci> Keq_R_ENO </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_ENO" value="1.69492"/>
+            <localParameter id="kf_R_ENO" value="1763.78"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_LDH_L" name="L-lactate dehydrogenase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_nadh_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyr_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_lac__L_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_nad_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_LDH_L </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_nadh_c </ci>
+                  <ci> M_pyr_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> M_lac__L_c </ci>
+                    <ci> M_nad_c </ci>
+                  </apply>
+                  <ci> Keq_R_LDH_L </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_LDH_L" value="26300"/>
+            <localParameter id="kf_R_LDH_L" value="1112.57"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub" id="R_DM_amp_c" metaid="meta_R_DM_amp_c" name="AMP demand" reversible="false" sboTerm="SBO:0000628">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_amp_c" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> M_amp_c </ci>
+              <ci> kf_R_DM_amp_c </ci>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_DM_amp_c" value="0.161424"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_ADK1" name="Adenylate kinase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_amp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_ADK1 </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <power/>
+                  <ci> M_adp_c </ci>
+                  <cn> 2 </cn>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> M_amp_c </ci>
+                    <ci> M_atp_c </ci>
+                  </apply>
+                  <ci> Keq_R_ADK1 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_ADK1" value="1.65"/>
+            <localParameter id="kf_R_ADK1" value="100000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_SK_pyr_c" metaid="meta_R_SK_pyr_c" name="Pyruvate sink" reversible="true" sboTerm="SBO:0000632">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pyr_c" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_SK_pyr_c </ci>
+              <apply>
+                <minus/>
+                <ci> M_pyr_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> pyr_b </ci>
+                  <ci> Keq_R_SK_pyr_c </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_SK_pyr_c" value="744.186"/>
+            <localParameter id="Keq_R_SK_pyr_c" value="1"/>
+            <localParameter id="pyr_b" value="0.06"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_SK_lac__L_c" metaid="meta_R_SK_lac__L_c" name="L-Lactate sink" reversible="true" sboTerm="SBO:0000632">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_lac__L_c" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_SK_lac__L_c </ci>
+              <apply>
+                <minus/>
+                <ci> M_lac__L_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> lac__L_b </ci>
+                  <ci> Keq_R_SK_lac__L_c </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="lac__L_b" value="1"/>
+            <localParameter id="Keq_R_SK_lac__L_c" value="1"/>
+            <localParameter id="kf_R_SK_lac__L_c" value="5.6"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_ATPM" name="ATP maintenance requirement" reversible="false">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_h2o_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pi_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> M_atp_c </ci>
+              <ci> kf_R_ATPM </ci>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_ATPM" value="1.4"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_DM_nadh" name="Demand NADH" reversible="false">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_nadh_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_nad_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> M_nadh_c </ci>
+              <ci> kf_R_DM_nadh </ci>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_DM_nadh" value="7.44186"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_SK_glc__D_c" metaid="meta_R_SK_glc__D_c" name="D-Glucose sink" reversible="true" sboTerm="SBO:0000632">
+        <listOfProducts>
+          <speciesReference constant="true" species="M_glc__D_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_SK_glc__D_c </ci>
+              <apply>
+                <minus/>
+                <ci> glc__D_b </ci>
+                <apply>
+                  <divide/>
+                  <ci> M_glc__D_c </ci>
+                  <ci> Keq_R_SK_glc__D_c </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="glc__D_b" value="1"/>
+            <localParameter id="Keq_R_SK_glc__D_c" value="INF"/>
+            <localParameter id="kf_R_SK_glc__D_c" value="1.12"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_SK_amp_c" metaid="meta_R_SK_amp_c" name="AMP sink" reversible="true" sboTerm="SBO:0000632">
+        <listOfProducts>
+          <speciesReference constant="true" species="M_amp_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_SK_amp_c </ci>
+              <apply>
+                <minus/>
+                <ci> amp_b </ci>
+                <apply>
+                  <divide/>
+                  <ci> M_amp_c </ci>
+                  <ci> Keq_R_SK_amp_c </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_SK_amp_c" value="0.014"/>
+            <localParameter id="amp_b" value="1"/>
+            <localParameter id="Keq_R_SK_amp_c" value="INF"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_SK_h_c" metaid="meta_R_SK_h_c" name="H+ sink" reversible="true" sboTerm="SBO:0000632">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_SK_h_c </ci>
+              <apply>
+                <minus/>
+                <ci> M_h_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> h_b </ci>
+                  <ci> Keq_R_SK_h_c </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_SK_h_c" value="1"/>
+            <localParameter id="kf_R_SK_h_c" value="100000"/>
+            <localParameter id="h_b" value="8.99757E-5"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_SK_h2o_c" metaid="meta_R_SK_h2o_c" name="H2O sink" reversible="true" sboTerm="SBO:0000632">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_h2o_c" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_SK_h2o_c </ci>
+              <apply>
+                <minus/>
+                <ci> M_h2o_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> h2o_b </ci>
+                  <ci> Keq_R_SK_h2o_c </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="h2o_b" value="1"/>
+            <localParameter id="Keq_R_SK_h2o_c" value="1"/>
+            <localParameter id="kf_R_SK_h2o_c" value="100000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_SK_pi_c" metaid="meta_R_SK_pi_c" name="Phosphate sink" reversible="true" sboTerm="SBO:0000632">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pi_c" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_SK_pi_c </ci>
+              <apply>
+                <minus/>
+                <ci> M_pi_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> pi_b </ci>
+                  <ci> Keq_R_SK_pi_c </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_SK_pi_c" value="0.23"/>
+            <localParameter id="pi_b" value="2.5"/>
+            <localParameter id="Keq_R_SK_pi_c" value="1"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_DPGM" name="Diphosphoglyceromutase" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M__13dpg_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M__23dpg_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_DPGM </ci>
+              <apply>
+                <minus/>
+                <ci> M__13dpg_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> M__23dpg_c </ci>
+                  <ci> Keq_R_DPGM </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_DPGM" value="2300000"/>
+            <localParameter id="kf_R_DPGM" value="1814.81"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_DPGase" name="Diphosphoglycerate phosphatase" reversible="false">
+        <listOfReactants>
+          <speciesReference constant="true" species="M__23dpg_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_h2o_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M__3pg_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pi_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> M__23dpg_c </ci>
+              <ci> kf_R_DPGase </ci>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_DPGase" value="0.142258"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_HBO1" name="Oxygen Loading (1)" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_hb_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_o2_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_hb_1o2_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_HBO1 </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_hb_c </ci>
+                  <ci> M_o2_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_hb_1o2_c </ci>
+                  <ci> Keq_R_HBO1 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_HBO1" value="41.8352"/>
+            <localParameter id="kf_R_HBO1" value="506935"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_HBO2" name="Oxygen Loading (2)" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_hb_1o2_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_o2_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_hb_2o2_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_HBO2 </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_hb_1o2_c </ci>
+                  <ci> M_o2_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_hb_2o2_c </ci>
+                  <ci> Keq_R_HBO2 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_HBO2" value="73.2115"/>
+            <localParameter id="kf_R_HBO2" value="511077"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_HBO3" name="Oxygen Loading (3)" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_hb_2o2_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_o2_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_hb_3o2_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_HBO3 </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_hb_2o2_c </ci>
+                  <ci> M_o2_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_hb_3o2_c </ci>
+                  <ci> Keq_R_HBO3 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_HBO3" value="509243"/>
+            <localParameter id="Keq_R_HBO3" value="177.799"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_HBO4" name="Oxygen Loading (4)" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_hb_3o2_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_o2_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_hb_4o2_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_HBO4 </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_hb_3o2_c </ci>
+                  <ci> M_o2_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_hb_4o2_c </ci>
+                  <ci> Keq_R_HBO4 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_HBO4" value="501595"/>
+            <localParameter id="Keq_R_HBO4" value="1289.92"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_HBDPG" name="Hemoglobin-23dpg binding" reversible="true">
+        <listOfReactants>
+          <speciesReference constant="true" species="M__23dpg_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_hb_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_dhb_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_HBDPG </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M__23dpg_c </ci>
+                  <ci> M_hb_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_dhb_c </ci>
+                  <ci> Keq_R_HBDPG </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_R_HBDPG" value="0.25"/>
+            <localParameter id="kf_R_HBDPG" value="519613"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_SK_o2_c" metaid="meta_R_SK_o2_c" name="Oxygen sink" reversible="true" sboTerm="SBO:0000632">
+        <listOfReactants>
+          <speciesReference constant="true" species="M_o2_c" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_SK_o2_c </ci>
+              <apply>
+                <minus/>
+                <ci> M_o2_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> o2_b </ci>
+                  <ci> Keq_R_SK_o2_c </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_SK_o2_c" value="509726"/>
+            <localParameter id="Keq_R_SK_o2_c" value="1"/>
+            <localParameter id="o2_b" value="0.0200788"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R01" name="pyk_R0-pep binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pyk_R0_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R0_P_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_P </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_pep_c </ci>
+                  <ci> M_pyk_R0_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R0_P_c </ci>
+                  <ci> Keq_PYK_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK_P" value="4000000"/>
+            <localParameter id="Keq_PYK_P" value="4.44444"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R02" name="pyk_R0-adp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R0_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R0_A_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_A </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_adp_c </ci>
+                  <ci> M_pyk_R0_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R0_A_c </ci>
+                  <ci> Keq_PYK_A </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_A" value="2.1097"/>
+            <localParameter id="kf_PYK_A" value="4000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R03" name="pyk_R0_A-pep binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R0_A_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R0_AP_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_P </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_pep_c </ci>
+                  <ci> M_pyk_R0_A_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R0_AP_c </ci>
+                  <ci> Keq_PYK_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK_P" value="4000000"/>
+            <localParameter id="Keq_PYK_P" value="4.44444"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R04" name="pyk_R0_P-adp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R0_P_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R0_AP_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_A </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_adp_c </ci>
+                  <ci> M_pyk_R0_P_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R0_AP_c </ci>
+                  <ci> Keq_PYK_A </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_A" value="2.1097"/>
+            <localParameter id="kf_PYK_A" value="4000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R05" name="pyk_R0_AP catalyzation" reversible="false">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R0_AP_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R0_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyr_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> M_pyk_R0_AP_c </ci>
+              <ci> kf_PYK </ci>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK" value="6019.11"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R10" name="pyk_R0-fdp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_fdp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R0_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R1_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_ACT </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <cn> 4 </cn>
+                  <ci> M_fdp_c </ci>
+                  <ci> M_pyk_R0_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R1_c </ci>
+                  <ci> Keq_PYK_ACT </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_ACT" value="200"/>
+            <localParameter id="kf_PYK_ACT" value="1000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R11" name="pyk_R1-pep binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R1_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R1_P_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_P </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_pep_c </ci>
+                  <ci> M_pyk_R1_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R1_P_c </ci>
+                  <ci> Keq_PYK_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK_P" value="4000000"/>
+            <localParameter id="Keq_PYK_P" value="4.44444"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R12" name="pyk_R1-adp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R1_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R1_A_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_A </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_adp_c </ci>
+                  <ci> M_pyk_R1_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R1_A_c </ci>
+                  <ci> Keq_PYK_A </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_A" value="2.1097"/>
+            <localParameter id="kf_PYK_A" value="4000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R13" name="pyk_R1_A-pep binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R1_A_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R1_AP_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_P </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_pep_c </ci>
+                  <ci> M_pyk_R1_A_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R1_AP_c </ci>
+                  <ci> Keq_PYK_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK_P" value="4000000"/>
+            <localParameter id="Keq_PYK_P" value="4.44444"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R14" name="pyk_R1_P-adp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R1_P_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R1_AP_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_A </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_adp_c </ci>
+                  <ci> M_pyk_R1_P_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R1_AP_c </ci>
+                  <ci> Keq_PYK_A </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_A" value="2.1097"/>
+            <localParameter id="kf_PYK_A" value="4000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R15" name="pyk_R1_AP catalyzation" reversible="false">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R1_AP_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R1_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyr_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> M_pyk_R1_AP_c </ci>
+              <ci> kf_PYK </ci>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK" value="6019.11"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R20" name="pyk_R1-fdp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_fdp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R1_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R2_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_ACT </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <cn> 3 </cn>
+                  <ci> M_fdp_c </ci>
+                  <ci> M_pyk_R1_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <cn> 2 </cn>
+                    <ci> M_pyk_R2_c </ci>
+                  </apply>
+                  <ci> Keq_PYK_ACT </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_ACT" value="200"/>
+            <localParameter id="kf_PYK_ACT" value="1000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R21" name="pyk_R2-pep binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R2_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R2_P_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_P </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_pep_c </ci>
+                  <ci> M_pyk_R2_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R2_P_c </ci>
+                  <ci> Keq_PYK_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK_P" value="4000000"/>
+            <localParameter id="Keq_PYK_P" value="4.44444"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R22" name="pyk_R2-adp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R2_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R2_A_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_A </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_adp_c </ci>
+                  <ci> M_pyk_R2_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R2_A_c </ci>
+                  <ci> Keq_PYK_A </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_A" value="2.1097"/>
+            <localParameter id="kf_PYK_A" value="4000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R23" name="pyk_R2_A-pep binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R2_A_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R2_AP_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_P </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_pep_c </ci>
+                  <ci> M_pyk_R2_A_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R2_AP_c </ci>
+                  <ci> Keq_PYK_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK_P" value="4000000"/>
+            <localParameter id="Keq_PYK_P" value="4.44444"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R24" name="pyk_R2_P-adp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R2_P_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R2_AP_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_A </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_adp_c </ci>
+                  <ci> M_pyk_R2_P_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R2_AP_c </ci>
+                  <ci> Keq_PYK_A </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_A" value="2.1097"/>
+            <localParameter id="kf_PYK_A" value="4000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R25" name="pyk_R2_AP catalyzation" reversible="false">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R2_AP_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R2_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyr_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> M_pyk_R2_AP_c </ci>
+              <ci> kf_PYK </ci>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK" value="6019.11"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R30" name="pyk_R2-fdp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_fdp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R2_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R3_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_ACT </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <cn> 2 </cn>
+                  <ci> M_fdp_c </ci>
+                  <ci> M_pyk_R2_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <cn> 3 </cn>
+                    <ci> M_pyk_R3_c </ci>
+                  </apply>
+                  <ci> Keq_PYK_ACT </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_ACT" value="200"/>
+            <localParameter id="kf_PYK_ACT" value="1000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R31" name="pyk_R3-pep binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R3_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R3_P_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_P </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_pep_c </ci>
+                  <ci> M_pyk_R3_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R3_P_c </ci>
+                  <ci> Keq_PYK_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK_P" value="4000000"/>
+            <localParameter id="Keq_PYK_P" value="4.44444"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R32" name="pyk_R3-adp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R3_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R3_A_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_A </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_adp_c </ci>
+                  <ci> M_pyk_R3_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R3_A_c </ci>
+                  <ci> Keq_PYK_A </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_A" value="2.1097"/>
+            <localParameter id="kf_PYK_A" value="4000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R33" name="pyk_R3_A-pep binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R3_A_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R3_AP_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_P </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_pep_c </ci>
+                  <ci> M_pyk_R3_A_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R3_AP_c </ci>
+                  <ci> Keq_PYK_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK_P" value="4000000"/>
+            <localParameter id="Keq_PYK_P" value="4.44444"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R34" name="pyk_R3_P-adp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R3_P_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R3_AP_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_A </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_adp_c </ci>
+                  <ci> M_pyk_R3_P_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R3_AP_c </ci>
+                  <ci> Keq_PYK_A </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_A" value="2.1097"/>
+            <localParameter id="kf_PYK_A" value="4000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R35" name="pyk_R3_AP catalyzation" reversible="false">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R3_AP_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R3_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyr_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> M_pyk_R3_AP_c </ci>
+              <ci> kf_PYK </ci>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK" value="6019.11"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R40" name="pyk_R3-fdp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_fdp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R3_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R4_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_ACT </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_fdp_c </ci>
+                  <ci> M_pyk_R3_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <cn> 4 </cn>
+                    <ci> M_pyk_R4_c </ci>
+                  </apply>
+                  <ci> Keq_PYK_ACT </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_ACT" value="200"/>
+            <localParameter id="kf_PYK_ACT" value="1000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R41" name="pyk_R4-pep binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R4_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R4_P_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_P </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_pep_c </ci>
+                  <ci> M_pyk_R4_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R4_P_c </ci>
+                  <ci> Keq_PYK_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK_P" value="4000000"/>
+            <localParameter id="Keq_PYK_P" value="4.44444"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R42" name="pyk_R4-adp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R4_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R4_A_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_A </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_adp_c </ci>
+                  <ci> M_pyk_R4_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R4_A_c </ci>
+                  <ci> Keq_PYK_A </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_A" value="2.1097"/>
+            <localParameter id="kf_PYK_A" value="4000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R43" name="pyk_R4_A-pep binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pep_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R4_A_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R4_AP_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_P </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_pep_c </ci>
+                  <ci> M_pyk_R4_A_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R4_AP_c </ci>
+                  <ci> Keq_PYK_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK_P" value="4000000"/>
+            <localParameter id="Keq_PYK_P" value="4.44444"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R44" name="pyk_R4_P-adp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_adp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R4_P_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_R4_AP_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_A </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_adp_c </ci>
+                  <ci> M_pyk_R4_P_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_R4_AP_c </ci>
+                  <ci> Keq_PYK_A </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_A" value="2.1097"/>
+            <localParameter id="kf_PYK_A" value="4000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_R45" name="pyk_R4_AP catalyzation" reversible="false">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_h_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R4_AP_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_R4_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyr_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> M_pyk_R4_AP_c </ci>
+              <ci> kf_PYK </ci>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_PYK" value="6019.11"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_L" name="pyk_R0-pyk_T0 transition" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_pyk_R0_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_T0_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_R_PYK_L </ci>
+              <apply>
+                <minus/>
+                <ci> M_pyk_R0_c </ci>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_T0_c </ci>
+                  <ci> Keq_R_PYK_L </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="kf_R_PYK_L" value="1E12"/>
+            <localParameter id="Keq_R_PYK_L" value="19"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_T1" name="pyk_T0-atp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_T0_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_T1_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_I </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <cn> 4 </cn>
+                  <ci> M_atp_c </ci>
+                  <ci> M_pyk_T0_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> M_pyk_T1_c </ci>
+                  <ci> Keq_PYK_I </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_I" value="0.294985"/>
+            <localParameter id="kf_PYK_I" value="1000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_T2" name="pyk_T1-atp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_T1_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_T2_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_I </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <cn> 3 </cn>
+                  <ci> M_atp_c </ci>
+                  <ci> M_pyk_T1_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <cn> 2 </cn>
+                    <ci> M_pyk_T2_c </ci>
+                  </apply>
+                  <ci> Keq_PYK_I </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_I" value="0.294985"/>
+            <localParameter id="kf_PYK_I" value="1000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_T3" name="pyk_T2-atp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_T2_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_T3_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_I </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <cn> 2 </cn>
+                  <ci> M_atp_c </ci>
+                  <ci> M_pyk_T2_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <cn> 3 </cn>
+                    <ci> M_pyk_T3_c </ci>
+                  </apply>
+                  <ci> Keq_PYK_I </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_I" value="0.294985"/>
+            <localParameter id="kf_PYK_I" value="1000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction fast="false" fbc:lowerFluxBound="cobra_default_lb" fbc:upperFluxBound="cobra_default_ub" id="R_PYK_T4" name="pyk_T3-atp binding" reversible="true">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>SUBSYSTEM: Glycolysis</p>
+            <p>enzyme_module_id: PYK</p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference constant="true" species="M_atp_c" stoichiometry="1"/>
+          <speciesReference constant="true" species="M_pyk_T3_c" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" species="M_pyk_T4_c" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kf_PYK_I </ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> M_atp_c </ci>
+                  <ci> M_pyk_T3_c </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <cn> 4 </cn>
+                    <ci> M_pyk_T4_c </ci>
+                  </apply>
+                  <ci> Keq_PYK_I </ci>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="Keq_PYK_I" value="0.294985"/>
+            <localParameter id="kf_PYK_I" value="1000000"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>
