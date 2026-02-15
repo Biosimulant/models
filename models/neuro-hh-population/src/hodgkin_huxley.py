@@ -193,13 +193,17 @@ class HodgkinHuxleyPopulation(BioModule):
         if signal is None:
             return
         I = signal.value
+        # Current is a continuous signal — replace (not accumulate) and hold
+        # until the next set_inputs call.  This ensures that when the HH model
+        # advances faster than the current source (different min_dt), the
+        # injected current persists between source emissions.
         if isinstance(I, (int, float)):
-            for i in range(self.n):
-                self._I_ext[i] += float(I)
+            self._I_ext = [float(I)] * self.n
         elif isinstance(I, (list, tuple)):
-            for i, val in enumerate(I):
-                if i < self.n:
-                    self._I_ext[i] += float(val)
+            self._I_ext = [
+                float(I[i]) if i < len(I) else 0.0
+                for i in range(self.n)
+            ]
 
     def advance_to(self, t: float) -> None:
         dt = t - self._time if t > self._time else self._last_dt
@@ -269,8 +273,8 @@ class HodgkinHuxleyPopulation(BioModule):
             self._h[i] = h
             self._n[i] = n_gate
 
-        # Clear external current after integration
-        self._I_ext = [0.0] * self.n
+        # Note: _I_ext is NOT cleared — it holds the last received value
+        # until the next set_inputs call (continuous current semantics).
 
         # Compute ionic currents for state output (at final voltage)
         state_indices = [i for i in self.sample_indices if i < self.n]

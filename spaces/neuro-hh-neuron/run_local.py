@@ -54,13 +54,15 @@ def run_hh_neuron(I_current: float = 10.0, duration: float = 0.1) -> dict:
 
     world = bsim.BioWorld()
 
-    # Create modules
-    current_source = StepCurrent(I=I_current)
-    neuron = HodgkinHuxleyPopulation(n=1, sample_indices=[0])
-    spike_monitor = SpikeMonitor(max_neurons=1, width=600, height=200)
-    state_monitor = StateMonitor(max_points=10000)
-    hh_monitor = HHStateMonitor(max_points=10000, neuron_index=0)
-    metrics = NeuroMetrics(n_neurons=1)
+    # Create modules — all min_dt must match the HH neuron's rate (0.0001s)
+    # so monitors don't miss transient spike events.
+    hh_dt = 0.0001
+    current_source = StepCurrent(I=I_current, min_dt=hh_dt)
+    neuron = HodgkinHuxleyPopulation(n=1, sample_indices=[0], min_dt=hh_dt)
+    spike_monitor = SpikeMonitor(max_neurons=1, width=600, height=200, min_dt=hh_dt)
+    state_monitor = StateMonitor(max_points=10000, min_dt=hh_dt)
+    hh_monitor = HHStateMonitor(max_points=10000, neuron_index=0, min_dt=hh_dt)
+    metrics = NeuroMetrics(n_neurons=1, min_dt=hh_dt)
 
     # Wire modules
     wb = bsim.WiringBuilder(world)
@@ -76,8 +78,8 @@ def run_hh_neuron(I_current: float = 10.0, duration: float = 0.1) -> dict:
     wb.connect("neuron.state", ["state_mon.state", "hh_mon.state"])
     wb.apply()
 
-    # Simulate with fine time step (0.05ms = 50us)
-    world.run(duration=duration, tick_dt=0.00005)
+    # Simulate with fine time step (0.1ms) matching module min_dt
+    world.run(duration=duration, tick_dt=hh_dt)
 
     # Collect visuals
     visuals = world.collect_visuals()
@@ -92,12 +94,16 @@ def run_hh_neuron(I_current: float = 10.0, duration: float = 0.1) -> dict:
     # Print metrics
     for entry in visuals:
         if entry["module"] == "NeuroMetrics":
-            vis = entry["visuals"]
-            if vis is not None:
-                table_data = vis["data"]
-                print("\nMetrics:")
-                for row in table_data["rows"]:
-                    print(f"  {row[0]}: {row[1]}")
+            vis_list = entry["visuals"]
+            if isinstance(vis_list, list) and vis_list:
+                table_data = vis_list[0]["data"]
+            elif isinstance(vis_list, dict):
+                table_data = vis_list["data"]
+            else:
+                continue
+            print("\nMetrics:")
+            for row in table_data["rows"]:
+                print(f"  {row[0]}: {row[1]}")
 
     return {"visuals": visuals}
 
@@ -117,9 +123,10 @@ def run_fi_curve() -> None:
     for I in currents:
         world = bsim.BioWorld()
 
-        current_source = StepCurrent(I=float(I))
-        neuron = HodgkinHuxleyPopulation(n=1, sample_indices=[0])
-        metrics = NeuroMetrics(n_neurons=1)
+        hh_dt = 0.0001
+        current_source = StepCurrent(I=float(I), min_dt=hh_dt)
+        neuron = HodgkinHuxleyPopulation(n=1, sample_indices=[0], min_dt=hh_dt)
+        metrics = NeuroMetrics(n_neurons=1, min_dt=hh_dt)
 
         wb = bsim.WiringBuilder(world)
         wb.add("current", current_source)
@@ -130,17 +137,21 @@ def run_fi_curve() -> None:
         wb.connect("neuron.spikes", ["metrics.spikes"])
         wb.apply()
 
-        world.run(duration=duration, tick_dt=0.00005)
+        world.run(duration=duration, tick_dt=hh_dt)
 
         # Extract spike count
         visuals = world.collect_visuals()
         spike_count = 0
         for entry in visuals:
             if entry["module"] == "NeuroMetrics":
-                vis = entry["visuals"]
-                if vis is not None:
-                    rows = vis["data"]["rows"]
-                    spike_count = int(rows[0][1])  # "Total Spikes"
+                vis_list = entry["visuals"]
+                if isinstance(vis_list, list) and vis_list:
+                    rows = vis_list[0]["data"]["rows"]
+                elif isinstance(vis_list, dict):
+                    rows = vis_list["data"]["rows"]
+                else:
+                    continue
+                spike_count = int(rows[0][1])  # "Total Spikes"
 
         rate = spike_count / duration
         print(f"{I:>15} | {spike_count:>8} | {rate:>10.1f}")
