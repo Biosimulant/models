@@ -1,0 +1,226 @@
+C######################################################################C
+Subroutine SYMBOL
+Implicit None
+Include 'globals.inc'
+Include 'model.inc'
+CC
+C----------------------------------------------------------------------C
+C Enter as Indicated C
+C----c-----------------------------------------------------------------C
+NDEqs = 46 ! Enter # of Diff. Eqs.
+NSParam = 27 ! Enter # of System Parameters.
+NVparam = 2 ! Enter # of Variance Parameters.
+NSecPar = 0 ! Enter # of Secondary Parameters.
+NSecOut = 0 ! Enter # of Secondary Outputs (not used).
+Ieqsol = 1 ! Model type: 1 - DIFFEQ, 2 - AMAT, 3 - OUTPUT only.
+Descr = 'Systems pharmacology model Sunitinib and biomarkers including tumor'
+CC
+C----------------------------------------------------------------------C
+C Enter Symbol for Each System Parameter (eg. Psym(1)='Kel') C
+C----c-----------------------------------------------------------------C
+Psym(1)='Emax_vegf'
+Psym(2)='Kd_vegf'
+Psym(3)='Kout_vegf'
+Psym(4)='Kout_plgf'
+Psym(5)='Kout_svegfr2'
+Psym(6)='gam' !gam is n1 in the manuscript
+Psym(7)='tau2'
+Psym(8)='Tau' !Tau, is tau1 (Fixed) in the manuscript
+Psym(9)='Alpha'
+Psym(10)='Beta'
+Psym(11)='IC50'
+Psym(12)='gamma'
+Psym(13)='Ka' !Ka,Ke &V_F are PK parameters(Fixed)
+Psym(14)='Ke'
+Psym(15)='V_F' !V_F is vol. of dist. preclinical model
+Psym(16)='Alpha50'
+Psym(17)='Beta50'
+Psym(18)='gamma50'
+Psym(19)='n1' !n1 is n2(Fixed) in manuscript
+Psym(20)='Wt_0' !Wt_0 is initial wt. of tumor (Fixed)
+Psym(21)='W1'
+Psym(22)='K0'
+Psym(23)='K1'
+Psym(24)='K_Dmax' !K_Dmax is k2 in manuscript
+Psym(25)='K_kill' !K_kill is k3 in manuscript
+Psym(26)='IC50_1' !IC50_1 is k2_50 in manuscript
+Psym(27)='n2' !n2 is n3 (Fixed) in manuscript
+CC
+C----------------------------------------------------------------------C
+C Enter Symbol for Each Variance Parameter {eg: PVsym(1)='Sigma'} C
+C----c-----------------------------------------------------------------C
+PVSym(1)='Sigma1'
+PVsym(2)='Sigma2'
+CC
+C----------------------------------------------------------------------C
+C Enter Symbol for Each Secondary Parameter {eg: PSsym(1)='CLt'} C
+C----c-----------------------------------------------------------------C
+C----------------------------------------------------------------------C
+C----------------------------------------------------------------------C
+C
+Return
+End
+C######################################################################C
+Subroutine DIFFEQ(T,X,XP)
+Implicit None
+Include 'globals.inc'
+Include 'model.inc'
+Real*8 T,X(MaxNDE),XP(MaxNDE)
+CC
+C----------------------------------------------------------------------C
+C Enter Differential Equations Below {e.g. XP(1) = -P(1)*X(1) } C
+C----c-----------------------------------------------------------------C
+real*8 ka,Ke,c1,c2,V_F
+real*8 Emax_vegf,Kd_vegf,Imax,IC50,Emax_plgf,Kd_plgf,VEGF_0,PlGF_0
+real*8 Ksyn_vegf,Ksyn_plgf,Ksyn_sVEGFR2,alpha,beta,gamma,Kout_vegf
+real*8 Kout_plgf,Kout_sVEGFR2,Ev,EV1,tau
+real*8 Angiogenesis_0,EV_0,EP_0,gam,sVEGFR2_0,tau2
+real*8 FBs1,FBi1,FBs2,FBi2,FBs3,FBi3
+real*8 I,I1,I2,alpha50,beta50,gamma50,n1,n2
+real*8 Wt_0,Wt_d1,Wt_d2,Wt_d3,W1,K0,K1,K_Dmax,KD50,C3,EV2
+real*8 K_kill,Phi,IC50_1
+ka=7.58166192 !Per day
+ke=2.115665232 !Per day
+V_F=7497.18 !ml/kg V/F
+Emax_vegf=P(1)
+Kd_vegf=P(2)
+Kout_vegf=P(3)
+Kout_plgf=P(4)
+Kout_svegfr2=P(5)
+gam=P(6)
+tau2=P(7)
+Tau=P(8)
+Alpha=P(9)
+Beta=P(10)
+IC50=P(11)
+gamma=P(12)
+Ka=P(13)
+Ke=P(14)
+V_F=P(15)
+Alpha50=P(16)
+Beta50=P(17)
+gamma50=P(18)
+n1=P(19)
+Wt_0=P(20)
+W1=P(21)
+K0=P(22)
+K1=P(23)
+K_Dmax=P(24)
+K_kill=P(25)
+IC50_1=P(26)
+n2=P(27)
+Imax=1.
+VEGF_0=40
+PLGF_0=30
+sVEGFR2_0=70
+Phi=20
+C----------------------Sunitinib PK------------------------------------C
+XP(1)=-ka*X(1) !CP(oral)
+XP(2)=ka*X(1)-ke*X(2) !
+C++++++++++++++++++++++PK Summary++++++++++++++++++++++++++++++++++++++C
+C1=X(2)/V_F
+C-------------------PD part--------------------------------------------C
+Ksyn_vegf=Kout_vegf*VEGF_0
+KSyn_plgf=Kout_plgf*PlGF_0
+Ksyn_sVEGFR2=Kout_sVEGFR2*sVEGFR2_0
+cc----------------Ligand-receptor interaction----------------------------
+Ev=((Emax_vegf*(X(3)+VEGF_0))/(Kd_vegf
+X +(X(3)+VEGF_0)))*(1-I)
+Ev_0=((Emax_vegf*(VEGF_0))/(Kd_vegf+(VEGF_0)))
+I=(Imax*C1**gam)/(IC50**gam+C1**gam)
+cc---------------Feedback regulation-------------------------------------
+FBs1=(0.-X(11))/(tau2/tau) !change ratio=(Ang0-Ang)/Ang0
+FBi1=(0.-X(11))/(tau2/tau)
+XP(3)=Ksyn_vegf*(1+(alpha*FBs1**n1)/(alpha50**n1+FBs1**n1))
+x -Kout_vegf*(X(3)+VEGF_0) !vegf
+XP(4)=Ksyn_plgf*(1+(beta*FBs1**n1)/(beta50**n1+FBs1**n1))
+x -Kout_plgf*(X(4)+PLGF_0) !Plgf
+XP(5)=Ksyn_sVEGFR2*(1-(gamma*FBi1**n1)/(gamma50**n1+FBi1**n1))
+x -Kout_sVEGFR2*(X(5)+sVEGFR2_0)!s
+XP(6)=(1/tau)*(Ev/Ev_0-(X(6)+1)) !RAS
+XP(7)=(1/tau)*((X(6)+1)-(X(7)+1)) !RAF1
+XP(8)=(1/tau)*((X(7)+1)-(X(8)+1)) !MEK
+XP(9)=(1/tau)*((X(8)+1)-(X(9)+1)) !ERK
+XP(10)=(1/tau)*((X(9)+1)-(X(10)+1)) !Nucleus
+XP(11)=(X(10)+1)/tau -(X(11)+tau2/tau)/tau2 !Angiogenesis
+c----------------------Sunitinib PK------------------------------------C
+c
+XP(12)=-ka*X(12) !CP(oral)
+XP(13)=ka*X(12)-ke*X(13)
+C2=X(13)/V_F
+C++++++++++++++++++++++PK Summary++++++++++++++++++++++++++++++++++++++C
+Ev1=((Emax_vegf*(X(14)+VEGF_0))/(Kd_vegf
+X +(X(14)+VEGF_0)))*(1-I1)
+Ev_0=((Emax_vegf*(VEGF_0))/(Kd_vegf+(VEGF_0)))
+I1=(Imax*C2**gam)/(IC50**gam+C2**gam)
+cc---------------Feedback regulation-------------------------------------
+FBs2=(0.-X(22))/(tau2/tau)
+FBi2=(0.-X(22))/(tau2/tau)
+XP(14)=Ksyn_vegf*(1+(alpha*FBs2**n1)/(alpha50**n1+FBs2**n1))
+x -Kout_vegf*(X(14)+VEGF_0) !vegf
+XP(15)=Ksyn_plgf*(1+(beta*FBs2**n1)/(beta50**n1+FBs2**n1))
+x -Kout_plgf*(X(15)+PLGF_0) !Plgf
+XP(16)=Ksyn_sVEGFR2*(1-(gamma*FBi2**n1)/(gamma50**n1+FBi2**n1))
+x -Kout_sVEGFR2*(X(16)+sVEGFR2_0) !sVEGFR2
+XP(17)=(1/tau)*(Ev1/Ev_0-(X(17)+1)) !RAS
+XP(18)=(1/tau)*((X(17)+1)-(X(18)+1)) !RAF1
+XP(19)=(1/tau)*((X(18)+1)-(X(19)+1)) !MEK
+XP(20)=(1/tau)*((X(19)+1)-(X(20)+1)) !ERK
+XP(21)=(1/tau)*((X(20)+1)-(X(21)+1)) !Nucleus
+XP(22)=(X(21)+1)/tau -(X(22)+tau2/tau)/tau2 !Angiogenesis
+cc---------------Feedback regulation-------------------------------------
+Ev2=((Emax_vegf*(X(23)+VEGF_0))/(Kd_vegf
+X +(X(23)+VEGF_0)))*(1-I2)
+Ev_0=((Emax_vegf*(VEGF_0))/(Kd_vegf+(VEGF_0)))
+I2=(Imax*C3**gam)/(IC50**gam+C3**gam)
+FBs3=(0.-X(31))/(tau2/tau)
+FBi3=(0.-X(31))/(tau2/tau)
+XP(23)=Ksyn_vegf*(1+(alpha*FBs3**n1)/(alpha50**n1+FBs3**n1))
+x -Kout_vegf*(X(23)+VEGF_0) !vegf
+XP(24)=Ksyn_plgf*(1+(beta*FBs3**n1)/(beta50**n1+FBs3**n1))
+x -Kout_plgf*(X(24)+PLGF_0) !Plgf
+XP(25)=Ksyn_sVEGFR2*(1-(gamma*FBi3**n1)/(gamma50**n1+FBi3**n1))
+x -Kout_sVEGFR2*(X(25)+sVEGFR2_0) !sVEGFR2
+XP(26)=(1/tau)*(Ev2/Ev_0-(X(26)+1)) !RAS
+XP(27)=(1/tau)*((X(26)+1)-(X(27)+1)) !RAF1
+XP(28)=(1/tau)*((X(27)+1)-(X(28)+1)) !MEK
+XP(29)=(1/tau)*((X(28)+1)-(X(29)+1)) !ERK
+XP(30)=(1/tau)*((X(29)+1)-(X(30)+1)) !Nucleus
+XP(31)=(X(30)+1)/tau -(X(31)+tau2/tau)/tau2 !Angiogenesis
+c----------------------Sunitinib PK------------------------------------C
+c
+XP(32)=-ka*X(32) !CP(oral)
+XP(33)=ka*X(32)-ke*X(33)
+C3=X(33)/V_F
+cc--------------------Tumor PD part 20 mg/kg ------------------------------------c
+Wt_d1=X(35)+X(36)+X(37)+X(38)+Wt_0
+XP(34)=(K0*(X(34)+Wt_0))/((1+(K0/K1*(X(34)+Wt_0))**Phi)**(1/Phi))
+XP(35)=(K0*(X(35)+Wt_0))/((1+(K0/K1*Wt_d1)**Phi)**(1/Phi))
+x *(1-(W1*FBs1))-((K_Dmax*C1**n2)
+x /(IC50_1**n2+C1**n2))*(X(35)+Wt_0)
+XP(36)=((K_Dmax*C1**n2)/(IC50_1**n2+C1**n2))*(X(35)+Wt_0)
+x -K_kill*X(36)
+XP(37)=K_kill*((X(36))-(X(37)))
+XP(38)=K_kill*((X(37))-(X(38)))
+cc--------------------Tumor PD part 40 mg/kg ------------------------------------c
+Wt_d2=X(39)+X(40)+X(41)+X(42)+Wt_0
+XP(39)=(K0*(X(39)+Wt_0))/((1+(K0/K1*Wt_d2)**Phi)**(1/Phi))
+x *(1-(W1*FBs2))-((K_Dmax*C2**n2)
+x /(IC50_1**n2+C2**n2))*(X(39)+Wt_0)
+XP(40)=((K_Dmax*C2**n2)/(IC50_1**n2+C2**n2))*(X(39)+Wt_0)
+x -K_kill*X(40)
+XP(41)=K_kill*((X(40))-(X(41)))
+XP(42)=K_kill*((X(41))-(X(42)))
+cc--------------------Tumor PD part 80 mg/kg ------------------------------------c
+Wt_d3=X(52)+X(53)+X(54)+X(55)+Wt_0
+XP(43)=(K0*(X(43)+Wt_0))/((1+(K0/K1*Wt_d3)**Phi)**(1/Phi))
+x *(1-(W1*FBs3))-((K_Dmax*C3**n2)
+x /(IC50_1**n2+C3**n2))*(X(43)+Wt_0)
+XP(44)=((K_Dmax*C3**n2)/(IC50_1**n2+C3**n2))*(X(43)+Wt_0)
+x -K_kill*X(44)
+XP(45)=K_kill*((X(44))-(X(45)))
+XP(46)=K_kill*((X(45))-(X(46)))
+C----------------------------------------------------------------------C
+C
+Return
+End
