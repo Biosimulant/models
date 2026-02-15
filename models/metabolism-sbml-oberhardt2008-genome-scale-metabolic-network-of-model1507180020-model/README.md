@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-oberhardt2008-genome-scale-metabolic-network-of-pseudomonas/model.yaml
+    manifest_path: models/metabolism-sbml-oberhardt2008-genome-scale-metabolic-network-of-model1507180020-model/model.yaml
 ```
 
 ## Tags

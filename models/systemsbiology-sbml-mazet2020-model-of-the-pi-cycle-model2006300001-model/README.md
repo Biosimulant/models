@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-mazet2020-model-of-the-pi-cycle/model.yaml
+    manifest_path: models/systemsbiology-sbml-mazet2020-model-of-the-pi-cycle-model2006300001-model/model.yaml
 ```
 
 ## Tags

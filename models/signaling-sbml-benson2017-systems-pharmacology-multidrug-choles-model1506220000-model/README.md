@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-benson2017-systems-pharmacology-multidrug-cholesterol/model.yaml
+    manifest_path: models/signaling-sbml-benson2017-systems-pharmacology-multidrug-choles-model1506220000-model/model.yaml
 ```
 
 ## Tags

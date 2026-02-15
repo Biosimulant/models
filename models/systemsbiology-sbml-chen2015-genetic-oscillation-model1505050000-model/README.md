@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-chen2015-genetic-oscillation/model.yaml
+    manifest_path: models/systemsbiology-sbml-chen2015-genetic-oscillation-model1505050000-model/model.yaml
 ```
 
 ## Tags

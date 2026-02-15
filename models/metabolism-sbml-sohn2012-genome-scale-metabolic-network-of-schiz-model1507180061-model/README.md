@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-sohn2012-genome-scale-metabolic-network-of/model.yaml
+    manifest_path: models/metabolism-sbml-sohn2012-genome-scale-metabolic-network-of-schiz-model1507180061-model/model.yaml
 ```
 
 ## Tags

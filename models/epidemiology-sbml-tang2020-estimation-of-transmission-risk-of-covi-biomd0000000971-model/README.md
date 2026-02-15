@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-tang2020-estimation-of-transmission-risk-of-covid-19-and/model.yaml
+    manifest_path: models/epidemiology-sbml-tang2020-estimation-of-transmission-risk-of-covi-biomd0000000971-model/model.yaml
 ```
 
 ## Tags

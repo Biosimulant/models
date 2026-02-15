@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bhalla2002-mkp1-feedback-effects/model.yaml
+    manifest_path: models/signaling-sbml-bhalla2002-mkp1-feedback-effects-model9070467164-model/model.yaml
 ```
 
 ## Tags

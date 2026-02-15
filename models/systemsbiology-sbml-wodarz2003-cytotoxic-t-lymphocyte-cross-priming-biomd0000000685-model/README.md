@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-wodarz2003-cytotoxic-t-lymphocyte-cross-priming/model.yaml
+    manifest_path: models/systemsbiology-sbml-wodarz2003-cytotoxic-t-lymphocyte-cross-priming-biomd0000000685-model/model.yaml
 ```
 
 ## Tags

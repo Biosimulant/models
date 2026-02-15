@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bungay2003-thrombin-generation/model.yaml
+    manifest_path: models/systemsbiology-sbml-bungay2003-thrombin-generation-biomd0000000334-model/model.yaml
 ```
 
 ## Tags

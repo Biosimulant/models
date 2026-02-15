@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-mandlik2015-tristable-genetic-circuit-of-leishmania/model.yaml
+    manifest_path: models/systemsbiology-sbml-mandlik2015-tristable-genetic-circuit-of-leishma-biomd0000000584-model/model.yaml
 ```
 
 ## Tags

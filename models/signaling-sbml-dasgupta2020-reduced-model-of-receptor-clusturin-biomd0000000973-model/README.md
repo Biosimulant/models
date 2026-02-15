@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-dasgupta2020-reduced-model-of-receptor-clusturing-and/model.yaml
+    manifest_path: models/signaling-sbml-dasgupta2020-reduced-model-of-receptor-clusturin-biomd0000000973-model/model.yaml
 ```
 
 ## Tags

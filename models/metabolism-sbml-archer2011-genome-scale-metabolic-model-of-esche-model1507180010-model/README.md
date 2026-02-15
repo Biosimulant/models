@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-archer2011-genome-scale-metabolic-model-of-escherichia-coli/model.yaml
+    manifest_path: models/metabolism-sbml-archer2011-genome-scale-metabolic-model-of-esche-model1507180010-model/model.yaml
 ```
 
 ## Tags

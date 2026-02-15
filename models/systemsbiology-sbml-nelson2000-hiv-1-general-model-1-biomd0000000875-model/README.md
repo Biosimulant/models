@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-nelson2000-hiv-1-general-model-1/model.yaml
+    manifest_path: models/systemsbiology-sbml-nelson2000-hiv-1-general-model-1-biomd0000000875-model/model.yaml
 ```
 
 ## Tags

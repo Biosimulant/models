@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-yamaguchi1996-myocardialca2/model.yaml
+    manifest_path: models/systemsbiology-sbml-yamaguchi1996-myocardialca2-model1006230032-model/model.yaml
 ```
 
 ## Tags

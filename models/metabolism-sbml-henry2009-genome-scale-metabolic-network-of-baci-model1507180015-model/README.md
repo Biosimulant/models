@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-henry2009-genome-scale-metabolic-network-of-bacillus/model.yaml
+    manifest_path: models/metabolism-sbml-henry2009-genome-scale-metabolic-network-of-baci-model1507180015-model/model.yaml
 ```
 
 ## Tags

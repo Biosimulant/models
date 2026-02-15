@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-zatorsky2006-p53-model1/model.yaml
+    manifest_path: models/systemsbiology-sbml-zatorsky2006-p53-model1-biomd0000000159-model/model.yaml
 ```
 
 ## Tags

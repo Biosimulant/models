@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-hu2020-e-coli-translation-model/model.yaml
+    manifest_path: models/generegulation-sbml-hu2020-e-coli-translation-model-model2006210001-model/model.yaml
 ```
 
 ## Tags

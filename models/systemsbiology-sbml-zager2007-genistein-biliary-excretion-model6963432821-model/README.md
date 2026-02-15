@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-zager2007-genistein-biliary-excretion/model.yaml
+    manifest_path: models/systemsbiology-sbml-zager2007-genistein-biliary-excretion-model6963432821-model/model.yaml
 ```
 
 ## Tags

@@ -1,0 +1,198 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # Running the model from Hesse, Müller & Relógio, 2023
+# ## "An integrative mathematical model for timing treatment toxicity and Zeitgeber impact in colorectal cancer cells", npj Systems Biology and Applications
+# 
+# This script accompanies the article Hesse, Müller & Relógio, "An integrative mathematical model for timing treatment toxicity and Zeitgeber impact in colorectal cancer cells", npj Systems Biology and Applications, 2023.
+# 
+# The simulation first runs the extended core-clock network and subsequently the irinotecan PK-PD specific part of the model. The extended core-clock network is fitted to the HCT116 WT cell line, and the PK-PD specific part uses the parameters from the fit of the SW480 cell line data on irinotecan toxicity, with the eventual aim to predict toxicity for HCT116 WT. For details see main text and supplementary material of the original article.
+# 
+# The phase parameters of protein degradation and apoptosis are shifted according to the phase of Bmal, such that the phase of Bmal is the same for the SW480 cell line used to fit the PK/PD part, and the HCT116 cell lines, with the idea that Bmal sets the overall circadian phase. 
+# 
+
+# In[1]:
+
+
+get_ipython().run_line_magic('matplotlib', 'inline')
+import matplotlib.pyplot as plt
+import collections   # this ensures that dicts are ordered, orderedDict
+import numpy as np
+
+from scipy.integrate import odeint
+from scipy.integrate import solve_ivp
+
+# utilsCyto.py is also included in the upload
+from utilsCyto import model_geneNetwork_timeFirst, get_y0, get_period_from_yGenes, get_genes, np_max
+from utilsCyto import model_cytox, model_proteins, jac, atol, run_treatedCase
+
+
+# In[2]:
+
+
+def get_sol_extendedCoreClock(prefix = 'SW480'):
+    print(f"Integration of gene network for {prefix}")
+    paramFile = "params_geneNetwork_HCT116WT.txt"   # Parameters of the extended core-clock network for HCT116 WT
+    
+    # volumes derived for SW cell lines, for HCT116 we assume the same volume ratio as they are derived from the same tissue.
+    vc, vn = .8, .2
+    vol = vc/vn
+    
+    tspan = np.linspace(0, 600, 6001)
+    time_micro = np.array([12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51]) # Time points at which the experimental RNA-seq data was measured.
+    t_interp_micro = np.array((tspan[-1] - 60 + time_micro) * 10,
+                                  dtype=np.int32)
+    startPlot = 0
+    t = tspan[startPlot:] -tspan[t_interp_micro[0]] + time_micro[0] # Realinging simulated time to the experimental time points.
+    
+    model=model_geneNetwork_timeFirst
+    params = np.loadtxt(paramFile)[0]
+    y0 = get_y0(params)
+    
+    timeInterval = [-540.0, 360.0]   # Simulation starts earlier to later remove initial relaxation
+    sol_org = solve_ivp(model, timeInterval, y0,method='LSODA',args=(params,vol,),dense_output=True, rtol=1e-4, atol=1e-12)
+    return sol_org, y0
+
+
+# In[3]:
+
+
+
+def run_model(p,t,tGene,yGene,nCells,omega,prefixNetwork, PKPDmodel=model_cytox):
+    '''
+        t are the simulated times, in time since treatment.
+        nCells are the initial conditions for the simulation (all start at the same value).
+        omega is 2pi/period used during the fitting, and sets the 
+        oscillation frequency of the apoptosis modulation.
+        tGene is the time associated with the gene data in yGene from 
+        the transcription-translation network simulation.
+        yGene: the mRNA expression data of 'Ugt', 'Ces', 'Abcb', 'Abcc', 
+        stored as a two dimensional array with shape 4 x len(tGene), 
+        is used to calculated protein dynamics, which are then used 
+        to calculate the PK/PD dynamics for control (i.e. no treatement) 
+        and treatment at four different timepoints. 
+        Treatment at different timepoints shifts the protein 
+        dynamics along the time axis.
+    '''
+    tProt = np.arange(-100,360,0.02)
+    timeInterval = [-540.02, 359.98]   # used for simulation of protein data
+    #--- first the gene expression data is used to simulate the protein dynamcis -----------------------
+    #sol_prot = solve_ivp(model_proteins_noDegr, timeInterval, np.zeros(4), t_eval = tProt, method='LSODA',args=(p[:12],tGene,yGene,omega), rtol=10**(-4), atol=10**(-14))
+    sol_prot = solve_ivp(model_proteins, timeInterval, np.zeros(4), t_eval = tProt, method='LSODA',args=(p[:12],tGene,yGene,omega), rtol=10**(-4), atol=10**(-14))
+    
+    yProt = np.array(sol_prot.y)
+    maxLevels = np_max(yProt, axis=1)
+    #orgMagnitudes = {'Ugt': 1361.424, 'Abcb': 17.16708, 'Abcc': 1096.277, 'Ces': 0.78064}
+    print("in run_model() prefixNetwork=", prefixNetwork)
+    if prefixNetwork == 'SW480':
+        rescaling = np.array([1361.424, 0.78064, 17.16708, 1096.277])/maxLevels # orgMagnitudes/maxLevels
+    else:
+        scalingUGT = 0.1
+        rescaling = np.array([1361.424*scalingUGT, 0.78064, 17.16708, 1096.277])/maxLevels # orgMagnitudes/maxLevels
+        print(f"Rescaling UGT to something close to ZERO by multiplying with {scalingUGT}")
+    yProt = np.array([yProt[i,:]*rescaling[i] for i in range(4)])
+    #yProt = np.multiply(yProt.transpose(),rescaling).transpose()
+    #--- then the protein expression data is used to simulate the PK/PD dynamcis -----------------------
+    treatmentTimes = np.arange(6,25,6)
+    expInterval = [0., 84.6]  # # the same interval as the experiments are used, last value has to fit with experimental data.
+    u0 = np.array([70.9, 0, 0, 0, 0, 0, 0.005210499910309271, 0, 0, 0.07, 100, 0])   # initial conditions
+    
+    # simulating the control case with no treatment: -------------------------------------------------------
+    u0[0] = 0  # irinotecan concentration set to zero, no treatment.
+    u0[10:12] = nCells[:2]   # setting the initial number of cells.
+    
+    jacFct = jac
+    
+    solArray = np.zeros((2*len(treatmentTimes)+2, len(t)))  # plus an additional index for the untreated control, sol array has the option to also save proliferation data in the even indices, while cytotoxicity is saved in the odd indices
+    params = np.array(p)
+    params[17] = 0    # Setting k_treat to zero for the untreated case. This allows for a larger growth rate for the treated cases. 
+    sol = solve_ivp(PKPDmodel, expInterval, u0, t_eval = t, method='LSODA', jac=jacFct, 
+                    args=(0,params[12:],tProt,yProt,omega), rtol=10**(-2), atol= atol, min_step=0.0001)
+    if sol.success:
+        solArray[:2] = sol.y[10:]  # the last two elements of the PK/PD model are number of living and number of dead cells.
+    else:
+        print(f"ATTENTION: Integration of PKPD model failed. status={sol.status}, message={sol.message}")
+        return np.zeros((2*len(treatmentTimes)+2, len(t)))
+    #print("Control done")
+    # simulating the treated cases: --------------------------------------------------------------------------
+    u0[0] = 70.9   # with irinotecan treatment
+    for i, ZT_inj in enumerate(treatmentTimes):
+        sol = run_treatedCase(i, ZT_inj, tProt, yProt, u0, nCells, PKPDmodel, expInterval, t, p, omega, jacFct)
+        if sol.success:
+            solArray[2*(1+i):2*(2+i)] = sol.y[10:]
+    return solArray # solArray has corresponding entries to expArray
+
+
+def main(prefixGenes = 'HCT116WT'):
+    prefixNetwork = prefixGenes
+    prefix = 'SW480'   # This sets the cell line used for the PK-PD part of the model
+    paramFile = "params_PKPD.txt"
+    label = f'_testRun_{paramFile}'    # Label for saving the results
+    PKPDmodel = model_cytox   
+    print("prefix = ", prefix, label)
+    
+    sol_org, y0 = get_sol_extendedCoreClock(prefixNetwork)
+    
+    tGene, yGene = get_genes(y0,sol_org)
+    nCells = np.array([877.5 ,  87.75, 877.5 ,  87.75, 877.5 ,  87.75, 877.5 ,  87.75,
+       877.5 ,  87.75])  # initializing the number of cells such that they fit the experimental values.
+    
+    expMax = np.array([1928.75789335,  246.9167    ,  889.54218   ,  254.66667   ,
+        891.73229   ,  145.74997   ,  889.00425   ,  414.83334   ,
+        887.20675   ,  525.99996   ])
+    expArrayShape = (10, 25)
+    expMax = np.resize(np.repeat(expMax,expArrayShape[1]),expArrayShape)
+    period, omega = get_period_from_yGenes(tGene, yGene) # for the protein oscillation in degradation and the circadian     PKPDmodel = utilsCyto.model_cytox
+    
+    params = np.loadtxt(f'{paramFile}')[0]   # Parameters of the PK-PD part, unshifted  #Parameters from SW480 cell line, used for HCT116
+    # Shifting the parameters to align Bmal expression to SW480 cell line:
+    tBmal = np.arange(0,26,0.02)
+    bmalExpr = sol_org.sol(tBmal)[8, :]
+    print(prefixNetwork, "Bmal max", tBmal[np.argmax(bmalExpr)])
+    BmalSW480 = 2.69590872366348   # Phase of the SW480 cell line for BMAL1
+    shiftBmal = tBmal[np.argmax(bmalExpr)]/period*2*np.pi - BmalSW480
+    print("shiftBmal = ", shiftBmal)
+    params[[8,9,10,11,16]] += np.ones(5)*shiftBmal # Shifted parameters, shifted is the apoptosis oscillation and the circadian degradation of the irinotecan relevant genes.
+    expTimes = np.array([ 0.5,  2.5,  4.5,  6.5,  8.5, 10.5, 12.5, 14.5, 16.5, 18.5, 20.5,
+       22.5, 24.5, 26.5, 28.5, 30.5, 32.5, 34.5, 36.5, 38.5, 40.5, 42.5,
+       44.5, 46.5, 48.5])  # Time points at which the cytotoxicity was measured in the experiment. 
+    solArray = run_model(params,expTimes,tGene,yGene,nCells,omega,prefixNetwork,PKPDmodel)
+    return solArray, expTimes
+
+
+
+
+# # Comparison with HCT
+
+# In[4]:
+
+
+cell = 'HCT116WT'
+solArray, expTimes =  main(prefixGenes = cell)
+
+
+# In[5]:
+
+
+fig,ax=plt.subplots(1,1, figsize=(4,4))
+
+colorList = ['#555555', "#cd983aff", "#065f87ff", "#944231ff", '#d45925']
+labels = ['Ctrl','6h','12h','18h','24h']
+
+cell = "HCT116WT"
+t = expTimes
+for i in range(0,5):   # cyto
+    ax.plot(expTimes,(solArray[i*2+1,:]).transpose(),".", c=colorList[i], label = labels[i])  # sim
+ax.set_ylabel('Dead cells, equation variable D')
+ax.set_ylim(bottom=0)
+ax.legend()
+ax.set_xlabel('Time after treatment [h]')
+ax.set_xticks(range(0,50,12))
+print("Done")
+
+
+# In[ ]:
+
+
+
+

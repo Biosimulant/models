@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-pomerening2005-model-of-the-xenopus-cdc2-apc-system/model.yaml
+    manifest_path: models/cellcycle-sbml-pomerening2005-model-of-the-xenopus-cdc2-apc-sys-model2005150001-model/model.yaml
 ```
 
 ## Tags

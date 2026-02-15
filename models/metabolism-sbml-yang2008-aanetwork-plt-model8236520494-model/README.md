@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-yang2008-aanetwork-plt/model.yaml
+    manifest_path: models/metabolism-sbml-yang2008-aanetwork-plt-model8236520494-model/model.yaml
 ```
 
 ## Tags

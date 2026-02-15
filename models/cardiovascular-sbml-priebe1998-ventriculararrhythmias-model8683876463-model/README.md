@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-priebe1998-ventriculararrhythmias/model.yaml
+    manifest_path: models/cardiovascular-sbml-priebe1998-ventriculararrhythmias-model8683876463-model/model.yaml
 ```
 
 ## Tags

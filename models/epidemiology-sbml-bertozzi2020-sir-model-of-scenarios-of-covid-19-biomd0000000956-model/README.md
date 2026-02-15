@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bertozzi2020-sir-model-of-scenarios-of-covid-19-spread-in/model.yaml
+    manifest_path: models/epidemiology-sbml-bertozzi2020-sir-model-of-scenarios-of-covid-19-biomd0000000956-model/model.yaml
 ```
 
 ## Tags

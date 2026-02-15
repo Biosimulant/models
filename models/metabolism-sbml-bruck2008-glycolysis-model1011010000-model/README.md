@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bruck2008-glycolysis/model.yaml
+    manifest_path: models/metabolism-sbml-bruck2008-glycolysis-model1011010000-model/model.yaml
 ```
 
 ## Tags

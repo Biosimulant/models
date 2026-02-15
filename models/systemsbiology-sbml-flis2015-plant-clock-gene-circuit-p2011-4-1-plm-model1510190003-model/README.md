@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-flis2015-plant-clock-gene-circuit-p2011-4-1-plm-1042-ver-1/model.yaml
+    manifest_path: models/systemsbiology-sbml-flis2015-plant-clock-gene-circuit-p2011-4-1-plm-model1510190003-model/model.yaml
 ```
 
 ## Tags

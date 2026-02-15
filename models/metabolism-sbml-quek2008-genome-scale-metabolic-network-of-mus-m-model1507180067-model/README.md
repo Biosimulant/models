@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-quek2008-genome-scale-metabolic-network-of-mus-musculus/model.yaml
+    manifest_path: models/metabolism-sbml-quek2008-genome-scale-metabolic-network-of-mus-m-model1507180067-model/model.yaml
 ```
 
 ## Tags

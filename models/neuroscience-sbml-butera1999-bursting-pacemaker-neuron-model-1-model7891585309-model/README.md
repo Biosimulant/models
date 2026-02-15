@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-butera1999-bursting-pacemaker-neuron-model-1/model.yaml
+    manifest_path: models/neuroscience-sbml-butera1999-bursting-pacemaker-neuron-model-1-model7891585309-model/model.yaml
 ```
 
 ## Tags

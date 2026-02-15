@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-liu2017-chemotherapy-targeted-model-of-tumor-immune-system/model.yaml
+    manifest_path: models/immunology-sbml-liu2017-chemotherapy-targeted-model-of-tumor-imm-biomd0000000930-model/model.yaml
 ```
 
 ## Tags

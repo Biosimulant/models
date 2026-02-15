@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-forster2008-genome-scale-metabolic-network-of-saccharamyces/model.yaml
+    manifest_path: models/metabolism-sbml-f-rster2008-genome-scale-metabolic-network-of-sa-model1507180012-model/model.yaml
 ```
 
 ## Tags

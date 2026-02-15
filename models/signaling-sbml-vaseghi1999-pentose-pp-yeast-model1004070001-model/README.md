@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-vaseghi1999-pentose-pp-yeast/model.yaml
+    manifest_path: models/signaling-sbml-vaseghi1999-pentose-pp-yeast-model1004070001-model/model.yaml
 ```
 
 ## Tags

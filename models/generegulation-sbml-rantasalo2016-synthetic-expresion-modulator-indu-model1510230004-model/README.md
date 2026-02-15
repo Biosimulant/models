@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-rantasalo2016-synthetic-expresion-modulator-induced-stf-b42/model.yaml
+    manifest_path: models/generegulation-sbml-rantasalo2016-synthetic-expresion-modulator-indu-model1510230004-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-oliveira2005-genome-scale-metabolic-network-of-lactococcus/model.yaml
+    manifest_path: models/metabolism-sbml-oliveira2005-genome-scale-metabolic-network-of-l-model1507180014-model/model.yaml
 ```
 
 ## Tags

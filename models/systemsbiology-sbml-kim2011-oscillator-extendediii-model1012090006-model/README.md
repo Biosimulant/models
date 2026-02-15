@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-kim2011-oscillator-extendediii/model.yaml
+    manifest_path: models/systemsbiology-sbml-kim2011-oscillator-extendediii-model1012090006-model/model.yaml
 ```
 
 ## Tags

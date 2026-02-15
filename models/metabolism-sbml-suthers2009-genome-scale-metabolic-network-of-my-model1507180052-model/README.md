@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-suthers2009-genome-scale-metabolic-network-of-mycoplasma/model.yaml
+    manifest_path: models/metabolism-sbml-suthers2009-genome-scale-metabolic-network-of-my-model1507180052-model/model.yaml
 ```
 
 ## Tags

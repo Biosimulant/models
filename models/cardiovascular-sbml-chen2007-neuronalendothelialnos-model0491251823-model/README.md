@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-chen2007-neuronalendothelialnos/model.yaml
+    manifest_path: models/cardiovascular-sbml-chen2007-neuronalendothelialnos-model0491251823-model/model.yaml
 ```
 
 ## Tags

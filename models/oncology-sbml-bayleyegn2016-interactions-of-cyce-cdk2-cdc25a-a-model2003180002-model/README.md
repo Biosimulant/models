@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bayleyegn2016-interactions-of-cyce-cdk2-cdc25a-and-p27-kip1/model.yaml
+    manifest_path: models/oncology-sbml-bayleyegn2016-interactions-of-cyce-cdk2-cdc25a-a-model2003180002-model/model.yaml
 ```
 
 ## Tags

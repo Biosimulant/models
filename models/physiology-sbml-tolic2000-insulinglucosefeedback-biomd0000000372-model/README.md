@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-tolic2000-insulinglucosefeedback/model.yaml
+    manifest_path: models/physiology-sbml-tolic2000-insulinglucosefeedback-biomd0000000372-model/model.yaml
 ```
 
 ## Tags

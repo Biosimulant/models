@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-keizer1996-ryanodine-receptor-adaptation/model.yaml
+    manifest_path: models/signaling-sbml-keizer1996-ryanodine-receptor-adaptation-biomd0000000060-model/model.yaml
 ```
 
 ## Tags

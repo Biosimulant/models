@@ -1,0 +1,239 @@
+// PRISM file for TCA metabolism with IDH mutation
+
+ctmc
+
+const int max_amount;
+const int init_amount;
+
+const int idhwt;
+const int idhmut;
+
+//Rates
+const double R1; 	
+const double R2; 	
+const double R3; 	
+const double R4; 	
+const double R5; 	
+const double R6; 	
+const double R7; 	
+const double R8; 	
+const double R9; 	
+const double R10; 	
+const double R11; 	
+const double R12; 
+const double R13;
+const double R14;
+const double R15;
+const double R16;
+const double R17;
+const double R18;	
+
+const int init_gluc;
+const int max_gluc=max_amount;
+const int init_g6p=init_amount;
+const int max_g6p=max_amount;
+const int init_ppp=init_amount;
+const int max_ppp=max_amount;
+const int init_pyr=init_amount;
+const int max_pyr=max_amount;
+const int init_lac;
+const int max_lac=max_amount;
+const int init_acoa=init_amount;
+const int max_acoa=max_amount;
+const int init_cit=init_amount;
+const int max_cit=max_amount;
+const int init_lip=init_amount;
+const int max_lip=max_amount;
+const int init_akg=init_amount;
+const int max_akg=max_amount;
+const int init__2hg=init_amount;
+const int max__2hg=max_amount;
+const int init_gln;
+const int max_gln=max_amount;
+const int init_mal=init_amount;
+const int max_mal=max_amount;
+const int init_oac=init_amount;
+const int max_oac=max_amount;
+
+module rates
+ 	[gluctog6p] 	R1>0 	-> R1: true;
+ 	[g6ptoppp] 	R2>0 	-> R2: true;
+ 	[g6ptopyr] 	R3>0 	-> R3: true;
+	[pyrtolac] 	R4>0 	-> R4: true;
+	[lactopyr] 	R5>0 	-> R5: true;
+	[pyrtoacoa]	R6>0	-> R6: true;
+	[acoatocit]	R7>0	-> R7: true; 
+	[cittoacoa]	R8>0	-> R8: true;
+	[cittoakg]	R9>0	-> R9: true;
+	[akgtocit]	R10>0	-> R10: true;
+	[akgtomal]	R11>0	-> R11: true;
+	[maltooac]	R12>0	-> R12: true;
+	[oactomal]	R13>0	-> R13: true;
+	[maltopyr]	R14>0	-> R14: true;
+	[pyrtooac]	R15>0	-> R15: true;
+	[acoatolip]	R16>0	-> R16: true;
+	[glntoakg]	R17>0	-> R17: true;
+	[akgto2hg]	R18>0	-> R18: true;
+	
+endmodule
+
+module metabolism
+gluc : [0..max_gluc] init init_gluc;
+g6p : [0..max_g6p] init init_g6p;
+ppp : [0..max_ppp] init init_ppp;
+pyr : [0..max_pyr] init init_pyr;
+lac : [0..max_lac] init init_lac;
+acoa : [0..max_acoa] init init_acoa;
+cit : [0..max_cit] init init_cit;
+lip : [0..max_lip] init init_lip;
+akg : [0..max_akg] init init_akg;
+_2hg : [0..max__2hg] init init__2hg;
+gln : [0..max_gln] init init_gln;
+mal : [0..max_mal] init init_mal;
+oac : [0..max_oac] init init_oac;
+
+[gluctog6p] gluc>0 & g6p<max_g6p -> gluc: 
+	(gluc'=gluc-1) & (g6p'=g6p+1);
+[g6ptoppp] g6p>0 & ppp<max_ppp -> g6p: 
+	(g6p'=g6p-1) & (ppp'=ppp+1);
+[g6ptopyr] g6p>0 & pyr<max_pyr -> g6p: 
+	(g6p'=g6p-1) & (pyr'=pyr+1);
+[pyrtolac] pyr>0 & lac<max_lac -> pyr: 
+	(pyr'=pyr-1) & (lac'=lac+1);
+[lactopyr] lac>0 & pyr<max_pyr -> lac: 
+	(lac'=lac-1) & (pyr'=pyr+1);
+[pyrtoacoa] pyr>0 & acoa<max_acoa -> pyr: 
+	(pyr'=pyr-1) & (acoa'=acoa+1);
+[pyrtooac] pyr>0 & oac<max_oac -> pyr:
+	(pyr'=pyr-1) & (oac'=oac+1);
+[acoatocit] acoa>0 & oac>0 & cit<max_cit -> acoa*oac: 
+	(acoa'=acoa-1) & (oac'=oac-1)&(cit'=cit+1);
+[acoatolip] acoa>0 & lip<max_lip -> acoa:
+	(acoa'=acoa-1) & (lip'=lip+1);
+[cittoacoa] cit>0 & acoa<max_acoa & oac<max_oac -> cit:
+	(cit'=cit-1) & (acoa'=acoa+1) & (oac'=oac+1);
+[cittoakg] cit>0 & idhwt>0 & akg<max_akg -> cit*idhwt: 
+	(cit'=cit-1) & (akg'=akg+1);
+[cittoakg] cit>0 & idhmut>0 & akg<max_akg -> cit*idhmut: 
+	(cit'=cit-1) & (akg'=akg+1);
+[akgtocit] akg>0 & idhwt>0 & cit<max_cit -> akg*idhwt: 
+	(akg'=akg-1) & (cit'=cit+1);
+[akgto2hg] akg>0 & idhmut>0 & _2hg<max__2hg -> akg*idhmut: 
+	(akg'=akg-1) & (_2hg'=_2hg+1);
+[akgtomal] akg>0 & mal<max_mal -> akg:
+	(akg'=akg-1) & (mal'=mal+1);
+[maltooac] mal>0 & oac<max_oac -> mal:
+	(mal'=mal-1) & (oac'=oac+1);
+[oactomal] oac>0 & mal<max_mal -> oac:
+	(oac'=oac-1) & (mal'=mal+1);
+[maltopyr] mal>0 & pyr<max_pyr -> mal:
+	(mal'=mal-1) & (pyr'=pyr+1);
+[glntoakg] gln>0 & akg<max_akg -> gln: 
+	(gln'=gln-1) & (akg'=akg+1);
+
+endmodule
+
+//REWARDS
+
+rewards "gluc"
+	true:gluc;
+endrewards
+
+rewards "g6p"
+	true:g6p;
+endrewards
+
+rewards "ppp"
+	true:ppp;
+endrewards
+
+rewards "pyr"
+	true:pyr;
+endrewards
+
+rewards "lac"
+	true:lac;
+endrewards
+
+rewards "acoa"
+	true:acoa;
+endrewards
+
+rewards "cit"
+	true:cit;
+endrewards
+
+rewards "akg"
+	true:akg;
+endrewards
+
+rewards "mal"
+	true:mal;
+endrewards
+
+rewards "oac"
+	true:oac;
+endrewards
+
+rewards "_2hg"
+	true:_2hg;
+endrewards
+	
+rewards "lip"
+	true:lip;
+endrewards
+
+rewards "gln"
+	true:gln;
+endrewards
+
+rewards "g6preact"
+  [gluctog6p] true: 1;
+endrewards
+
+rewards "pyrreact"
+  [g6ptopyr] true: 1;
+  [lactopyr] true: 1;
+  [maltopyr] true: 1;
+endrewards
+
+rewards "lacreact"
+  [pyrtolac] true: 1;
+endrewards
+
+rewards "acoareact"
+  [pyrtoacoa] true: 1;
+  [cittoacoa] true: 1;
+endrewards
+
+rewards "pppreact"
+  [g6ptoppp] true: 1;
+endrewards
+
+rewards "lipreact"
+  [acoatolip] true: 1;
+endrewards
+
+rewards "citreact"
+  [acoatocit]	true: 1;
+  [akgtocit]	true: 1;
+endrewards
+
+rewards "akgreact"
+  [cittoakg]	true: 1;
+	[glntoakg]	true: 1;
+endrewards
+
+rewards "malreact"
+  [akgtomal]	true: 1;
+  [oactomal]	true: 1;
+endrewards
+
+rewards "oacreact"
+  [maltooac]	true: 1;
+  [pyrtooac]	true: 1;
+endrewards
+
+rewards "_2hgreact"
+	[akgto2hg]	true: 1;
+endrewards

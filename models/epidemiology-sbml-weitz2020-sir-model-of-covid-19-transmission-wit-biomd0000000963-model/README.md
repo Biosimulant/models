@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-weitz2020-sir-model-of-covid-19-transmission-with-shielding/model.yaml
+    manifest_path: models/epidemiology-sbml-weitz2020-sir-model-of-covid-19-transmission-wit-biomd0000000963-model/model.yaml
 ```
 
 ## Tags

@@ -1,0 +1,960 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+  <model id="New_Model" metaid="COPASI0" name="Banerjee2015 - A Mathematical Model to Elucidate BrainTumor Abrogation by Immunotherapywith T11 Target Structure">
+    <notes>
+      <body xmlns="http://www.w3.org/1999/xhtml">
+     <p>T11 Target structure (T11TS), a membrane glycoprotein isolated from sheep erythrocytes, reverses the immune suppressed state of brain tumor induced animals by boosting the functional status of the immune cells. This study aims at aiding in the design of more efficacious brain tumor therapies with T11 target structure. We propose a mathematical model for brain tumor (glioma) and the immune system interactions, which aims in designing efficacious brain tumor therapy. The model encompasses considerations of the interactive dynamics of glioma cells, macrophages, cytotoxic T-lymphocytes (CD8(+) T-cells), TGF-β, IFN-γ and the T11TS. The system undergoes sensitivity analysis, that determines which state variables are sensitive to the given parameters and the parameters are estimated from the published data. Computer simulations were used for model verification and validation, which highlight the importance of T11 target structure in brain tumor therapy.</p>
+  </body>
+    </notes>
+    <annotation>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+        <rdf:Description rdf:about="#COPASI0">
+	<dc:creator>
+	<rdf:Bag>
+	<rdf:li rdf:parseType="Resource">
+	<vCard:N rdf:parseType="Resource">
+	<vCard:Family>Sharif Shohan</vCard:Family>
+	<vCard:Given>Mohammad Umer</vCard:Given>
+	</vCard:N>
+	<vCard:EMAIL>msharifshohan@ebi.ac.uk</vCard:EMAIL>
+	<vCard:ORG rdf:parseType="Resource">
+	<vCard:Orgname>EMBL-EBI</vCard:Orgname>
+	</vCard:ORG>
+	</rdf:li>
+	</rdf:Bag>
+	</dc:creator>
+	<dcterms:created rdf:parseType="Resource">
+	<dcterms:W3CDTF>2019-12-09T11:36:05Z</dcterms:W3CDTF>
+	</dcterms:created>
+	<dcterms:modified rdf:parseType="Resource">
+	<dcterms:W3CDTF>2019-12-09T11:36:05Z</dcterms:W3CDTF>
+	</dcterms:modified>
+	<bqbiol:isDescribedBy>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/pubmed/25955428"/>
+	</rdf:Bag>
+	</bqbiol:isDescribedBy>
+	</rdf:Description>
+	
+      </rdf:RDF>
+      <COPASI xmlns="http://www.copasi.org/static/sbml">
+        <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+          <rdf:Description rdf:about="#COPASI0">
+            <dcterms:bibliographicCitation>
+              <rdf:Description>
+                <dcterms:description>A mathematical model to elucidate brain tumor abrogation by immunotherapy with T11 target structure.</dcterms:description>
+                <CopasiMT:isDescribedBy rdf:resource="urn:miriam:pubmed:25955428"/>
+              </rdf:Description>
+            </dcterms:bibliographicCitation>
+            <dcterms:created>
+              <rdf:Description>
+                <dcterms:W3CDTF>2019-12-09T11:36:05Z</dcterms:W3CDTF>
+              </rdf:Description>
+            </dcterms:created>
+            <dcterms:creator>
+              <rdf:Description>
+                <vCard:EMAIL>msharifshohan@ebi.ac.uk</vCard:EMAIL>
+                <vCard:N>
+                  <rdf:Description>
+                    <vCard:Family>Sharif Shohan</vCard:Family>
+                    <vCard:Given>Mohammad Umer</vCard:Given>
+                  </rdf:Description>
+                </vCard:N>
+                <vCard:ORG>
+                  <rdf:Description>
+                    <vCard:Orgname>EMBL-EBI</vCard:Orgname>
+                  </rdf:Description>
+                </vCard:ORG>
+              </rdf:Description>
+            </dcterms:creator>
+          </rdf:Description>
+        </rdf:RDF>
+      </COPASI>
+    </annotation>
+      <listOfFunctionDefinitions>
+      <functionDefinition id="Function_for_Eradication_of_glioma_cell" metaid="COPASI11" name="Function for Eradication of glioma cell">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI11">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T11:51:28Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> e_1 </ci>
+            </bvar>
+            <bvar>
+              <ci> alpha_1 </ci>
+            </bvar>
+            <bvar>
+              <ci> M </ci>
+            </bvar>
+            <bvar>
+              <ci> alpha_2 </ci>
+            </bvar>
+            <bvar>
+              <ci> CT </ci>
+            </bvar>
+            <bvar>
+              <ci> G </ci>
+            </bvar>
+            <bvar>
+              <ci> k_1 </ci>
+            </bvar>
+            <bvar>
+              <ci> TB </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <cn> 1 </cn>
+                <apply>
+                  <plus/>
+                  <ci> TB </ci>
+                  <ci> e_1 </ci>
+                </apply>
+              </apply>
+              <apply>
+                <plus/>
+                <apply>
+                  <times/>
+                  <ci> alpha_1 </ci>
+                  <ci> M </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> alpha_2 </ci>
+                  <ci> CT </ci>
+                </apply>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> G </ci>
+                <apply>
+                  <plus/>
+                  <ci> G </ci>
+                  <ci> k_1 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Function_for_removal_of_Macrophage" metaid="COPASI12" name="Function for removal of Macrophage">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI12">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:00:17Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> alpha_3 </ci>
+            </bvar>
+            <bvar>
+              <ci> G </ci>
+            </bvar>
+            <bvar>
+              <ci> k_2 </ci>
+            </bvar>
+            <bvar>
+              <ci> M </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> alpha_3 </ci>
+              <apply>
+                <divide/>
+                <ci> G </ci>
+                <apply>
+                  <plus/>
+                  <ci> G </ci>
+                  <ci> k_2 </ci>
+                </apply>
+              </apply>
+              <ci> M </ci>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Function_for_formation_of_glioma_cell" metaid="COPASI13" name="Function for formation of glioma cell">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI13">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T11:49:31Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> r_1 </ci>
+            </bvar>
+            <bvar>
+              <ci> G </ci>
+            </bvar>
+            <bvar>
+              <ci> G_max </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> r_1 </ci>
+              <ci> G </ci>
+              <apply>
+                <minus/>
+                <cn> 1 </cn>
+                <apply>
+                  <divide/>
+                  <ci> G </ci>
+                  <ci> G_max </ci>
+                </apply>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Function_for_Production_of_CD8__T_cell" metaid="COPASI14" name="Function for Production of CD8+ T cell">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI14">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:07:05Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> a_2 </ci>
+            </bvar>
+            <bvar>
+              <ci> G </ci>
+            </bvar>
+            <bvar>
+              <ci> k_5 </ci>
+            </bvar>
+            <bvar>
+              <ci> TB </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> a_2 </ci>
+                <ci> G </ci>
+              </apply>
+              <apply>
+                <plus/>
+                <ci> k_5 </ci>
+                <ci> TB </ci>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Function_for_Production_of_macrophage_cell" metaid="COPASI15" name="Function for Production of macrophage cell">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI15">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T11:54:13Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> r_2 </ci>
+            </bvar>
+            <bvar>
+              <ci> M </ci>
+            </bvar>
+            <bvar>
+              <ci> M_max </ci>
+            </bvar>
+            <bvar>
+              <ci> a_1 </ci>
+            </bvar>
+            <bvar>
+              <ci> IG </ci>
+            </bvar>
+            <bvar>
+              <ci> k_4 </ci>
+            </bvar>
+            <bvar>
+              <ci> e_2 </ci>
+            </bvar>
+            <bvar>
+              <ci> TB </ci>
+            </bvar>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> r_2 </ci>
+                <ci> M </ci>
+                <apply>
+                  <minus/>
+                  <cn> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> M </ci>
+                    <ci> M_max </ci>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <ci> a_1 </ci>
+                <apply>
+                  <divide/>
+                  <ci> IG </ci>
+                  <apply>
+                    <plus/>
+                    <ci> k_4 </ci>
+                    <ci> IG </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <divide/>
+                  <cn> 1 </cn>
+                  <apply>
+                    <plus/>
+                    <ci> TB </ci>
+                    <ci> e_2 </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Function_for_removal_of_cytokine_INF_gamma" metaid="COPASI16" name="Function for removal of cytokine INF-gamma">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI16">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:23:03Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> mu_3 </ci>
+            </bvar>
+            <bvar>
+              <ci> IG </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> mu_3 </ci>
+              <ci> IG </ci>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Function_for_Cytokine_INF_gamma_production" metaid="COPASI17" name="Function for Cytokine INF-gamma production">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI17">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:21:47Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> b2 </ci>
+            </bvar>
+            <bvar>
+              <ci> CT </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> b2 </ci>
+              <ci> CT </ci>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Function_for_Cytokine_TGF_B_production" metaid="COPASI18" name="Function for Cytokine TGF-B production">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI18">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:15:49Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> s_1 </ci>
+            </bvar>
+            <bvar>
+              <ci> b_1 </ci>
+            </bvar>
+            <bvar>
+              <ci> G </ci>
+            </bvar>
+            <apply>
+              <plus/>
+              <ci> s_1 </ci>
+              <apply>
+                <times/>
+                <ci> b_1 </ci>
+                <ci> G </ci>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Function_for_Removal_of_CD8__T_cell" metaid="COPASI19" name="Function for Removal of CD8+ T cell">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI19">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:13:55Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> mu_1 </ci>
+            </bvar>
+            <bvar>
+              <ci> CT </ci>
+            </bvar>
+            <bvar>
+              <ci> alpha_4 </ci>
+            </bvar>
+            <bvar>
+              <ci> G </ci>
+            </bvar>
+            <bvar>
+              <ci> k_3 </ci>
+            </bvar>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> mu_1 </ci>
+                <ci> CT </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> alpha_4 </ci>
+                <apply>
+                  <divide/>
+                  <ci> G </ci>
+                  <apply>
+                    <plus/>
+                    <ci> G </ci>
+                    <ci> k_3 </ci>
+                  </apply>
+                </apply>
+                <ci> CT </ci>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Function_for_Cytokine_TGF_beta_removal" metaid="COPASI20" name="Function for Cytokine TGF-beta removal">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI20">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:19:54Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> mu_2 </ci>
+            </bvar>
+            <bvar>
+              <ci> TB </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> mu_2 </ci>
+              <ci> TB </ci>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+    </listOfFunctionDefinitions>
+    <listOfUnitDefinitions>
+      <unitDefinition id="volume" name="volume">
+        <listOfUnits>
+          <unit exponent="1" kind="litre" multiplier="1" scale="-3"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="time" name="time">
+        <listOfUnits>
+          <unit exponent="1" kind="second" multiplier="86400" scale="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="substance" name="substance">
+        <listOfUnits>
+          <unit exponent="1" kind="mole" multiplier="1" scale="-3"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment constant="true" id="compartment" name="compartment" size="1" spatialDimensions="3"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species boundaryCondition="false" compartment="compartment" constant="false" id="G" initialConcentration="857419" name="G"/>
+      <species boundaryCondition="false" compartment="compartment" constant="false" id="M" initialConcentration="943092" name="M"/>
+      <species boundaryCondition="false" compartment="compartment" constant="false" id="CT" initialConcentration="303.397" name="CT"/>
+      <species boundaryCondition="false" compartment="compartment" constant="false" id="TB" initialConcentration="9134.33" name="TB"/>
+      <species boundaryCondition="false" compartment="compartment" constant="false" id="IG" initialConcentration="0.303397" name="IG"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter constant="true" id="r_1" name="r_1" value="0.01"/>
+      <parameter constant="true" id="G_max" name="G_max" value="882650"/>
+      <parameter constant="true" id="e_1" name="e_1" value="10000"/>
+      <parameter constant="true" id="alpha_1" name="alpha_1" value="1.5"/>
+      <parameter constant="true" id="alpha_2" name="alpha_2" value="0.12"/>
+      <parameter constant="true" id="k_1" name="k_1" value="27000"/>
+      <parameter constant="true" id="r_2" name="r_2" value="0.3307"/>
+      <parameter constant="true" id="M_max" name="M_max" value="1000000"/>
+      <parameter constant="true" id="a_1" name="a_1" value="0.1163"/>
+      <parameter constant="true" id="k_4" name="k_4" value="10500"/>
+      <parameter constant="true" id="e_2" name="e_2" value="10000"/>
+      <parameter constant="true" id="alpha_3" name="alpha_3" value="0.0194"/>
+      <parameter constant="true" id="k_2" name="k_2" value="27000"/>
+      <parameter constant="true" id="a_2" name="a_2" value="0"/>
+      <parameter constant="true" id="k_5" name="k_5" value="2000"/>
+      <parameter constant="true" id="mu_1" name="mu_1" value="0.0074"/>
+      <parameter constant="true" id="alpha_4" name="alpha_4" value="0.1694"/>
+      <parameter constant="true" id="k_3" name="k_3" value="334452"/>
+      <parameter constant="true" id="s_1" name="s_1" value="63305"/>
+      <parameter constant="true" id="b_1" name="b_1" value="5.7E-6"/>
+      <parameter constant="true" id="mu_2" name="mu_2" value="6.93"/>
+      <parameter constant="true" id="b_2" name="b_2" value="0.000102"/>
+      <parameter constant="true" id="mu_3" name="mu_3" value="0.102"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="Formation_of_glioma_cell" metaid="COPASI1" name="Formation of glioma cell" reversible="false">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI1">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T11:49:13Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+              <listOfProducts>
+          <speciesReference species="G" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> compartment </ci>
+              <apply>
+                <ci> Function_for_formation_of_glioma_cell </ci>
+                <ci> r_1 </ci>
+                <ci> G </ci>
+                <ci> G_max </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Eradication_of_glioma_cell" metaid="COPASI2" name="Eradication of glioma cell" reversible="false">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI2">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T11:51:11Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="G" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfModifiers>
+          <modifierSpeciesReference species="M"/>
+          <modifierSpeciesReference species="CT"/>
+          <modifierSpeciesReference species="TB"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> compartment </ci>
+              <apply>
+                <ci> Function_for_Eradication_of_glioma_cell </ci>
+                <ci> e_1 </ci>
+                <ci> alpha_1 </ci>
+                <ci> M </ci>
+                <ci> alpha_2 </ci>
+                <ci> CT </ci>
+                <ci> G </ci>
+                <ci> k_1 </ci>
+                <ci> TB </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Production_of_macrophage_cell" metaid="COPASI3" name="Production of macrophage cell" reversible="false">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI3">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T11:53:54Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+              <listOfProducts>
+          <speciesReference species="M" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="IG"/>
+          <modifierSpeciesReference species="TB"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> compartment </ci>
+              <apply>
+                <ci> Function_for_Production_of_macrophage_cell </ci>
+                <ci> r_2 </ci>
+                <ci> M </ci>
+                <ci> M_max </ci>
+                <ci> a_1 </ci>
+                <ci> IG </ci>
+                <ci> k_4 </ci>
+                <ci> e_2 </ci>
+                <ci> TB </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Removal_of_macrophage_cell" metaid="COPASI4" name="Removal of macrophage cell" reversible="false">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI4">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T11:57:34Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="M" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfModifiers>
+          <modifierSpeciesReference species="G"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> compartment </ci>
+              <apply>
+                <ci> Function_for_removal_of_Macrophage </ci>
+                <ci> alpha_3 </ci>
+                <ci> G </ci>
+                <ci> k_2 </ci>
+                <ci> M </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Production_of_CD8__T_cell" metaid="COPASI5" name="Production of CD8+ T cell" reversible="false">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI5">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:06:35Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+              <listOfProducts>
+          <speciesReference species="CT" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="G"/>
+          <modifierSpeciesReference species="TB"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> compartment </ci>
+              <apply>
+                <ci> Function_for_Production_of_CD8__T_cell </ci>
+                <ci> a_2 </ci>
+                <ci> G </ci>
+                <ci> k_5 </ci>
+                <ci> TB </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Removal_of_CD8__T_cell" metaid="COPASI6" name="Removal of CD8+ T cell" reversible="false">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI6">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:13:15Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="CT" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfModifiers>
+          <modifierSpeciesReference species="G"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> compartment </ci>
+              <apply>
+                <ci> Function_for_Removal_of_CD8__T_cell </ci>
+                <ci> mu_1 </ci>
+                <ci> CT </ci>
+                <ci> alpha_4 </ci>
+                <ci> G </ci>
+                <ci> k_3 </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Cytokine_TGF_B_production" metaid="COPASI7" name="Cytokine TGF-B production" reversible="false">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI7">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:15:35Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+              <listOfProducts>
+          <speciesReference species="TB" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="G"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> compartment </ci>
+              <apply>
+                <ci> Function_for_Cytokine_TGF_B_production </ci>
+                <ci> s_1 </ci>
+                <ci> b_1 </ci>
+                <ci> G </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Cytokine_TGF_beta_removal" metaid="COPASI8" name="Cytokine TGF-beta removal" reversible="false">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI8">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:19:33Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="TB" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> compartment </ci>
+              <apply>
+                <ci> Function_for_Cytokine_TGF_beta_removal </ci>
+                <ci> mu_2 </ci>
+                <ci> TB </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Cytokine_INF_gamma_production" metaid="COPASI9" name="Cytokine INF-gamma production" reversible="false">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI9">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:20:28Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+              <listOfProducts>
+          <speciesReference species="IG" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="CT"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> compartment </ci>
+              <apply>
+                <ci> Function_for_Cytokine_INF_gamma_production </ci>
+                <ci> b_2 </ci>
+                <ci> CT </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Removal_of_cytokine_INF_gamma" metaid="COPASI10" name="Removal of cytokine INF-gamma" reversible="false">
+        <annotation>
+          <COPASI xmlns="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI10">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2019-12-09T12:22:26Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="IG" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> compartment </ci>
+              <apply>
+                <ci> Function_for_removal_of_cytokine_INF_gamma </ci>
+                <ci> mu_3 </ci>
+                <ci> IG </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

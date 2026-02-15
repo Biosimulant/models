@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-selvaggio2020-microenvironment-control-of-hybrid-epithelial/model.yaml
+    manifest_path: models/oncology-sbml-selvaggio2020-microenvironment-control-of-hybrid-model2004040001-model/model.yaml
 ```
 
 ## Tags

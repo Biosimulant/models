@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-giordano2020-sidarthe-model-of-covid-19-spread-in-italy/model.yaml
+    manifest_path: models/epidemiology-sbml-giordano2020-sidarthe-model-of-covid-19-spread-i-biomd0000000955-model/model.yaml
 ```
 
 ## Tags

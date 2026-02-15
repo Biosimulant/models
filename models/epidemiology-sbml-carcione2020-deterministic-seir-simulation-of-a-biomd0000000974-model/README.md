@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-carcione2020-deterministic-seir-simulation-of-a-covid-19/model.yaml
+    manifest_path: models/epidemiology-sbml-carcione2020-deterministic-seir-simulation-of-a-biomd0000000974-model/model.yaml
 ```
 
 ## Tags

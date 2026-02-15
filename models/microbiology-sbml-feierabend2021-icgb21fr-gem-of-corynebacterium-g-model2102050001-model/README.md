@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-feierabend2021-icgb21fr-gem-of-corynebacterium-glutamicum/model.yaml
+    manifest_path: models/microbiology-sbml-feierabend2021-icgb21fr-gem-of-corynebacterium-g-model2102050001-model/model.yaml
 ```
 
 ## Tags

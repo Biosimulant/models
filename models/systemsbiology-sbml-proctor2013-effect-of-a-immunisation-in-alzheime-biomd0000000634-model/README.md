@@ -1,0 +1,26 @@
+# Proctor2013 - Effect of Aβ immunisation in Alzheimer's disease (stochastic version)
+
+**Source**: [biomodels_ebi](https://www.ebi.ac.uk/biomodels/BIOMD0000000634)
+**Standard**: sbml
+**Authors**: Carole J Proctor; Delphine Boche; Douglas A Gray; James A R Nicoll
+
+## Description
+
+Proctor2013 - Effect of Aβ immunisationin Alzheimer's disease (stochastic version) Extension of a previously publishedstochastic model (designed to examine some of the key pathwaysinvolved in the aggr
+
+
+## Usage
+
+This model was auto-generated from the biomodels_ebi repository.
+
+```yaml
+# In a space.yaml wiring file:
+models:
+  - repo: Biosimulant/models
+    alias: model
+    manifest_path: models/systemsbiology-sbml-proctor2013-effect-of-a-immunisation-in-alzheime-biomd0000000634-model/model.yaml
+```
+
+## Tags
+
+systemsbiology, sbml, biomodels_ebi, auto-generated, biomodels-ebi, curated

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-yi2003-gproteincycle/model.yaml
+    manifest_path: models/systemsbiology-sbml-yi2003-gproteincycle-biomd0000000072-model/model.yaml
 ```
 
 ## Tags

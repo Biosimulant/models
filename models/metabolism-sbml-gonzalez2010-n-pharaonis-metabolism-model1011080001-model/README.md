@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-gonzalez2010-n-pharaonis-metabolism/model.yaml
+    manifest_path: models/metabolism-sbml-gonzalez2010-n-pharaonis-metabolism-model1011080001-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-sachse2008-fibroblastinteractingmyocytes/model.yaml
+    manifest_path: models/systemsbiology-sbml-sachse2008-fibroblastinteractingmyocytes-model7914759868-model/model.yaml
 ```
 
 ## Tags

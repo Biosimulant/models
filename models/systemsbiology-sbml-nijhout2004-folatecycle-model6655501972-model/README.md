@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-nijhout2004-folatecycle/model.yaml
+    manifest_path: models/systemsbiology-sbml-nijhout2004-folatecycle-model6655501972-model/model.yaml
 ```
 
 ## Tags

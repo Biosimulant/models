@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-selvarasu2009-genome-scale-metabolic-network-of-mus/model.yaml
+    manifest_path: models/metabolism-sbml-selvarasu2009-genome-scale-metabolic-network-of-model1507180042-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-singh2006-tca-mtu-model2/model.yaml
+    manifest_path: models/pharmacology-sbml-singh2006-tca-mtu-model2-biomd0000000218-model/model.yaml
 ```
 
 ## Tags

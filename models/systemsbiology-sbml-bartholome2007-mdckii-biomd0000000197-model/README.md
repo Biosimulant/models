@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bartholome2007-mdckii/model.yaml
+    manifest_path: models/systemsbiology-sbml-bartholome2007-mdckii-biomd0000000197-model/model.yaml
 ```
 
 ## Tags

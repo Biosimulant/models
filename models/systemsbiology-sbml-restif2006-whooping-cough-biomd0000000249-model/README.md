@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-restif2006-whooping-cough/model.yaml
+    manifest_path: models/systemsbiology-sbml-restif2006-whooping-cough-biomd0000000249-model/model.yaml
 ```
 
 ## Tags

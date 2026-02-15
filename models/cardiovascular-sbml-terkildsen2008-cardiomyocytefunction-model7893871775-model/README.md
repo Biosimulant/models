@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-terkildsen2008-cardiomyocytefunction/model.yaml
+    manifest_path: models/cardiovascular-sbml-terkildsen2008-cardiomyocytefunction-model7893871775-model/model.yaml
 ```
 
 ## Tags

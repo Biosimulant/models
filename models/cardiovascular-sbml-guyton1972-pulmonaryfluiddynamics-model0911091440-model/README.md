@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-guyton1972-pulmonaryfluiddynamics/model.yaml
+    manifest_path: models/cardiovascular-sbml-guyton1972-pulmonaryfluiddynamics-model0911091440-model/model.yaml
 ```
 
 ## Tags

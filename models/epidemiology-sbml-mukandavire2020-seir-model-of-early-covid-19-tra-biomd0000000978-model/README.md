@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-mukandavire2020-seir-model-of-early-covid-19-transmission/model.yaml
+    manifest_path: models/epidemiology-sbml-mukandavire2020-seir-model-of-early-covid-19-tra-biomd0000000978-model/model.yaml
 ```
 
 ## Tags

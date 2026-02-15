@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-sriram2007-cellcycle/model.yaml
+    manifest_path: models/ecology-sbml-sriram2007-cellcycle-biomd0000000181-model/model.yaml
 ```
 
 ## Tags

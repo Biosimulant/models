@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-malinzi2018-enhancement-of-chemotherapy-using-oncolytic/model.yaml
+    manifest_path: models/oncology-sbml-malinzi2018-enhancement-of-chemotherapy-using-on-model2003050002-model/model.yaml
 ```
 
 ## Tags

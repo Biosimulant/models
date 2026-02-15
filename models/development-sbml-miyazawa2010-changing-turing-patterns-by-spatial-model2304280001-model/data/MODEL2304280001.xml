@@ -1,0 +1,183 @@
+<MorpheusModel version="4">
+    <Description>
+        <Title>Miyazawa2010</Title>
+        <Details>Biologists have long been fascinated by the amazing diversity of animal colour patterns. Despite
+much interest, the underlying evolutionary and developmental mechanisms contributing to
+their rich variety remain largely unknown, especially the vivid and complex colour patterns seen
+in vertebrates. The model [1] shows, that complex and camouflaged animal markings can be formed
+by the ‘blending’ of simple colour patterns. A mathematical model predicts that crossing
+between animals having inverted spot patterns (for example, ‘light spots on a dark background’
+and ‘ dark spots on a light background’ ) will necessarily result in hybrid offspring that have
+camouflaged labyrinthine patterns as ‘ blended ’ intermediate phenotypes. In  [1] the authors 
+confirmed the broad applicability of the model prediction by empirical examination of natural and
+artificial hybrids of salmonid fish. The results suggest an unexplored evolutionary process by means of
+‘pattern blending’, as one of the possible mechanisms underlying colour pattern diversity and
+hybrid speciation. The model file is in MorpheusML format and can be opened in the free, open-source multicellular modeling software
+Morpheus (https://morpheus.gitlab.io) to simulate the time course (movie) of the spatio-temporal dynamics. 
+It resembles figure 3a from [1], where a 2D parameter space shows the transition from black to white spots 
+through intermediate labyrinthine patterns.
+
+1. Miyazawa, Okamoto and Kondo, Blending of animal colour patterns by hybridization, Nature Communications, 2010
+        <Annotation>
+                <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqmodel:isDerivedFrom xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://identifiers.org/pubmed/20842190"/>
+                        </rdf:Bag>
+                    </bqmodel:isDerivedFrom>
+                    <bqbiol:hasTaxon xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://identifiers.org/taxonomy/8034"/>
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://identifiers.org/taxonomy/90313"/>
+                        </rdf:Bag>
+                    </bqbiol:hasTaxon>
+                </rdf:RDF>
+            </Annotation>
+        </Details>
+    </Description>
+    <Global>
+        <Field symbol="u" value="4.1+rand_uni(0,1)">
+            <Diffusion rate="1"/>
+            <Annotation><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqbiol:isPropertyOf xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://identifiers.org/mamo/MAMO_0000056"/>
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://identifiers.org/mamo/MAMO_0000032"/>
+                        </rdf:Bag>
+                    </bqbiol:isPropertyOf>
+                </rdf:RDF>
+            </Annotation>
+        </Field>
+        <Field symbol="v" value="4.84+rand_uni(0,1)">
+            <Diffusion rate="20"/>
+            <Annotation><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqbiol:isPropertyOf xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://identifiers.org/mamo/MAMO_0000056"/>
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://identifiers.org/mamo/MAMO_0000032"/>
+                        </rdf:Bag>
+                    </bqbiol:isPropertyOf>
+                </rdf:RDF>
+            </Annotation>
+        </Field>
+        <System time-step="0.25" name="Miyazawa" solver="Runge-Kutta [fixed, O(4)]">
+            <Function symbol="A">
+                <Expression>0.07 + ((0.07 * l.y)/ s.y)</Expression>
+            </Function>
+            <Constant symbol="B" value="0.08"/>
+            <Function symbol="C">
+                <Expression>-0.1 + ((0.5 * l.x)/ s.x)</Expression>
+            </Function>
+            <Constant symbol="D" value="0.03"/>
+            <Constant symbol="E" value="0.10"/>
+            <Constant symbol="F" value="0.12"/>
+            <Constant symbol="G" value="0.06"/>
+            <Constant symbol="R" value="20.0"/>
+            <Constant symbol="synU_max" value="0.23"/>
+            <Constant symbol="synV_max" value="0.50"/>
+            <Function symbol="s_u">
+                <Expression>max( 0, min( synU_max, A()*u-B*v+C()))</Expression>
+            </Function>
+            <Function symbol="s_v">
+                <Expression>max( 0, min( synV_max, E*u - F))</Expression>
+            </Function>
+            <DiffEqn symbol-ref="u">
+                <Expression>R*(s_u() - D*u)</Expression>
+            </DiffEqn>
+            <DiffEqn symbol-ref="v">
+                <Expression>R*(s_v() - G*v)</Expression>
+            </DiffEqn>
+            <Annotation><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqbiol:isPropertyOf xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://identifiers.org/mamo/MAMO:0000048"/>
+                        </rdf:Bag>
+                    </bqbiol:isPropertyOf>
+                </rdf:RDF>
+            </Annotation>
+        </System>
+    </Global>
+    <Space>
+        <Lattice class="square">
+            <Size symbol="s" value="1024,1024,0"/>
+            <NodeLength value="1"/>
+            <BoundaryConditions>
+                <Condition type="noflux" boundary="x"/>
+                <Condition type="noflux" boundary="y"/>
+            </BoundaryConditions>
+            <Neighborhood>
+                <Order>1</Order>
+            </Neighborhood>
+        </Lattice>
+        <SpaceSymbol symbol="l"/>
+    </Space>
+    <Time>
+        <StartTime value="0"/>
+        <StopTime value="300"/>
+        <SaveInterval value="0"/>
+        <RandomSeed value="1"/>
+        <TimeSymbol symbol="time"/>
+    </Time>
+    <Analysis>
+        <Gnuplotter time-step="2" decorate="false">
+            <Terminal name="png" persist="true"/>
+            <Plot>
+                <Field symbol-ref="u">
+                    <ColorMap>
+                        <Color color="black" value="0"/>
+                        <Color color="white" value="1"/>
+                    </ColorMap>
+                </Field>
+            </Plot>
+        </Gnuplotter>
+        <!--    <Disabled>
+        <Logger time-step="0.0">
+            <Input>
+                <Symbol symbol-ref="u"/>
+            </Input>
+            <Output>
+                <TextOutput file-format="csv"/>
+            </Output>
+            <Restriction>
+                <Slice axis="x" value="s.x/2"/>
+            </Restriction>
+            <Plots>
+                <Plot title="slice at half of x extension" time-step="-1">
+                    <Style style="lines" line-width="3.0"/>
+                    <Terminal terminal="png"/>
+                    <X-axis>
+                        <Symbol symbol-ref="l.y"/>
+                    </X-axis>
+                    <Y-axis>
+                        <Symbol symbol-ref="u"/>
+                    </Y-axis>
+                    <Color-bar>
+                        <Symbol symbol-ref="v"/>
+                    </Color-bar>
+                </Plot>
+            </Plots>
+        </Logger>
+    </Disabled>
+-->
+        <!--    <Disabled>
+        <Logger time-step="2">
+            <Input>
+                <Symbol symbol-ref="u"/>
+            </Input>
+            <Output>
+                <TextOutput file-format="csv"/>
+            </Output>
+            <Plots>
+                <SurfacePlot time-step="2">
+                    <Color-bar>
+                        <Symbol symbol-ref="u"/>
+                    </Color-bar>
+                    <Terminal terminal="png"/>
+                </SurfacePlot>
+            </Plots>
+        </Logger>
+    </Disabled>
+-->
+        <ModelGraph include-tags="#untagged" format="svg" reduced="false"/>
+    </Analysis>
+</MorpheusModel>

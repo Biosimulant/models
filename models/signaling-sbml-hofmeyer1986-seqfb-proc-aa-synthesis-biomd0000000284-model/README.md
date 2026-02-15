@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-hofmeyer1986-seqfb-proc-aa-synthesis/model.yaml
+    manifest_path: models/signaling-sbml-hofmeyer1986-seqfb-proc-aa-synthesis-biomd0000000284-model/model.yaml
 ```
 
 ## Tags

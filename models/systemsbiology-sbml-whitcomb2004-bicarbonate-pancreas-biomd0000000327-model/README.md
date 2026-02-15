@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-whitcomb2004-bicarbonate-pancreas/model.yaml
+    manifest_path: models/systemsbiology-sbml-whitcomb2004-bicarbonate-pancreas-biomd0000000327-model/model.yaml
 ```
 
 ## Tags

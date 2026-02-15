@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-becker2005-genome-scale-metabolic-network-of-staphylococcus/model.yaml
+    manifest_path: models/metabolism-sbml-becker2005-genome-scale-metabolic-network-of-sta-model1507180070-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-benedict2011-genome-scale-metoblic-network-of/model.yaml
+    manifest_path: models/metabolism-sbml-benedict2011-genome-scale-metoblic-network-of-me-biomd0000001097-model/model.yaml
 ```
 
 ## Tags

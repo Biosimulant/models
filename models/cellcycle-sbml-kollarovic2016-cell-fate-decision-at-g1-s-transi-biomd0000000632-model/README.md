@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-kollarovic2016-cell-fate-decision-at-g1-s-transition/model.yaml
+    manifest_path: models/cellcycle-sbml-kollarovic2016-cell-fate-decision-at-g1-s-transi-biomd0000000632-model/model.yaml
 ```
 
 ## Tags

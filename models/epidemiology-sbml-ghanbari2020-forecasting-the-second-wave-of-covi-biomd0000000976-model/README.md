@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-ghanbari2020-forecasting-the-second-wave-of-covid-19-in-iran/model.yaml
+    manifest_path: models/epidemiology-sbml-ghanbari2020-forecasting-the-second-wave-of-covi-biomd0000000976-model/model.yaml
 ```
 
 ## Tags

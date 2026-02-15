@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bhattacharya2011-ureacycle/model.yaml
+    manifest_path: models/systemsbiology-sbml-bhattacharya2011-ureacycle-model0318212660-model/model.yaml
 ```
 
 ## Tags

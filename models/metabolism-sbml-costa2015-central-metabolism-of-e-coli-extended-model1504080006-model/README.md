@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-costa2015-central-metabolism-of-e-coli-extended-regulated/model.yaml
+    manifest_path: models/metabolism-sbml-costa2015-central-metabolism-of-e-coli-extended-model1504080006-model/model.yaml
 ```
 
 ## Tags

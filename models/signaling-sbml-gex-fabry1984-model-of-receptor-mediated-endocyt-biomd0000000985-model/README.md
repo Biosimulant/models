@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-gex-fabry1984-model-of-receptor-mediated-endocytosis-of-egf/model.yaml
+    manifest_path: models/signaling-sbml-gex-fabry1984-model-of-receptor-mediated-endocyt-biomd0000000985-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-baart2007-genome-scale-metabolic-network-of-neisseria/model.yaml
+    manifest_path: models/metabolism-sbml-baart2007-genome-scale-metabolic-network-of-neis-model1507180069-model/model.yaml
 ```
 
 ## Tags

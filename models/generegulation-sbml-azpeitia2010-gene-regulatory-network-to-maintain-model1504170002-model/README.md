@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-azpeitia2010-gene-regulatory-network-to-maintain-the-root-2/model.yaml
+    manifest_path: models/generegulation-sbml-azpeitia2010-gene-regulatory-network-to-maintain-model1504170002-model/model.yaml
 ```
 
 ## Tags

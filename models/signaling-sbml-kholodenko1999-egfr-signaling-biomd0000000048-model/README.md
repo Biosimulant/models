@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-kholodenko1999-egfr-signaling/model.yaml
+    manifest_path: models/signaling-sbml-kholodenko1999-egfr-signaling-biomd0000000048-model/model.yaml
 ```
 
 ## Tags

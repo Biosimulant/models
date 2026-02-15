@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-yang2006-methadone-pkmodel/model.yaml
+    manifest_path: models/pharmacology-sbml-yang2006-methadone-pkmodel-model1006230040-model/model.yaml
 ```
 
 ## Tags

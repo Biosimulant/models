@@ -1,0 +1,203 @@
+//#############################################################################//
+//                                                                             //
+//                           Virus Model                                       //
+//                                                                             //
+//#############################################################################//
+
+// nvcc Viral_Transmission.cu -o program.out && ./program.out
+
+#define CODETESTINGCONDITIONS 0
+
+//Simulation Parameters
+int CELL2CELL = 0;
+int FREECELL = 1;
+
+//Change initial conditions
+int INITIALCELL = 0;
+int INITIALVIRUS = 1;
+
+///////////////////////////////////////////////////////////////////////////////////
+float timestep = 0.005;    //hours //0.005 hr = 18 sec, (1/3600) hr = 1 sec
+float endtime = 5;   //hours
+int Save = (1/timestep); //the number of time the program saves to file, (1/timestep) results in 1 save every simulated hour
+int NumberOfLayers = 607; //607 is a million hexigon in a circle
+int StartRuns = 0;
+int NumberOfRuns = 1;
+
+//Physical Parameters//////////////////////////////////////////////////////////////
+// ****SEE MAIN**** float MOI = pow(10,0); //pow(10,-5) to 1
+float beta = 0.1;           //Infection rate, units: 1/(hour)
+float rho = 0.3;            
+float D = 2.16*pow(10,-8);  //Diffusion rate at 37 degrees celsius unit: m^2/h
+float c = 0.3;              //0.105 Clearance rate, units: 1/(hour) 
+float deltx = 25.0*pow(10,-6);
+float deltxprime = deltx*2;
+float Dtsx2 = D*timestep*pow(deltxprime,-2);
+
+//Probability Constants////////////////////////////////////////////////////////////
+float TauI = 12.0;  //Avg time for infection
+float TauE = 6.0;   //Avg time for eclipse
+float ne = 30.0;    //Number of compartments/partitions for time of eclipse cells
+float ni = 100.0;   //Number of compartments/partitions for time of infected cells
+// ****SEE MAIN**** float probi = 0.2;  //Probability of cell to cell infection
+
+#include "Includes.h"
+#include "Variables.h"
+#include "Functions.h"
+
+int main(void){
+checksAndClear(D, timestep, deltxprime);
+
+///////////////////////////////////////////////////////////////////////////////////
+double MOI[1] = {5};
+float probi[1] = {0.0};
+
+///////////////////////////////////////////////////////////////////////////////////
+for(int q=0;q<(sizeof(MOI)/sizeof(MOI[0]));q++){
+for(int k=0;k<(sizeof(probi)/sizeof(probi[0]));k++){
+    //Loop For The number Of Simulations To Run Per Setting////////////////////////
+    for(int BigIndex=0;BigIndex<NumberOfRuns;BigIndex++){
+
+        //Creating Save Path//////////////////////////////////////////////////////
+        creatingPathToFolderAndDirectory(StartRuns+BigIndex, NumberOfLayers, MOI[q], probi[k]);
+        //Creating placeholder variables for multipy runs///////////////////////////
+        int cell2cell = CELL2CELL;
+        int freecell = FREECELL;
+
+        //Building Cells////////////////////////////////////////////////////////////
+        creatingCellLocations();
+        
+        //Number of initial infected cells//////////////////////////////////////////
+        int Ni = NumberOfCells*MOI[q]; 
+        int Nx = (2*NumberOfLayers-1);      //Range of cells on x axis
+        int Ny = (2*NumberOfLayers-1);      //Range of cells on y axis
+        
+        //Makeing empty matrices///////////////////////////////////////////////////
+        allocateMemory(Nx, Ny);
+        
+        //Initial Conditions////////////////////////////////////////////////////////
+        initailConditions(Nx, Ny, MOI[q]);
+
+        //Initializing print files//////////////////////////////////////////////////
+        printToFileCellAndVirusAnalysisInitial(Nx, Ny);
+        
+        //Infects a random cell, now seen as eclipse////////////////////////////////
+        if (INITIALCELL == 1){
+            if(Ni < 1){ printf("Use larger MOI"); exit(0);} 
+            infectANumberOfCellsRandomly(Nx, Ny, Ni);
+        }
+
+        //Create state for random number generator/////////////////////////////////
+        cudaMalloc((void**)&state, Nx*Ny*sizeof(int));
+        errorCheck("cudaMalloc Random Setup");
+        cuRand_Setup<<<GridConfig,BlockConfig>>>(state);
+        errorCheck("Random Setup");
+        
+        //Load constants to pass to GPU////////////////////////////////////////////
+        loadConstants(MOI[q], probi[k]);
+        
+        //Allocate memory on GPU//////////////////////////////////////////////////
+        deviceSetupAndMemoryAllocation(Nx, Ny);
+
+        //Copy memory to GPU/////////////////////////////////////////////////
+        memoryCopyToDevice(Nx, Ny);
+        
+        //Time step and counting//////////////////////////////////////////////////
+        int NumberofTimeSteps = endtime/timestep;
+        int NumberofSavedTimeSteps = NumberofTimeSteps/Save;
+        float timestepcount = 0.0;    //equal to the number of timesteps elapsed
+        while(timestepcount < (NumberofTimeSteps-1)){
+            
+            //Calls GPU code//////////////////////////////////////////////////////
+            kernel<<<GridConfig,BlockConfig>>>(cells_GPU, vtemp_GPU, ut_GPU, ecl_GPU, inf_GPU, th_GPU, EclipsePhaseLength_GPU, InfectionPhaseLength_GPU, TransmissionInfection_GPU, SystemConstants, cell2cell, freecell, state, NumberOfLayers, probi[k]);
+            
+            //These actions are preformed when a measurement wants to be preformed. The time frame is dictated by the 'Save' variable//////////////////////////////////
+            if((int(timestepcount)%Save) == 0){ 
+
+                //Copys memory back to CPU////////////////////////////////////////
+                cudaMemcpy( cells, cells_GPU, Nx*Ny*2*sizeof(char), cudaMemcpyDeviceToHost );
+                errorCheck("cudaMemcpy cells DtoH");
+                cudaMemcpy( vtemp, vtemp_GPU, Nx*Ny*2*sizeof(double), cudaMemcpyDeviceToHost );
+                errorCheck("cudaMemcpy vtemp DtoH");
+                
+                //Prints last save analitics to file////////////////////////////////
+                if(timestepcount != 0.0){
+                    printToFileCellAndVirusAnalysis(timestepcount*timestep);
+                }
+                //Analysis the dish/////////////////////////////////////////////////
+                NumberDead1 = 0;
+                NumberInfected1 = 0;
+                NumberEclipse1 = 0;
+                NumberHealthy1 = 0;
+                AmountOfVirus = 0.0;
+                for(int j=0; j<Ny; j++){
+                    for(int i=0; i<Nx; i++){
+                        AmountOfVirus = AmountOfVirus + vtemp[i+Nx*j+Nx*Ny*0];
+                        
+                        if(cells[i+Nx*j+Nx*Ny*0] == 'd'){
+                            NumberDead1 = NumberDead1 + 1;
+                        }
+                        else if(cells[i+Nx*j+Nx*Ny*0] == 'i'){
+                            NumberInfected1 = NumberInfected1 + 1;
+                        }
+                        else if(cells[i+Nx*j+Nx*Ny*0] == 'e'){
+                            NumberEclipse1 = NumberEclipse1 +1;
+                        }
+                        else if(cells[i+Nx*j+Nx*Ny*0] == 'h'){
+                            NumberHealthy1 = NumberHealthy1 + 1;
+                        }
+                    }
+                }
+            }
+            
+            //End Code when all cells are not healthy//////////////////////////////
+            if((NumberHealthy1 == 0) || (AmountOfVirus == 0.0)){
+                break;
+            }
+            
+            timestepcount = timestepcount+1.0;
+        }
+
+        //Copies and prints number of cell-to-cell and cell-free infections to file/
+        cudaMemcpy( TransmissionInfection, TransmissionInfection_GPU, Nx*Ny*2*sizeof(char), cudaMemcpyDeviceToHost );
+        errorCheck("cudaMemcpy TransmissionInfection DtoH");
+        Amountc2c = 0.0;
+        Amountcf = 0.0;
+        Amountboth = 0.0;
+        Amountwtf = 0.0;
+        for(int j=0; j<Ny; j++){
+            for(int i=0; i<Nx; i++){
+                if(TransmissionInfection[i+Nx*j+Nx*Ny*0] == 'c'){
+                    Amountc2c = Amountc2c + 1.0;
+                }
+                else if(TransmissionInfection[i+Nx*j+Nx*Ny*0] == 'f'){
+                    Amountcf = Amountcf + 1.0;
+                }
+                else if(TransmissionInfection[i+Nx*j+Nx*Ny*0] == 'b'){
+                    Amountboth = Amountboth + 1.0;
+                }
+            }
+        }
+        char Fileti[100] = "";
+        strcat(Fileti,Path_to_Folder);
+        strcat(Fileti,"/TransmissionInfection.txt");
+        FILE *outfileti = fopen(Fileti,"w");
+        if (outfileti == NULL){
+            printf("Error opening file!\n");
+            exit(0);
+        }
+        fprintf(outfileti, "Amount via c2c = %f\n", Amountc2c);
+        fprintf(outfileti, "Amount via cf = %f\n", Amountcf);
+        fprintf(outfileti, "Amount via both = %f\n", Amountboth);
+        fclose(outfileti);
+
+        //Writes a file with all of our parameters/variables//////////////////////
+        createParameterFile(timestep, NumberofSavedTimeSteps, endtime, timestepcount, AmountOfVirus, rho, D, deltxprime, c, probi[k]);
+
+        //Frees memory////////////////////////////////////////////////////////////
+        freeMemory();
+    }
+}
+}
+printf("\nPROGRAM DONE\n");
+}

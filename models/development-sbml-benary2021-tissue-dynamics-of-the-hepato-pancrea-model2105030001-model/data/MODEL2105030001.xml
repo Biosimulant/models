@@ -1,0 +1,52 @@
+function dxdt = modelBenary2021_EmbryonicDevelopment(t,x,k)
+
+
+BEP  = x(1);     % bipotent precursor cells
+BEPp = x(2);     % proliferating bipotent precursor cells
+LV   = x(3);     % hepatic cells
+LVp  = x(4);     % proliferating hepatic cells
+PB	 = x(5);     % ventral pancreas cells Pdx1+/Sox17+
+PBp	 = x(6);     % proliferating ventral pancreas cells  Pdx1+/Sox17+
+GB	 = x(7);     % ventral pancreas cells Pdx1-/Sox17+
+GBp	 = x(8);     % proliferating ventral pancreas cells  Pdx1-/Sox17+
+VP	 = x(9);     % ventral pancreas cells Pdx1+/Sox17-
+VPp  = x(10);    % proliferating ventral pancreas cells  Pdx1+/Sox17-
+
+k1   = k(1);
+k2   = k(2);
+k3   = k(3);
+k4   = k(4);
+k5   = k(5);
+k6   = k(6);
+k11  = k(7);
+k13  = k(8);
+k17  = k(9);
+k18  = k(10);
+k21  = k(11);
+k22  = k(12);
+k23  = k(13);
+k24  = k(14);
+k26  = k(15);
+k27  = k(16);
+
+
+%d(BEP)/dt:
+dxdt(1,1) = -k5*BEP	+ 2*k6*BEPp	- k11*BEP - k13*BEP;
+%d(BEPp)/dt:
+dxdt(2,1) = k5*BEP - k6*BEPp;
+%d(LV)/dt:
+dxdt(3,1) = -k1*LV + 2*k2*LVp + k11*BEP - k17*LV + k18*PB;
+%d(LVp)/dt:
+dxdt(4,1) = k1*LV - k2*LVp;
+%d(PB)/dt:
+dxdt(5,1) = -k3*PB + 2*k4*PBp + k13*BEP + k17*LV - k18*PB - k26*PB - k27*PB;
+%d(PBp)/dt:
+dxdt(6,1) = k3*PB - k4*PBp;
+%d(GB)/dt:
+dxdt(7,1) = -k21*GB + 2*k22*GBp + k26*PB;
+%d(GBp)/dt:
+dxdt(8,1) = k21*GB - k22*GBp;
+%d(VP)/dt:
+dxdt(9,1) = -k23*VP + 2*k24*VPp + k27*PB;
+%d(VPp)/dt:
+dxdt(10,1) = k23*VP - k24*VPp;

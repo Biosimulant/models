@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-siebert2008-musclecontraction-cc/model.yaml
+    manifest_path: models/systemsbiology-sbml-siebert2008-musclecontraction-cc-model1006230119-model/model.yaml
 ```
 
 ## Tags

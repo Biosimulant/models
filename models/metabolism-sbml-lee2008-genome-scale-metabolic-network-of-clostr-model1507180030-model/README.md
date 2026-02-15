@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-lee2008-genome-scale-metabolic-network-of-clostridium/model.yaml
+    manifest_path: models/metabolism-sbml-lee2008-genome-scale-metabolic-network-of-clostr-model1507180030-model/model.yaml
 ```
 
 ## Tags

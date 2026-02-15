@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bhalla2002-mapk-bistability-fig1c/model.yaml
+    manifest_path: models/systemsbiology-sbml-bhalla2002-mapk-bistability-fig1c-model9079179924-model/model.yaml
 ```
 
 ## Tags

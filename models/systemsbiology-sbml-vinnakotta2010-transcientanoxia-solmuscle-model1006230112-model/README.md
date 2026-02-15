@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-vinnakotta2010-transcientanoxia-solmuscle/model.yaml
+    manifest_path: models/systemsbiology-sbml-vinnakotta2010-transcientanoxia-solmuscle-model1006230112-model/model.yaml
 ```
 
 ## Tags

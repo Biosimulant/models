@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-smallbone2010-genome-scale-yeast-kinetics/model.yaml
+    manifest_path: models/metabolism-sbml-smallbone2010-genome-scale-yeast-kinetics-model1001200000-model/model.yaml
 ```
 
 ## Tags

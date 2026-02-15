@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-model2021747594-url-xml/model.yaml
+    manifest_path: models/systemsbiology-sbml-model2021747594-url-xml-model2021747594-model/model.yaml
 ```
 
 ## Tags

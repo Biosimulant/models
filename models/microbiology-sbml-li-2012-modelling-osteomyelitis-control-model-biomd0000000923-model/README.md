@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-lio2012-modelling-osteomyelitis-control-model/model.yaml
+    manifest_path: models/microbiology-sbml-li-2012-modelling-osteomyelitis-control-model-biomd0000000923-model/model.yaml
 ```
 
 ## Tags

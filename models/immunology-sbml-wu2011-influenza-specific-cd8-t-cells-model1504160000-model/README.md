@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-wu2011-influenza-specific-cd8-t-cells/model.yaml
+    manifest_path: models/immunology-sbml-wu2011-influenza-specific-cd8-t-cells-model1504160000-model/model.yaml
 ```
 
 ## Tags

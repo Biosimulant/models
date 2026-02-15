@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bakker2001-glycolysis/model.yaml
+    manifest_path: models/systemsbiology-sbml-bakker2001-glycolysis-biomd0000000071-model/model.yaml
 ```
 
 ## Tags

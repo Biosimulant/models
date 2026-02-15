@@ -1,0 +1,2282 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version5" level="2" version="5">
+  <model id="EnterocyteIronMucosalBlock" metaid="COPASI0" name="Masison2024 - Enterocyte Iron Mucosal Block">
+    <notes>
+      <body xmlns="http://www.w3.org/1999/xhtml">
+        <h1>Enterocyte Iron Mucosal Block</h1>
+        <p>This is a model of enterocyte iron absorption, consisting of iron uptake (movement of iron from intestinal lumen into cytplasm), and transfer (transport of iron from cytoplasm to blood/plasma).  The model was created by Joseph Masison and Pedro Mendes.</p>
+        <p>Intestinal mucosal block is a cellular phenomenon defined by a transient reduction in iron absorption by intestinal epithelial cells following previous iron exposures. Understanding what controls the mucosal block is central to understanding how intestinal iron absorption contributes to pathological iron states. Three mechanisms implicated in driving mucosal block are the endocytosis of divalent metal transporter 1 (DMT1), sequestration of iron by cytosolic ferritin, and iron regulatory proteins (IRPs) regulation of ferritin expression. </p>
+        <p>Here, we build a model that reproduces the mucosal block phenomena, based on published experimental data, and use it to quantify the contribution of each mechanism to the block. Model analysis shows ferritin and IRPs regulation have the largest quantitative impact on the mucosal block. Lastly, DMT1 endocytosis is shown to play a role in limiting total enterocyte iron uptake, protecting the cell against oxidative stress, but does not contribute to the decrease in total iron transfer seen in mucosal block.</p>
+        <p style="font-size:small">
+          <b>CC0 1.0 Universal</b>: To the extent possible under law, all copyright and related or neighbouring rights to this encoded model have been dedicated to the public domain worldwide. You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission. Please refer to <a href="http://creativecommons.org/publicdomain/zero/1.0/" title="Creative Commons CC0">CC0 Public Domain Dedication</a> for more information.</p>
+        </body>
+    </notes>
+    <annotation>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+        <rdf:Description rdf:about="#COPASI0">
+          <dcterms:creator>
+            <rdf:Bag>
+              <rdf:li rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Masison</vCard:Family>
+                  <vCard:Given>Joseph</vCard:Given>
+                </vCard:N>
+                <vCard:EMAIL>masison@uchc.edu</vCard:EMAIL>
+                <vCard:ORG rdf:parseType="Resource">
+                  <vCard:Orgname>University of Connecticut School of Medicine</vCard:Orgname>
+                </vCard:ORG>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Mendes</vCard:Family>
+                  <vCard:Given>Pedro</vCard:Given>
+                </vCard:N>
+                <vCard:EMAIL>pmendes@uchc.edu</vCard:EMAIL>
+                <vCard:ORG rdf:parseType="Resource">
+                  <vCard:Orgname>University of Connecticut School of Medicine</vCard:Orgname>
+                </vCard:ORG>
+              </rdf:li>
+            </rdf:Bag>
+          </dcterms:creator>
+	<dcterms:created rdf:parseType="Resource">
+	<dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+	</dcterms:created>
+	<dcterms:modified rdf:parseType="Resource">
+	<dcterms:W3CDTF>2024-05-17T08:37:59Z</dcterms:W3CDTF>
+	</dcterms:modified>
+	<bqmodel:is>
+	<rdf:Bag>
+	<rdf:li rdf:resource="https://identifiers.org/biomodels.db:MODEL2405170001"/>
+	</rdf:Bag>
+	</bqmodel:is>
+	<bqbiol:is>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0160179"/>
+	</rdf:Bag>
+	</bqbiol:is>
+	<bqbiol:hasProperty>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/CL:1000337"/>
+	<rdf:li rdf:resource="https://identifiers.org/mamo:MAMO_0000046"/>
+	</rdf:Bag>
+	</bqbiol:hasProperty>
+	</rdf:Description>
+      </rdf:RDF>
+      <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+        <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+          <rdf:Description rdf:about="#COPASI0">
+            <bqbiol:hasProperty rdf:resource="urn:miriam:cl:CL:1000337"/>
+            <dcterms:created>
+              <rdf:Description>
+                <dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+              </rdf:Description>
+            </dcterms:created>
+            <dcterms:creator>
+              <rdf:Description>
+                <vCard:EMAIL>masison@uchc.edu</vCard:EMAIL>
+                <vCard:N>
+                  <rdf:Description>
+                    <vCard:Family>Masison</vCard:Family>
+                    <vCard:Given>Joseph</vCard:Given>
+                  </rdf:Description>
+                </vCard:N>
+                <vCard:ORG>
+                  <rdf:Description>
+                    <vCard:Orgname>University of Connecticut School of Medicine</vCard:Orgname>
+                  </rdf:Description>
+                </vCard:ORG>
+              </rdf:Description>
+            </dcterms:creator>
+            <dcterms:creator>
+              <rdf:Description>
+                <vCard:EMAIL>pmendes@uchc.edu</vCard:EMAIL>
+                <vCard:N>
+                  <rdf:Description>
+                    <vCard:Family>Mendes</vCard:Family>
+                    <vCard:Given>Pedro</vCard:Given>
+                  </rdf:Description>
+                </vCard:N>
+                <vCard:ORG>
+                  <rdf:Description>
+                    <vCard:Orgname>University of Connecticut School of Medicine</vCard:Orgname>
+                  </rdf:Description>
+                </vCard:ORG>
+              </rdf:Description>
+            </dcterms:creator>
+            <dcterms:modified>
+              <rdf:Description>
+                <dcterms:W3CDTF>2024-05-17T08:37:59</dcterms:W3CDTF>
+              </rdf:Description>
+            </dcterms:modified>
+            <CopasiMT:is rdf:resource="urn:miriam:go:GO:0160179"/>
+          </rdf:Description>
+        </rdf:RDF>
+      </copasi:COPASI>
+    </annotation>
+      <listOfFunctionDefinitions>
+      <functionDefinition id="Rate_Law_for_nucleation_w__inhibition" name="Rate Law for nucleation w/ inhibition">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> k1 </ci>
+            </bvar>
+            <bvar>
+              <ci> S </ci>
+            </bvar>
+            <bvar>
+              <ci> M </ci>
+            </bvar>
+            <bvar>
+              <ci> L </ci>
+            </bvar>
+            <bvar>
+              <ci> rN </ci>
+            </bvar>
+            <bvar>
+              <ci> ki </ci>
+            </bvar>
+            <bvar>
+              <ci> n </ci>
+            </bvar>
+            <bvar>
+              <ci> I </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> k1 </ci>
+              <apply>
+                <power/>
+                <ci> S </ci>
+                <cn> 2 </cn>
+              </apply>
+              <ci> M </ci>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <ci> L </ci>
+                  <ci> rN </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn> 24 </cn>
+                  <ci> rN </ci>
+                </apply>
+              </apply>
+              <apply>
+                <divide/>
+                <apply>
+                  <power/>
+                  <ci> ki </ci>
+                  <ci> n </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <power/>
+                    <ci> ki </ci>
+                    <ci> n </ci>
+                  </apply>
+                  <apply>
+                    <power/>
+                    <ci> I </ci>
+                    <ci> n </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Rate_Law_for_reaction" name="Rate Law for reaction">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> K </ci>
+            </bvar>
+            <bvar>
+              <ci> S </ci>
+            </bvar>
+            <bvar>
+              <ci> M </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> K </ci>
+              <apply>
+                <divide/>
+                <ci> S </ci>
+                <ci> M </ci>
+              </apply>
+              <ci> M </ci>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Hill_Function_w__enzyme" metaid="COPASI29" name="Hill Function w/ enzyme">
+        <annotation>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI29">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-03-04T20:19:22Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> kcat </ci>
+            </bvar>
+            <bvar>
+              <ci> E </ci>
+            </bvar>
+            <bvar>
+              <ci> S </ci>
+            </bvar>
+            <bvar>
+              <ci> K </ci>
+            </bvar>
+            <bvar>
+              <ci> n </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> kcat </ci>
+              <ci> E </ci>
+              <apply>
+                <divide/>
+                <apply>
+                  <power/>
+                  <apply>
+                    <divide/>
+                    <ci> S </ci>
+                    <ci> K </ci>
+                  </apply>
+                  <ci> n </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn> 1 </cn>
+                  <apply>
+                    <power/>
+                    <apply>
+                      <divide/>
+                      <ci> S </ci>
+                      <ci> K </ci>
+                    </apply>
+                    <ci> n </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Rate_Law_for_DMT1_endocytosis_free" metaid="COPASI30" name="Rate Law for DMT1 endocytosis free">
+        <annotation>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI30">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-03-15T17:56:12Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> k </ci>
+            </bvar>
+            <bvar>
+              <ci> S </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> k </ci>
+              <ci> S </ci>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Hill__" name="Hill -|">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> a </ci>
+            </bvar>
+            <bvar>
+              <ci> I </ci>
+            </bvar>
+            <bvar>
+              <ci> n </ci>
+            </bvar>
+            <bvar>
+              <ci> K </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> a </ci>
+              <apply>
+                <minus/>
+                <cn> 1 </cn>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <power/>
+                    <ci> I </ci>
+                    <ci> n </ci>
+                  </apply>
+                  <apply>
+                    <plus/>
+                    <apply>
+                      <power/>
+                      <ci> K </ci>
+                      <ci> n </ci>
+                    </apply>
+                    <apply>
+                      <power/>
+                      <ci> I </ci>
+                      <ci> n </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="function_4_one" name="function_4-one">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> kcat </ci>
+            </bvar>
+            <bvar>
+              <ci> H </ci>
+            </bvar>
+            <bvar>
+              <ci> rO </ci>
+            </bvar>
+            <bvar>
+              <ci> FT </ci>
+            </bvar>
+            <bvar>
+              <ci> S </ci>
+            </bvar>
+            <bvar>
+              <ci> n </ci>
+            </bvar>
+            <bvar>
+              <ci> Km </ci>
+            </bvar>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kcat </ci>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <plus/>
+                    <ci> H </ci>
+                    <ci> rO </ci>
+                  </apply>
+                  <apply>
+                    <plus/>
+                    <cn> 24 </cn>
+                    <ci> rO </ci>
+                  </apply>
+                </apply>
+                <ci> FT </ci>
+                <apply>
+                  <power/>
+                  <ci> S </ci>
+                  <ci> n </ci>
+                </apply>
+              </apply>
+              <apply>
+                <plus/>
+                <apply>
+                  <power/>
+                  <ci> Km </ci>
+                  <ci> n </ci>
+                </apply>
+                <apply>
+                  <power/>
+                  <ci> S </ci>
+                  <ci> n </ci>
+                </apply>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Rate_Law_for_1FPN_down" name="Rate Law for 1FPN-down">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> k1 </ci>
+            </bvar>
+            <bvar>
+              <ci> S </ci>
+            </bvar>
+            <bvar>
+              <ci> M </ci>
+            </bvar>
+            <bvar>
+              <ci> n </ci>
+            </bvar>
+            <bvar>
+              <ci> k3 </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> k1 </ci>
+              <ci> S </ci>
+              <apply>
+                <divide/>
+                <apply>
+                  <power/>
+                  <ci> M </ci>
+                  <ci> n </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <power/>
+                    <ci> k3 </ci>
+                    <ci> n </ci>
+                  </apply>
+                  <apply>
+                    <power/>
+                    <ci> M </ci>
+                    <ci> n </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="Rate_Law_for_FT_core_formation" name="Rate Law for FT core formation">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> k1 </ci>
+            </bvar>
+            <bvar>
+              <ci> S </ci>
+            </bvar>
+            <bvar>
+              <ci> M </ci>
+            </bvar>
+            <bvar>
+              <ci> k2 </ci>
+            </bvar>
+            <bvar>
+              <ci> k3 </ci>
+            </bvar>
+            <bvar>
+              <ci> n </ci>
+            </bvar>
+            <bvar>
+              <ci> m </ci>
+            </bvar>
+            <bvar>
+              <ci> x </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> k1 </ci>
+                  <ci> S </ci>
+                  <ci> M </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <ci> k2 </ci>
+                  <ci> S </ci>
+                </apply>
+              </apply>
+              <apply>
+                <divide/>
+                <apply>
+                  <power/>
+                  <ci> k3 </ci>
+                  <ci> n </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <power/>
+                    <ci> k3 </ci>
+                    <ci> n </ci>
+                  </apply>
+                  <apply>
+                    <power/>
+                    <ci> M </ci>
+                    <ci> n </ci>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <power/>
+                    <cn> 4300 </cn>
+                    <ci> m </ci>
+                  </apply>
+                  <apply>
+                    <power/>
+                    <ci> x </ci>
+                    <ci> m </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <power/>
+                  <cn> 4300 </cn>
+                  <ci> m </ci>
+                </apply>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="DMT1_endocytosis_rate" metaid="COPASI31" name="DMT1 endocytosis rate">
+        <annotation>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI31">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-03-04T20:19:22Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> kcat </ci>
+            </bvar>
+            <bvar>
+              <ci> S </ci>
+            </bvar>
+            <bvar>
+              <ci> M </ci>
+            </bvar>
+            <bvar>
+              <ci> K </ci>
+            </bvar>
+            <bvar>
+              <ci> n </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> kcat </ci>
+              <ci> S </ci>
+              <apply>
+                <divide/>
+                <apply>
+                  <power/>
+                  <apply>
+                    <divide/>
+                    <ci> M </ci>
+                    <ci> K </ci>
+                  </apply>
+                  <ci> n </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn> 1 </cn>
+                  <apply>
+                    <power/>
+                    <apply>
+                      <divide/>
+                      <ci> M </ci>
+                      <ci> K </ci>
+                    </apply>
+                    <ci> n </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+      <functionDefinition id="function_2" name="function_2">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <lambda>
+            <bvar>
+              <ci> ka </ci>
+            </bvar>
+            <bvar>
+              <ci> s </ci>
+            </bvar>
+            <bvar>
+              <ci> m1 </ci>
+            </bvar>
+            <apply>
+              <times/>
+              <ci> ka </ci>
+              <ci> s </ci>
+              <ci> m1 </ci>
+            </apply>
+          </lambda>
+        </math>
+            </functionDefinition>
+    </listOfFunctionDefinitions>
+    <listOfUnitDefinitions>
+      <unitDefinition id="length" name="length">
+        <listOfUnits>
+          <unit exponent="1" kind="metre" multiplier="1" scale="-2"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="area" name="area">
+        <listOfUnits>
+          <unit exponent="2" kind="metre" multiplier="1" scale="-2"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="volume" name="volume">
+        <listOfUnits>
+          <unit exponent="1" kind="litre" multiplier="1" scale="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="time" name="time">
+        <listOfUnits>
+          <unit exponent="1" kind="second" multiplier="1" scale="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="substance" name="substance">
+        <listOfUnits>
+          <unit exponent="1" kind="mole" multiplier="1" scale="0"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment constant="true" id="c2" metaid="COPASI1" name="cell" size="1.4E-12" spatialDimensions="3">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI1">
+              <bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0005737"/>
+	<rdf:li rdf:resource="http://identifiers.org/CL:1000337"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	
+	<bqbiol:hasPart>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0005737"/>
+	</rdf:Bag>
+	</bqbiol:hasPart>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI1">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:cl:CL:1000337"/>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+                <CopasiMT:hasPart rdf:resource="urn:miriam:go:GO:0005737"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </compartment>
+      <compartment constant="true" id="apical_mem" metaid="COPASI2" name="apical_mem" size="1.5E-5" spatialDimensions="2">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI2">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0016324"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI2">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:go:GO:0016324"/>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </compartment>
+      <compartment constant="true" id="lumen" metaid="COPASI3" name="lumen" size="6.67E-10" spatialDimensions="3">
+        <annotation>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI3">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </compartment>
+      <compartment constant="true" id="blood" name="blood" size="8.57E-10" spatialDimensions="3"/>
+      <compartment constant="true" id="BLM" metaid="COPASI4" name="BLM" size="1.5E-7" spatialDimensions="2">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI4">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0016323"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI4">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:go:GO:0016323"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </compartment>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species boundaryCondition="false" compartment="c2" constant="false" id="FT_cage" initialConcentration="2.37518982217312E-9" metaid="COPASI5" name="FT-cage">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI5">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0070288"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI5">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:go:GO:0070288"/>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-04-30T15:35:09Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="c2" constant="false" id="core" initialConcentration="3.68221701749388E-6" metaid="COPASI6" name="core">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI6">
+              <bqbiol:hasPart>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/CHEBI:192761"/>
+	</rdf:Bag>
+	</bqbiol:hasPart>
+	
+	<bqbiol:hasPart>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/wikipedia.en/Ferrihydrite"/>
+	</rdf:Bag>
+	</bqbiol:hasPart>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI6">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-04-30T15:35:19Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+                <CopasiMT:hasPart rdf:resource="urn:miriam:chebi:CHEBI:192761"/>
+                <CopasiMT:hasPart rdf:resource="urn:miriam:wikipedia.en:Ferrihydrite"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="c2" constant="false" id="DFP" initialConcentration="1.344769304E-10" metaid="COPASI7" name="DFP">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI7">
+	<bqbiol:isDescribedBy>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/doi/10.1073/pnas.0805083105"/>
+	</rdf:Bag>
+	</bqbiol:isDescribedBy>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI7">
+                <dcterms:bibliographicCitation>
+                  <rdf:Description>
+                    <dcterms:description>Tosha T, Hasan MR, Theil EC. The ferritin Fe2 site at the diiron catalytic center controls the reaction with O2 in the rapid mineralization pathway. Proc Natl Acad Sci U S A. 2008;105(47):18182-18187</dcterms:description>
+                    <CopasiMT:isDescribedBy rdf:resource="urn:miriam:doi:10.1073/pnas.0805083105"/>
+                  </rdf:Description>
+                </dcterms:bibliographicCitation>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-04-30T15:36:12Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="c2" constant="false" id="LIP" initialConcentration="1.223884748E-7" metaid="COPASI8" name="LIP" sboTerm="SBO:0000327">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI8">
+              <bqbiol:is>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/SBO:0000327"/>
+	</rdf:Bag>
+	</bqbiol:is>
+	<bqbiol:is>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/CHEBI:18248"/>
+	</rdf:Bag>
+	</bqbiol:is>
+	
+	<bqbiol:is>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/kegg.compound/C00023"/>
+	</rdf:Bag>
+	</bqbiol:is>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI8">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+                <CopasiMT:is rdf:resource="urn:miriam:chebi:CHEBI:18248"/>
+                <CopasiMT:is rdf:resource="urn:miriam:kegg.compound:C00023"/>
+                <CopasiMT:is rdf:resource="urn:miriam:sbo:SBO:0000327"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="apical_mem" constant="false" id="DMT1" initialConcentration="3.12307982819422E-12" metaid="COPASI9" name="DMT1">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI9">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/uniprot/P49281"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI9">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:uniprot:P49281"/>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="apical_mem" constant="false" id="DMT1_vesicular" initialConcentration="1.87695845480582E-12" metaid="COPASI10" name="DMT1_vesicular">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI10">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/uniprot/P49281"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI10">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:uniprot:P49281"/>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="blood" constant="false" id="Fe_blood" initialConcentration="4.95845643331909E-9" metaid="COPASI11" name="Fe_blood">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI11">
+              <bqbiol:hasPart>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/CHEBI:18248"/>
+	</rdf:Bag>
+	</bqbiol:hasPart>
+	
+	<bqbiol:hasPart>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/kegg.compound/C00023"/>
+	</rdf:Bag>
+	</bqbiol:hasPart>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI11">
+                <CopasiMT:hasPart rdf:resource="urn:miriam:chebi:CHEBI:18248"/>
+                <CopasiMT:hasPart rdf:resource="urn:miriam:kegg.compound:C00023"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="c2" constant="false" id="IRPs_active" initialConcentration="6.88933593542443E-11" metaid="COPASI12" name="IRPs_active">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI12">
+              <bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0030350"/>
+	<rdf:li rdf:resource="http://identifiers.org/uniprot/P21399"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/uniprot/P48200"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	
+	<bqbiol:hasProperty>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0030350"/>
+	</rdf:Bag>
+	</bqbiol:hasProperty>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI12">
+                <bqbiol:hasProperty rdf:resource="urn:miriam:go:GO:0030350"/>
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:uniprot:P21399"/>
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:uniprot:P48200"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="BLM" constant="false" id="FPN_internalized" initialConcentration="2.02503520950059E-16" metaid="COPASI13" name="FPN_internalized">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI13">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/uniprot/Q9NP59"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI13">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:uniprot:Q9NP59"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="c2" constant="false" id="IRPs_inactive" initialConcentration="7.26434512617237E-12" metaid="COPASI14" name="IRPs_inactive">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI14">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/uniprot/P21399"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI14">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:uniprot:P21399"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="lumen" constant="false" id="Fe_lumen" initialConcentration="1.25E-8" metaid="COPASI15" name="Fe_lumen" sboTerm="SBO:0000327">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI15">
+              <bqbiol:is>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/SBO:0000327"/>
+	</rdf:Bag>
+	</bqbiol:is>
+	<bqbiol:is>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/kegg.compound/C00023"/>
+	</rdf:Bag>
+	</bqbiol:is>
+	
+	<bqbiol:is>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/CHEBI:18248"/>
+	</rdf:Bag>
+	</bqbiol:is>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI15">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+                <CopasiMT:is rdf:resource="urn:miriam:chebi:CHEBI:18248"/>
+                <CopasiMT:is rdf:resource="urn:miriam:kegg.compound:C00023"/>
+                <CopasiMT:is rdf:resource="urn:miriam:sbo:SBO:0000327"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="blood" constant="false" id="body_fe" initialConcentration="0" metaid="COPASI16" name="body_fe">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI16">
+              <bqbiol:hasPart>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/CHEBI:18248"/>
+	</rdf:Bag>
+	</bqbiol:hasPart>
+	
+	<bqbiol:hasPart>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/kegg.compound/C00023"/>
+	</rdf:Bag>
+	</bqbiol:hasPart>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI16">
+                <CopasiMT:hasPart rdf:resource="urn:miriam:chebi:CHEBI:18248"/>
+                <CopasiMT:hasPart rdf:resource="urn:miriam:kegg.compound:C00023"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+      <species boundaryCondition="false" compartment="BLM" constant="false" id="FPN_active" initialConcentration="9.979749647905E-14" metaid="COPASI17" name="FPN_active">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI17">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/uniprot/Q9NP59"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI17">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:uniprot:Q9NP59"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </species>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter constant="false" id="atoms_per_cage_transient" metaid="COPASI18" name="atoms-per-cage_transient" value="1550.28325867654">
+        <annotation>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI18">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-05-13T17:25:46Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+            </parameter>
+      <parameter constant="true" id="H" name="H" value="24"/>
+      <parameter constant="false" id="L" name="L" value="0"/>
+      <parameter constant="true" id="dose_fe" name="dose-fe" value="1.25E-8"/>
+      <parameter constant="false" id="uptake" name="uptake" value="5.76693540761775E6"/>
+      <parameter constant="true" id="time_delay" name="time_delay" value="260000"/>
+      <parameter constant="false" id="_30min_transfer" name="30min_transfer" value="0"/>
+      <parameter constant="false" id="transfer_at_time_test_dose" name="transfer_at_time_test_dose" value="0"/>
+      <parameter constant="false" id="transfer" name="transfer" value="2.55904682750568E6"/>
+      <parameter constant="false" id="iron_t0_transfer" name="iron_t0-transfer" value="0"/>
+      <parameter constant="false" id="uptake_at_time_test_dose" name="uptake_at_time_test_dose" value="0"/>
+      <parameter constant="false" id="_30min_uptake" name="30min_uptake" value="0"/>
+      <parameter constant="false" id="iron_t0_uptake" name="iron_t0-uptake" value="0"/>
+      <parameter constant="true" id="FT_kdeg" name="FT-kdeg" value="5.461499585E-6"/>
+      <parameter constant="true" id="FT_a" name="FT-a" value="7.68E-14"/>
+      <parameter constant="false" id="vuptake" name="vuptake" value="0"/>
+      <parameter constant="false" id="vtransfer" name="vtransfer" value="0"/>
+      <parameter constant="true" id="dose_0" name="dose-0" value="1.25E-8"/>
+      <parameter constant="true" id="sim_start" name="sim_start" value="0"/>
+      <parameter constant="false" id="transfer_dif" name="transfer_dif" value="0"/>
+      <parameter constant="false" id="uptake_dif" name="uptake_dif" value="0"/>
+      <parameter constant="true" id="quantity_to_number_factor" name="quantity to number factor" value="6.022140857E23"/>
+      <parameter id="ModelValue_18" name="Initial for sim_start" value="0">
+        <annotation>
+          <initialValue xmlns="http://copasi.org/initialValue" parent="sim_start" type="InitialValue"/>
+        </annotation>
+            </parameter>
+    </listOfParameters>
+    <listOfInitialAssignments>
+      <initialAssignment symbol="ModelValue_18">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <ci> sim_start </ci>
+        </math>
+            </initialAssignment>
+    </listOfInitialAssignments>
+    <listOfRules>
+      <assignmentRule variable="atoms_per_cage_transient">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> core </ci>
+              <ci> quantity_to_number_factor </ci>
+              <ci> c2 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> FT_cage </ci>
+              <ci> quantity_to_number_factor </ci>
+              <ci> c2 </ci>
+            </apply>
+          </apply>
+        </math>
+            </assignmentRule>
+      <assignmentRule variable="L">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <apply>
+            <minus/>
+            <cn> 24 </cn>
+            <ci> H </ci>
+          </apply>
+        </math>
+            </assignmentRule>
+      <assignmentRule variable="uptake">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> core </ci>
+              <ci> quantity_to_number_factor </ci>
+              <ci> c2 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <cn> 2 </cn>
+              <ci> DFP </ci>
+              <ci> quantity_to_number_factor </ci>
+              <ci> c2 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> LIP </ci>
+              <ci> quantity_to_number_factor </ci>
+              <ci> c2 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> Fe_blood </ci>
+              <ci> quantity_to_number_factor </ci>
+              <ci> blood </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> body_fe </ci>
+              <ci> quantity_to_number_factor </ci>
+              <ci> blood </ci>
+            </apply>
+          </apply>
+        </math>
+            </assignmentRule>
+      <assignmentRule variable="transfer">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> Fe_blood </ci>
+              <ci> quantity_to_number_factor </ci>
+              <ci> blood </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> body_fe </ci>
+              <ci> quantity_to_number_factor </ci>
+              <ci> blood </ci>
+            </apply>
+          </apply>
+        </math>
+            </assignmentRule>
+      <assignmentRule variable="vuptake">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <ci> _30min_uptake </ci>
+        </math>
+            </assignmentRule>
+      <assignmentRule variable="vtransfer">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <ci> _30min_transfer </ci>
+        </math>
+            </assignmentRule>
+      <assignmentRule variable="transfer_dif">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <apply>
+            <plus/>
+            <ci> _30min_transfer </ci>
+            <ci> transfer_at_time_test_dose </ci>
+          </apply>
+        </math>
+            </assignmentRule>
+      <assignmentRule variable="uptake_dif">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">        
+          <apply>
+            <plus/>
+            <ci> _30min_uptake </ci>
+            <ci> uptake_at_time_test_dose </ci>
+          </apply>
+        </math>
+            </assignmentRule>
+    </listOfRules>
+    <listOfReactions>
+      <reaction id="FT_core_formation" metaid="COPASI19" name="FT core formation" reversible="false">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI19">
+	<bqbiol:isDescribedBy>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/doi/10.1073/pnas.0805083105"/>
+	</rdf:Bag>
+	</bqbiol:isDescribedBy>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI19">
+                <dcterms:bibliographicCitation>
+                  <rdf:Description>
+                    <dcterms:description>Tosha T, Hasan MR, Theil EC. The ferritin Fe2 site at the diiron catalytic center controls the reaction with O2 in the rapid mineralization pathway. Proc Natl Acad Sci U S A. 2008;105(47):18182-18187</dcterms:description>
+                    <CopasiMT:isDescribedBy rdf:resource="urn:miriam:doi:10.1073/pnas.0805083105"/>
+                  </rdf:Description>
+                </dcterms:bibliographicCitation>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-04-30T15:34:53Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="DFP" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="core" stoichiometry="2"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="core"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> c2 </ci>
+              <apply>
+                <ci> Rate_Law_for_FT_core_formation </ci>
+                <ci> k1 </ci>
+                <ci> DFP </ci>
+                <ci> core </ci>
+                <ci> k2 </ci>
+                <ci> k3 </ci>
+                <ci> n </ci>
+                <ci> m </ci>
+                <ci> atoms_per_cage_transient </ci>
+              </apply>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k1" name="k1" value="0.101564"/>
+            <parameter id="k2" name="k2" value="5E-6"/>
+            <parameter id="k3" name="k3" value="0.0046458"/>
+            <parameter id="n" name="n" value="4"/>
+            <parameter id="m" name="m" value="8"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="FT_Fe_reduction" metaid="COPASI20" name="FT Fe reduction" reversible="false">
+        <annotation>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI20">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-04-30T15:34:52Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="DFP" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="LIP" stoichiometry="2"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> c2 </ci>
+              <ci> k1 </ci>
+              <ci> DFP </ci>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k1" name="k1" value="0.2605"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="FT_nucleation" name="FT nucleation" reversible="false">
+        <listOfReactants>
+          <speciesReference species="DFP" stoichiometry="2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="core" stoichiometry="4"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="FT_cage"/>
+          <modifierSpeciesReference species="core"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> c2 </ci>
+              <apply>
+                <ci> Rate_Law_for_nucleation_w__inhibition </ci>
+                <ci> k1 </ci>
+                <ci> DFP </ci>
+                <ci> FT_cage </ci>
+                <ci> L </ci>
+                <ci> rN </ci>
+                <ci> ki </ci>
+                <ci> n </ci>
+                <ci> core </ci>
+              </apply>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k1" name="k1" value="50000000"/>
+            <parameter id="rN" name="rN" value="50"/>
+            <parameter id="ki" name="ki" value="0.000461598"/>
+            <parameter id="n" name="n" value="4"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="FT_degradation" name="FT degradation" reversible="false">
+        <listOfReactants>
+          <speciesReference species="FT_cage" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> c2 </ci>
+              <ci> FT_kdeg </ci>
+              <ci> FT_cage </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="FT_degradation_core_release" name="FT degradation core release" reversible="false">
+        <listOfReactants>
+          <speciesReference species="core" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="LIP" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="FT_cage"/>
+          <modifierSpeciesReference species="core"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> c2 </ci>
+              <apply>
+                <ci> Rate_Law_for_reaction </ci>
+                <ci> FT_kdeg </ci>
+                <ci> core </ci>
+                <ci> FT_cage </ci>
+              </apply>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="FT_expression" metaid="COPASI21" name="FT expression" reversible="false">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI21">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0006412"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI21">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:go:GO:0006412"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+              <listOfProducts>
+          <speciesReference species="FT_cage" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="IRPs_active"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> c2 </ci>
+              <apply>
+                <ci> Hill__ </ci>
+                <ci> FT_a </ci>
+                <ci> IRPs_active </ci>
+                <ci> n </ci>
+                <ci> K </ci>
+              </apply>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="n" name="n" value="1"/>
+            <parameter id="K" name="K" value="1.4E-11"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="DMT1_endocytosis_free" metaid="COPASI22" name="DMT1 endocytosis free" reversible="false">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI22">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0006897"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI22">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:go:GO:0006897"/>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-03-15T17:53:09Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="DMT1" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="DMT1_vesicular" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> apical_mem </ci>
+              <apply>
+                <ci> Rate_Law_for_DMT1_endocytosis_free </ci>
+                <ci> k </ci>
+                <ci> DMT1 </ci>
+              </apply>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k" name="k" value="29.4233"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="DMT1_i_fusion" metaid="COPASI23" name="DMT1_i fusion" reversible="false">
+        <annotation>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI23">
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2020-12-14T15:53:22Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="DMT1_vesicular" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="DMT1" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="DMT1"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> apical_mem </ci>
+              <ci> k1 </ci>
+              <ci> DMT1_vesicular </ci>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k1" name="k1" value="48.9989"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="DMT1_endocytosis_modified" metaid="COPASI24" name="DMT1 endocytosis modified" reversible="false">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI24">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0006897"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI24">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:go:GO:0006897"/>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="DMT1" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="DMT1_vesicular" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="LIP"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <ci> DMT1_endocytosis_rate </ci>
+              <ci> kcat </ci>
+              <ci> DMT1 </ci>
+              <ci> LIP </ci>
+              <ci> K </ci>
+              <ci> n </ci>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="kcat" name="kcat" value="14.5161"/>
+            <parameter id="K" name="K" value="2.80591"/>
+            <parameter id="n" name="n" value="1.03128"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="FPN_iron_transport" metaid="COPASI25" name="FPN iron transport" reversible="false">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI25">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:1903988"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI25">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:go:GO:1903988"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="LIP" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Fe_blood" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="FPN_active"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> BLM </ci>
+              <apply>
+                <ci> Hill_Function_w__enzyme </ci>
+                <ci> kcat </ci>
+                <ci> FPN_active </ci>
+                <ci> LIP </ci>
+                <ci> K </ci>
+                <ci> n </ci>
+              </apply>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="kcat" name="kcat" value="1.88317"/>
+            <parameter id="K" name="K" value="2.31608E-6"/>
+            <parameter id="n" name="n" value="1"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="IRPs_activation" name="IRPs activation" reversible="false">
+        <listOfReactants>
+          <speciesReference species="IRPs_inactive" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="IRPs_active" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> c2 </ci>
+              <ci> k1 </ci>
+              <ci> IRPs_inactive </ci>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k1" name="k1" value="4.63671E-6"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="IRPs_degradation" name="IRPs degradation" reversible="false">
+        <listOfReactants>
+          <speciesReference species="IRPs_active" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="IRPs_inactive" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="LIP"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> c2 </ci>
+              <apply>
+                <ci> function_2 </ci>
+                <ci> ka </ci>
+                <ci> IRPs_active </ci>
+                <ci> LIP </ci>
+              </apply>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="ka" name="ka" value="3.99474"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="FT_Fe_oxidation" metaid="COPASI26" name="FT Fe oxidation" reversible="false">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI26">
+	<bqbiol:isDescribedBy>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/doi/10.1073/pnas.0805083105"/>
+	</rdf:Bag>
+	</bqbiol:isDescribedBy>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:CopasiMT="http://www.copasi.org/RDF/MiriamTerms#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI26">
+                <dcterms:bibliographicCitation>
+                  <rdf:Description>
+                    <dcterms:description>Tosha T, Hasan MR, Theil EC. The ferritin Fe2 site at the diiron catalytic center controls the reaction with O2 in the rapid mineralization pathway. Proc Natl Acad Sci U S A. 2008;105(47):18182-18187</dcterms:description>
+                    <CopasiMT:isDescribedBy rdf:resource="urn:miriam:doi:10.1073/pnas.0805083105"/>
+                  </rdf:Description>
+                </dcterms:bibliographicCitation>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2021-04-30T15:34:52Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="LIP" stoichiometry="2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="DFP" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="FT_cage"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> c2 </ci>
+              <apply>
+                <ci> function_4_one </ci>
+                <ci> kcat </ci>
+                <ci> H </ci>
+                <ci> rO </ci>
+                <ci> FT_cage </ci>
+                <ci> LIP </ci>
+                <ci> n </ci>
+                <ci> Km </ci>
+              </apply>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="kcat" name="kcat" value="591"/>
+            <parameter id="rO" name="rO" value="2"/>
+            <parameter id="n" name="n" value="1.3"/>
+            <parameter id="Km" name="Km" value="0.00035"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="DMT1_iron_transport" metaid="COPASI27" name="DMT1 iron transport" reversible="false">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI27">
+              <bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0033212"/>
+	<rdf:li rdf:resource="http://identifiers.org/rhea/29579"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	
+	<bqbiol:hasProperty>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0033212"/>
+	</rdf:Bag>
+	</bqbiol:hasProperty>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI27">
+                <bqbiol:hasProperty rdf:resource="urn:miriam:go:GO:0033212"/>
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:rhea:29579"/>
+                <dcterms:created>
+                  <rdf:Description>
+                    <dcterms:W3CDTF>2020-12-14T15:10:00Z</dcterms:W3CDTF>
+                  </rdf:Description>
+                </dcterms:created>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="Fe_lumen" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="LIP" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="DMT1"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> apical_mem </ci>
+              <apply>
+                <ci> Hill_Function_w__enzyme </ci>
+                <ci> kcat </ci>
+                <ci> DMT1 </ci>
+                <ci> Fe_lumen </ci>
+                <ci> K </ci>
+                <ci> n </ci>
+              </apply>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="kcat" name="kcat" value="6844.7"/>
+            <parameter id="K" name="K" value="2.835"/>
+            <parameter id="n" name="n" value="1"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Fe_basal_uptake" metaid="COPASI28" name="Fe basal uptake" reversible="false">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#COPASI28">
+	<bqmodel:isInstanceOf>
+	<rdf:Bag>
+	<rdf:li rdf:resource="http://identifiers.org/GO:0033212"/>
+	</rdf:Bag>
+	</bqmodel:isInstanceOf>
+	</rdf:Description>
+	
+	
+	
+	
+	
+          </rdf:RDF>
+          <copasi:COPASI xmlns:copasi="http://www.copasi.org/static/sbml">
+            <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <rdf:Description rdf:about="#COPASI28">
+                <bqmodel:isInstanceOf rdf:resource="urn:miriam:go:GO:0033212"/>
+              </rdf:Description>
+            </rdf:RDF>
+          </copasi:COPASI>
+        </annotation>
+              <listOfReactants>
+          <speciesReference species="Fe_blood" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="LIP" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> k1 </ci>
+              <ci> Fe_blood </ci>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k1" name="k1" value="2.22055E-16"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="paracellular_fe_transport" name="paracellular fe transport" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Fe_lumen" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Fe_blood" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> k1 </ci>
+                <ci> Fe_lumen </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> k2 </ci>
+                <ci> Fe_blood </ci>
+              </apply>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k1" name="k1" value="3.87951E-22"/>
+            <parameter id="k2" name="k2" value="3.1746E-15"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="body_sequestration" name="body sequestration" reversible="false">
+        <listOfReactants>
+          <speciesReference species="Fe_blood" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="body_fe" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> blood </ci>
+              <ci> k1 </ci>
+              <ci> Fe_blood </ci>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k1" name="k1" value="0.000329"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="FPN_inactivation" name="FPN-inactivation" reversible="false">
+        <listOfReactants>
+          <speciesReference species="FPN_active" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="FPN_internalized" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="Fe_blood"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <ci> Rate_Law_for_1FPN_down </ci>
+              <ci> k1 </ci>
+              <ci> FPN_active </ci>
+              <ci> Fe_blood </ci>
+              <ci> n </ci>
+              <ci> k3 </ci>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k1" name="k1" value="1.44264E-6"/>
+            <parameter id="n" name="n" value="2.71609"/>
+            <parameter id="k3" name="k3" value="1.22073E-5"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="FPN_activation" name="FPN-activation" reversible="false">
+        <listOfReactants>
+          <speciesReference species="FPN_internalized" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="FPN_active" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> k1 </ci>
+              <ci> FPN_internalized </ci>
+            </apply>
+          </math>
+                  <listOfParameters>
+            <parameter id="k1" name="k1" value="4.37363E-13"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+    <listOfEvents>
+      <event id="dose_first" name="dose-first">
+        <trigger>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <gt/>
+              <csymbol encoding="text" definitionURL="http://www.sbml.org/sbml/symbols/time"> time </csymbol>
+              <ci> ModelValue_18 </ci>
+            </apply>
+          </math>
+                </trigger>
+        <listOfEventAssignments>
+          <eventAssignment variable="Fe_lumen">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <ci> dose_0 </ci>
+            </math>
+                    </eventAssignment>
+          <eventAssignment variable="iron_t0_transfer">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <apply>
+                <plus/>
+                <apply>
+                  <times/>
+                  <ci> Fe_blood </ci>
+                  <ci> quantity_to_number_factor </ci>
+                  <ci> blood </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> body_fe </ci>
+                  <ci> quantity_to_number_factor </ci>
+                  <ci> blood </ci>
+                </apply>
+              </apply>
+            </math>
+                    </eventAssignment>
+          <eventAssignment variable="iron_t0_uptake">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <apply>
+                <plus/>
+                <apply>
+                  <times/>
+                  <ci> core </ci>
+                  <ci> quantity_to_number_factor </ci>
+                  <ci> c2 </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <cn> 2 </cn>
+                  <ci> DFP </ci>
+                  <ci> quantity_to_number_factor </ci>
+                  <ci> c2 </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> LIP </ci>
+                  <ci> quantity_to_number_factor </ci>
+                  <ci> c2 </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> Fe_blood </ci>
+                  <ci> quantity_to_number_factor </ci>
+                  <ci> blood </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> body_fe </ci>
+                  <ci> quantity_to_number_factor </ci>
+                  <ci> blood </ci>
+                </apply>
+              </apply>
+            </math>
+                    </eventAssignment>
+        </listOfEventAssignments>
+      </event>
+      <event id="dose_test" name="dose-test">
+        <trigger>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <gt/>
+              <csymbol encoding="text" definitionURL="http://www.sbml.org/sbml/symbols/time"> time </csymbol>
+              <apply>
+                <plus/>
+                <ci> ModelValue_18 </ci>
+                <ci> time_delay </ci>
+              </apply>
+            </apply>
+          </math>
+                </trigger>
+        <listOfEventAssignments>
+          <eventAssignment variable="transfer_at_time_test_dose">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <ci> transfer </ci>
+            </math>
+                    </eventAssignment>
+          <eventAssignment variable="uptake_at_time_test_dose">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <ci> uptake </ci>
+            </math>
+                    </eventAssignment>
+          <eventAssignment variable="Fe_lumen">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <ci> dose_fe </ci>
+            </math>
+                    </eventAssignment>
+        </listOfEventAssignments>
+      </event>
+      <event id="measure_uptake_transfer" name="measure-uptake-transfer">
+        <trigger>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <gt/>
+              <csymbol encoding="text" definitionURL="http://www.sbml.org/sbml/symbols/time"> time </csymbol>
+              <apply>
+                <plus/>
+                <ci> ModelValue_18 </ci>
+                <ci> time_delay </ci>
+                <cn> 1800 </cn>
+              </apply>
+            </apply>
+          </math>
+                </trigger>
+        <listOfEventAssignments>
+          <eventAssignment variable="_30min_transfer">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <apply>
+                <minus/>
+                <ci> transfer </ci>
+                <ci> transfer_at_time_test_dose </ci>
+              </apply>
+            </math>
+                    </eventAssignment>
+          <eventAssignment variable="_30min_uptake">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <apply>
+                <minus/>
+                <ci> uptake </ci>
+                <ci> uptake_at_time_test_dose </ci>
+              </apply>
+            </math>
+                    </eventAssignment>
+        </listOfEventAssignments>
+      </event>
+    </listOfEvents>
+  </model>
+</sbml>

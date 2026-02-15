@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-dicenzo2020-sinorhizobium-meliloti-1021-genome-scale/model.yaml
+    manifest_path: models/metabolism-sbml-dicenzo2020-sinorhizobium-meliloti-1021-genome-s-model2003240001-model/model.yaml
 ```
 
 ## Tags

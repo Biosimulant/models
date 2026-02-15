@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-mukhta2018-the-effect-of-bednet-coverage-on-malaria/model.yaml
+    manifest_path: models/epidemiology-sbml-mukhta2018-the-effect-of-bednet-coverage-on-mala-model2003160003-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-zymomonas-ed-pathway/model.yaml
+    manifest_path: models/signaling-sbml-zymomonas-ed-pathway-model2008060001-model/model.yaml
 ```
 
 ## Tags

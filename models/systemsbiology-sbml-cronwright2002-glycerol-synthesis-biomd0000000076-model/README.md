@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-cronwright2002-glycerol-synthesis/model.yaml
+    manifest_path: models/systemsbiology-sbml-cronwright2002-glycerol-synthesis-biomd0000000076-model/model.yaml
 ```
 
 ## Tags

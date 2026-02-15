@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-dalcantara2003-synapticplasticity/model.yaml
+    manifest_path: models/systemsbiology-sbml-dalcantara2003-synapticplasticity-model8938094216-model/model.yaml
 ```
 
 ## Tags

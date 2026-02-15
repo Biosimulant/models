@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-mizuno2012-alzpathway-a-comprehensive-map-of-alzheimer-s/model.yaml
+    manifest_path: models/systemsbiology-sbml-mizuno2012-alzpathway-a-comprehensive-map-of-alz-model1504290001-model/model.yaml
 ```
 
 ## Tags

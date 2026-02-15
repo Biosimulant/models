@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bagci2006-apoptoticstimuli/model.yaml
+    manifest_path: models/systemsbiology-sbml-bagci2006-apoptoticstimuli-model1006230056-model/model.yaml
 ```
 
 ## Tags

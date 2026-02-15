@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-matsuoka2003-ventricularcells-sinoatrialnodepacemaker/model.yaml
+    manifest_path: models/cardiovascular-sbml-matsuoka2003-ventricularcells-sinoatrialnodepace-model1006230058-model/model.yaml
 ```
 
 ## Tags

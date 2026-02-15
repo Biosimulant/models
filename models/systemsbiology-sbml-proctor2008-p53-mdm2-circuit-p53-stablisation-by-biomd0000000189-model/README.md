@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-proctor2008-p53-mdm2-circuit-p53-stablisation-by-p14arf/model.yaml
+    manifest_path: models/systemsbiology-sbml-proctor2008-p53-mdm2-circuit-p53-stablisation-by-biomd0000000189-model/model.yaml
 ```
 
 ## Tags

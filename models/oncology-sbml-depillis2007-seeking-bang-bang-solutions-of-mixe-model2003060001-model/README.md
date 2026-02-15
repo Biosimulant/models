@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-depillis2007-seeking-bang-bang-solutions-of-mixed/model.yaml
+    manifest_path: models/oncology-sbml-depillis2007-seeking-bang-bang-solutions-of-mixe-model2003060001-model/model.yaml
 ```
 
 ## Tags

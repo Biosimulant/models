@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-caron2010-mtorc1-upstreamregulators/model.yaml
+    manifest_path: models/systemsbiology-sbml-caron2010-mtorc1-upstreamregulators-model1012220003-model/model.yaml
 ```
 
 ## Tags

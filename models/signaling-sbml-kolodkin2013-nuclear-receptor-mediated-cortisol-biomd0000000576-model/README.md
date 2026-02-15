@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-kolodkin2013-nuclear-receptor-mediated-cortisol-signalling/model.yaml
+    manifest_path: models/signaling-sbml-kolodkin2013-nuclear-receptor-mediated-cortisol-biomd0000000576-model/model.yaml
 ```
 
 ## Tags

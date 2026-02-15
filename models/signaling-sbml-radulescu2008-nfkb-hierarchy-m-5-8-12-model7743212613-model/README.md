@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-radulescu2008-nfkb-hierarchy-m-5-8-12/model.yaml
+    manifest_path: models/signaling-sbml-radulescu2008-nfkb-hierarchy-m-5-8-12-model7743212613-model/model.yaml
 ```
 
 ## Tags

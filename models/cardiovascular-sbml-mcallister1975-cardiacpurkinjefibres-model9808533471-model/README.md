@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-mcallister1975-cardiacpurkinjefibres/model.yaml
+    manifest_path: models/cardiovascular-sbml-mcallister1975-cardiacpurkinjefibres-model9808533471-model/model.yaml
 ```
 
 ## Tags

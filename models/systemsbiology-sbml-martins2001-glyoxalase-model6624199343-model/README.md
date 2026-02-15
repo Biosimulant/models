@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-martins2001-glyoxalase/model.yaml
+    manifest_path: models/systemsbiology-sbml-martins2001-glyoxalase-model6624199343-model/model.yaml
 ```
 
 ## Tags

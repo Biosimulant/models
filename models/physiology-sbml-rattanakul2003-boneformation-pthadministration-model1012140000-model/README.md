@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-rattanakul2003-boneformation-pthadministration/model.yaml
+    manifest_path: models/physiology-sbml-rattanakul2003-boneformation-pthadministration-model1012140000-model/model.yaml
 ```
 
 ## Tags

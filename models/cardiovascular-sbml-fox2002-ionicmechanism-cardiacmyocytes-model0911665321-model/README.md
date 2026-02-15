@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-fox2002-ionicmechanism-cardiacmyocytes/model.yaml
+    manifest_path: models/cardiovascular-sbml-fox2002-ionicmechanism-cardiacmyocytes-model0911665321-model/model.yaml
 ```
 
 ## Tags

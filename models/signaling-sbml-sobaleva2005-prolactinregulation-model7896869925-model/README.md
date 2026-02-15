@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-sobaleva2005-prolactinregulation/model.yaml
+    manifest_path: models/signaling-sbml-sobaleva2005-prolactinregulation-model7896869925-model/model.yaml
 ```
 
 ## Tags

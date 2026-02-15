@@ -1,0 +1,327 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version3" level="2" version="3">
+  <model id="MODEL1608250001" name="Cardiomyocyte Telomere Damage by ROS without Cell Division">
+    <listOfUnitDefinitions>
+      <unitDefinition id="substance">
+        <listOfUnits>
+          <unit kind="item"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="tissue" size="1"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species compartment="tissue" hasOnlySubstanceUnits="true" id="intact" initialAmount="75"/>
+      <species compartment="tissue" hasOnlySubstanceUnits="true" id="one_taf" initialAmount="25"/>
+      <species compartment="tissue" hasOnlySubstanceUnits="true" id="two_taf" initialAmount="0"/>
+      <species compartment="tissue" hasOnlySubstanceUnits="true" id="three_taf" initialAmount="0"/>
+      <species compartment="tissue" hasOnlySubstanceUnits="true" id="four_taf" initialAmount="0"/>
+      <species compartment="tissue" hasOnlySubstanceUnits="true" id="ROS" initialAmount="100"/>
+      <species boundaryCondition="true" compartment="tissue" constant="true" hasOnlySubstanceUnits="true" id="Source" initialAmount="1"/>
+      <species boundaryCondition="true" compartment="tissue" constant="true" hasOnlySubstanceUnits="true" id="Sink" initialAmount="0"/>
+      <species compartment="tissue" hasOnlySubstanceUnits="true" id="div_marker" initialAmount="0"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="kdam" value="1E-10"/>
+      <parameter id="kdeathintact" value="0"/>
+      <parameter id="kdeath1taf" value="0"/>
+      <parameter id="kdeath2taf" value="0"/>
+      <parameter id="kdeath3taf" value="0"/>
+      <parameter id="kdeath4taf" value="0"/>
+      <parameter id="kdivintact" value="0"/>
+      <parameter id="kdiv1taf" value="0"/>
+      <parameter id="kdiv2taf" value="0"/>
+      <parameter id="kdiv3taf" value="0"/>
+      <parameter id="kdiv4taf" value="0"/>
+      <parameter id="kprodROS" value="1E-6"/>
+      <parameter id="kremROS" value="1E-10"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="first_hit" reversible="false">
+        <listOfReactants>
+          <speciesReference species="intact"/>
+          <speciesReference species="ROS"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="one_taf"/>
+          <speciesReference species="ROS"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdam </ci>
+              <ci> intact </ci>
+              <ci> ROS </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="second_hit" reversible="false">
+        <listOfReactants>
+          <speciesReference species="one_taf"/>
+          <speciesReference species="ROS"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="two_taf"/>
+          <speciesReference species="ROS"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdam </ci>
+              <ci> one_taf </ci>
+              <ci> ROS </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="third_hit" reversible="false">
+        <listOfReactants>
+          <speciesReference species="two_taf"/>
+          <speciesReference species="ROS"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="three_taf"/>
+          <speciesReference species="ROS"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdam </ci>
+              <ci> two_taf </ci>
+              <ci> ROS </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="fourth_hit" reversible="false">
+        <listOfReactants>
+          <speciesReference species="three_taf"/>
+          <speciesReference species="ROS"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="four_taf"/>
+          <speciesReference species="ROS"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdam </ci>
+              <ci> three_taf </ci>
+              <ci> ROS </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="ROS_production" reversible="false">
+        <listOfReactants>
+          <speciesReference species="Source"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ROS"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kprodROS </ci>
+              <ci> Source </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="ROS_removal" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ROS"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Sink"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kremROS </ci>
+              <ci> ROS </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Intact_cell_division" reversible="false">
+        <listOfReactants>
+          <speciesReference species="intact"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="intact" stoichiometry="2"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdivintact </ci>
+              <ci> intact </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="One_taf_cell_division" reversible="false">
+        <listOfReactants>
+          <speciesReference species="one_taf"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="one_taf" stoichiometry="2"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdiv1taf </ci>
+              <ci> one_taf </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Two_taf_cell_division" reversible="false">
+        <listOfReactants>
+          <speciesReference species="two_taf"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="two_taf" stoichiometry="2"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdiv2taf </ci>
+              <ci> two_taf </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Three_taf_cell_division" reversible="false">
+        <listOfReactants>
+          <speciesReference species="three_taf"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="three_taf" stoichiometry="2"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdiv3taf </ci>
+              <ci> three_taf </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Four_taf_cell_division" reversible="false">
+        <listOfReactants>
+          <speciesReference species="four_taf"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="four_taf" stoichiometry="2"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdiv4taf </ci>
+              <ci> four_taf </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="Intact_cell_death" reversible="false">
+        <listOfReactants>
+          <speciesReference species="intact"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Sink"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdeathintact </ci>
+              <ci> intact </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="one_taf_cell_death" reversible="false">
+        <listOfReactants>
+          <speciesReference species="one_taf"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Sink"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdeath1taf </ci>
+              <ci> one_taf </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="two_taf_cell_death" reversible="false">
+        <listOfReactants>
+          <speciesReference species="two_taf"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Sink"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdeath2taf </ci>
+              <ci> two_taf </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="three_taf_cell_death" reversible="false">
+        <listOfReactants>
+          <speciesReference species="three_taf"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Sink"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdeath3taf </ci>
+              <ci> three_taf </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+      <reaction id="four_taf_cell_death" reversible="false">
+        <listOfReactants>
+          <speciesReference species="four_taf"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Sink"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> kdeath4taf </ci>
+              <ci> four_taf </ci>
+            </apply>
+          </math>
+                </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

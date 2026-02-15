@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by libAntimony version v2.8.0 on 2016-12-08 16:32 with libSBML version 5.11.9. -->
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:comp="http://www.sbml.org/sbml/level3/version1/comp/version1" level="3" version="1" comp:required="true">
+  <model id="Purified_HFSC_Equilibrium____main" name="Purified_HFSC_Equilibrium____main">
+    <listOfParameters>
+      <parameter id="time_" constant="true">
+        <comp:listOfReplacedElements>
+          <comp:replacedElement comp:portRef="time_" comp:submodelRef="environment"/>
+          <comp:replacedElement comp:portRef="time_" comp:submodelRef="flux"/>
+        </comp:listOfReplacedElements>
+      </parameter>
+    </listOfParameters>
+    <comp:listOfSubmodels>
+      <comp:submodel comp:id="environment" comp:modelRef="Purified_HFSC_Equilibrium__environment"/>
+      <comp:submodel comp:id="flux" comp:modelRef="Purified_HFSC_Equilibrium__flux"/>
+    </comp:listOfSubmodels>
+  </model>
+  <comp:listOfModelDefinitions>
+    <comp:modelDefinition id="Purified_HFSC_Equilibrium__environment" name="Purified_HFSC_Equilibrium__environment">
+      <listOfParameters>
+        <parameter id="time_" constant="true"/>
+      </listOfParameters>
+      <comp:listOfPorts>
+        <comp:port comp:idRef="time_" comp:id="time_"/>
+      </comp:listOfPorts>
+    </comp:modelDefinition>
+    <comp:modelDefinition id="Purified_HFSC_Equilibrium__flux" name="Purified_HFSC_Equilibrium__flux">
+      <listOfParameters>
+        <parameter id="N_SC" value="14880" constant="false"/>
+        <parameter id="N_P" value="8740" constant="false"/>
+        <parameter id="N_apSC" value="0" constant="false"/>
+        <parameter id="N_apP" value="0" constant="false"/>
+        <parameter id="p_SC" value="0.04" constant="true"/>
+        <parameter id="p_P" value="0.03" constant="true"/>
+        <parameter id="apSC" value="0.003" constant="true"/>
+        <parameter id="apP" value="0.003" constant="true"/>
+        <parameter id="K" value="220000" constant="true"/>
+        <parameter id="deg" value="0.0833" constant="true"/>
+        <parameter id="t_SC_P" value="0.006" constant="true"/>
+        <parameter id="t_P_SC" value="0.003" constant="true"/>
+        <parameter id="time_" constant="true"/>
+      </listOfParameters>
+      <listOfRules>
+        <rateRule variable="N_SC">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <minus/>
+              <apply>
+                <minus/>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <times/>
+                    <ci> p_SC </ci>
+                    <apply>
+                      <divide/>
+                      <apply>
+                        <minus/>
+                        <ci> K </ci>
+                        <apply>
+                          <plus/>
+                          <ci> N_SC </ci>
+                          <ci> N_P </ci>
+                          <ci> N_apSC </ci>
+                          <ci> N_apP </ci>
+                        </apply>
+                      </apply>
+                      <ci> K </ci>
+                    </apply>
+                    <ci> N_SC </ci>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <ci> t_P_SC </ci>
+                    <ci> N_P </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> t_SC_P </ci>
+                  <ci> N_SC </ci>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <ci> apSC </ci>
+                <ci> N_SC </ci>
+              </apply>
+            </apply>
+          </math>
+        </rateRule>
+        <rateRule variable="N_P">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <minus/>
+              <apply>
+                <minus/>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <times/>
+                    <ci> p_P </ci>
+                    <apply>
+                      <divide/>
+                      <apply>
+                        <minus/>
+                        <ci> K </ci>
+                        <apply>
+                          <plus/>
+                          <ci> N_SC </ci>
+                          <ci> N_P </ci>
+                          <ci> N_apSC </ci>
+                          <ci> N_apP </ci>
+                        </apply>
+                      </apply>
+                      <ci> K </ci>
+                    </apply>
+                    <ci> N_P </ci>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <ci> t_SC_P </ci>
+                    <ci> N_SC </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> t_P_SC </ci>
+                  <ci> N_P </ci>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <ci> apP </ci>
+                <ci> N_P </ci>
+              </apply>
+            </apply>
+          </math>
+        </rateRule>
+        <rateRule variable="N_apSC">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> apSC </ci>
+                <ci> N_SC </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> deg </ci>
+                <ci> N_apSC </ci>
+              </apply>
+            </apply>
+          </math>
+        </rateRule>
+        <rateRule variable="N_apP">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> apP </ci>
+                <ci> N_P </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> deg </ci>
+                <ci> N_apP </ci>
+              </apply>
+            </apply>
+          </math>
+        </rateRule>
+      </listOfRules>
+      <comp:listOfPorts>
+        <comp:port comp:idRef="time_" comp:id="time_"/>
+      </comp:listOfPorts>
+    </comp:modelDefinition>
+  </comp:listOfModelDefinitions>
+</sbml>

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-singh2006-il6-signal-transduction/model.yaml
+    manifest_path: models/ecology-sbml-singh2006-il6-signal-transduction-biomd0000000151-model/model.yaml
 ```
 
 ## Tags

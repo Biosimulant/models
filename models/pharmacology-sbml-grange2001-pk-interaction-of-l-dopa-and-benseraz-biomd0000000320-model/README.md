@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-grange2001-pk-interaction-of-l-dopa-and-benserazide/model.yaml
+    manifest_path: models/pharmacology-sbml-grange2001-pk-interaction-of-l-dopa-and-benseraz-biomd0000000320-model/model.yaml
 ```
 
 ## Tags

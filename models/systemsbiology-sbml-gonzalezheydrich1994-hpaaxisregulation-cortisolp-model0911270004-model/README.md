@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-gonzalezheydrich1994-hpaaxisregulation-cortisolproduction/model.yaml
+    manifest_path: models/systemsbiology-sbml-gonzalezheydrich1994-hpaaxisregulation-cortisolp-model0911270004-model/model.yaml
 ```
 
 ## Tags

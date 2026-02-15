@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-fung2005-metabolic-oscillator/model.yaml
+    manifest_path: models/metabolism-sbml-fung2005-metabolic-oscillator-biomd0000000067-model/model.yaml
 ```
 
 ## Tags

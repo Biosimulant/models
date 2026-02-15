@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-fang2011-genome-scale-metabolic-network-of-burkholderia/model.yaml
+    manifest_path: models/epidemiology-sbml-fang2011-genome-scale-metabolic-network-of-burkh-model1507180051-model/model.yaml
 ```
 
 ## Tags

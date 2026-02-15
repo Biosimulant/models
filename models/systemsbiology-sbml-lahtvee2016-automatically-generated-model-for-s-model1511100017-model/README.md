@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-lahtvee2016-automatically-generated-model-for-s-cerevisiae-2/model.yaml
+    manifest_path: models/systemsbiology-sbml-lahtvee2016-automatically-generated-model-for-s-model1511100017-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-iribe2006-camkiikineticsmodel/model.yaml
+    manifest_path: models/signaling-sbml-iribe2006-camkiikineticsmodel-model1006230085-model/model.yaml
 ```
 
 ## Tags

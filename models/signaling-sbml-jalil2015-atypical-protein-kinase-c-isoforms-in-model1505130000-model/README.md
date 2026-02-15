@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-jalil2015-atypical-protein-kinase-c-isoforms-in-memory/model.yaml
+    manifest_path: models/signaling-sbml-jalil2015-atypical-protein-kinase-c-isoforms-in-model1505130000-model/model.yaml
 ```
 
 ## Tags

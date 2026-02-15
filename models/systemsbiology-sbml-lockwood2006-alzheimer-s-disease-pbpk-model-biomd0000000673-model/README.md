@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-lockwood2006-alzheimer-s-disease-pbpk-model/model.yaml
+    manifest_path: models/systemsbiology-sbml-lockwood2006-alzheimer-s-disease-pbpk-model-biomd0000000673-model/model.yaml
 ```
 
 ## Tags

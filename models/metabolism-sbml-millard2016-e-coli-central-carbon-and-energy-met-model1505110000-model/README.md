@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-millard2016-e-coli-central-carbon-and-energy-metabolism/model.yaml
+    manifest_path: models/metabolism-sbml-millard2016-e-coli-central-carbon-and-energy-met-model1505110000-model/model.yaml
 ```
 
 ## Tags

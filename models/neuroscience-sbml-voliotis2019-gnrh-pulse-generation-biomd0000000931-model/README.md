@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-voliotis2019-gnrh-pulse-generation/model.yaml
+    manifest_path: models/neuroscience-sbml-voliotis2019-gnrh-pulse-generation-biomd0000000931-model/model.yaml
 ```
 
 ## Tags

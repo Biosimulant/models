@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-hou2020-seir-model-of-covid-19-transmission-in-wuhan/model.yaml
+    manifest_path: models/epidemiology-sbml-hou2020-seir-model-of-covid-19-transmission-in-w-biomd0000000970-model/model.yaml
 ```
 
 ## Tags

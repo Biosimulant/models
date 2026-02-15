@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-moore2004-chronic-myeloid-leukemic-cells-and-t-lymphocyte/model.yaml
+    manifest_path: models/immunology-sbml-moore2004-chronic-myeloid-leukemic-cells-and-t-l-biomd0000000662-model/model.yaml
 ```
 
 ## Tags

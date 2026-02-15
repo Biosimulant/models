@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-noble1998-ventricularcellmodel-modela/model.yaml
+    manifest_path: models/cardiovascular-sbml-noble1998-ventricularcellmodel-modela-model1006230089-model/model.yaml
 ```
 
 ## Tags

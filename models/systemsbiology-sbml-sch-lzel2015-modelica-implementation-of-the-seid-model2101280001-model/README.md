@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-scholzel2015-modelica-implementation-of-the-seidel-herzel/model.yaml
+    manifest_path: models/systemsbiology-sbml-sch-lzel2015-modelica-implementation-of-the-seid-model2101280001-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-mulberry2020-two-layered-self-organizing-multicellular/model.yaml
+    manifest_path: models/signaling-sbml-mulberry2020-two-layered-self-organizing-multice-model2009210001-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-heldt2002-orthostaticstress-circpbpk/model.yaml
+    manifest_path: models/biomechanics-sbml-heldt2002-orthostaticstress-circpbpk-model1006230084-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-mardinoglu2015-tissue-specific-genome-scale-metabolic/model.yaml
+    manifest_path: models/metabolism-sbml-mardinoglu2015-tissue-specific-genome-scale-meta-model1509220026-model/model.yaml
 ```
 
 ## Tags

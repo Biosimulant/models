@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-proctor2006-telomere/model.yaml
+    manifest_path: models/systemsbiology-sbml-proctor2006-telomere-biomd0000000087-model/model.yaml
 ```
 
 ## Tags

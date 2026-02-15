@@ -1,0 +1,249 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Feb 17 15:13:38 2021
+
+@author: felipedalvigarcia
+"""
+
+from myfunctions import *
+import numpy as np
+from scipy.integrate import ode
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+from matplotlib import rcParams
+import xlsxwriter
+
+rcParams.update({'figure.autolayout': True})
+
+k = 1e3
+fc = 1/0.7e-3;
+
+Ri = 300e-9;
+Rv = 20e-9;
+Syn = 15e-9; #synaptic cleft
+
+Ve = 1000*(4*np.pi/3)*(((Ri+Syn)**3)-Ri**3);
+Vi = (1000*4*np.pi*Ri**3)/3; #in liters
+Vv = (200*1000*4*np.pi*Rv**3)/3; #200 vesicles in liters
+Vc = Vi-Vv;
+
+e5HT = 2;
+i5HT = e5HT*850; #Tissue concentration
+c5HT = 0.02*i5HT*(2*Vi+2*Ve)/Vc;
+v5HT = 0.98*i5HT*(2*Vi+2*Ve)/Vv;
+
+e5HIAA = 1.6e3;
+i5HIAA = e5HIAA*0.5;
+c5HIAA = i5HIAA*(2*Vi+2*Ve)/Vc;
+c5HIAL = 4e3;
+e5HIAL = 6.4e3;
+
+t5HT = (c5HT*Vc+v5HT*Vv+e5HT*2*Ve)/(2*Vi+2*Ve);
+t5HIAA = (c5HIAA*Vc+e5HIAA*2*Ve)/(2*Vi+2*Ve);
+
+eDA = 2;
+iDA = i5HT/2; #Tissue concentration
+cDA = 0.02*iDA*(2*Vi+2*Ve)/Vc;
+vDA = 0.98*iDA*(2*Vi+2*Ve)/Vv;
+
+eDOPAC = 10;
+iDOPAC = eDOPAC*0.5;
+cDOPAC = iDOPAC*(2*Vi+2*Ve)/Vc;
+cDOPAL = 200*cDOPAC;
+eDOPAL = 200*eDOPAC;
+HVA = 7;
+
+tDA = (cDA*Vc+vDA*Vv+eDA*2*Ve)/(2*Vi+2*Ve)
+tDOPAC = (cDOPAC*Vc+eDOPAC*2*Ve)/(2*Vi+2*Ve)
+
+cTYR = 68*fc;
+cPHE = 52*fc;
+cTRP = 39*fc;
+LDOPA = 0.1*cDA;
+HTP = 0.1*c5HT;
+KYN = 58;
+KYNA = 29;
+HK = 57;
+HAA = 19;
+QUIN = 51;
+
+pTYR = 1455e3
+pPHE = 1112e3
+pTRP = 833e3
+
+Din = 623e3;
+Sin = 244e3;
+
+#Getting the control values at the steady-state
+
+Xin = k*np.array([100, 72, 85, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+Xo = np.array([cTYR, cPHE, LDOPA, cDA, vDA, eDA, cDOPAL, cDOPAC, eDOPAL, eDOPAC, HVA,
+      pTYR, pPHE, cTRP, HTP, c5HT, v5HT, e5HT, c5HIAL, c5HIAA, e5HIAL, e5HIAA,
+      pTRP, KYN, KYNA, HK, HAA, QUIN])
+
+f = [0.894, -0.443, -0.384, 1, -0.642, -0.331, -0.3, -0.125, -0.46, 1, -0.106, 0.557, -0.384, 1, -0.578, 0.149, -0.125, -0.46, 1, 1, -0.1, 1, -0.361, 0.5, 1.0, -1.0, 0.435, 0.001, 0.857, -0.65, -0.1, 1.0, -0.944, 1, 0.874, -0.3, -0.032, -0.102, -0.213, -1.0, 1.0, 0.5, 1.0, 0.895, -0.3, -0.032, -0.102, -0.213, -1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 0.5, 1.0, 0.5, -0.3, 1.0, 0.993, 0.5, -0.248, -0.1, 1.0, -0.003, 0.001, 1.0, -0.3, 1, 1.0, -0.3, -1.0, 1.0, -0.3, -1.0, 1.0, 0.587, 0.709, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -0.106, -0.443, 0.616, 1.0, 0.19, -0.3, -0.3, -0.3, -0.387, 1.0, -0.854, -0.1, 1.0, -0.321, 0.5, 0.963, 1.0, -0.5, 0.999, -0.002, 1, 0.867, -0.3, -0.032, -0.102, -0.213, -1.0, 0.5, 0.547, 0.703, -0.65, -0.1, 0.5, 0.001, 0.5, -0.176, 0.997, 0.144, 0.001, 0.752, -0.007, -0.1, 1.0, 1.0, -0.3, 1, 0.802, -0.3, -0.032, -0.102, -0.213, -1.0, 0.5, 0.5, 0.001, 0.5, -0.5, 1.0, 0.264, -0.3, 0.7, 0.998, -0.3, 0.8, 0.999, -0.3, 1.0, 0.995, -0.3, 0.4, 0.998, -0.3, 0.001, 1.0, 1.0, 1.0, 1.0, 0.984, -0.5, 0.92, 1.0, 1.0, 1.0]
+
+g = [2.340e-1, 1.504e+4, 3.250e-2, 2.156e+0, 2.586e-2, 1.753e-1, 3.600e+3, 1.362e+3, 8.996e+3, 1.058e+0, 1.826e+2, 1.721e-4, 7.806e+1, 6.099e-4, 6.248e-2, 1.430e-2, 1.233e+3, 4.516e+2, 1.307e+2, 6.480e+0, 6.065e-2, 2.936e+3, 1.904e+3, 4.396e+3, 7.279e+2, 2.169e+1, 4.235e-5, 5.541e-6, 3.811e-1, 4.987e-2, 5.618e+1, 1.078e-1, 2.820e+3, 2.191e+2, 1.238e-1, 2.546e+3, 8.295e+3, 4.353e-4, 7.427e+2, 1.656e+1, 1.303e+4, 8.495e+0, 7.889e+2, 7.054e+1, 1.105e+1, 4.454e+2, 8.478e-2, 2.815e+2, 6.021e+0, 4.755e+2, 2.699e+1, 1.812e-4, 1.405e-3, 2.301e-4, 2.516e-2, 5.725e-1, 1.770e+3, 6.357e+1, 4.165e+2, 6.357e+0, 1.515e+0, 1.166e+0, 3.255e-6, 2.929e-2]
+
+to = 0
+t1 = 1000
+dt = 10
+
+experiment = np.arange(11)
+
+for e in experiment:
+    r = ode(model).set_integrator('lsoda')
+    r.set_initial_value(Xo,to).set_f_params(Xin,g,f,e)
+    T = []
+    R = []
+    while r.successful() and r.t < t1:
+        r.integrate(r.t+dt)
+        R.append(r.y)
+        T.append(r.t)
+    
+    X = np.array(R)
+    
+    #Validation experiments
+    if e >= 0 and e <= 5:
+        deltaX = (X[-1]/X[2])*100
+        
+        #Total concentration of DA, 5-HT, DOPAC, and 5-HIAA
+        tDAX = (X[:,3]*Vc+X[:,4]*Vv+X[:,5]*2*Ve)/(2*Vi+2*Ve)
+        t5HTX = (X[:,15]*Vc+X[:,16]*Vv+X[:,17]*2*Ve)/(2*Vi+2*Ve)
+        tDOPACX = (X[:,7]*Vc+X[:,9]*2*Ve)/(2*Vi+2*Ve)
+        t5HIAAX = (X[:,19]*Vc+X[:,21]*2*Ve)/(2*Vi+2*Ve)
+        
+        #Appending QUIN/KYNA and KYNA/3-HK to the main array
+        deltaX = np.concatenate((deltaX,
+                                  np.array([deltaX[27]*100/deltaX[24], deltaX[24]*100/deltaX[25],
+                                  tDAX[-1]*100/tDAX[2],t5HTX[-1]*100/t5HTX[2],
+                                  tDOPACX[-1]*100/tDOPACX[2],t5HIAAX[-1]*100/t5HIAAX[2]])))
+        deltaX -= 100
+        
+        idx = [5,30,9,32,10,17,31,33]
+        
+        barlabels = ['eDA:    ', 'tDA:    ', 'eDOPAC: ', 'tDOPAC: ',
+                     'HVA:    ', 'e5HT:   ', 't5HT:   ', 't5HIAA: ']        
+        litMAO = ['Up 3.2 - 11.6%', 'Up 12 - 200%', 'Down 21 - 78%',
+                  'Down 17 - 62%', 'Down 30 - 48%', '-', 'Up 209 - 700%', 'Down 81.8%']        
+        litCOMT = ['Up 8.6 - 52%', 'Up 40%', 'Up 233 - 628%', 'Up 387%',
+                   'Down 100%', '-', '-', '-']        
+        litDAT = ['Up 393%', 'Down 96%', '-', '-', '-', '-', ' Up 3.1%', '-']        
+        litSERT = ['-', '-', '-', '-', '-', 'Up 450 - 900%',
+                   'Down 53.8 - 76.7%', 'Down 44.4 - 55.6%']        
+        litTPH2 = ['-', '-', '-', '-', '-', 'Down 62.2%',
+                   'Down 78.5%', 'Down 72.2%']        
+        litVMAT2x = ['Up 44%', 'Up 21%', '-', '-', '-', '-', '-', '-']        
+        
+        literature = [litMAO, litCOMT, litDAT, litSERT, litTPH2, litVMAT2x]
+        
+        expLabels = ['MAO-/-', 'COMT-/-', 'DAT-/-', 'SERT-/-', 'TPH2+/-', '2x VMAT2']
+        
+        print(expLabels[e]+'\n')
+        for z, _ in enumerate(idx):
+            print(barlabels[z]+'{:.2f} '.format(deltaX[idx[z]])+'Lit: '+literature[e][z])
+            
+        print('------\n')
+        
+    elif e == 6:
+        
+        #Percentage variation between the end of experiments and the control state
+        #(baseline levels of CORT)
+        deltaX = (X[-1]/X[2])*100
+        
+        #Total concentration of DA, 5-HT, and DOPAC
+        tDAX = (X[:,3]*Vc+X[:,4]*Vv+X[:,5]*2*Ve)/(2*Vi+2*Ve)
+        t5HTX = (X[:,15]*Vc+X[:,16]*Vv+X[:,17]*2*Ve)/(2*Vi+2*Ve)
+        tDOPACX = (X[:,7]*Vc+X[:,9]*2*Ve)/(2*Vi+2*Ve)
+        
+        #Appending QUIN/KYNA and KYNA/3-HK to the main array
+        deltaX = np.concatenate((deltaX, np.array([deltaX[27]*100/deltaX[24], deltaX[24]*100/deltaX[25]])))
+        
+        idx = [3,4,5,6,15,16,17,18,23,24,25,26,27,28,29]
+        
+        barlabels = ['Cytosolic \nDA', 'Vesicular \nDA', 'Extracellular \nDA',
+                      'Cytosolic \nDOPAL', 'Cytosolic \n5-HT', 'Vesicular \n5-HT',
+                      'Extracellular \n5-HT', 'Cytosolic \n5-HIAL', 'KYN', 'KYNA',
+                      '3-HK', '3-HAA', 'QUIN', 'QUIN/KYNA', 'KYNA/3-HK']
+        
+        plt.figure(figsize=(10,4))
+        plt.axes().bar(np.arange(len(idx)), deltaX[idx],color=[0, 0.4470, 0.7410],edgecolor=[0.2, 0.2, 0.2],
+                linewidth=2)
+        bars = plt.axes().patches
+        for i in bars:
+            space = 2
+            y_pos = round(i.get_height())
+            x_pos = i.get_x()+i.get_width()/2
+            va = 'bottom'
+            label = "{:.0f}".format(round(y_pos))
+            plt.axes().annotate(label, (x_pos, y_pos), xytext=(0, space),
+                                textcoords='offset points', ha = 'center', va=va, fontsize=12)
+        plt.xticks(ticks=np.arange(len(idx)),labels=barlabels,rotation=75,fontsize=10)
+        plt.yticks(fontsize=10)
+        plt.axes().spines['right'].set_visible(False)
+        plt.axes().spines['top'].set_visible(False)
+        plt.axes().set_ylabel('Percentage changes in relation to\n'+
+                              'baseline levels of CORT (Control)',fontsize=10)
+        plt.savefig('Fig 2.png', dpi=600)
+        
+    else:      
+        x = X.copy()
+        x = np.column_stack((x,np.array([X[:,27]/X[:,24], X[:,24]/X[:,25]]).transpose()))
+        afTreat = (x[-1]-x[round(len(x)/2)])*100/x[round(len(x)/2)] #Metabolite values after treatment
+        
+        idx2 = [5, 6, 17, 18, 24, 25, 27, 28, 29]
+        barLabels2 = ['Extracellular\n DA', 'Cytosolic\n DOPAL', 'Extracellular\n 5-HT',
+                      'Cytosolic\n 5-HIAL', 'KYNA', '3-HK', 'QUIN', 'QUIN/KYNA', 'KYNA/3-HK']
+        
+        lw = 3 #linewidth
+    
+        fig, (ax1, ax2) = plt.subplots(1,2)
+        plt.gcf().set_size_inches(10,4)
+        ax1.plot(T,X[:,5]/Xo[5],'r-',linewidth=lw,label='Extracellular DA')
+        ax1.plot(T,X[:,6]/Xo[6],'r--',linewidth=lw,label='Cytosolic DOPAL')
+        ax1.plot(T,X[:,17]/Xo[17],'g-',linewidth=lw,label='Extracallular 5-HT')
+        ax1.plot(T,X[:,18]/Xo[18],'g--',linewidth=lw,label='Cytosolic 5-HIAL')
+        ax1.plot(T,(X[:,27]/X[:,24])/(Xo[27]/Xo[24]),'b-',linewidth=lw,label='QUIN/KYNA')
+        ax1.plot(T,(X[:,24]/X[:,25])/(Xo[24]/Xo[25]),'b--',linewidth=lw,label='KYNA/3HK')
+        ax1.plot(200,0.5,'k^',markersize=10)
+        ax1.plot(600,0.5,'k^',markersize=10)
+        ax1.set_ylabel('Relative metabolite\n concentration',fontsize=10)
+        ax1.legend(loc='best',fontsize=10, ncol=2)
+        ax1.set_ylim(bottom=-1)
+        plt.sca(ax1)
+        ticks_x = ticker.FuncFormatter(lambda days, pos: '{0:.0f}'.format(days/24))
+        ax1.xaxis.set_major_formatter(ticks_x)
+        plt.xticks(fontsize=8)
+        plt.yticks(fontsize=8)
+        ax1.set_xlabel('Time (days)', fontsize=10)
+        
+        xbar = np.arange(len(idx2))
+        ax2.bar(xbar, afTreat[idx2],color=[0, 0.4470, 0.7410],
+                edgecolor=[0.2, 0.2, 0.2],linewidth=1)
+        bars = ax2.patches
+        
+        for i in bars:
+            space = 2
+            y_pos = round(i.get_height())
+            x_pos = i.get_x()+i.get_width()/2
+            va = 'bottom'
+            label = "{:.0f}".format(round(y_pos))
+            if y_pos < 0:
+                space = -2
+                va = 'top'
+            ax2.annotate(label, (x_pos, y_pos), xytext=(0, space), textcoords='offset points',
+                         ha = 'center', va=va, fontsize=12)
+        ax2.spines['right'].set_visible(False)
+        ax2.spines['top'].set_visible(False)
+        plt.sca(ax2)
+        plt.xticks(ticks=np.arange(len(idx2)),labels=barLabels2,rotation=75, fontsize=10)
+        ax2.set_ylabel('Percentage changes\n after treatment',fontsize=10)
+        
+        figLabels = ['3A', '3B', '3C', '3D']
+        
+        plt.savefig('Fig '+figLabels[e-7]+'.png', dpi=600)
+        
+#sensAnalysis(Xo,Xin,g,f,1.1)
+        
+        

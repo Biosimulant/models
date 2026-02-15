@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-zhou2015-circadian-clock-with-immune-regulator-npr1/model.yaml
+    manifest_path: models/immunology-sbml-zhou2015-circadian-clock-with-immune-regulator-n-biomd0000000577-model/model.yaml
 ```
 
 ## Tags

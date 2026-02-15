@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-nelson2000-hiv-1-intracellular-delay/model.yaml
+    manifest_path: models/systemsbiology-sbml-nelson2000-hiv-1-intracellular-delay-model8102792069-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-basak-cell-2007/model.yaml
+    manifest_path: models/signaling-sbml-basak-cell-2007-model8478881246-model/model.yaml
 ```
 
 ## Tags

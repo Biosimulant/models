@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-stefan2008-calmodulin-allostery/model.yaml
+    manifest_path: models/systemsbiology-sbml-stefan2008-calmodulin-allostery-biomd0000000183-model/model.yaml
 ```
 
 ## Tags

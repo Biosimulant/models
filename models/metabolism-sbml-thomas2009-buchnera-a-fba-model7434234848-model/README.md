@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-thomas2009-buchnera-a-fba/model.yaml
+    manifest_path: models/metabolism-sbml-thomas2009-buchnera-a-fba-model7434234848-model/model.yaml
 ```
 
 ## Tags

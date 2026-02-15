@@ -1,0 +1,1062 @@
+
+% This file contains the functions necessary to load and fit rat GI
+% histopathology data for Irinotecan administration using a mechanism-based
+% model for GI toxicity
+
+% The model files are set up so that rat predictions are generated using
+% final fit parameters and are compared to rat histopathology data
+% The file can be modified to re-estimate parameters if necessary
+
+% The ODE Equations are in the function "Gut_Model_Equations"
+% System (rodent and human) and compound specific parameters used are in 
+% "Set_Base_Parameters"
+
+
+% The function "Load_and_plot_Experimental_Data" reads-in the experimental
+% data on crypt and villus pathology scores from an excel file called 
+% "Irinotecan_Jejunum_Rat_PathScore_Data.xlsx"
+% THIS EXCEL FILE IS A REQUIREMENT FOR THE CURRENT CODE. PLEASE PLACE THE
+% EXCEL FILE IN THE SAME FOLDER AS THE M FILE
+
+
+function GI_Tox_Model_Irinotecan_Rat_Fits
+
+clear all
+close all
+
+global ISPECIES iplot dirname
+global Parameters
+global FitPars FixedPars FixedValues tvF
+global Exp_Data
+global iplot_comp_figure iplot_bar_graph_comp
+global FitGroups MW_DRUG
+
+
+% System set up - set up the Random number Generator 
+% Used during parameter estimation to generate streams of random numbers
+warning('off','all');
+seedvalue = 76551;
+s = RandStream('mt19937ar','Seed',seedvalue);
+RandStream.setGlobalStream(s);
+ 
+
+% Load the rat histopathology data
+iplot = 0;
+Exp_Data = Load_and_plot_Experimental_Data;
+
+
+% ISPECIES = 1 for Rodent and 2 for Man 
+% Appropriate system parameters are loaded based on this choice
+% Since we are fitting rat data, here we set ISPECIES = 1
+ISPECIES = 1; 
+Parameters = Set_Base_Parameters; 
+
+
+% For the given Initial parameter values compute the deviation between 
+% model and experiment --- plot a model pred vs. exptal data comparison
+NPars = length(Parameters.Values);
+AllPars = 1:NPars;
+FitPars = []; 
+FitValues = [];
+FixedPars = AllPars;
+if ~isempty(FitPars)
+    FixedPars(FitPars) = [];
+end
+FixedValues = Parameters.Values(FixedPars);
+FitGroups = [1:4]; % Which dose groups do we want to consider in our fit
+iplot_comp_figure = 0;
+iplot_bar_graph_comp = 1;
+Fit_Score = Compare_Model_and_Data( ...
+    FitValues,Parameters,FitPars,FixedPars,FixedValues,...
+    Exp_Data,FitGroups,MW_DRUG,tvF,...
+    iplot_comp_figure,iplot_bar_graph_comp,1); 
+
+
+
+
+irefit_data = 0;
+
+% ------ STOP HERE IF YOU DON'T WANT TO RE-FIT THE DATA  -------------------           
+% ------PARAMETER ESTIMATION STARTS HERE  -------------------   
+% ------ THESE FITS WERE ORIGINALLY RUN USING THE MATLAB ----
+% ------ PARALLEL OPTIMIZATION TOOLBOX STARTING FROM 100 ICS ----
+% -------- THESE FITS WILL TAKE A LOT OF TIME TO COMPLETE -------
+
+if (irefit_data == 1)
+    % Define which parameters to fit and assign initial values to those
+    % parameters
+    NPars = length(Parameters.Values);
+    AllPars = 1:NPars;
+    % Specify the parameters that we want to fit here in this section
+    % These were the final 14 parameters that we fit in the paper
+    FitPars = ...
+        [ ...
+        find(strcmpi(Parameters.Names,'a1')) ...
+        find(strcmpi(Parameters.Names,'b1')) ...
+        find(strcmpi(Parameters.Names,'d1')) ...
+        find(strcmpi(Parameters.Names,'e1')) ...
+        find(strcmpi(Parameters.Names,'f1')) ...
+        find(strcmpi(Parameters.Names,'a2')) ...
+        find(strcmpi(Parameters.Names,'b2')) ...
+        find(strcmpi(Parameters.Names,'d2')) ...
+        find(strcmpi(Parameters.Names,'e2')) ... 
+        find(strcmpi(Parameters.Names,'tadc_tox_emax')) ...    
+        find(strcmpi(Parameters.Names,'tadc_tox_IC50')) ...
+        find(strcmpi(Parameters.Names,'TOX_EXP_TADC')) ...
+        find(strcmpi(Parameters.Names,'tadc_arrest_IC50')) ...
+        find(strcmpi(Parameters.Names,'kzombie')) ];  
+    FixedPars = AllPars;
+    if ~isempty(FitPars)
+        FixedPars(FitPars) = [];
+    end
+    FixedValues = Parameters.Values(FixedPars);
+    FitLB = Parameters.LB(FitPars);
+    FitUB = Parameters.UB(FitPars);
+
+    NFitPars = length(FitPars);
+    NRuns = 1;
+    R = rand(NRuns,NFitPars);
+
+    % SAMPLE THE INITIAL VALUES ON A LOG SCALE
+    % ASSUMPTION HERE IS THAT THE REGIONS ARE EITHER ALL NEGATIVE OR ALL POS
+    Low = repmat(log10(abs(FitLB)),NRuns,1);
+    High = repmat(log10(abs(FitUB)),NRuns,1);
+    Signs = ones(1,NFitPars);
+    Signs(FitLB < 0) = -1;
+    Signs = repmat(Signs,NRuns,1);
+    InitVals = Signs .* 10.^(Low + R.* (High - Low));
+
+    FitVals = nan(NRuns,NPars);
+    NegLogLik = nan(NRuns,1);
+
+    tic;
+    iplot_comp_figure = 0;iplot_bar_graph_comp = 0;
+    % Set "UseParallel" to "Always" to use the parallel version of fmincon
+    % which speeds things up substantially
+    for irun = 1:NRuns 
+        options = optimoptions('fmincon','Algorithm','interior-point','Display','off','TolFun',1e-4,'TolX',1e-4) ; %,'UseParallel','always');
+        [FitVals(irun,:),NegLogLik(irun),~,~,~,~,~] = ...
+         fmincon(@(FitX)Compare_Model_and_Data(FitX,Parameters,...
+                                        FitPars,FixedPars,FixedValues,...
+                                   Exp_Data,FitGroups,MW_DRUG,tvF,...
+                               iplot_comp_figure,iplot_bar_graph_comp,irun), ... 
+                InitVals(irun,:),[],[],[],[],FitLB,FitUB,[],options);
+    end
+    cpumin = toc/60.;
+    [NegLL_Best,ind_best] = min(NegLogLik);
+    Fit_Best = FitVals(ind_best,:)';
+
+    save([dirname 'Fit_Results'],'InitVals','FitVals',...
+        'NegLogLik','cpumin','cv_percent1',...
+        'Fit_Best','cvpct_Best','NegLL_Best','seedvalue','irun');
+
+end
+
+
+% -------------------------------------------------------------------------
+% This function calculates the cumulative negative log-likelihood function
+% by generating model predictions for the various irinotecan dose groups
+% and comparing model predicted probabilities of crypt and villus pathology
+% with the incidence of various severity scores
+
+function Fit_Score = Compare_Model_and_Data( ...
+    FitX,Parameters,FitPars,FixedPars,FixedValues,...
+    Exp_Data,FitGroups,MW_DRUG,tvF,...
+    iplot_comp_figure,iplot_bar_graph_comp,irun)
+
+
+AllValues = Parameters.Values;
+AllValues(FixedPars) = FixedValues;
+AllValues(FitPars) = FitX;
+
+NGroups = numel(Exp_Data);
+for i = 1:NGroups
+    Dose_Values(i) = Exp_Data{i}.Dose_mpk;
+end
+max_Dose = max(Dose_Values);
+
+
+LL_crypt = nan(numel(FitGroups),1);
+LL_villus = nan(numel(FitGroups),1);
+LL_CHYP = nan(numel(FitGroups),1);
+
+Results_for_Group = cell(size(Exp_Data));
+
+for iGr = 1:numel(FitGroups)
+    i = FitGroups(iGr);
+    DOSE = Exp_Data{i}.Dose_mpk * 1000/MW_DRUG; % Administered dose in umol/kg
+   
+    AVAIL_DOSE = DOSE*tvF;
+    tspan = [0 10]; % Time span in days
+    
+    %AllValues(PreFitPars) = Crypt_Prefit_Parameters(i,:);
+    
+    curr_pars = Parameters;
+    curr_pars.Values = AllValues;
+   
+    
+    % Run the GI model to determine cell numbers and path scores
+    Results = Calculate_GI_Model_Response(AVAIL_DOSE,tspan,curr_pars);
+    Results_for_Group{i} = Results;
+    
+    Probabilities = interp1(Results.t, Results.probs_crypt, Exp_Data{i}.Time_days);        
+    Observations = Exp_Data{i}.Raw_Crypt_Counts;  
+    LL_crypt(iGr) = Compute_Multinomial_LogLikelihood(Probabilities,Observations);
+    Probabilities = interp1(Results.t, Results.probs_villus, Exp_Data{i}.Time_days);        
+    Observations = Exp_Data{i}.Raw_Villus_Counts;  
+    Observations = Observations(:,1:4); % Ignore the last column since none of the animals have the max score
+    LL_villus(iGr) = Compute_Multinomial_LogLikelihood(Probabilities,Observations);   
+    
+    if (iplot_comp_figure == 1)
+        iGroup = i;
+        Dose_curr = Exp_Data{i}.Dose_mpk; % Needed for plot coloring        
+        Plot_Results_And_Data(Results,Exp_Data);
+    end    
+
+end
+
+if iplot_bar_graph_comp
+    Plot_Data_Model_Stacked_Bars(Results_for_Group,Exp_Data);
+end
+  
+
+Fit_Score = -1*(sum(LL_crypt) + sum(LL_villus) ); % % Negative log of the likelihood
+
+if ~isempty(FitX)
+    fprintf('Run number : % 3i; %8.4f %8.4f %8.4f %8.4f %8.4f; Score = %8.4f \n',irun,FitX(10:14),Fit_Score);
+end
+
+
+
+% --------------------------------------------------------------------
+% This is the function use to compute the multinomial log likelihood
+
+function LogLikelihood = Compute_Multinomial_LogLikelihood(pmat,ymat)
+
+LogLikelihood = nan;
+
+% Remove experimental data rows that contain no counts in any of the
+% categories
+NanVals = isnan(ymat);
+NVals = sum(NanVals,2);
+indbadrow = NVals == 0;
+
+pnew = pmat(~indbadrow,:);
+ynew = ymat(~indbadrow,:);
+
+% Set Nan (used in the data to indicate not observed) values in the
+% experimental data to 0
+ynew(isnan(ynew)) = 0;
+
+% Shift probabilities of 0 and 1 from these numbers by a small value
+% epsilon so that when we take the log of the probability we get a finite
+% number
+EPSVAL = 1e-8;
+pnew(pnew == 0) = EPSVAL;
+pnew(pnew < 0 ) = EPSVAL;
+pnew(pnew == 1) = 1 - EPSVAL;
+
+LL_Mat = ynew .* log(pnew);
+
+% Remove likelihood data rows that contain nan values
+NanVals = isnan(LL_Mat);
+NVals = sum(NanVals,2);
+indgoodrow = NVals == 0;
+
+LL_Mat = LL_Mat(indgoodrow,:);
+
+LogLikelihood = sum(sum(LL_Mat));
+
+
+
+% --------------------------------------------------------------------
+% This function calculates model outputs for various crypt and villus cell
+% numbers as well as the probabilities of observing various pathology
+% scores (using the scale parameters a1, b1,... etc)
+% Inputs are Irinotecan dose, time span, and the model paramter structure
+
+function Results = Calculate_GI_Model_Response(AVAIL_DOSE,tspan,pars)
+
+iplot = 0;
+ISPECIES = 1;
+
+[SC_SS, TADC_SS_vec, TADC_tot_SS, ENT_SS_VEC, ENT_tot_SS, ...
+    ShedRate_per_Villus_SS ] = ...
+    Calculate_Steady_State_Quantities(pars);
+
+SC_SS = pars.Values(strcmpi(pars.Names,'SC_SS'));
+Ntransit = pars.Values(strcmpi(pars.Names,'Ntransit'));
+N_ENT_TRANSIT = pars.Values(strcmpi(pars.Names,'N_ENT_TRANSIT'));
+Crypt_Villus_Ratio_0 = pars.Values(strcmpi(pars.Names,'Crypt_Villus_Ratio_0'));
+N_Zombie_Levels = pars.Values(strcmpi(pars.Names,'N_Zombie_Levels'));
+
+% Set Initial Conditions
+y0 = zeros(7+Ntransit+N_ENT_TRANSIT,1);
+y0(1) = SC_SS ;
+y0(2:Ntransit+1) = TADC_SS_vec;
+y0(Ntransit+2: Ntransit+1+N_ENT_TRANSIT) = ENT_SS_VEC;
+y0(2+Ntransit+N_ENT_TRANSIT) = 0; % Total number of shed enterocytes
+y0(3+Ntransit+N_ENT_TRANSIT) = 0; % Number of enterocytes produced per crypt
+if ISPECIES == 1 % Rodent IP or oral administration
+    y0(4+Ntransit+N_ENT_TRANSIT) = AVAIL_DOSE; % Oral drug amount in umol per kg bod weight
+else
+    y0(4+Ntransit+N_ENT_TRANSIT) = 0; % Typically IV infusion in humans
+end
+y0(5+Ntransit+N_ENT_TRANSIT) = 0; % Plasma drug amount in umol/kg
+y0(6+Ntransit+N_ENT_TRANSIT) = 0; % Peripheral drug amount in umol/kg
+y0(7+Ntransit+N_ENT_TRANSIT) = 0; % Amount of SN38 central umol/kg
+y0(7+Ntransit+N_ENT_TRANSIT+1 : 7+Ntransit+N_ENT_TRANSIT+N_Zombie_Levels) = 0; % Number of "un-dead" crypt cells on the way to disappearance
+
+Nvars = length(y0);
+
+% Simulate the ODE model using the current parameters and initial
+% conditions
+options = odeset('NonNegative',1:Nvars,'RelTol',1e-6);
+[t,y] = ode15s(@Gut_Model_Equations,tspan,y0,options,pars);
+t = real(t);
+y = real(y);
+
+% Parse the time course simulation results 
+% i.e. Extract out the appropriate variables
+Results = Parse_Results(t,y,pars);
+
+
+% -------------------------------------------------------------------------
+% Parse ODE Results to extract out normalized cell numbers. Convert crypt
+% and villus cell reductions to probabilities of observing crypt and villus
+% pathology scores
+function Results = Parse_Results(t,y,pars)
+
+[SC_SS, TADC_SS_vec, TADC_tot_SS, ENT_SS_VEC, ENT_tot_SS, ...
+    ShedRate_per_Villus_SS] = ...
+Calculate_Steady_State_Quantities(pars);
+
+[SC_SS, k_shed, krep_SC, krep_TADC, Ntransit, ...  
+    Crypt_Villus_Ratio_0, ...                               
+    N_ENT_TRANSIT,                 ...                      
+    sc_tox_emax, sc_tox_IC50, TOX_EXP_SC, ...           
+    tadc_tox_emax, tadc_tox_IC50, TOX_EXP_TADC, ...     
+    tadc_arrest_IC50, tvTOX_EXP_TADC_ARREST, ...          
+    ent_tox_emax, ent_tox_IC50, TOX_EXP_ENT, ...        
+    a1, b1, d1, e1, f1, ...                         
+    a2, b2, d2, e2,      ...                          
+    Ka, V, V2, Cl2, Vmax, Km, Fconv, Vmet, Clmet, ...
+    N_Zombie_Levels, kzombie] = ... 
+    Assign_ParValues_To_Appropriate_Variable_Names(pars);
+
+Nt = size(y,1);
+SC = y(:,1); % Stem Cells [# cells/crypt]
+TADC = zeros(Nt,Ntransit);
+for i = 1:Ntransit
+    TADC(:,i) = y(:,1+i); % TADCs in compartment number i [# cells/crypt]
+end
+ENT = zeros(Nt,N_ENT_TRANSIT);
+for i = 1:N_ENT_TRANSIT
+    ENT(:,i) = y(:,1+Ntransit+i);
+end
+SHED_ENT = y(:,2+Ntransit+N_ENT_TRANSIT);  %Number of shed enterocytes [# cells/villus]
+ENT_produced_per_crypt = y(:,3+Ntransit+N_ENT_TRANSIT); % % Total enterocytes produced (only included to match RES model - not used for fits/interpretation)
+
+Aa = y(:,4+Ntransit+N_ENT_TRANSIT); % Oral drug amount in umol per kg BW  
+A1 = y(:,5+Ntransit+N_ENT_TRANSIT); % Plasma drug concentration in umol/kg
+A2 = y(:,6+Ntransit+N_ENT_TRANSIT); % Peripheral drug amount in umol/kg
+Amet = y(:,7+Ntransit+N_ENT_TRANSIT); % Amount of metabolite, SN38 drug amount in umol/kg
+Zombies = zeros(Nt,N_Zombie_Levels);
+for i = 1:N_Zombie_Levels
+    Zombies(:,i) = y(:,7+Ntransit+N_ENT_TRANSIT+i);
+end
+
+C1 = A1/V;
+C2 = A2/V2;
+Cmet = Amet/Vmet;
+
+TADC_Total = sum(TADC,2);
+Zombie_Total = sum(Zombies,2);
+ENT_Total = sum(ENT,2);
+Total_cells_1villus = Crypt_Villus_Ratio_0.*(TADC_Total + SC) + ENT_Total ;
+Percent_Villus = ENT_Total./Total_cells_1villus ;
+Percent_Crypt  = Crypt_Villus_Ratio_0.*(SC+TADC_Total)./Total_cells_1villus ;
+
+SC_Norm = SC./SC_SS ;
+TADC_Total_Norm = TADC_Total./TADC_tot_SS ;
+SC_Norm_plus_TADC_Total_Norm = (SC+TADC_Total)/(SC_SS+TADC_tot_SS);
+ENT_Norm = ENT_Total./ENT_tot_SS;
+TADC_Norm = TADC./repmat(TADC_SS_vec,Nt,1);
+Zombie_Norm = Zombie_Total/(SC_SS+TADC_tot_SS);
+Visible_Crypt_Cells_Norm = (SC+TADC_Total+Zombie_Total)/(SC_SS+TADC_tot_SS);
+
+
+% we define the probabilities of observing various crypt pathology 
+% scores. We link the normalized stem cell levels to the crypt 
+% atrophy score. 1 - Visible_Crypt_Cells_Norm is linked to the pathology
+CRYPT_SCORE = 1 - Visible_Crypt_Cells_Norm;
+Effect_Term = a1*CRYPT_SCORE;
+prob4_crypt = ilogit(Effect_Term + b1);
+% prob (3 or 4) =ilogit(a1*S + b1 + d1)
+prob3_crypt = ilogit(Effect_Term+ b1+d1) -  ilogit(Effect_Term + b1);
+% prob (>=2) =ilogit(a1*S + b1 + d1 + e1)
+prob2_crypt = ilogit(Effect_Term+b1+d1+e1) -  ilogit(Effect_Term+b1+d1);
+% prob (>=1) =ilogit(a1*S + b1 + d1 + e1 + f1)
+prob1_crypt = ilogit(Effect_Term+b1+d1+e1+f1) -  ilogit(Effect_Term+b1+d1+e1);
+prob0_crypt = 1 - ilogit(Effect_Term+b1+d1+e1+f1);	
+prob_tot_crypt = prob4_crypt+prob3_crypt+prob2_crypt+prob1_crypt+prob0_crypt;
+prob_all_crypt = [prob0_crypt prob1_crypt prob2_crypt prob3_crypt prob4_crypt];
+
+% we define the probabilities of observing various villus pathology 
+% scores. We link the normalized enterocyte levels to the villus 
+% atrophy score. 1 - ENT_Norm is linked to the pathology
+ENT_Score = 1 - ENT_Norm;
+prob3_villus = ilogit(a2*ENT_Score + b2);
+prob2_villus = ilogit(a2*ENT_Score+ b2+d2) -  ilogit(a2*ENT_Score + b2);
+prob1_villus = ilogit(a2*ENT_Score+b2+d2+e2) -  ilogit(a2*ENT_Score+b2+d2);
+prob0_villus  = 1 - ilogit(a2*ENT_Score+b2+d2+e2);
+prob_tot_villus = prob3_villus+prob2_villus+prob1_villus+prob0_villus;
+prob_all_villus = [prob0_villus prob1_villus prob2_villus prob3_villus ];
+
+Results.t = t;
+Results.SC_Norm = SC_Norm;
+Results.TADC_Total_Norm = TADC_Total_Norm;
+Results.SC_Norm_plus_TADC_Total_Norm = SC_Norm_plus_TADC_Total_Norm;
+Results.Zombie_Norm = Zombie_Norm;
+Results.Visible_Crypt_Cells_Norm = Visible_Crypt_Cells_Norm;
+Results.ENT_Norm = ENT_Norm;
+Results.probs_crypt = prob_all_crypt;
+Results.probs_villus = prob_all_villus;
+Results.C1 = C1;
+Results.C2 = C2;
+Results.Cmet = Cmet;
+
+
+% -------------------------------------------------------------------------
+function Value = ilogit(a)
+
+Value = exp(a)./(1 + exp(a));
+
+
+% -------------------------------------------------------------------------
+% This is the actual ODE systme that is solved to generate the
+% time profiles for various cell types
+function dy_dt = Gut_Model_Equations(~,y,pars)
+
+% Determine the values for various parametrs
+[SC_SS, k_shed, krep_SC, krep_TADC, Ntransit, ...  
+    Crypt_Villus_Ratio_0, ...                               
+    N_ENT_TRANSIT,                 ...                      
+    sc_tox_emax, sc_tox_IC50, TOX_EXP_SC, ...           
+    tadc_tox_emax, tadc_tox_IC50, TOX_EXP_TADC, ...     
+    tadc_arrest_IC50, tvTOX_EXP_TADC_ARREST, ...          
+    ent_tox_emax, ent_tox_IC50, TOX_EXP_ENT, ...        
+    a1, b1, d1, e1, f1, ...                         
+    a2, b2, d2, e2,      ...                          
+    Ka, V, V2, Cl2, Vmax, Km, Fconv, Vmet, Clmet, ...
+    N_Zombie_Levels, kzombie] = ... 
+    Assign_ParValues_To_Appropriate_Variable_Names(pars);
+
+k_ent_transit = (N_ENT_TRANSIT)*k_shed;
+
+SC = y(1); % Stem Cells [# cells/crypt]
+TADC = zeros(Ntransit,1);
+for i = 1:Ntransit
+    TADC(i) = y(1+i); % TADCs in compartment number i [# cells/crypt]
+end
+ENT = zeros(N_ENT_TRANSIT,1);
+for i = 1:N_ENT_TRANSIT
+    ENT(i) = y(1+Ntransit+i); %Number of enterocytes [# cells/villus]
+end
+SHED_ENT = y(2+Ntransit+N_ENT_TRANSIT);  %Number of shed enterocytes [# cells/villus]
+ENT_produced_per_crypt = y(3+Ntransit+N_ENT_TRANSIT); % % Total enterocytes produced (only included to match RES model - not used for fits/interpretation)  
+Aa = y(4+Ntransit+N_ENT_TRANSIT); % Oral drug amount in umol per kg BW  
+A1 = y(5+Ntransit+N_ENT_TRANSIT); % Plasma drug concentration in umol/kg
+A2 = y(6+Ntransit+N_ENT_TRANSIT); % Peripheral drug amount in umol/kg
+Amet = y(7+Ntransit+N_ENT_TRANSIT); % Amount of metabolite, SN38 drug amount in umol/kg
+Zombies = zeros(N_Zombie_Levels,1);
+for i = 1:N_Zombie_Levels   
+    Zombies(i) =  y(7+Ntransit+N_ENT_TRANSIT+i);
+end
+
+
+% Drug PK. PK of Irinotecan and the metabolite SN38
+C = A1/V;
+C2 = A2/V2;
+Cmet = Amet/Vmet;
+Cl = Vmax/(Km + C);
+
+dAa_dt = - Ka * Aa;	
+dA1_dt = Ka * Aa - Cl * C - Cl2*(C - C2);
+dA2_dt = Cl2*(C - C2);
+dAmet_dt = Fconv * Cl * C - Clmet * Cmet;	
+
+%Effect of drug on various cell types
+SC_Tox        = sc_tox_emax*Cmet^TOX_EXP_SC/(sc_tox_IC50^TOX_EXP_SC + Cmet^TOX_EXP_SC) ; % Effect of drug on SC death
+TADC_Tox      = tadc_tox_emax*(Cmet^TOX_EXP_TADC) /...
+   ( (tadc_tox_IC50^TOX_EXP_TADC) + ...
+     (Cmet^TOX_EXP_TADC) ) ; % Effect of drug on SC death
+ENT_Tox        = ent_tox_emax*Cmet^TOX_EXP_ENT/(ent_tox_IC50^TOX_EXP_ENT + Cmet^TOX_EXP_ENT) ; % Effect of drug on SC death
+TADC_Prolif_Switch = (1- Cmet^tvTOX_EXP_TADC_ARREST/(tadc_arrest_IC50^tvTOX_EXP_TADC_ARREST + Cmet^tvTOX_EXP_TADC_ARREST)) ;
+
+
+% Cell Dynamics
+dSC_dt    = krep_SC*(SC_SS -SC)                    - SC_Tox*SC                  ;
+dTADC_dt = zeros(Ntransit,1);
+dTADC_dt(1) = krep_SC*SC 						  - krep_TADC*TADC_Prolif_Switch*TADC(1) - TADC_Tox*TADC(1) ;
+for i = 2:Ntransit
+    dTADC_dt(i) = 2*krep_TADC*TADC_Prolif_Switch*TADC(i-1) - krep_TADC*TADC_Prolif_Switch*TADC(i) - TADC_Tox*TADC(i) ;
+end
+
+dZombie_dt = zeros(N_Zombie_Levels,1);
+dZombie_dt(1) = TADC_Tox*(sum(TADC)) + SC_Tox*SC - kzombie*Zombies(1);
+for i = 2:N_Zombie_Levels
+    dZombie_dt(i) = kzombie*(Zombies(i-1) - Zombies(i));
+end
+
+dENT_dt = zeros(N_ENT_TRANSIT,1);
+dENT_dt(1) = 2*krep_TADC*TADC_Prolif_Switch*TADC(Ntransit)*Crypt_Villus_Ratio_0 - ENT_Tox*ENT(1) - k_ent_transit*ENT(1);
+for i = 2:N_ENT_TRANSIT
+    dENT_dt(i) = k_ent_transit*ENT(i-1) - k_ent_transit*ENT(i) - ENT_Tox*ENT(i);
+end
+dSHED_ENT_dt = k_ent_transit*ENT(N_ENT_TRANSIT) ;
+dENT_produced_per_crypt_dt = 2*krep_TADC*TADC_Prolif_Switch*TADC(Ntransit) ;
+
+
+dy_dt = [dSC_dt ...
+         dTADC_dt' dENT_dt' dSHED_ENT_dt  ...
+         dENT_produced_per_crypt_dt ...
+         dAa_dt dA1_dt dA2_dt dAmet_dt dZombie_dt']';
+
+
+
+% -------------------------------------------------------------------------
+% Here we set the system specific and compound specific parameters
+% Compound specific parameters listed here are the ones that were obtained
+% by fitting rat histopathology data
+% Human compound specific parameter are obtained by scaling rat data to
+% human while accounting for free fraction differences between the species
+function Parameters = Set_Base_Parameters
+
+global ISPECIES MW_DRUG
+global tvF
+
+MW_DRUG = 586.7; % Molecular weight for Irinotecan
+
+% For each parameter we specify an actual value as well as upper and lower
+% bounds. During parameter estimation initial values are samples uniformly
+% between the upper and lower bounds and the optimization is repeated
+% multiple times to arrive at a final value
+
+switch ISPECIES    
+    case 1 % Rat
+        SC_SS = [10 4 16]; % Number of stem cells/crypt at steady state
+        k_shed = [0.45 0.2 0.6]; % Shedding rate constant of enterocytes in per day
+
+        krep_SC = [1.5 0.8 3]; % Stem cell doubling rate in per day (16 hour doubling time)
+        krep_TADC = [2 0.8 3]; % TADC doubling rate in per day (12 hour doubling time)  
+
+        Ntransit = 4;  % Number of TADC compartment
+        Crypt_Villus_Ratio_0 = [7 4 9]; % Number of crypts feeding each villus
+               
+        % PK parameters for Irinotecan in rats 
+        Ka = [15 10 200] * 24; % Ka - convert from /hr to /day
+        V = [9.14 1 100]; % Volume of Irinotecan in L/kg
+        V2 = [12.3 1 100]; % Peripheral volume of Irinotecan in L/kg
+        Cl2 = [0.967 0.001 10] * 24; % Intercompartment clearance in L/kg/day
+        Vmax = [6.283 0.01 20] * 24; % Vmax for saturable clearance of Irinotecan in L/kg/day . uM
+        Km = [0.515 0.001 20]; % Km for Irinotecan clearance in umol/L
+        Fconv = [0.533 0.001 1]; % Fraction of the Irino clearance that is conversion to SN38 
+        Vmet = [0.0187 0.001 1]; % Volume of distribution of SN38 in L/kg
+        Clmet = [5.899 0.01 10] * 24; % Clearance of metabolite SN38 in L/kg/day 
+        tvF = 1; % Bioavailability
+               
+        % Compound-Specific Parameters
+        % Drug-mediated TADC Killing
+        tadc_tox_emax = [4.41 1e-2 1e2];  		% #Emax for direct killing of TADCs (Units: per day)
+        tadc_tox_IC50 = [3.1 0.001 1e3];  % #IC50 for direct killing of TADCs (Units: uM plasma concentration)
+        TOX_EXP_TADC = [0.5 0.1 4]; %			#Hill exponent for direct killing of TADCs (Units: Dimensionless)
+
+        % Parameters for drug-mediated arrest of TADCs
+        tadc_arrest_IC50 = [0.03 1e-3 100]; % % EC50 value for arrest of TADCs in uM
+        tvTOX_EXP_TADC_ARREST = [1 1 3];
+
+                
+    case 2 % Man
+        SC_SS = [10 4 16]; % Number of stem cells/crypt at steady state
+        k_shed = [0.25 0.1 0.4]; % Shedding rate constant of enterocytes 
+
+        krep_SC = [0.333 0.2 1]; % Stem cell doubling rate in per day (60 hour doubling time)
+        krep_TADC = [0.75 0.5 2]; % TADC doubling rate in per day (1 day doubling time)  
+
+        Ntransit = 5; % Number of TADC Transit comparments
+        Crypt_Villus_Ratio_0 = [7 4 9];
+        tvF = 1;
+        
+        % Compound-Specific Parameters
+        % Drug-mediated TADC Killing
+        tadc_tox_emax = [4.41 1e-2 1e2];  		% #Emax for direct killing of TADCs (Units: per day)
+        tadc_tox_IC50 = [7.8 0.001 1e3];  % #IC50 for direct killing of TADCs (Units: uM plasma concentration
+        TOX_EXP_TADC = [0.5 0.1 4]; %			#Hill exponent for direct killing of TADCs (Units: Dimensionless)
+
+        % Parameters for drug-mediated arrest of TADCs
+        tadc_arrest_IC50 = [0.075 1e-3 100]; % % EC50 value for arrest of TADCs in uM
+        tvTOX_EXP_TADC_ARREST = [1 1 3];        
+end
+
+N_ENT_TRANSIT = [5 1 25];  % Number of enterocyte transit compartments
+
+ % Cell Toxicity (Killing) Parameters - Direct Stem Cell Toxicity UNUSED IN
+% FINAL MODEL
+sc_tox_emax = [0 1e-3 100]; % #Emax for direct killing of stem cells (Units: per day)
+sc_tox_IC50 = [1 0.001 100]; % #IC50 for direct killing of stem cells (Units: uM plasma concentration)
+TOX_EXP_SC = [1 0.5 3]; %    #Hill exponent for direct killing of stem cells (Units: Dimensionless)
+
+% Parameters for drug mediated direct killing of enterocytes UNUSED IN
+% FINAL MODEL
+ent_tox_emax = [0 0 20]; %  #Emax for direct killing of ENTs -> currently OFF! (1e-6) (Units: per day)
+ent_tox_IC50 = [5 0.001 10]; %	#IC50 for direct killing of ENTs (Units: uM plasma concentration)
+TOX_EXP_ENT  = [1 1 10]; %	#Hill exponent for direct killing of ENTs (Units: Dimensionless)
+
+
+% These are paramters that are specifically associated with fitting of rat
+% data 
+N_Zombie_Levels = [5 1 5]; % Number of transit compartments for cell death
+MTT_from_exposure_to_cell_removal = 0.25; % Time from expression of apoptosis marker to actual cell disappearance in days
+kzombie = [N_Zombie_Levels(1)/MTT_from_exposure_to_cell_removal 0.5 50]; % Rate constant for crypt cell transit following commitment to cell death
+
+
+% Parameters relating stem cell levels to probability of observing various
+% crypt atrophy scores
+a1 = [33.3 1 50];
+b1 = [-18.7 -50 -1];
+d1 = [5.3 0.1 10];
+e1 = [2.9 0.1 10];
+f1 = [2.8  0.1 10];
+
+% Parameters relating enterocyte cell levels to probability of observing various
+% villous atrophy scores
+a2 = [12.4  1 50];
+b2 = [-10.3 -50 -1];
+d2 = [1.2 0.1 10];
+e2 = [0.7 0.1 10];
+
+
+Par_Values = ...
+    [SC_SS(1) k_shed(1) krep_SC(1) krep_TADC(1) Ntransit ...  % Crypt parameters
+    Crypt_Villus_Ratio_0(1) ...                               % Crypt parameters
+    N_ENT_TRANSIT(1)                 ...                      % Enterocyte transit compartments
+    sc_tox_emax(1) sc_tox_IC50(1) TOX_EXP_SC(1) ...           % Compound effects on stem cells
+    tadc_tox_emax(1) tadc_tox_IC50(1) TOX_EXP_TADC(1) ...     % Compound effects on TADC killing
+    tadc_arrest_IC50(1) tvTOX_EXP_TADC_ARREST(1) ...          % Compound effects on TADC arrest
+    ent_tox_emax(1) ent_tox_IC50(1) TOX_EXP_ENT(1) ...        % Compound effects on Enterocytes
+    a1(1) b1(1) d1(1) e1(1) f1(1) ...                         % Relationship between stem cells and crypt pathology score
+    a2(1) b2(1) d2(1) e2(1)      ...                          % Relationship between enterocytes and villous pathology score
+    Ka(1) V(1) V2(1) Cl2(1) Vmax(1) Km(1) Fconv(1) Vmet(1) Clmet(1) ...  % Rat PK parameters to fit Rat Data
+    N_Zombie_Levels(1) kzombie(1)];                           % Parameters related to time taken for crypt cell death                                            
+    
+Par_LB = ...
+    [SC_SS(2) k_shed(2) krep_SC(2) krep_TADC(2) Ntransit ...  % Crypt parameters
+    Crypt_Villus_Ratio_0(2) ...                               % Crypt parameters
+    N_ENT_TRANSIT(2)                 ...                      % Enterocyte transit compartments
+    sc_tox_emax(2) sc_tox_IC50(2) TOX_EXP_SC(2) ...           % Compound effects on stem cells
+    tadc_tox_emax(2) tadc_tox_IC50(2) TOX_EXP_TADC(2) ...     % Compound effects on TADC killing
+    tadc_arrest_IC50(2) tvTOX_EXP_TADC_ARREST(2) ...          % Compound effects on TADC arrest
+    ent_tox_emax(2) ent_tox_IC50(2) TOX_EXP_ENT(2) ...        % Compound effects on Enterocytes
+    a1(2) b1(2) d1(2) e1(2) f1(2) ...                         % Relationship between stem cells and crypt pathology score
+    a2(2) b2(2) d2(2) e2(2)      ...                          % Relationship between enterocytes and villous pathology score
+    Ka(2) V(2) V2(2) Cl2(2) Vmax(2) Km(2) Fconv(2) Vmet(2) Clmet(2) ...  % Rat PK parameters to fit Rat Data
+    N_Zombie_Levels(2) kzombie(2)];                           % Parameters related to time taken for crypt cell death         
+    
+    
+Par_UB = ...
+    [SC_SS(3) k_shed(3) krep_SC(3) krep_TADC(3) Ntransit ...  % Crypt parameters
+    Crypt_Villus_Ratio_0(3) ...                               % Crypt parameters
+    N_ENT_TRANSIT(3)                 ...                      % Enterocyte transit compartments
+    sc_tox_emax(3) sc_tox_IC50(3) TOX_EXP_SC(3) ...           % Compound effects on stem cells
+    tadc_tox_emax(3) tadc_tox_IC50(3) TOX_EXP_TADC(3) ...     % Compound effects on TADC killing
+    tadc_arrest_IC50(3) tvTOX_EXP_TADC_ARREST(3) ...          % Compound effects on TADC arrest
+    ent_tox_emax(3) ent_tox_IC50(3) TOX_EXP_ENT(3) ...        % Compound effects on Enterocytes
+    a1(3) b1(3) d1(3) e1(3) f1(3) ...                         % Relationship between stem cells and crypt pathology score
+    a2(3) b2(3) d2(3) e2(3)      ...                          % Relationship between enterocytes and villous pathology score
+    Ka(3) V(3) V2(3) Cl2(3) Vmax(3) Km(3) Fconv(3) Vmet(3) Clmet(3) ...  % Rat PK parameters to fit Rat Data
+    N_Zombie_Levels(3) kzombie(3)];                           % Parameters related to time taken for crypt cell death                                            
+
+Par_Names = ...
+    {'SC_SS', 'k_shed', 'krep_SC', 'krep_TADC', 'Ntransit' ...  % Crypt parameters
+    'Crypt_Villus_Ratio_0', ...                                % Crypt parameters
+     'N_ENT_TRANSIT', ...                                      % Enterocyte transit compartments
+    'sc_tox_emax', 'sc_tox_IC50', 'TOX_EXP_SC', ...            % Compound effects on stem cells
+    'tadc_tox_emax', 'tadc_tox_IC50', 'TOX_EXP_TADC', ...      % Compound effects on TADC killing
+    'tadc_arrest_IC50', 'tvTOX_EXP_TADC_ARREST', ...           % Compound effects on TADC arrest
+    'ent_tox_emax', 'ent_tox_IC50', 'TOX_EXP_ENT',...          % Compound effects on Enterocytes
+    'a1', 'b1', 'd1', 'e1', 'f1', ...                         % Relationship between stem cells and crypt pathology score
+    'a2', 'b2', 'd2', 'e2', ...                               % Relationship between enterocytes and villous pathology score
+    'Ka', 'V', 'V2', 'Cl2', 'Vmax', 'Km', 'Fconv', 'Vmet', 'Clmet',... % Rat PK parameters to fit Rat Data
+    'N_Zombie_Levels','kzombie'};  
+   
+
+Parameters.Values = Par_Values;
+Parameters.LB = Par_LB;
+Parameters.UB = Par_UB;
+Parameters.Names = Par_Names;   
+
+
+% ---------------------------------------------------------------------
+% Calculates steady-state cell numbers given model parameters
+
+function [SC_SS, TADC_SS_vec, TADC_tot_SS, ENT_SS_VEC, ENT_tot_SS, ...
+    ShedRate_per_Villus_SS] = ...
+    Calculate_Steady_State_Quantities(par)
+
+doubling_vector = 2.^(0:10);
+
+Values = par.Values;
+Names = par.Names;
+
+SC_SS = Values(strcmpi(Names,'SC_SS'));
+Ntransit = Values(strcmpi(Names,'Ntransit'));
+krep_SC = Values(strcmpi(Names,'krep_SC'));
+krep_TADC = Values(strcmpi(Names,'krep_TADC'));
+k_shed = Values(strcmpi(Names,'k_shed'));
+Crypt_Villus_Ratio_0 = Values(strcmpi(Names,'Crypt_Villus_Ratio_0'));
+N_ENT_TRANSIT = Values(strcmpi(Names,'N_ENT_TRANSIT'));
+
+% Calculate Steady state quantities
+TADC_SS_vec = SC_SS  * (krep_SC/krep_TADC)*doubling_vector(1:Ntransit);
+TADC_tot_SS = SC_SS  * (krep_SC/krep_TADC)*sum(doubling_vector(1:Ntransit));
+ENT_tot_SS  = SC_SS  * (krep_SC/k_shed)*Crypt_Villus_Ratio_0 * (2^Ntransit);
+
+ENT_SS_VEC = ones(N_ENT_TRANSIT,1) * ENT_tot_SS/N_ENT_TRANSIT;
+ShedRate_per_Villus_SS  = SC_SS  * krep_SC * Crypt_Villus_Ratio_0 * (2^Ntransit);
+
+% -------------------------------------------------------------------------
+% Assigns appropriate values to each of the Parameter Names. 
+% The Name and Value fields in Parameter structure are used to assign 
+% values to each parameter
+function [SC_SS, k_shed, krep_SC, krep_TADC, Ntransit, ...  
+    Crypt_Villus_Ratio_0, ...                               
+    N_ENT_TRANSIT,                 ...                      
+    sc_tox_emax, sc_tox_IC50, TOX_EXP_SC, ...           
+    tadc_tox_emax, tadc_tox_IC50, TOX_EXP_TADC, ...     
+    tadc_arrest_IC50, tvTOX_EXP_TADC_ARREST, ...          
+    ent_tox_emax, ent_tox_IC50, TOX_EXP_ENT, ...        
+    a1, b1, d1, e1, f1, ...                         
+    a2, b2, d2, e2,      ...                          
+    Ka, V, V2, Cl2, Vmax, Km, Fconv, Vmet, Clmet, ...
+    N_Zombie_Levels, kzombie] = ... 
+Assign_ParValues_To_Appropriate_Variable_Names(pars)
+
+
+Values = pars.Values;
+Names = pars.Names;
+
+SC_SS = Values(strcmpi(Names,'SC_SS'));
+k_shed = Values(strcmpi(Names,'k_shed'));
+krep_SC = Values(strcmpi(Names,'krep_SC'));
+krep_TADC = Values(strcmpi(Names,'krep_TADC'));
+Ntransit = Values(strcmpi(Names,'Ntransit'));
+Crypt_Villus_Ratio_0 = Values(strcmpi(Names,'Crypt_Villus_Ratio_0'));
+N_ENT_TRANSIT = Values(strcmpi(Names,'N_ENT_TRANSIT'));
+
+sc_tox_emax = Values(strcmpi(Names,'sc_tox_emax'));
+sc_tox_IC50 = Values(strcmpi(Names,'sc_tox_IC50'));
+TOX_EXP_SC = Values(strcmpi(Names,'TOX_EXP_SC'));
+tadc_tox_emax = Values(strcmpi(Names,'tadc_tox_emax'));
+tadc_tox_IC50 = Values(strcmpi(Names,'tadc_tox_IC50'));
+TOX_EXP_TADC = Values(strcmpi(Names,'TOX_EXP_TADC'));
+tadc_arrest_IC50 = Values(strcmpi(Names,'tadc_arrest_IC50'));
+tvTOX_EXP_TADC_ARREST = Values(strcmpi(Names,'tvTOX_EXP_TADC_ARREST'));
+ent_tox_emax = Values(strcmpi(Names,'ent_tox_emax'));
+ent_tox_IC50 = Values(strcmpi(Names,'ent_tox_IC50'));
+TOX_EXP_ENT = Values(strcmpi(Names,'TOX_EXP_ENT'));
+a1 = Values(strcmpi(Names,'a1'));
+b1 = Values(strcmpi(Names,'b1'));
+d1 = Values(strcmpi(Names,'d1'));
+e1 = Values(strcmpi(Names,'e1'));
+f1 = Values(strcmpi(Names,'f1'));
+a2 = Values(strcmpi(Names,'a2'));
+b2 = Values(strcmpi(Names,'b2'));
+d2 = Values(strcmpi(Names,'d2'));
+e2 = Values(strcmpi(Names,'e2'));
+
+Ka = Values(strcmpi(Names,'Ka'));
+V = Values(strcmpi(Names,'V'));
+V2 = Values(strcmpi(Names,'V2'));
+Cl2 = Values(strcmpi(Names,'Cl2'));
+Vmax = Values(strcmpi(Names,'Vmax'));
+Km = Values(strcmpi(Names,'Km'));
+Fconv = Values(strcmpi(Names,'Fconv'));
+Vmet = Values(strcmpi(Names,'Vmet'));
+Clmet = Values(strcmpi(Names,'Clmet'));
+
+N_Zombie_Levels = Values(strcmpi(Names,'N_Zombie_Levels'));
+kzombie = Values(strcmpi(Names,'kzombie'));
+
+
+% -------------------------------------------------------------------------
+% Read in the rat histopathology data from an Excel file and assign the
+% data to appropriate variables
+function Exp_Data = Load_and_plot_Experimental_Data
+
+global  iplot map
+
+fname = 'Irinotecan_Jejunum_Rat_PathScore_Data';
+    
+
+[Num,Txt] = xlsread(fname,'PathScoreData');
+
+Group_IDs = Txt(2:end,5);
+Groups = Num(:,1);
+Doses = Num(:,2);
+Times = Num(:,3);
+
+% These are the raw numbers of animals showing various severity scores for
+% particular histopathological findings in the crypt and villus
+Raw_CAD_Counts = Num(:,6:10); % CAD stands for Crypt apoptosis degeneration
+Raw_CAT_Counts = Num(:,11:15); % CAT stands for crypt atrophy
+Raw_CHYP_Counts = Num(:,16:20); % Crypt hyperproliferation scores
+Raw_Villus_Counts = Num(:,21:25); % Villus stands for villus mucosal atrophy
+
+% These are the raw numbers converted into observed fractions of animals
+% with various severity levels for Crypt Apoptosis Degeneration(CAD), Crypt
+% Atrophy (CAT), Crypt hyperproliferation (CHYP), Villus atrophy
+Prob_CAD_Score = Num(:,26:30);
+Prob_CAT_Score = Num(:,31:35);
+Prob_CHYP_Score = Num(:,36:40);
+Prob_Villus_Score = Num(:,41:45);
+
+Unique_Groups = unique(Groups);
+Nunique_groups = numel(Unique_Groups);
+
+% To generate colors for plotting
+map = colormap('jet');
+close;
+max_Dose = max(Doses);
+Exp_Data = cell(Nunique_groups,1);
+
+for i = 1:Nunique_groups        
+    ind = Groups == Unique_Groups(i);
+    Group_name_curr = Group_IDs(ind,:);
+    Doses_curr = Doses(ind);
+    Exp_Data{i}.Dose_mpk = Doses_curr(1);
+    Exp_Data{i}.Times = Times(ind);
+    Exp_Data{i}.Time_days = Times(ind)/24;
+    Exp_Data{i}.Group_Name = Group_name_curr{1};
+    Exp_Data{i}.Raw_CAD_Counts = Raw_CAD_Counts(ind,:);
+    Exp_Data{i}.Raw_CAT_Counts = Raw_CAT_Counts(ind,:);
+    Exp_Data{i}.Raw_CHYP_Counts = Raw_CHYP_Counts(ind,:);
+    Exp_Data{i}.Raw_Villus_Counts = Raw_Villus_Counts(ind,:);
+    Exp_Data{i}.Prob_CAD_Score = Prob_CAD_Score(ind,:);
+    Exp_Data{i}.Prob_CAT_Score = Prob_CAT_Score(ind,:);
+    Exp_Data{i}.Prob_CHYP_Score = Prob_CHYP_Score(ind,:);
+    Exp_Data{i}.Prob_Villus_Score = Prob_Villus_Score(ind,:);
+    
+    % Specify which type of crypt score we want to fit. CAD is crypt
+    % apoptosis and degeneration. CAT is Crypt atrophy - Crypt atrophy is a
+    % more direct reflection of the reduction in crypt cell numbers. That
+    % is the metric that we fit here.
+    Exp_Data{i}.Raw_Crypt_Counts = Exp_Data{i}.Raw_CAT_Counts;
+    Exp_Data{i}.Prob_Crypt_Score = Exp_Data{i}.Prob_CAT_Score;
+    
+    if (iplot == 1)    % This is if we want to plot the crypt and villus scores
+        for iscore = 1:5
+            ifig1 = (floor((iscore-1)/4))*2 + 1 ;
+            ifig2 = (floor((iscore-1)/4))*2 + 2;
+            if ((iscore == 1)||(iscore == 5)) && (i == 1)                
+                figure(ifig1); hold on;
+                title(['Crypt Score Plot ' num2str(ifig1)]);                
+                figure(ifig2); hold on;
+                title(['Villus Score Plot ' num2str(ifig2)]);
+             end
+                
+            %clr = map(floor(4 + 56*(Doses_curr(1)-1)/(max_Dose-1)),:);
+            switch Doses_curr(1)
+                case 12.5
+                    clr = [0 0 1];
+                case 25
+                    clr = [0 1 0];
+                case 50
+                    clr = 'm';
+                case 100
+                    clr = 'r';
+            end
+            
+            im = mod(iscore,4);
+            if (im == 0) 
+                isp = 4;
+            else
+                isp = im;
+            end
+            figure(ifig1);
+            subplot(2,2,isp);
+            pl(1) = plot(Exp_Data{i}.Times,Exp_Data{i}.Prob_Crypt_Score(:,iscore),'ko');      
+            hold on;
+            set(gca,'fontname','arial','fontweight','bold','fontsize',16,'box','on','linewidth',2);
+            title(['Score = ' num2str(iscore)]);
+            figure(ifig2);
+            subplot(2,2,isp);
+            hold on;
+            pl(2) = plot(Exp_Data{i}.Times,Exp_Data{i}.Prob_Villus_Score(:,iscore),'ko');
+            set(pl,'Marker','o','markeredgecolor',clr,'markersize',14,'linewidth',2);
+            set(gca,'fontname','arial','fontweight','bold','fontsize',16,'box','on','linewidth',2);
+            title(['Score = ' num2str(iscore)]);
+
+        end
+    end
+end
+
+
+% -------------------------------------------------------------------------
+% This is the plot function used for comparing model predictions with
+% experimental data. Currently the avg score as a function of time for
+% various dose groups is compared across the model and the experiment
+% This function can also generate the bar graphs in Figs. 2A-2D of the
+% manuscript comparing the distribution of severity scores as a function of
+% time (both model and experiment). That feature is currently turned off.
+% Set iplot_stacked_bars to 1 to activate it.
+
+function Plot_Data_Model_Stacked_Bars(Results,Exp_Data)
+
+clr = {'m', [0.7 0 0], [0 0 0.7], [0 0.7 0]};
+
+for i = 1:4
+    figure(1);
+    hold on;
+    Observed = Exp_Data{i}.Prob_Crypt_Score;
+    Predicted = Results{i}.probs_crypt;
+    
+    AvgScore_Obs = Calculate_Average_Score(Observed);
+    AvgScore_Pred = Calculate_Average_Score(Predicted);
+        
+    pl = plot(Exp_Data{i}.Time_days,AvgScore_Obs,'ko');
+    ll = plot(Results{i}.t, AvgScore_Pred, 'k-');    
+    
+    set(pl,'Marker','o','markeredgecolor',clr{i},'markersize',14,'linewidth',2,'markerfacecolor',clr{i});
+    set(ll,'Color',clr{i},'linewidth',3);
+    
+    figure(2);
+    hold on;
+    Observed = Exp_Data{i}.Prob_Villus_Score;
+    Predicted = Results{i}.probs_villus;
+    
+    AvgScore_Obs = Calculate_Average_Score(Observed);
+    AvgScore_Pred = Calculate_Average_Score(Predicted);
+        
+    pl = plot(Exp_Data{i}.Time_days,AvgScore_Obs,'ko');
+    ll = plot(Results{i}.t, AvgScore_Pred, 'k-');    
+    
+    set(pl,'Marker','o','markeredgecolor',clr{i},'markersize',14,'linewidth',2,'markerfacecolor',clr{i});
+    set(ll,'Color',clr{i},'linewidth',3);             
+    
+end
+figure(1);
+set(gca,'fontname','arial','fontweight','bold','fontsize',18,'box','on','linewidth',2); 
+xlabel('Time (days)');
+ylabel('Average Crypt Score');
+print('-dtiff','Crypt_Avg_Score_Comparison');
+
+figure(2);
+set(gca,'fontname','arial','fontweight','bold','fontsize',18,'box','on','linewidth',2); 
+xlabel('Time (days)');
+ylabel('Average Villus Score');
+print('-dtiff','Villus_Avg_Score_Comparison');
+
+
+% This part is currently set up to skip the plotting of stacked bar graphs
+% for various severity levels. This plot section can be re-activated if
+% desired
+iplot_stacked_bars = 0;
+if (iplot_stacked_bars == 1)
+    for i = 1:4
+        figure
+        ntimes = numel(Exp_Data{i}.Time_days);
+        bar(1:ntimes,Exp_Data{i}.Prob_Crypt_Score,0.5,'stack');
+        ttltxt = ['Group ' num2str(i) '  : Crypt Path Data : ' num2str(Exp_Data{i}.Dose_mpk) ' mpk Irino'];
+
+        timetxt = cell(1,ntimes);
+        for j = 1:ntimes
+            timetxt{j} = convertdaytotext(Exp_Data{i}.Time_days(j));
+        end
+        set(gca,'ylim',[0 1]);    
+        c = colorbar; set(c,'ytick',[1 2 3 4 5]);
+        set(gca,'fontname','arial','fontweight','bold','fontsize',18,'box','on','linewidth',2);  
+        set(gca,'xticklabel',timetxt);
+        title(ttltxt);
+        colormap jet
+        print('-dtiff', ['Crypt_Bar_Graph_Data_Group', num2str(i)]);
+
+        Probabilities = interp1(Results{i}.t, Results{i}.probs_crypt, Exp_Data{i}.Time_days); 
+        figure
+        bar(1:ntimes,Probabilities,0.5,'stack');    
+        ttltxt = ['Group ' num2str(i) '  : Crypt Path Model Fit :'  num2str(Exp_Data{i}.Dose_mpk) ' mpk Irino'];
+
+        set(gca,'ylim',[0 1]);  
+        c = colorbar; set(c,'ytick',[1 2 3 4 5]);
+        set(gca,'fontname','arial','fontweight','bold','fontsize',18,'box','on','linewidth',2);    
+        set(gca,'xticklabel',timetxt);
+        title(ttltxt);
+        colormap jet
+        print('-dtiff',['Crypt_Bar_Graph_Model_Group', num2str(i)]);
+    end
+    for i = 1:4
+        figure
+        ntimes = numel(Exp_Data{i}.Time_days);
+        bar(1:ntimes,Exp_Data{i}.Prob_Villus_Score,0.5,'stack');
+        ttltxt = ['Group ' num2str(i) '  : Villus Path Data :' num2str(Exp_Data{i}.Dose_mpk) ' mpk Irino'];
+
+        timetxt = cell(1,ntimes);
+        for j = 1:ntimes
+            timetxt{j} = convertdaytotext(Exp_Data{i}.Time_days(j));
+        end
+        set(gca,'ylim',[0 1]);     
+         c = colorbar; set(c,'ytick',[1 2 3 4 5]);
+        set(gca,'fontname','arial','fontweight','bold','fontsize',18,'box','on','linewidth',2);  
+        set(gca,'xticklabel',timetxt);
+        title(ttltxt);
+        colormap jet
+        print('-dtiff',['Villus_Bar_Graph_Data_Group', num2str(i)]);
+
+        Probabilities = interp1(Results{i}.t, Results{i}.probs_villus, Exp_Data{i}.Time_days); 
+        figure
+        Probabilities = [Probabilities zeros(ntimes,1)]; % Append a column for the highest grade of tox (we dont' observe the highest)
+        bar(1:ntimes,Probabilities,0.5,'stack');    
+        ttltxt = ['Group ' num2str(i) '  : Villus Path Model Fit :' num2str(Exp_Data{i}.Dose_mpk) ' mpk Irino'];
+
+        set(gca,'ylim',[0 1]);
+        c = colorbar; set(c,'ytick',[1 2 3 4 5]);
+        set(gca,'fontname','arial','fontweight','bold','fontsize',18,'box','on','linewidth',2);    
+        set(gca,'xticklabel',timetxt);
+        title(ttltxt);
+        colormap jet
+        print('-dtiff',['Villus_Bar_Graph_Model_Group', num2str(i)]);
+    end
+end
+
+%--------------------------------------------------------------------------
+% Calculates the average score
+function Avg_Score =  Calculate_Average_Score(Frn_with_various_scores)
+
+[ntimes,ngrades] = size(Frn_with_various_scores);
+Avg_Score = nan(ntimes,1);
+
+for iGrade = 1:ngrades
+    if iGrade == 1
+        Avg_Score = (iGrade-1)*Frn_with_various_scores(:,iGrade);
+    else
+        Avg_Score = Avg_Score + (iGrade-1)*Frn_with_various_scores(:,iGrade);
+    end
+        
+end
+
+
+k = 1;
+
+
+%--------------------------------------------------------------------------
+function TimeString = convertdaytotext(Day)
+
+TimeString = [];
+
+if (Day < 1),
+    TimeString = [num2str(round(Day*24)) 'h'];
+else
+    TimeString = [num2str(round(Day)) 'd'];
+end
+
+

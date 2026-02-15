@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-wang2009-pi3k-ras-crosstalk/model.yaml
+    manifest_path: models/signaling-sbml-wang2009-pi3k-ras-crosstalk-biomd0000000288-model/model.yaml
 ```
 
 ## Tags

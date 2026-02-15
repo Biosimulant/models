@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-iyer2004-ventricularmyocyte/model.yaml
+    manifest_path: models/cardiovascular-sbml-iyer2004-ventricularmyocyte-model0847999575-model/model.yaml
 ```
 
 ## Tags

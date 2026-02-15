@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bhalla2004-egfr-mapk/model.yaml
+    manifest_path: models/signaling-sbml-bhalla2004-egfr-mapk-model9085850385-model/model.yaml
 ```
 
 ## Tags

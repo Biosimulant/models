@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-larsen2004-calciumspiking/model.yaml
+    manifest_path: models/systemsbiology-sbml-larsen2004-calciumspiking-biomd0000000330-model/model.yaml
 ```
 
 ## Tags

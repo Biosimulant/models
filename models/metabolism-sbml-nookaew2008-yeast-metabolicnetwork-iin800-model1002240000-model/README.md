@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-nookaew2008-yeast-metabolicnetwork-iin800/model.yaml
+    manifest_path: models/metabolism-sbml-nookaew2008-yeast-metabolicnetwork-iin800-model1002240000-model/model.yaml
 ```
 
 ## Tags

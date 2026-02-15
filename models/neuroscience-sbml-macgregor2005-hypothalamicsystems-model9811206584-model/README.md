@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-macgregor2005-hypothalamicsystems/model.yaml
+    manifest_path: models/neuroscience-sbml-macgregor2005-hypothalamicsystems-model9811206584-model/model.yaml
 ```
 
 ## Tags

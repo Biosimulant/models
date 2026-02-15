@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-sivakumar2011-wntsignalingpathway/model.yaml
+    manifest_path: models/signaling-sbml-sivakumar2011-wntsignalingpathway-biomd0000000397-model/model.yaml
 ```
 
 ## Tags

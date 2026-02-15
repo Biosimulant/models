@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-bannerman2020-integrated-model-of-the-human-airway/model.yaml
+    manifest_path: models/epidemiology-sbml-bannerman2020-integrated-model-of-the-human-airw-model2007210001-model/model.yaml
 ```
 
 ## Tags

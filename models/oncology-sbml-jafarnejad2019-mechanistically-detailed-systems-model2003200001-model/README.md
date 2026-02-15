@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-jafarnejad2019-mechanistically-detailed-systems-biology/model.yaml
+    manifest_path: models/oncology-sbml-jafarnejad2019-mechanistically-detailed-systems-model2003200001-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-you2010-general-yeast-mrna-translation/model.yaml
+    manifest_path: models/generegulation-sbml-you2010-general-yeast-mrna-translation-model8459127548-model/model.yaml
 ```
 
 ## Tags

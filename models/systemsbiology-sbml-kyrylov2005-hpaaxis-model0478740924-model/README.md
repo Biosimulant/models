@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-kyrylov2005-hpaaxis/model.yaml
+    manifest_path: models/systemsbiology-sbml-kyrylov2005-hpaaxis-model0478740924-model/model.yaml
 ```
 
 ## Tags

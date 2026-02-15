@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-goldbeter2013-oscillatory-activity-of-cyclin-dependent/model.yaml
+    manifest_path: models/signaling-sbml-goldbeter2013-oscillatory-activity-of-cyclin-dep-biomd0000000944-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-oliveira2020-beta-alanine-pathway-for-acrylic-acid/model.yaml
+    manifest_path: models/signaling-sbml-oliveira2020-beta-alanine-pathway-for-acrylic-ac-model2010040001-model/model.yaml
 ```
 
 ## Tags

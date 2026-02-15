@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-gerlin2020-genome-scale-metabolic-model-of-bacterial-growth/model.yaml
+    manifest_path: models/metabolism-sbml-gerlin2020-genome-scale-metabolic-model-of-bacte-model2003100001-model/model.yaml
 ```
 
 ## Tags

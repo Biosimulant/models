@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-irani2015-genome-scale-metabolic-model-of-p-pastoris-n/model.yaml
+    manifest_path: models/metabolism-sbml-irani2015-genome-scale-metabolic-model-of-p-past-biomd0000001096-model/model.yaml
 ```
 
 ## Tags

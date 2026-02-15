@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-waugh2006-diabetic-wound-healing-tgf-b-dynamics/model.yaml
+    manifest_path: models/immunology-sbml-waugh2006-diabetic-wound-healing-tgf-b-dynamics-biomd0000000680-model/model.yaml
 ```
 
 ## Tags

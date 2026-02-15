@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-schulz2009-th1-differentiation/model.yaml
+    manifest_path: models/immunology-sbml-schulz2009-th1-differentiation-biomd0000000215-model/model.yaml
 ```
 
 ## Tags

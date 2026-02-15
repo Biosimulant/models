@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-starbuck1990-egf-binding-and-trafficking-dynamics-in/model.yaml
+    manifest_path: models/signaling-sbml-starbuck1990-egf-binding-and-trafficking-dynamic-model2003190005-model/model.yaml
 ```
 
 ## Tags

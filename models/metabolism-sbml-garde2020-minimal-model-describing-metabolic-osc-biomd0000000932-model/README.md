@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-garde2020-minimal-model-describing-metabolic-oscillations/model.yaml
+    manifest_path: models/metabolism-sbml-garde2020-minimal-model-describing-metabolic-osc-biomd0000000932-model/model.yaml
 ```
 
 ## Tags

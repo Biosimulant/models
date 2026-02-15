@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-oliveira2020-glycerol-pathway-for-acrylic-acid-production/model.yaml
+    manifest_path: models/signaling-sbml-oliveira2020-glycerol-pathway-for-acrylic-acid-p-model2010040003-model/model.yaml
 ```
 
 ## Tags

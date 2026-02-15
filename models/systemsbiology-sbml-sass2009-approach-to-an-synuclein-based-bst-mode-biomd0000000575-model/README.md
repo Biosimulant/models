@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-sass2009-approach-to-an-synuclein-based-bst-model-of/model.yaml
+    manifest_path: models/systemsbiology-sbml-sass2009-approach-to-an-synuclein-based-bst-mode-biomd0000000575-model/model.yaml
 ```
 
 ## Tags

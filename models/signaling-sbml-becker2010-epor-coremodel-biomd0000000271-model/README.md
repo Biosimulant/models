@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-becker2010-epor-coremodel/model.yaml
+    manifest_path: models/signaling-sbml-becker2010-epor-coremodel-biomd0000000271-model/model.yaml
 ```
 
 ## Tags

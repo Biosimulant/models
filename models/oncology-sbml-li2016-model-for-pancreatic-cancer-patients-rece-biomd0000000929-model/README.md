@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-li2016-model-for-pancreatic-cancer-patients-receiving/model.yaml
+    manifest_path: models/oncology-sbml-li2016-model-for-pancreatic-cancer-patients-rece-biomd0000000929-model/model.yaml
 ```
 
 ## Tags

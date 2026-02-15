@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-tang2019-pharmacology-modelling-of-aurkb-and-zak/model.yaml
+    manifest_path: models/oncology-sbml-tang2019-pharmacology-modelling-of-aurkb-and-zak-biomd0000000940-model/model.yaml
 ```
 
 ## Tags

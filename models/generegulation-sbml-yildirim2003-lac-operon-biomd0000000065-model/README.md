@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-yildirim2003-lac-operon/model.yaml
+    manifest_path: models/generegulation-sbml-yildirim2003-lac-operon-biomd0000000065-model/model.yaml
 ```
 
 ## Tags

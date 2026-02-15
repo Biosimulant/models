@@ -1,0 +1,128 @@
+function dxdt = modelLIH_RA2019(time,X,name_file_par)
+
+global i Y Z
+
+i= i+1;
+
+load(name_file_par)
+
+dxdt    = zeros(size(X));
+
+Aeff    = X(1);
+NH      = X(2); 
+pH      = X(3);
+NK      = X(4); 
+NNa     = X(5); 
+NCl     = X(6); 
+NCa_T   = X(7); 
+NCa_F   = X(8); 
+
+
+%Luminal Concentrations
+H       = NH/init_V/NA;
+K       = NK/init_V/NA;
+Na      = NNa/init_V/NA;
+Cl      = NCl/init_V/NA;
+Ca_F    = NCa_F/init_V/NA;
+Ca_T    = NCa_T/init_V/NA;
+r       = Ca_F/Ca_T;
+
+%Membrane Potential
+psi     = (F/cap)*init_V*(H + K + Na - Cl + 2*Ca_T - B);
+
+%Modified Cytoplasmic Surface Concentrations
+pH_C0   = (pH_C+psi_out/(RTF*2.3)); 
+K_C0    = K_C*exp(-psi_out/RTF); 
+Na_C0   = Na_C*exp(-psi_out/RTF); 
+Cl_C0   = Cl_C*exp(psi_out/RTF); 
+Ca_F_C0 = Ca_C*exp(-2*psi_out/RTF); 
+
+%Modified Luminal Surface Concentrations
+pH_L0   = (pH+psi_in/(RTF*2.3)); 
+K_L0    = K*exp(-psi_in/RTF); 
+Na_L0   = Na*exp(-psi_in/RTF); 
+Cl_L0   = Cl*exp(psi_in/RTF); 
+Ca_F_L0 = Ca_F*exp(-2*psi_in/RTF); 
+
+delta_pH    = pH_C0-pH_L0;
+
+%Treatment of singular terms for passive ion flux
+if abs(psi) > 0.01
+    gg      =  psi / (1 - exp (- psi / RTF)) / RTF;
+    gg_Ca   = 2*psi/(1-exp(-2*psi/RTF))/RTF;
+
+else 
+    gg      =  1 / 1 - (psi / RTF)/2 + (psi / RTF)^2/6 - (psi / RTF)^3 / 24 + (psi / RTF) ^ 4 / 120;
+    gg_Ca   = 1/(1 - (psi/RTF) + (2/3)*(psi/RTF)^2 - (1/3)*(psi/RTF)^3 +(2/15)*(psi/RTF)^4);
+
+end
+
+%V-ATPase performance
+V_ATPASE        = find_VATP_rate(v_flux,psi,pH);
+J_VATPASE   = N_VATP*real(V_ATPASE);
+
+%ClC-7 Antiporter {H out, Cl in}
+CLC_mu      = (CLC_H + CLC_Cl)*psi + RTF*(CLC_H*2.3*delta_pH + CLC_Cl*log(Cl_C0/Cl_L0)); 
+%Switching function   
+x           = 0.5 + 0.5*tanh((CLC_mu + 250)/75); 
+%Activity
+A           = 0.3*x + 1.5E-5*(1-x)*CLC_mu^2;
+
+if strcmp(CLC_type,'fast')
+    J_CLC    = N_CLC*A*CLC_mu; 
+    dAeffdt     = 0;
+elseif strcmp(CLC_type,'WT')
+    if A < Aeff
+        tau = tau_deact;
+    else
+        tau = tau_act;
+    end
+        
+    dAeffdt = (1/tau)*(A - Aeff); 
+    J_CLC    = N_CLC*Aeff*CLC_mu; 
+
+end
+
+%CAX Antiporter {H out, Ca in}
+CAX_mu      = (CAX_H - 2*CAX_Ca)*psi + RTF*(CAX_H*2.3*delta_pH + CAX_Ca/2*log(Ca_F_L0/Ca_F_C0));
+J_CAX    = N_CAX*CAX_mu;
+
+%Passive flux
+J_H    = P_H*S*(10^(-pH_C0)*exp(-psi/RTF)-10^(-pH_L0))*gg*NA/1000;
+J_K    = P_K*S*(K_C0*exp(-psi/RTF)-K_L0)*gg*NA/1000;
+J_Na   = P_Na*S*(Na_C0*exp(-psi/RTF)-Na_L0)*gg*NA/1000;
+J_Cl_unc   = P_Cl*S*(Cl_C0-Cl_L0*exp(-psi/RTF))*gg*NA/1000;
+J_Ca   = P_Ca*S*(Ca_F_C0*exp(-2*psi/RTF)-Ca_F_L0)*gg_Ca*NA/1000;
+
+%TRPML1 channel
+y = 0.5 - 0.5*tanh(psi + 40);
+P_trpml1 = p*(y*abs(psi) + (1-y)*(abs(psi + 40)^3)/(pH_L0^q));
+J_Ca_trpml1 = P_trpml1*S*(Ca_F_C0*exp(-2*psi/RTF)-Ca_F_L0)*gg_Ca*NA/1000;
+
+%Time Dependent Quantities
+
+dNHdt   = J_H + (J_VATPASE) - (CLC_H*J_CLC) - (CAX_H*J_CAX); 
+
+dpHdt   = (-dNHdt/init_V/NA)/beta_pH;   
+
+dNKdt   = J_K;  
+
+dNNadt  = J_Na; 
+
+dNCldt  = J_Cl_unc + (CLC_Cl*J_CLC);  
+ 
+dNCaTdt = J_Ca + (CAX_Ca*J_CAX) + J_Ca_trpml1;   
+
+dNCaFdt = dNCaTdt*r;   
+
+
+Y = [time, H, K, Na, Cl, Ca_F, Ca_T, psi, ...
+    V_ATPASE, J_VATPASE, CLC_mu, A, J_CLC, CAX_mu, J_CAX, ...
+    J_H, J_K, J_Na, J_Cl_unc, J_Ca, J_Ca_trpml1, P_trpml1];
+
+save_values (Y);
+
+%OUTPUT
+
+dxdt = [dAeffdt; dNHdt; dpHdt; dNKdt; dNNadt; dNCldt; dNCaTdt ; dNCaFdt];
+

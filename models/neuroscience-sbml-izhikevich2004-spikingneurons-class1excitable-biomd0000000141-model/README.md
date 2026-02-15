@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-izhikevich2004-spikingneurons-class1excitable/model.yaml
+    manifest_path: models/neuroscience-sbml-izhikevich2004-spikingneurons-class1excitable-biomd0000000141-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-lemon2003-ca2dynamics/model.yaml
+    manifest_path: models/signaling-sbml-lemon2003-ca2dynamics-model1006230039-model/model.yaml
 ```
 
 ## Tags

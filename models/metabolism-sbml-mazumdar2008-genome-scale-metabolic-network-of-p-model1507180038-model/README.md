@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-mazumdar2008-genome-scale-metabolic-network-of/model.yaml
+    manifest_path: models/metabolism-sbml-mazumdar2008-genome-scale-metabolic-network-of-p-model1507180038-model/model.yaml
 ```
 
 ## Tags

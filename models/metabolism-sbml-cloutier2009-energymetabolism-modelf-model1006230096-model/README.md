@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-cloutier2009-energymetabolism-modelf/model.yaml
+    manifest_path: models/metabolism-sbml-cloutier2009-energymetabolism-modelf-model1006230096-model/model.yaml
 ```
 
 ## Tags

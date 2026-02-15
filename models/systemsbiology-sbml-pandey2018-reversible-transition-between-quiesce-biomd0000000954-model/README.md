@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-pandey2018-reversible-transition-between-quiescence-and/model.yaml
+    manifest_path: models/systemsbiology-sbml-pandey2018-reversible-transition-between-quiesce-biomd0000000954-model/model.yaml
 ```
 
 ## Tags

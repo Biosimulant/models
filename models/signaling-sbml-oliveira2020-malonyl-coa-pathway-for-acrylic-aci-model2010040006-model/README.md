@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-oliveira2020-malonyl-coa-pathway-for-acrylic-acid/model.yaml
+    manifest_path: models/signaling-sbml-oliveira2020-malonyl-coa-pathway-for-acrylic-aci-model2010040006-model/model.yaml
 ```
 
 ## Tags

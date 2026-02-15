@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-vempati2007-mmp9-regulation/model.yaml
+    manifest_path: models/systemsbiology-sbml-vempati2007-mmp9-regulation-model7888000034-model/model.yaml
 ```
 
 ## Tags

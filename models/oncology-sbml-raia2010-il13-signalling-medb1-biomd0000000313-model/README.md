@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-raia2010-il13-signalling-medb1/model.yaml
+    manifest_path: models/oncology-sbml-raia2010-il13-signalling-medb1-biomd0000000313-model/model.yaml
 ```
 
 ## Tags

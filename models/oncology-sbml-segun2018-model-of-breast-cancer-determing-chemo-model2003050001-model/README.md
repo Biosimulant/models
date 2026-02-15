@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-segun2018-model-of-breast-cancer-determing-chemotherapy-and/model.yaml
+    manifest_path: models/oncology-sbml-segun2018-model-of-breast-cancer-determing-chemo-model2003050001-model/model.yaml
 ```
 
 ## Tags

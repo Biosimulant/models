@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-gidvani2012-dna-replication-initiation-model-in-s-cevevisiae/model.yaml
+    manifest_path: models/systemsbiology-sbml-gidvani2012-dna-replication-initiation-model-in-model2003180001-model/model.yaml
 ```
 
 ## Tags

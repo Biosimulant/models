@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-chickarmane2006-stem-cell-switch-reversible/model.yaml
+    manifest_path: models/development-sbml-chickarmane2006-stem-cell-switch-reversible-biomd0000000203-model/model.yaml
 ```
 
 ## Tags

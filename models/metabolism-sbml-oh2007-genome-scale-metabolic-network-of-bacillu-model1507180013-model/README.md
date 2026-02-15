@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-oh2007-genome-scale-metabolic-network-of-bacillus-subtilis/model.yaml
+    manifest_path: models/metabolism-sbml-oh2007-genome-scale-metabolic-network-of-bacillu-model1507180013-model/model.yaml
 ```
 
 ## Tags

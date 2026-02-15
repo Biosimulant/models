@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-hatzimanikatis1999-regulation-of-the-g1-s-transition-of-the/model.yaml
+    manifest_path: models/cellcycle-sbml-hatzimanikatis1999-regulation-of-the-g1-s-transi-model2005070001-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-leloup1999-circadianrhythms-drosophila/model.yaml
+    manifest_path: models/neuroscience-sbml-leloup1999-circadianrhythms-drosophila-biomd0000000298-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-schilling2009-erk-distributive/model.yaml
+    manifest_path: models/signaling-sbml-schilling2009-erk-distributive-biomd0000000270-model/model.yaml
 ```
 
 ## Tags

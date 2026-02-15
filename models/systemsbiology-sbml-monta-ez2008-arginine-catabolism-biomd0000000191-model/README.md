@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-montanez2008-arginine-catabolism/model.yaml
+    manifest_path: models/systemsbiology-sbml-monta-ez2008-arginine-catabolism-biomd0000000191-model/model.yaml
 ```
 
 ## Tags

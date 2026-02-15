@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-chang2008-erk-activation-hallucinogenic-drugs-mediated/model.yaml
+    manifest_path: models/signaling-sbml-chang2008-erk-activation-hallucinogenic-drugs-me-model0975191032-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-sengupta2015-knowledge-base-model-of-human-energy-pool/model.yaml
+    manifest_path: models/systemsbiology-sbml-sengupta2015-knowledge-base-model-of-human-energ-biomd0000000579-model/model.yaml
 ```
 
 ## Tags

@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-lai2007-o2-transport-metabolism/model.yaml
+    manifest_path: models/metabolism-sbml-lai2007-o2-transport-metabolism-biomd0000000248-model/model.yaml
 ```
 
 ## Tags

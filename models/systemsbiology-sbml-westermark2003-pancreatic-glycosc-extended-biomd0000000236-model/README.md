@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-westermark2003-pancreatic-glycosc-extended/model.yaml
+    manifest_path: models/systemsbiology-sbml-westermark2003-pancreatic-glycosc-extended-biomd0000000236-model/model.yaml
 ```
 
 ## Tags

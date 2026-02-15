@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-hayer2005-ampar-traff-model0/model.yaml
+    manifest_path: models/systemsbiology-sbml-hayer2005-ampar-traff-model0-model9086207764-model/model.yaml
 ```
 
 ## Tags

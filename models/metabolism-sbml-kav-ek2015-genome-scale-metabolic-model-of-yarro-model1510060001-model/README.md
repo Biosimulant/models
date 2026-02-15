@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-kavscek2015-genome-scale-metabolic-model-of-yarrowia/model.yaml
+    manifest_path: models/metabolism-sbml-kav-ek2015-genome-scale-metabolic-model-of-yarro-model1510060001-model/model.yaml
 ```
 
 ## Tags

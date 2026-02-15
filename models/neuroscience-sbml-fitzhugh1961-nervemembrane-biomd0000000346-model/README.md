@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-fitzhugh1961-nervemembrane/model.yaml
+    manifest_path: models/neuroscience-sbml-fitzhugh1961-nervemembrane-biomd0000000346-model/model.yaml
 ```
 
 ## Tags

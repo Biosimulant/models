@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-tham2008-pdmodel-tumour-shrinkage-by-gemcitabine-and/model.yaml
+    manifest_path: models/oncology-sbml-tham2008-pdmodel-tumour-shrinkage-by-gemcitabine-biomd0000000234-model/model.yaml
 ```
 
 ## Tags

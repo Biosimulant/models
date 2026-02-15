@@ -18,7 +18,7 @@ This model was auto-generated from the biomodels_ebi repository.
 models:
   - repo: Biosimulant/models
     alias: model
-    manifest_path: models/sbml-zhang2020-draft-metabolic-reconstruction-model-of-atlantic/model.yaml
+    manifest_path: models/metabolism-sbml-zhang2020-draft-metabolic-reconstruction-model-o-model2010090002-model/model.yaml
 ```
 
 ## Tags
