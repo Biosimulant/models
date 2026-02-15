@@ -325,10 +325,12 @@ class VirtualCell(BioModule):
                 ) * sub_dt
 
                 # Perturbation forcing: push perturbed genes toward target
+                # Use abs(1 - mask) so both knockout (mask<1) and
+                # overexpression (mask>1) produce positive forcing strength
                 forcing = (
                     self.response_speed
                     * (target - self._expression)
-                    * (1.0 - self._perturbation_mask + 0.1)
+                    * (np.abs(1.0 - self._perturbation_mask) + 0.1)
                     * sub_dt
                 )
 
