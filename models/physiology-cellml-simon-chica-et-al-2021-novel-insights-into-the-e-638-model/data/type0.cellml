@@ -1,0 +1,262 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" name="Simon_Chica_2021">
+  <documentation xmlns="http://cellml.org/tmp-documentation">
+  <article>
+    <articleinfo>
+    <title>Novel insights into the electrophysiology of murine cardiac macrophages: relevance of voltage-gated potassium channels
+  </title>
+    <author>
+      <firstname>Ana</firstname>
+	    <surname>Simon Chica</surname>
+      <affiliation>
+	<shortaffil>Spanish National Cardiovascular Research Center, Carlos III (CNIC)</shortaffil>
+      </affiliation>
+    </author>
+  </articleinfo>
+
+  <para>
+    ABSTRACT: Macrophages (MΦ), known for immunological roles such as phagocytosis and antigen presentation, have been found to electrotonically couple to cardiomyocytes (CM) of the atrio-ventricular node via Cx43, affecting cardiac conduction in isolated mouse hearts. Here, we characterise passive and active electrophysiological properties of murine cardiac resident MΦ, and model their potential electrophysiological relevance for CM.
+    We combined classic electrophysiological approaches with 3D florescence imaging, RNA-sequencing, pharmacological interventions and computer simulations. We used Cx3cr1eYFP/+ mice wherein cardiac MΦ were fluorescently labelled. FACS-purified fluorescent MΦ from mouse hearts were studied by whole-cell patch-clamp. MΦ electrophysiological properties include: membrane resistance 2.2±0.1 GΩ (all data mean±SEM), capacitance 18.3±0.1 pF, resting membrane potential -39.6±0.3 mV, and several voltage-activated, outward or inwardly-rectifying potassium currents. Using ion channel blockers (barium, TEA, 4-AP, margatoxin, XEN-D0103, DIDS), flow cytometry, immuno-staining and RNA-sequencing, we identified Kv1.3, Kv1.5 and Kir2.1 as channels contributing to observed ion currents. MΦ displayed four patterns for outward and two for inward-rectifier potassium currents. Additionally, MΦ showed surface expression of Cx43, a prerequisite for homo- and/or heterotypic electrotonic coupling. Experimental results fed into development of an original computational model to describe cardiac MΦ electrophysiology. Computer simulations to quantitatively assess plausible effects of MΦ on electrotonically coupled CM showed that MΦ can depolarise resting CM, shorten early and prolong late action potential duration, with effects depending on coupling strength and individual MΦ electrophysiological properties, in particular resting membrane potential and presence/absence of Kir2.1. 
+    Our results provide a first electrophysiological characterisation of cardiac resident MΦ, and a computational model to quantitatively explore their relevance in the heterocellular heart. Future work will be focussed at distinguishing electro-physiological effects of MΦ–CM coupling on both cell types during steady-state and in patho-physiological remodelling, when immune cells change their phenotype, proliferate, and/or invade from external sources.
+  </para>
+
+  <para>
+    This exposure contains three murine resident macrophage models (type0-type2) as decribed in the original paper:
+  </para>
+
+
+  <para>
+ Novel insights into the electrophysiology of murine cardiac macrophages: relevance of voltage-gated potassium channels, Ana Simon-Chica, Marbely C Fernández, Eike M Wülfers, Achim Lother, Ingo Hilgendorf, Gunnar Seemann, Ursula Ravens, Peter Kohl, Franziska Schneider-Warme, 2021, <emphasis>Cardiovascular Research</emphasis>.
+  </para>
+
+
+  </article>
+  </documentation>
+
+  <units name="A_per_F">
+    <unit units="gram" multiplier="1000"/>
+    <unit units="metre" exponent="2.0"/>
+    <unit units="second" exponent="-4.0"/>
+    <unit units="ampere" exponent="-1.0"/>
+  </units>
+  <units name="C_per_mol">
+    <unit units="second"/>
+    <unit units="ampere"/>
+    <unit units="mole" exponent="-1.0"/>
+  </units>
+  <units name="mJ_per_mol_per_K">
+    <unit units="gram"/>
+    <unit units="metre" exponent="2.0"/>
+    <unit units="second" exponent="-2.0"/>
+    <unit units="kelvin" exponent="-1.0"/>
+    <unit units="mole" exponent="-1.0"/>
+  </units>
+  <units name="mS">
+    <unit units="gram" exponent="-1.0" multiplier="1e-06"/>
+    <unit units="metre" exponent="-2.0"/>
+    <unit units="second" exponent="3.0"/>
+    <unit units="ampere" exponent="2.0"/>
+  </units>
+  <units name="mV">
+    <unit units="gram"/>
+    <unit units="metre" exponent="2.0"/>
+    <unit units="second" exponent="-3.0"/>
+    <unit units="ampere" exponent="-1.0"/>
+  </units>
+  <units name="uF">
+    <unit units="gram" exponent="-1.0" multiplier="1e-09"/>
+    <unit units="metre" exponent="-2.0"/>
+    <unit units="second" exponent="4.0"/>
+    <unit units="ampere" exponent="2.0"/>
+  </units>
+  <component name="Environment">
+    <variable name="pace" units="dimensionless" initial_value="0.0"/>
+    <variable name="time" units="dimensionless" public_interface="out"/>
+  </component>
+  <component name="cell">
+    <variable name="Cm" units="uF" public_interface="in"/>
+    <variable name="IK1" units="A_per_F" public_interface="in"/>
+    <variable name="Ib" units="A_per_F" public_interface="in"/>
+    <variable name="V" units="mV" public_interface="out" initial_value="-39.55"/>
+    <variable name="i_diff" units="dimensionless" initial_value="0.0"/>
+    <variable name="time" units="dimensionless" public_interface="in"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>V</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <plus/>
+              <ci>Ib</ci>
+              <ci>IK1</ci>
+            </apply>
+            <apply>
+              <divide/>
+              <ci>i_diff</ci>
+              <ci>Cm</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ib">
+    <variable name="Cm" units="uF" public_interface="in"/>
+    <variable name="Eb" units="mV"/>
+    <variable name="Ib" units="A_per_F" public_interface="out"/>
+    <variable name="V" units="mV" public_interface="in"/>
+    <variable name="gb" units="mS" initial_value="1.6e-07"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>Eb</ci>
+        <apply>
+          <minus/>
+          <cn cellml:units="dimensionless">10.0</cn>
+        </apply>
+      </apply>
+      <apply>
+        <eq/>
+        <ci>Ib</ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <ci>gb</ci>
+            <ci>Cm</ci>
+          </apply>
+          <apply>
+            <minus/>
+            <ci>V</ci>
+            <ci>Eb</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ik1">
+    <variable name="Cm" units="uF" public_interface="in"/>
+    <variable name="EK" units="mV"/>
+    <variable name="F" units="C_per_mol" initial_value="96487.0"/>
+    <variable name="GKir" units="mS" initial_value="4.2e-07"/>
+    <variable name="IK1" units="A_per_F" public_interface="out"/>
+    <variable name="K_e" units="dimensionless" initial_value="5.4"/>
+    <variable name="R" units="mJ_per_mol_per_K" initial_value="8314.0"/>
+    <variable name="T" units="kelvin"/>
+    <variable name="V" units="mV" public_interface="in"/>
+    <variable name="aKir" units="dimensionless" initial_value="0.91"/>
+    <variable name="bKir" units="dimensionless" initial_value="1.09"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>EK</ci>
+        <apply>
+          <minus/>
+          <cn cellml:units="mV">79.362</cn>
+        </apply>
+      </apply>
+      <apply>
+        <eq/>
+        <ci>IK1</ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci>GKir</ci>
+                <ci>Cm</ci>
+              </apply>
+              <apply>
+                <root/>
+                <ci>K_e</ci>
+              </apply>
+            </apply>
+            <apply>
+              <minus/>
+              <ci>V</ci>
+              <ci>EK</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>aKir</ci>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <apply>
+                    <times/>
+                    <ci>bKir</ci>
+                    <apply>
+                      <minus/>
+                      <ci>V</ci>
+                      <ci>EK</ci>
+                    </apply>
+                  </apply>
+                  <ci>F</ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci>R</ci>
+                  <ci>T</ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq/>
+        <ci>T</ci>
+        <apply>
+          <plus/>
+          <cn cellml:units="dimensionless">275.0</cn>
+          <cn cellml:units="kelvin">22.0</cn>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="mac">
+    <variable name="Cm" units="uF" public_interface="out" initial_value="1.832e-05"/>
+  </component>
+  <connection>
+    <map_components component_1="Environment" component_2="cell"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="cell" component_2="ib"/>
+    <map_variables variable_1="Ib" variable_2="Ib"/>
+    <map_variables variable_1="V" variable_2="V"/>
+  </connection>
+  <connection>
+    <map_components component_1="cell" component_2="ik1"/>
+    <map_variables variable_1="IK1" variable_2="IK1"/>
+    <map_variables variable_1="V" variable_2="V"/>
+  </connection>
+  <connection>
+    <map_components component_1="cell" component_2="mac"/>
+    <map_variables variable_1="Cm" variable_2="Cm"/>
+  </connection>
+  <connection>
+    <map_components component_1="ib" component_2="mac"/>
+    <map_variables variable_1="Cm" variable_2="Cm"/>
+  </connection>
+  <connection>
+    <map_components component_1="ik1" component_2="mac"/>
+    <map_variables variable_1="Cm" variable_2="Cm"/>
+  </connection>
+</model>

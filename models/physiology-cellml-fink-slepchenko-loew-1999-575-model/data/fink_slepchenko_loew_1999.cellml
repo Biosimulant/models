@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="fink_slepchenko_loew_1999" cmeta:id="fink_slepchenko_loew_1999_version01">
+  <documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <articleinfo>
+        <title>Intracellular IP3 and Calcium Release in a Smooth Muscle Cell</title>
+        <author>
+          <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+          <affiliation>
+            <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+          </affiliation>
+        </author>
+      </articleinfo>
+      <section id="sec_status">
+        <title>Model Status</title>
+        <para>This is the original unchecked version of the model imported from the previous
+            CellML model repository, 24-Jan-2006.</para>
+      </section>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+        <para>
+          Intracellular calcium dynamics are frequently the subject of theoretical mathematical models (
+          <ulink url="${HTML_EXMPL_IP3_CA2+_MODEL}">De Young and Keizer, 1992</ulink>
+          ,
+          <ulink url="${HTML_EXMPL_LI_MODEL}">Li and Rinzel, 1994</ulink>
+          ,
+          <ulink url="${HTML_EXMPL_KEIZER_MODEL}">Keizer and Levine, 1996</ulink>
+          ,
+          <ulink url="${HTML_EXMPL_JRW_MODEL}">Jafri-Rice-Winslow, 1998</ulink>
+          , and
+          <ulink url="${HTML_EXMPL_SNYDER_MODEL}">Snyder et al., 2000</ulink>
+          are just a few examples of calcium dynamic models that have been coded up into CellML).  The physical and chemical laws of calcium waves and oscillations can be expressed in terms of differential equations describing reaction kinetics, fluxes through membranes, and diffusion.
+        </para>
+        <para>
+          Inositol-1,4,5-triphosphate (IP
+          <subscript>3</subscript>
+          )-mediated calcium release from the endoplasmic reticulum is an important intracellular signalling mechanism in many cell types.  In their 1999 study, Fink
+          <emphasis>et al</emphasis>
+          . determine the levels of IP
+          <subscript>3</subscript>
+          required for calcium release in A7r5 cells (a rat smooth muscle cell from the thoracic aorta).  Experimental data were used to construct a mathematical model of the IP
+          <subscript>3</subscript>
+          -dependent calcium changes (see
+          <xref linkend="fig_cell_diagram" />
+          below).  This model considers of several elements, including:
+          <itemizedlist>
+            <listitem>
+              <para>
+                the mechanism of the IP
+                <subscript>3</subscript>
+                -receptor;
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                IP
+                <subscript>3</subscript>
+                degradation;
+              </para>
+            </listitem>
+            <listitem>
+              <para>calcium buffering in the cytosol;</para>
+            </listitem>
+            and
+            <listitem>
+              <para>refilling of the endoplasmic reticulum (ER) calcium stores via sarcoplasmic endoplasmic reticulum ATPase (SERCA) pumps.</para>
+            </listitem>
+          </itemizedlist>
+        </para>
+        <para>
+          The calcium response to IP
+          <subscript>3</subscript>
+          release and its subsequent degradation were modelled using
+          <emphasis>Vitual Cell</emphasis>
+          software.  By combining experimental and modelling approaches, IP
+          <subscript>3</subscript>
+          and Ca
+          <superscript>2+</superscript>
+          time courses can be directly compared.
+        </para>
+        <para>
+          <ulink url="http://www.biophysj.org/cgi/content/abstract/77/1/617">Determination of Time-Dependent Inositol-1,4,5-Trisphosphate Concentrations during Calcium Release in a Smooth Muscle Cell</ulink>
+          , Charles C. Fink, Boris Slepchenko, and Leslie M. Loew, 1999,
+          <ulink url="http://www.biophysj.org/">
+            <emphasis>Biophysical Journal</emphasis>
+          </ulink>
+          , 77, 617-628. (
+          <ulink url="http://www.biophysj.org/cgi/content/full/77/1/617">Full text</ulink>
+          and
+          <ulink url="http://www.biophysj.org/cgi/reprint/77/1/617.pdf">PDF versions</ulink>
+          of the article are available to subscribers on the Biophysical Journal website.)
+          <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=10388786&amp;dopt=Abstract">PubMed ID: 10388776</ulink>
+        </para>
+        <informalfigure float="0" id="fig_cell_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>Schematic diagram of model</title>
+              </objectinfo>
+              <imagedata fileref="fink_1999.png" />
+            </imageobject>
+          </mediaobject>
+        </informalfigure>
+      </sect1>
+    </article>
+  </documentation>
+  <units name="micrometre_per_second">
+    <unit units="micrometre" />
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <units name="micrometre_2_per_second">
+    <unit exponent="-1.0" units="second" />
+    <unit exponent="2.0" units="micrometre" />
+  </units>
+  <units name="flux">
+    <unit units="micromolar" />
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <units name="micrometre">
+    <unit prefix="micro" units="metre" />
+  </units>
+  <units name="second_order_rate_constant">
+    <unit exponent="-1.0" units="second" />
+    <unit exponent="-1.0" units="micromolar" />
+  </units>
+  <units name="micromolar">
+    <unit prefix="micro" units="mole" />
+    <unit exponent="-1.0" units="litre" />
+  </units>
+  <units name="micromolar_micrometre_per_second">
+    <unit units="micrometre" />
+    <unit units="micromolar" />
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <component name="environment">
+    <variable cmeta:id="environment.time" name="time" public_interface="out" units="second" />
+  </component>
+  <component name="Calcium_dynamics">
+    <variable cmeta:id="Calcium_dynamics.Ca" initial_value="0.05" name="Ca" public_interface="out" units="micromolar" />
+    <variable cmeta:id="Calcium_dynamics.time" name="time" public_interface="in" units="second" />
+    <variable cmeta:id="Calcium_dynamics.J_channel" name="J_channel" public_interface="in" units="flux" />
+    <variable cmeta:id="Calcium_dynamics.J_pump" name="J_pump" public_interface="in" units="flux" />
+    <variable cmeta:id="Calcium_dynamics.J_leak" name="J_leak" public_interface="in" units="flux" />
+    <variable cmeta:id="Calcium_dynamics.beta" name="beta" public_interface="in" units="dimensionless" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>Ca</ci>
+        </apply>
+        <apply>
+          <times />
+          <ci>beta</ci>
+          <apply>
+            <plus />
+            <apply>
+              <minus />
+              <ci>J_channel</ci>
+              <ci>J_pump</ci>
+            </apply>
+            <ci>J_leak</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ER">
+    <variable cmeta:id="ER.Ca_ER" initial_value="400" name="Ca_ER" public_interface="out" units="micromolar" />
+  </component>
+  <component name="Channel_kinetics">
+    <variable cmeta:id="Channel_kinetics.J_channel" name="J_channel" public_interface="out" units="flux" />
+    <variable cmeta:id="Channel_kinetics.J_max" initial_value="2880" name="J_max" units="flux" />
+    <variable cmeta:id="Channel_kinetics.h" initial_value="0.667" name="h" units="dimensionless" />
+    <variable cmeta:id="Channel_kinetics.K_act" initial_value="0.17" name="K_act" units="micromolar" />
+    <variable cmeta:id="Channel_kinetics.K_I" initial_value="0.03" name="K_I" units="micromolar" />
+    <variable cmeta:id="Channel_kinetics.K_inh" initial_value="0.1" name="K_inh" units="micromolar" />
+    <variable cmeta:id="Channel_kinetics.k_on" initial_value="8" name="k_on" units="second_order_rate_constant" />
+    <variable cmeta:id="Channel_kinetics.I" initial_value="0.01" name="I" units="micromolar" />
+    <variable cmeta:id="Channel_kinetics.time" name="time" public_interface="in" units="second" />
+    <variable cmeta:id="Channel_kinetics.Ca" name="Ca" public_interface="in" units="micromolar" />
+    <variable cmeta:id="Channel_kinetics.Ca_ER" name="Ca_ER" public_interface="in" units="micromolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>J_channel</ci>
+        <apply>
+          <times />
+          <ci>J_max</ci>
+          <apply>
+            <power />
+            <apply>
+              <times />
+              <apply>
+                <divide />
+                <apply>
+                  <times />
+                  <apply>
+                    <divide />
+                    <ci>I</ci>
+                    <apply>
+                      <plus />
+                      <ci>I</ci>
+                      <ci>K_I</ci>
+                    </apply>
+                  </apply>
+                  <ci>Ca</ci>
+                </apply>
+                <apply>
+                  <plus />
+                  <ci>Ca</ci>
+                  <ci>K_act</ci>
+                </apply>
+              </apply>
+              <ci>h</ci>
+            </apply>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+          </apply>
+          <apply>
+            <minus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+            <apply>
+              <divide />
+              <ci>Ca</ci>
+              <ci>Ca_ER</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>h</ci>
+        </apply>
+        <apply>
+          <times />
+          <ci>k_on</ci>
+          <apply>
+            <minus />
+            <ci>K_inh</ci>
+            <apply>
+              <times />
+              <ci>h</ci>
+              <apply>
+                <plus />
+                <ci>Ca</ci>
+                <ci>K_inh</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="SERCA_pump_kinetics">
+    <variable cmeta:id="SERCA_pump_kinetics.J_pump" name="J_pump" public_interface="out" units="flux" />
+    <variable cmeta:id="SERCA_pump_kinetics.V_max" initial_value="5.85" name="V_max" units="flux" />
+    <variable cmeta:id="SERCA_pump_kinetics.K_p" initial_value="0.24" name="K_p" units="micromolar" />
+    <variable cmeta:id="SERCA_pump_kinetics.time" name="time" public_interface="in" units="second" />
+    <variable cmeta:id="SERCA_pump_kinetics.Ca" name="Ca" public_interface="in" units="micromolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>J_pump</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>V_max</ci>
+            <apply>
+              <power />
+              <ci>Ca</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <power />
+              <ci>Ca</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+            <apply>
+              <power />
+              <ci>K_p</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Calcium_buffering">
+    <variable cmeta:id="Calcium_buffering.beta" name="beta" public_interface="out" units="dimensionless" />
+    <variable cmeta:id="Calcium_buffering.B_end" initial_value="12" name="B_end" units="micromolar" />
+    <variable cmeta:id="Calcium_buffering.B_ex" initial_value="11.35" name="B_ex" units="micromolar" />
+    <variable cmeta:id="Calcium_buffering.K_end" initial_value="0.3" name="K_end" units="micromolar" />
+    <variable cmeta:id="Calcium_buffering.K_ex" initial_value="0.26" name="K_ex" units="micromolar" />
+    <variable cmeta:id="Calcium_buffering.Ca_ex" initial_value="1.78" name="Ca_ex" units="micromolar" />
+    <variable cmeta:id="Calcium_buffering.time" name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>beta</ci>
+        <apply>
+          <power />
+          <apply>
+            <plus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+            <apply>
+              <divide />
+              <ci>B_end</ci>
+              <ci>K_end</ci>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>B_ex</ci>
+                <ci>K_ex</ci>
+              </apply>
+              <apply>
+                <power />
+                <apply>
+                  <plus />
+                  <ci>Ca_ex</ci>
+                  <ci>K_ex</ci>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <minus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Leak">
+    <variable cmeta:id="Leak.J_leak" name="J_leak" public_interface="out" units="flux" />
+    <variable cmeta:id="Leak.L" initial_value="0.0804" name="L" units="flux" />
+    <variable cmeta:id="Leak.time" name="time" public_interface="in" units="second" />
+    <variable cmeta:id="Leak.Ca" name="Ca" public_interface="in" units="micromolar" />
+    <variable cmeta:id="Leak.Ca_ER" name="Ca_ER" public_interface="in" units="micromolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>J_leak</ci>
+        <apply>
+          <times />
+          <ci>L</ci>
+          <apply>
+            <minus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+            <apply>
+              <divide />
+              <ci>Ca</ci>
+              <ci>Ca_ER</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <connection>
+    <map_components component_1="Channel_kinetics" component_2="Calcium_dynamics" />
+    <map_variables variable_1="J_channel" variable_2="J_channel" />
+  </connection>
+  <connection>
+    <map_components component_1="Calcium_dynamics" component_2="Channel_kinetics" />
+    <map_variables variable_1="Ca" variable_2="Ca" />
+  </connection>
+  <connection>
+    <map_components component_1="Calcium_buffering" component_2="Calcium_dynamics" />
+    <map_variables variable_1="beta" variable_2="beta" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Channel_kinetics" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="SERCA_pump_kinetics" component_2="Calcium_dynamics" />
+    <map_variables variable_1="J_pump" variable_2="J_pump" />
+  </connection>
+  <connection>
+    <map_components component_1="Calcium_dynamics" component_2="Leak" />
+    <map_variables variable_1="Ca" variable_2="Ca" />
+  </connection>
+  <connection>
+    <map_components component_1="Leak" component_2="Calcium_dynamics" />
+    <map_variables variable_1="J_leak" variable_2="J_leak" />
+  </connection>
+  <connection>
+    <map_components component_1="Calcium_dynamics" component_2="SERCA_pump_kinetics" />
+    <map_variables variable_1="Ca" variable_2="Ca" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Calcium_dynamics" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="ER" component_2="Leak" />
+    <map_variables variable_1="Ca_ER" variable_2="Ca_ER" />
+  </connection>
+  <connection>
+    <map_components component_1="ER" component_2="Channel_kinetics" />
+    <map_variables variable_1="Ca_ER" variable_2="Ca_ER" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Leak" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="SERCA_pump_kinetics" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Calcium_buffering" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+</model>
+

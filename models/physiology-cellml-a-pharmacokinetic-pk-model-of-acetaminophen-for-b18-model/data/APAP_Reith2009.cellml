@@ -1,0 +1,297 @@
+<?xml version='1.0'?>
+<model name="APAP_Reith_2009_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="APAP_Reith2009_Units.cellml">
+        <units name="mg" units_ref="mg"/>
+        <units name="hr" units_ref="hr"/>
+        <units name="mmol" units_ref="mmol"/>
+        <units name="per_hr" units_ref="per_hr"/>
+        <units name="litre_per_hr" units_ref="litre_per_hr"/>
+        <units name="mg_per_litre" units_ref="mg_per_litre"/>
+        <units name="mmol_per_litre" units_ref="mmol_per_l"/>
+        <units name="mmol_per_hr" units_ref="mmol_per_hr"/>
+    </import>
+    <component name="APAP_Adult_PK">
+        <!--Adult PK Parameters
+Glucuronidation-->
+        <variable initial_value="7" name="k_mG" units="mmol_per_litre"/>
+        <variable initial_value="64" name="V_mG" units="mmol_per_hr"/>
+        <variable initial_value="0.49" name="k_eG" units="per_hr"/>
+        <!--Sulfation-->
+        <variable initial_value="0.097" name="k_mS" units="mmol_per_litre"/>
+        <variable initial_value="0.74" name="V_mS" units="mmol_per_hr"/>
+        <variable initial_value="2.44" name="k_eS" units="per_hr"/>
+        <!--CM-->
+        <variable initial_value="0.30" name="k_mCM" units="mmol_per_litre"/>
+        <variable initial_value="0.25" name="V_mCM" units="mmol_per_hr"/>
+        <variable initial_value="0.07" name="k_eP" units="per_hr"/>
+        <!-- -->
+        <variable initial_value="0.29" name="Fe_P" units="dimensionless"/>
+        <variable initial_value="0" name="tlag" units="hr"/>
+        <variable initial_value="2.04" name="ka" units="per_hr"/>
+        <!--Vd-->
+        <variable initial_value="56.4" name="V" units="litre"/>
+        <variable initial_value="17.8" name="V_G" units="litre"/>
+        <variable initial_value="17.5" name="V_S" units="litre"/>
+        <variable initial_value="40.4872" name="dose" units="mmol"/>
+        <!--dose = 90mg/kg = 595.4 µmol/kg-->
+        <!--var input: dimensionless {init: };
+var t_v: dimensionless {init: 24};-->
+        <variable initial_value="0" name="t" units="hr"/>
+        <variable initial_value="0" name="Cp" units="mmol_per_litre"/>
+        <variable initial_value="0" name="Cp_G" units="mmol_per_litre"/>
+        <variable initial_value="0" name="Cp_S" units="mmol_per_litre"/>
+        <variable initial_value="0" name="U_P" units="mmol"/>
+        <variable initial_value="0" name="U_G" units="mmol"/>
+        <variable initial_value="0" name="U_S" units="mmol"/>
+        <variable initial_value="0" name="U_CM" units="mmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>Cp</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <divide/>
+                                        <apply>
+                                            <times/>
+                                            <ci>ka</ci>
+                                            <ci>dose</ci>
+                                        </apply>
+                                        <ci>V</ci>
+                                    </apply>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <times/>
+                                            <apply>
+                                                <minus/>
+                                                <ci>ka</ci>
+                                            </apply>
+                                            <apply>
+                                                <minus/>
+                                                <ci>t</ci>
+                                                <ci>tlag</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>Cp</ci>
+                                        <ci>V_mG</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <plus/>
+                                            <ci>k_mG</ci>
+                                            <ci>Cp</ci>
+                                        </apply>
+                                        <ci>V</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <ci>Cp</ci>
+                                    <ci>V_mS</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <plus/>
+                                        <ci>k_mS</ci>
+                                        <ci>Cp</ci>
+                                    </apply>
+                                    <ci>V</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>Cp</ci>
+                                <ci>V_mCM</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <plus/>
+                                    <ci>k_mCM</ci>
+                                    <ci>Cp</ci>
+                                </apply>
+                                <ci>V</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>Cp</ci>
+                        <ci>k_eP</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>Cp_G</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>Cp</ci>
+                            <ci>V_mG</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <ci>k_mG</ci>
+                                <ci>Cp</ci>
+                            </apply>
+                            <ci>V_G</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>Cp_G</ci>
+                        <ci>k_eG</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>Cp_S</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>Cp</ci>
+                            <ci>V_mS</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <ci>k_mS</ci>
+                                <ci>Cp</ci>
+                            </apply>
+                            <ci>V_S</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>Cp_S</ci>
+                        <ci>k_eS</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>U_P</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>Cp</ci>
+                    <ci>k_eP</ci>
+                    <ci>V</ci>
+                    <ci>Fe_P</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>U_G</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>Cp_G</ci>
+                    <ci>k_eG</ci>
+                    <ci>V_G</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>U_S</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>Cp_S</ci>
+                    <ci>k_eS</ci>
+                    <ci>V_S</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>U_CM</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Cp</ci>
+                        <ci>V_mCM</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>k_mCM</ci>
+                        <ci>Cp</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

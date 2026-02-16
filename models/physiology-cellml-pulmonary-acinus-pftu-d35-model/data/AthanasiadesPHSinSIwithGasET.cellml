@@ -1,0 +1,1707 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="PulmonaryAcinusFTUBasedOnAthanasiadesModel" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <units name="per_second">
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="minute">
+        <unit multiplier="60" units="second"/>
+    </units>
+    <units name="per_min">
+        <unit exponent="-1" units="minute"/>
+    </units>
+    <units name="Pa">
+        <unit units="pascal"/>
+    </units>
+    <units name="L">
+        <unit units="litre"/>
+    </units>
+    <units name="L_per_second">
+        <unit units="litre"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="L_per_Pa">
+        <unit units="L"/>
+        <unit exponent="-1" units="Pa"/>
+    </units>
+    <units name="per_L">
+        <unit exponent="-1" units="L"/>
+    </units>
+    <units name="Pa_sec_per_L">
+        <unit units="Pa"/>
+        <unit units="second"/>
+        <unit exponent="-1" units="liter"/>
+    </units>
+    <units name="Pa_sec2_per_L2">
+        <unit units="Pa"/>
+        <unit units="second"/>
+        <unit exponent="-2" units="liter"/>
+    </units>
+    <units name="J_per_mole_per_kelvin">
+        <unit units="joule"/>
+        <unit exponent="-1" units="mole"/>
+        <unit exponent="-1" units="kelvin"/>
+    </units>
+    <units name="grams_per_mole">
+        <unit units="gram"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="L_per_mole">
+        <unit units="litre"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="mole_per_second_Pa">
+        <unit units="mole"/>
+        <unit exponent="-1" units="second"/>
+        <unit exponent="-1" units="pascal"/>
+    </units>
+    <units name="Joule_per_mole_per_kelvin">
+        <unit units="joule"/>
+        <unit exponent="-1" units="mole"/>
+        <unit exponent="-1" units="kelvin"/>
+    </units>
+    <units name="mole_per_L">
+        <unit units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="mole_per_L_Pa">
+        <unit units="mole"/>
+        <unit exponent="-1" units="litre"/>
+        <unit exponent="-1" units="pascal"/>
+    </units>
+    <units name="L_per_second_mole">
+        <unit units="litre"/>
+        <unit exponent="-1" units="second"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="Pa_second_per_meter3">
+        <unit units="Pa"/>
+        <unit units="second"/>
+        <unit exponent="-3" units="metre"/>
+    </units>
+    <component name="Environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="24064" name="numAlveoli" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="gasExchange">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="numAlveoli" public_interface="in" units="dimensionless"/>
+        <variable name="breathsPerMin" public_interface="in" units="per_min"/>
+        <variable name="P_A" public_interface="in" units="Pa"/>
+        <variable name="V_A" public_interface="in" units="litre"/>
+        <variable initial_value="1.17e-07" name="D_o_" public_interface="out" units="mole_per_second_Pa"/>
+        <variable initial_value="0.21000" name="f_o" public_interface="out" units="dimensionless"/>
+        <variable name="f_oi" units="dimensionless"/>
+        <variable initial_value="2.37e-07" name="D_c" public_interface="out" units="mole_per_second_Pa"/>
+        <variable initial_value="2.7732e-06" name="f_c" units="dimensionless"/>
+        <variable name="f_ci" units="dimensionless"/>
+        <variable initial_value="6266.15" name="P_w" public_interface="out" units="Pa"/>
+        <variable initial_value="101325" name="P_m" units="Pa"/>
+        <variable name="p_ao" units="Pa"/>
+        <variable name="p_o" public_interface="in" units="Pa"/>
+        <variable name="p_ac" public_interface="out" units="Pa"/>
+        <variable initial_value="0.21" name="f_om" units="dimensionless"/>
+        <variable initial_value="0" name="f_cm" units="dimensionless"/>
+        <variable name="Q_A" public_interface="out" units="L_per_second"/>
+        <variable name="p_c" public_interface="in" units="Pa"/>
+        <variable initial_value="0.185" name="V_D" units="litre"/>
+        <variable initial_value="0.41" name="V_T" units="litre"/>
+        <variable initial_value="0.65" name="AlveolarResistance" units="Pa_second_per_meter3"/>
+        <variable name="D_o" units="mole_per_second_Pa"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>D_o</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>D_o_</ci>
+                        <cn cellml:units="dimensionless">15</cn>
+                    </apply>
+                    <ci>breathsPerMin</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--Diffusion capacity physiologically decreases at high frequencies (shorter alveolar contact time),-->
+        <!--var q: L_per_second {pub: in};-->
+        <variable name="q" units="L_per_second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <minus/>
+                            <ci>P_m</ci>
+                            <ci>P_A</ci>
+                        </apply>
+                        <ci>numAlveoli</ci>
+                    </apply>
+                    <ci>AlveolarResistance</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>p_ao</ci>
+                <apply>
+                    <times/>
+                    <ci>f_o</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_A</ci>
+                        <ci>P_w</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>p_ac</ci>
+                <apply>
+                    <times/>
+                    <ci>f_c</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_A</ci>
+                        <ci>P_w</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_A</ci>
+                <apply>
+                    <plus/>
+                    <ci>q</ci>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="L_per_mole">1</cn>
+                        <ci>D_c</ci>
+                        <apply>
+                            <minus/>
+                            <ci>p_c</ci>
+                            <ci>p_ac</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="L_per_mole">1</cn>
+                        <ci>D_o</ci>
+                        <apply>
+                            <minus/>
+                            <ci>p_o</ci>
+                            <ci>p_ao</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f_oi</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <ci>f_o</ci>
+                                    <ci>V_D</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>f_om</ci>
+                                    <apply>
+                                        <minus/>
+                                        <ci>V_T</ci>
+                                        <ci>V_D</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <ci>V_T</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>V_T</ci>
+                            <ci>V_D</ci>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>f_o</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f_ci</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <ci>f_c</ci>
+                                    <ci>V_D</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>f_cm</ci>
+                                    <apply>
+                                        <minus/>
+                                        <ci>V_T</ci>
+                                        <ci>V_D</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <ci>V_T</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>V_T</ci>
+                            <ci>V_D</ci>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>f_c</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>f_o</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <times/>
+                            <ci>V_A</ci>
+                            <ci>numAlveoli</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="L_per_mole">1</cn>
+                                <ci>D_o</ci>
+                                <apply>
+                                    <minus/>
+                                    <ci>p_o</ci>
+                                    <ci>p_ao</ci>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <minus/>
+                                    <ci>f_oi</ci>
+                                    <ci>f_o</ci>
+                                </apply>
+                                <ci>q</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>f_o</ci>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="L_per_mole">1</cn>
+                                    <ci>D_c</ci>
+                                    <apply>
+                                        <minus/>
+                                        <ci>p_c</ci>
+                                        <ci>p_ac</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="L_per_mole">1</cn>
+                                    <ci>D_o</ci>
+                                    <apply>
+                                        <minus/>
+                                        <ci>p_o</ci>
+                                        <ci>p_ao</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>f_c</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <times/>
+                            <ci>V_A</ci>
+                            <ci>numAlveoli</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="L_per_mole">1</cn>
+                                <ci>D_c</ci>
+                                <apply>
+                                    <minus/>
+                                    <ci>p_c</ci>
+                                    <ci>p_ac</ci>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <minus/>
+                                    <ci>f_ci</ci>
+                                    <ci>f_c</ci>
+                                </apply>
+                                <ci>q</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>f_c</ci>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="L_per_mole">1</cn>
+                                    <ci>D_o</ci>
+                                    <apply>
+                                        <minus/>
+                                        <ci>p_o</ci>
+                                        <ci>p_ao</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="L_per_mole">1</cn>
+                                    <ci>D_c</ci>
+                                    <apply>
+                                        <minus/>
+                                        <ci>p_c</ci>
+                                        <ci>p_ac</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="gasTransport">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="f_o" public_interface="in" units="dimensionless"/>
+        <variable name="df_satdp" units="dimensionless"/>
+        <variable initial_value="171200000" name="L" units="dimensionless"/>
+        <variable initial_value="10000" name="K_T" units="L_per_mole"/>
+        <variable initial_value="3600000" name="K_R" units="L_per_mole"/>
+        <variable initial_value="5332.9" name="p_o" public_interface="out" units="Pa"/>
+        <variable initial_value="133.332" name="mmHg2Pa" units="dimensionless"/>
+        <variable initial_value="1.05e-08" name="sigma" units="mole_per_L_Pa"/>
+        <variable name="D_o" public_interface="in" units="mole_per_second_Pa"/>
+        <variable initial_value="0.071" name="V_c" units="litre"/>
+        <variable name="P_A" public_interface="in" units="Pa"/>
+        <variable name="P_w" public_interface="in" units="Pa"/>
+        <variable initial_value="0.002" name="T_h" units="mole_per_L"/>
+        <variable name="D_c" public_interface="in" units="mole_per_second_Pa"/>
+        <variable name="delta" units="dimensionless"/>
+        <variable name="h" units="mole_per_L"/>
+        <variable initial_value="164000" name="l_2" units="L_per_second_mole"/>
+        <variable initial_value="6132.83" name="p_c" public_interface="out" units="Pa"/>
+        <variable name="p_ac" public_interface="in" units="Pa"/>
+        <variable initial_value="0.12" name="r_2" units="per_second"/>
+        <variable initial_value="2.475e-07" name="sigma_c" units="mole_per_L_Pa"/>
+        <variable initial_value="0.00000044219" name="z" units="dimensionless"/>
+        <variable initial_value="8.3145" name="R" units="Joule_per_mole_per_kelvin"/>
+        <variable initial_value="312.0" name="T" units="kelvin"/>
+        <!--Calculate oxygen saturation-->
+        <variable initial_value="2.78e-3" name="Q" units="L_per_second"/>
+        <!--Blood flow rate per second per acinus cardiac output 5L per min/30000 acini-->
+        <variable initial_value="0.0" name="C_O2" public_interface="out" units="L"/>
+        <!--Total transported Oxygen -->
+        <variable initial_value="15.0" name="Hb" units="mole_per_L"/>
+        <!-- hemoglobin concentration (usually ~15 g/dL in healthy adults)-->
+        <!-- Haemoglobin saturation function (4-ligand binding model with T and R states)-->
+        <variable initial_value="3.6e6" name="K_R" units="L_per_mole"/>
+        <!--Relaxed state affinity-->
+        <variable initial_value="1.0e4" name="K_T" units="L_per_mole"/>
+        <!--Tense state affinity-->
+        <variable initial_value="1.712e8" name="L" units="dimensionless"/>
+        <!--Allosteric equilibrium constant-->
+        <variable initial_value="1.05e-8" name="sigma" units="mol_per_L_per_Pa"/>
+        <!-- O2 solubility in plasma-->
+        <variable name="satpo" units="dimensionless"/>
+        <variable name="satt1" units="dimensionless"/>
+        <variable name="satt2" units="dimensionless"/>
+        <variable name="saturation" public_interface="out" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>satt1</ci>
+                <apply>
+                    <power/>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <apply>
+                            <times/>
+                            <ci>K_R</ci>
+                            <ci>sigma</ci>
+                            <ci>p_o</ci>
+                        </apply>
+                    </apply>
+                    <cn cellml:units="dimensionless">4</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>satt2</ci>
+                <apply>
+                    <power/>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <apply>
+                            <times/>
+                            <ci>K_T</ci>
+                            <ci>sigma</ci>
+                            <ci>p_o</ci>
+                        </apply>
+                    </apply>
+                    <cn cellml:units="dimensionless">4</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>satpo</ci>
+                <apply>
+                    <divide/>
+                    <ci>satt1</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>L</ci>
+                            <ci>satt2</ci>
+                        </apply>
+                        <ci>satt1</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>saturation</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless" type="e-notation">2.25<sep/>-5</cn>
+                        <ci>p_o</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>Hb</ci>
+                        <cn cellml:units="dimensionless">1.34</cn>
+                        <ci>satpo</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <!--dissolved + bound-->
+            <apply>
+                <eq/>
+                <ci>delta</ci>
+                <apply>
+                    <power/>
+                    <cn cellml:units="dimensionless">10</cn>
+                    <cn cellml:units="dimensionless">1.9</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>h</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="mole_per_L">1</cn>
+                    <apply>
+                        <power/>
+                        <cn cellml:units="dimensionless">10</cn>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">7.4</cn>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <!--df_satdp = ((L*pow(1{dimensionless}+K_T*sigma*p_o, 4{dimensionless})+pow(1{dimensionless}+K_R*sigma*p_o, 4{dimensionless}))*(3{dimensionless}*L*sqr(K_T)*sqr(sigma)*p_o*133.332{mmHg}*sqr(1{dimensionless}+K_T*sigma*p_o)+L*K_T*sigma*133.332{mmHg}*pow(1{dimensionless}+K_T*sigma*p_o, 3{dimensionless})+3{dimensionless}*sqr(K_R)*sqr(sigma)*p_o*133.332{mmHg}*sqr(1{dimensionless}+K_R*sigma*p_o)+K_R*sigma*133.332{mmHg}*pow(1{dimensionless}+K_R*sigma*p_o, 3{dimensionless}))-(L*K_T*sigma*p_o*pow(1{dimensionless}+K_T*sigma*p_o, 3{dimensionless})+K_R*sigma*p_o*pow(1{dimensionless}+K_R*sigma*p_o, 3{dimensionless}))*(4{dimensionless}*L*K_T*sigma*133.332{mmHg}*pow(1{dimensionless}+K_T*sigma*p_o, 3{dimensionless})+4{dimensionless}*K_R*sigma*133.332{mmHg}*pow(1{dimensionless}+K_R*sigma*p_o, 3{dimensionless})))/sqr(L*pow(1{dimensionless}+K_T*sigma*p_o, 4{dimensionless})+pow(1{dimensionless}+K_R*sigma*p_o, 4{dimensionless}));
+ode(p_o, time) = D_o/(sigma*V_c)*pow(1{dimensionless}+4{dimensionless}/133.332{mmHg}*T_h/sigma*df_satdp, -1{dimensionless})*(f_o*(P_A-P_w)-p_o);-->
+            <apply>
+                <eq/>
+                <ci>df_satdp</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <ci>L</ci>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <plus/>
+                                            <cn cellml:units="dimensionless">1</cn>
+                                            <apply>
+                                                <times/>
+                                                <ci>K_T</ci>
+                                                <ci>sigma</ci>
+                                                <ci>p_o</ci>
+                                            </apply>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">4</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <power/>
+                                    <apply>
+                                        <plus/>
+                                        <cn cellml:units="dimensionless">1</cn>
+                                        <apply>
+                                            <times/>
+                                            <ci>K_R</ci>
+                                            <ci>sigma</ci>
+                                            <ci>p_o</ci>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">4</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="dimensionless">3</cn>
+                                    <ci>L</ci>
+                                    <apply>
+                                        <power/>
+                                        <ci>K_T</ci>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <apply>
+                                        <power/>
+                                        <ci>sigma</ci>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <ci>p_o</ci>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <plus/>
+                                            <cn cellml:units="dimensionless">1</cn>
+                                            <apply>
+                                                <times/>
+                                                <ci>K_T</ci>
+                                                <ci>sigma</ci>
+                                                <ci>p_o</ci>
+                                            </apply>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>L</ci>
+                                    <ci>K_T</ci>
+                                    <ci>sigma</ci>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <plus/>
+                                            <cn cellml:units="dimensionless">1</cn>
+                                            <apply>
+                                                <times/>
+                                                <ci>K_T</ci>
+                                                <ci>sigma</ci>
+                                                <ci>p_o</ci>
+                                            </apply>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">3</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="dimensionless">3</cn>
+                                    <apply>
+                                        <power/>
+                                        <ci>K_R</ci>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <apply>
+                                        <power/>
+                                        <ci>sigma</ci>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <ci>p_o</ci>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <plus/>
+                                            <cn cellml:units="dimensionless">1</cn>
+                                            <apply>
+                                                <times/>
+                                                <ci>K_R</ci>
+                                                <ci>sigma</ci>
+                                                <ci>p_o</ci>
+                                            </apply>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>K_R</ci>
+                                    <ci>sigma</ci>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <plus/>
+                                            <cn cellml:units="dimensionless">1</cn>
+                                            <apply>
+                                                <times/>
+                                                <ci>K_R</ci>
+                                                <ci>sigma</ci>
+                                                <ci>p_o</ci>
+                                            </apply>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">3</cn>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <ci>L</ci>
+                                    <ci>K_T</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <plus/>
+                                            <cn cellml:units="dimensionless">1</cn>
+                                            <apply>
+                                                <times/>
+                                                <ci>K_T</ci>
+                                                <ci>sigma</ci>
+                                                <ci>p_o</ci>
+                                            </apply>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">3</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>K_R</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <plus/>
+                                            <cn cellml:units="dimensionless">1</cn>
+                                            <apply>
+                                                <times/>
+                                                <ci>K_R</ci>
+                                                <ci>sigma</ci>
+                                                <ci>p_o</ci>
+                                            </apply>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">3</cn>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="dimensionless">4</cn>
+                                    <ci>L</ci>
+                                    <ci>K_T</ci>
+                                    <ci>sigma</ci>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <plus/>
+                                            <cn cellml:units="dimensionless">1</cn>
+                                            <apply>
+                                                <times/>
+                                                <ci>K_T</ci>
+                                                <ci>sigma</ci>
+                                                <ci>p_o</ci>
+                                            </apply>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">3</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="dimensionless">4</cn>
+                                    <ci>K_R</ci>
+                                    <ci>sigma</ci>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <plus/>
+                                            <cn cellml:units="dimensionless">1</cn>
+                                            <apply>
+                                                <times/>
+                                                <ci>K_R</ci>
+                                                <ci>sigma</ci>
+                                                <ci>p_o</ci>
+                                            </apply>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">3</cn>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <ci>L</ci>
+                                <apply>
+                                    <power/>
+                                    <apply>
+                                        <plus/>
+                                        <cn cellml:units="dimensionless">1</cn>
+                                        <apply>
+                                            <times/>
+                                            <ci>K_T</ci>
+                                            <ci>sigma</ci>
+                                            <ci>p_o</ci>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">4</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <plus/>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                    <apply>
+                                        <times/>
+                                        <ci>K_R</ci>
+                                        <ci>sigma</ci>
+                                        <ci>p_o</ci>
+                                    </apply>
+                                </apply>
+                                <cn cellml:units="dimensionless">4</cn>
+                            </apply>
+                        </apply>
+                        <cn cellml:units="dimensionless">2</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>p_o</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>D_o</ci>
+                        <apply>
+                            <times/>
+                            <ci>sigma</ci>
+                            <ci>V_c</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <ci>T_h</ci>
+                                    <ci>df_satdp</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>sigma</ci>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>f_o</ci>
+                            <apply>
+                                <minus/>
+                                <ci>P_A</ci>
+                                <ci>P_w</ci>
+                            </apply>
+                        </apply>
+                        <ci>p_o</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>p_c</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <ci>D_c</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>sigma_c</ci>
+                                    <ci>V_c</ci>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <ci>p_ac</ci>
+                                <ci>p_c</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="mole_per_L">1</cn>
+                                    <ci>delta</ci>
+                                    <ci>l_2</ci>
+                                </apply>
+                                <ci>sigma_c</ci>
+                            </apply>
+                            <ci>h</ci>
+                            <ci>z</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>delta</ci>
+                        <ci>r_2</ci>
+                        <ci>p_c</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>z</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>delta</ci>
+                            <ci>r_2</ci>
+                            <ci>sigma_c</ci>
+                            <ci>p_c</ci>
+                        </apply>
+                        <cn cellml:units="mole_per_L">1</cn>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>delta</ci>
+                        <ci>l_2</ci>
+                        <ci>h</ci>
+                        <ci>z</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>C_O2</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>saturation</ci>
+                        <ci>Q</ci>
+                    </apply>
+                    <cn cellml:units="dimensionless">100</cn>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="AlveolarRecruitment">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable initial_value="3.462" name="k1" units="per_second"/>
+        <variable initial_value="1.0" name="k2" units="per_second"/>
+        <variable initial_value="15" name="breathsPerMin" public_interface="out" units="per_min"/>
+        <variable initial_value="10" name="alevolar_cooperativity" units="dimensionless"/>
+        <variable initial_value="0.5" name="Less_active_alveoli" units="dimensionless"/>
+        <!-- Assumed initial value-->
+        <variable initial_value="0.5" name="Fully_active_alveoli" units="dimensionless"/>
+        <!-- So total is 1        
+ Define S as normalized breaths per min input, like in original recruitmentFactor-->
+        <variable name="S" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>S</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <divide/>
+                        <ci>breathsPerMin</ci>
+                        <cn cellml:units="dimensionless">60.0</cn>
+                    </apply>
+                    <cn cellml:units="dimensionless">0.64</cn>
+                </apply>
+            </apply>
+        </math>
+        <variable name="Ra" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Ra</ci>
+                <apply>
+                    <minus/>
+                    <cn cellml:units="dimensionless">1.0</cn>
+                    <apply>
+                        <divide/>
+                        <ci>k2</ci>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <ci>k1</ci>
+                                <apply>
+                                    <power/>
+                                    <ci>S</ci>
+                                    <ci>alevolar_cooperativity</ci>
+                                </apply>
+                            </apply>
+                            <ci>k2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- recruitmentFactor with Less_active_alveoli-->
+        <variable name="recruitmentFactor" public_interface="out" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>recruitmentFactor</ci>
+                <apply>
+                    <min/>
+                    <apply>
+                        <max/>
+                        <ci>Fully_active_alveoli</ci>
+                        <cn cellml:units="dimensionless">0.1</cn>
+                    </apply>
+                    <cn cellml:units="dimensionless">1.0</cn>
+                </apply>
+            </apply>
+            <!--ensure that resistance does not go below phyological limits as Less_active_alveoli can go close to zero-->
+            <!-- Define the ODEs for Less_active_alveoli and Fully_active_alveoli-->
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>Less_active_alveoli</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+                            <ci>k1</ci>
+                        </apply>
+                        <ci>Less_active_alveoli</ci>
+                        <apply>
+                            <power/>
+                            <ci>S</ci>
+                            <ci>alevolar_cooperativity</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k2</ci>
+                        <ci>Fully_active_alveoli</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>Fully_active_alveoli</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k1</ci>
+                        <ci>Less_active_alveoli</ci>
+                        <apply>
+                            <power/>
+                            <ci>S</ci>
+                            <ci>alevolar_cooperativity</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k2</ci>
+                        <ci>Fully_active_alveoli</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="Acinus">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="numAlveoli" public_interface="in" units="dimensionless"/>
+        <variable name="V_lung" public_interface="in" units="L"/>
+        <!--Total lung volume (input to the acinus)-->
+        <variable initial_value="0.1818" name="Vc" units="L"/>
+        <!--Volume of the central compartment (conducting airways)-->
+        <variable initial_value="0.00014" name="VA" public_interface="out" units="L"/>
+        <!--Volume of the acinus (alveolar air space) - 4.5 L/ 30000 (acini)-->
+        <variable initial_value="1.5082e-05" name="Vve" units="L"/>
+        <!--Volume related to viscoelastic components (tissue compartments)-->
+        <variable initial_value="1.9" name="RV" units="L"/>
+        <!--Residual volume (minimum lung volume after full exhalation)-->
+        <variable initial_value="7.3" name="TLC" units="L"/>
+        <!--Total lung capacity-->
+        <variable initial_value="0.185" name="VD" units="L"/>
+        <!--	Dead space volume (non-gas-exchanging airways)-->
+        <variable name="breathsPerMin" public_interface="in" units="per_min"/>
+        <!-- Breaths per minute-->
+        <variable initial_value="92685.4" name="Ac" units="Pa"/>
+        <!--Central airway elastic coefficient-->
+        <variable initial_value="18307.3" name="Acw" units="Pa"/>
+        <!--Chest wall pressure coefficient-->
+        <variable initial_value="2614.0" name="Al" units="Pa"/>
+        <!--Lung pressure coefficient-->
+        <variable initial_value="28759.3" name="As" units="Pa_sec_per_L"/>
+        <variable initial_value="487741.5" name="Bc" units="Pa"/>
+        <!--Central airway recoil pressure constants-->
+        <variable initial_value="48768.4" name="Bcp" units="Pa"/>
+        <!--Central airway recoil pressure constants-->
+        <variable initial_value="-45751.4" name="Bcw" units="Pa"/>
+        <!--Chest wall pressure decay constant-->
+        <variable initial_value="-6539.6" name="Bl" units="Pa"/>
+        <!--Lung pressure offset-->
+        <variable initial_value="0.0" name="PEEP" units="Pa"/>
+        <!--Positive end expiratory pressure-->
+        <variable initial_value="-0.1" name="k_peep" units="dimensionless"/>
+        <!--gain factor-->
+        <variable initial_value="261.5" name="Bs" units="Pa"/>
+        <!--Serial resistance pressure offset-->
+        <variable initial_value="3.827e-5" name="Cve" units="L_per_Pa"/>
+        <!--Viscoelastic compliance-->
+        <variable initial_value="7.65e-5" name="Rve" units="L_per_Pa"/>
+        <!--Viscoelastic resistance-->
+        <variable initial_value="1" name="Kl" units="per_L"/>
+        <!--Lung elasticity factor-->
+        <variable initial_value="-2.5" name="Ks" units="dimensionless"/>
+        <!-- {init: -10.9};  //-3.1 (COPD) to -10.9 (ARDS)-->
+        <!--Coefficient for resistance change with volume-->
+        <variable initial_value="5.3" name="Vstar" units="L"/>
+        <!--A reference lung volume used in calculations-->
+        <variable initial_value="0.185" name="Vcmax" units="L"/>
+        <!--Maximum volume of the central (conducting) compartment
+var tau: second {init: 0.1};-->
+        <variable initial_value="26150.4" name="Amus" units="Pa"/>
+        <!--Muscle pressure amplitude-->
+        <!-- 4.5 L (at max) / 187e-6-->
+        <variable name="Vcw" units="L"/>
+        <!--Chest wall volume-->
+        <variable name="Pcw" units="Pa"/>
+        <!--Chest wall pressure-->
+        <variable name="Pl" units="Pa"/>
+        <!--Lung elastic recoil pressure-->
+        <variable name="PA" public_interface="out" units="Pa"/>
+        <!--Alveolar pressure-->
+        <variable name="Pc" units="Pa"/>
+        <!--Pressure from central airways (elastic recoil of lung)-->
+        <variable name="Pve" units="Pa"/>
+        <!--Viscoelastic pressure (resistance from tissue deformation)-->
+        <variable name="Ppl" units="Pa"/>
+        <!--Pleural pressure-->
+        <variable name="Pmus" units="Pa"/>
+        <!--Muscle pressure (respiratory muscle effort)-->
+        <variable name="QA" public_interface="out" units="L_per_second"/>
+        <!--y = 2.500514 + (0.03826521 - 2.500514)/(1 + (x/0.6482999)^9.558973)-->
+        <variable name="Al_effective" units="Pa"/>
+        <variable name="Rs" units="Pa_sec_per_L"/>
+        <!--Lung pressure reduces with recruitment-->
+        <variable name="Bl_effective" units="Pa"/>
+        <!--Base line elastic pressure also reduces with recruitment-->
+        <variable name="recruitmentFactor" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Al_effective</ci>
+                <apply>
+                    <times/>
+                    <ci>Al</ci>
+                    <ci>recruitmentFactor</ci>
+                </apply>
+            </apply>
+            <!--Linear approximation - recruitment affects both the number of open units and their individual mechanical properties in a non-linear way.-->
+            <apply>
+                <eq/>
+                <ci>Bl_effective</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>Bl</ci>
+                        <ci>recruitmentFactor</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_peep</ci>
+                        <ci>PEEP</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Rs</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>As</ci>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <ci>Ks</ci>
+                                    <apply>
+                                        <minus/>
+                                        <ci>V_lung</ci>
+                                        <ci>RV</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <ci>Vstar</ci>
+                                    <ci>RV</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <ci>Bs</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pl</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>Al_effective</ci>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <times/>
+                                <ci>Kl</ci>
+                                <ci>V_lung</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <ci>Bl_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pmus</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>Amus</ci>
+                        <apply>
+                            <sin/>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dimensionless">6.2831</cn>
+                                <ci>breathsPerMin</ci>
+                                <ci>time</ci>
+                                <cn cellml:units="dimensionless" type="e-notation">1.6666<sep/>-2</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <ci>Amus</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pc</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <minus/>
+                            <ci>Ac</ci>
+                            <apply>
+                                <times/>
+                                <ci>Bc</ci>
+                                <apply>
+                                    <power/>
+                                    <apply>
+                                        <minus/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Vc</ci>
+                                            <ci>Vcmax</ci>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">0.7</cn>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <lt/>
+                            <apply>
+                                <divide/>
+                                <ci>Vc</ci>
+                                <ci>Vcmax</ci>
+                            </apply>
+                            <cn cellml:units="dimensionless">0.5</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">5.6</cn>
+                            <apply>
+                                <times/>
+                                <ci>Bcp</ci>
+                                <apply>
+                                    <log/>
+                                    <apply>
+                                        <minus/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Vcmax</ci>
+                                            <ci>Vc</ci>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">0.999</cn>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pve</ci>
+                <apply>
+                    <divide/>
+                    <ci>Vve</ci>
+                    <ci>Cve</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Vcw</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>numAlveoli</ci>
+                        <ci>VA</ci>
+                    </apply>
+                    <ci>VD</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pcw</ci>
+                <apply>
+                    <minus/>
+                    <ci>Acw</ci>
+                    <apply>
+                        <times/>
+                        <ci>Bcw</ci>
+                        <apply>
+                            <ln/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <minus/>
+                                        <ci>TLC</ci>
+                                        <ci>RV</ci>
+                                    </apply>
+                                    <apply>
+                                        <minus/>
+                                        <ci>Vcw</ci>
+                                        <ci>RV</ci>
+                                    </apply>
+                                </apply>
+                                <cn cellml:units="dimensionless">0.999</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ppl</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>Pcw</ci>
+                    </apply>
+                    <ci>Pmus</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>PA</ci>
+                <apply>
+                    <plus/>
+                    <ci>Pl</ci>
+                    <ci>Pve</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="JR11" units="dimensionless"/>
+        <variable name="JR2" units="dimensionless"/>
+        <variable name="JR33" units="dimensionless"/>
+        <variable name="U1" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>JR11</ci>
+                <apply>
+                    <minus/>
+                    <cn cellml:units="dimensionless">2</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>JR2</ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <ci>numAlveoli</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>JR33</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <ci>Rs</ci>
+                        <ci>Rve</ci>
+                    </apply>
+                    <ci>Rve</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>U1</ci>
+                <apply>
+                    <plus/>
+                    <ci>Pcw</ci>
+                    <ci>Pmus</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>QA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>numAlveoli</ci>
+                            <ci>JR2</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <minus/>
+                                    <ci>Pc</ci>
+                                    <ci>Pl</ci>
+                                </apply>
+                                <ci>Pve</ci>
+                            </apply>
+                        </apply>
+                        <ci>Rs</ci>
+                    </apply>
+                    <cn cellml:units="dimensionless">1000</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>Vc</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>JR11</ci>
+                            <ci>Pc</ci>
+                        </apply>
+                        <ci>Pl</ci>
+                        <ci>Pve</ci>
+                        <ci>U1</ci>
+                    </apply>
+                    <ci>Rs</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>VA</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>JR2</ci>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <ci>Pc</ci>
+                                <ci>Pl</ci>
+                            </apply>
+                            <ci>Pve</ci>
+                        </apply>
+                    </apply>
+                    <ci>Rs</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>Vve</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <ci>Pc</ci>
+                            <ci>Pl</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>JR33</ci>
+                            <ci>Pve</ci>
+                        </apply>
+                    </apply>
+                    <ci>Rs</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="AcinusToLungScaleCoupling">
+        <variable name="PA_acinus" public_interface="in" units="Pa"/>
+        <variable name="P_A" public_interface="out" units="Pa"/>
+        <variable name="VA_acinus" public_interface="in" units="L"/>
+        <variable name="V_A" public_interface="out" units="L"/>
+        <variable name="Resistance" public_interface="out" units="dimensionless"/>
+        <variable initial_value="24064" name="LungToAcinusVolRatio" public_interface="out" units="dimensionless"/>
+        <!-- Ratio of Lung volume to acini volume at full inhalation - 4.5 L (at max) / 187e-6-->
+        <variable initial_value="0.65" name="AlveolarResistance" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>V_A</ci>
+                <apply>
+                    <times/>
+                    <ci>VA_acinus</ci>
+                    <ci>LungToAcinusVolRatio</ci>
+                </apply>
+            </apply>
+            <!--P_A = PA_acinus*133.33{dimensionless}; // 1mmHg = 133.33 Pa-->
+            <apply>
+                <eq/>
+                <ci>P_A</ci>
+                <ci>PA_acinus</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Resistance</ci>
+                <apply>
+                    <times/>
+                    <ci>LungToAcinusVolRatio</ci>
+                    <ci>AlveolarResistance</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="gasTransport" component_2="gasExchange"/>
+        <map_variables variable_1="p_o" variable_2="p_o"/>
+        <map_variables variable_1="D_o" variable_2="D_o"/>
+        <map_variables variable_1="f_o" variable_2="f_o"/>
+        <map_variables variable_1="P_w" variable_2="P_w"/>
+        <map_variables variable_1="p_c" variable_2="p_c"/>
+        <map_variables variable_1="D_c" variable_2="D_c"/>
+        <map_variables variable_1="p_ac" variable_2="p_ac"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="gasTransport"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="AlveolarRecruitment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="Acinus" component_2="gasTransport"/>
+        <map_variables variable_1="PA" variable_2="P_A"/>
+    </connection>
+    <connection>
+        <map_components component_1="Acinus" component_2="AlveolarRecruitment"/>
+        <map_variables variable_1="recruitmentFactor" variable_2="recruitmentFactor"/>
+        <map_variables variable_1="breathsPerMin" variable_2="breathsPerMin"/>
+    </connection>
+    <connection>
+        <map_components component_1="gasExchange" component_2="AlveolarRecruitment"/>
+        <map_variables variable_1="breathsPerMin" variable_2="breathsPerMin"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="gasExchange"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="numAlveoli" variable_2="numAlveoli"/>
+    </connection>
+    <connection>
+        <map_components component_1="Acinus" component_2="gasExchange"/>
+        <map_variables variable_1="PA" variable_2="P_A"/>
+        <map_variables variable_1="VA" variable_2="V_A"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="Acinus"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="numAlveoli" variable_2="numAlveoli"/>
+    </connection>
+    <connection>
+        <map_components component_1="Acinus" component_2="AcinusToLungScaleCoupling"/>
+        <map_variables variable_1="PA" variable_2="PA_acinus"/>
+        <map_variables variable_1="VA" variable_2="VA_acinus"/>
+        <map_variables variable_1="V_lung" variable_2="V_A"/>
+    </connection>
+</model>

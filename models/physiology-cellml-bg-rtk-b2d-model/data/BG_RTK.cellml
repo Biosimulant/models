@@ -1,0 +1,771 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="individual_RTK" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="millivolt" units_ref="millivolt"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <!-- initial values-->
+        <variable initial_value="1" name="q_L" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-3" name="q_K1" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-3" name="q_K2" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-6" name="q_LK1" public_interface="out" units="fmol"/>
+        <variable initial_value="1" name="q_P" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-9" name="q_LK1K2" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-9" name="q_LK1K2P" public_interface="out" units="fmol"/>
+        <variable initial_value="1" name="q_Ubiq" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-88" name="q_LKKPU" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-88" name="q_LKKPUtag" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-88" name="q_LPUtag" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="v_Re1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Re2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Re3" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Re4" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Re5" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Re6" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_L</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_K1</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_Re1</ci>
+                    </apply>
+                    <ci>v_Re5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_K2</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_Re2</ci>
+                    </apply>
+                    <ci>v_Re5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_LK1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re1</ci>
+                    <ci>v_Re2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_P</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_LK1K2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re2</ci>
+                    <ci>v_Re3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_LK1K2P</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re3</ci>
+                    <ci>v_Re4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ubiq</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_LKKPU</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_Re4</ci>
+                        <ci>v_Re5</ci>
+                    </apply>
+                    <ci>v_Re6</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_LKKPUtag</ci>
+                </apply>
+                <ci>v_Re6</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_LPUtag</ci>
+                </apply>
+                <ci>v_Re5</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="RTK_parameters">
+        <variable initial_value="1.31758e-07" name="kappa_Re1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0862846" name="kappa_Re2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00038952" name="kappa_Re3" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.66799e-09" name="kappa_Re4" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="26.6799" name="kappa_Re5" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2667.99" name="kappa_Re6" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="8.32274e+08" name="K_L" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000770619" name="K_K1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="44390" name="K_K2" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.22063" name="K_LK1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="6.4394e+12" name="K_P" public_interface="out" units="per_fmol"/>
+        <variable initial_value="3.36906e-07" name="K_LK1K2" public_interface="out" units="per_fmol"/>
+        <variable initial_value="7.46298e-05" name="K_LK1K2P" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4.24411e+13" name="K_Ubiq" public_interface="out" units="per_fmol"/>
+        <variable initial_value="10.8958" name="K_LKKPU" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.08958e-11" name="K_LKKPUtag" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.69163e-14" name="K_LPUtag" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="RTK">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- parameters-->
+        <variable name="kappa_Re1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_Re2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_Re3" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_Re4" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_Re5" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_Re6" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_L" public_interface="in" units="per_fmol"/>
+        <variable name="K_K1" public_interface="in" units="per_fmol"/>
+        <variable name="K_K2" public_interface="in" units="per_fmol"/>
+        <variable name="K_LK1" public_interface="in" units="per_fmol"/>
+        <variable name="K_P" public_interface="in" units="per_fmol"/>
+        <variable name="K_LK1K2" public_interface="in" units="per_fmol"/>
+        <variable name="K_LK1K2P" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ubiq" public_interface="in" units="per_fmol"/>
+        <variable name="K_LKKPU" public_interface="in" units="per_fmol"/>
+        <variable name="K_LKKPUtag" public_interface="in" units="per_fmol"/>
+        <variable name="K_LPUtag" public_interface="in" units="per_fmol"/>
+        <!-- Input from global environment-->
+        <variable name="q_L" public_interface="in" units="fmol"/>
+        <variable name="q_K1" public_interface="in" units="fmol"/>
+        <variable name="q_K2" public_interface="in" units="fmol"/>
+        <variable name="q_LK1" public_interface="in" units="fmol"/>
+        <variable name="q_P" public_interface="in" units="fmol"/>
+        <variable name="q_LK1K2" public_interface="in" units="fmol"/>
+        <variable name="q_LK1K2P" public_interface="in" units="fmol"/>
+        <variable name="q_Ubiq" public_interface="in" units="fmol"/>
+        <variable name="q_LKKPU" public_interface="in" units="fmol"/>
+        <variable name="q_LKKPUtag" public_interface="in" units="fmol"/>
+        <variable name="q_LPUtag" public_interface="in" units="fmol"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_L" units="J_per_mol"/>
+        <variable name="mu_K1" units="J_per_mol"/>
+        <variable name="mu_K2" units="J_per_mol"/>
+        <variable name="mu_LK1" units="J_per_mol"/>
+        <variable name="mu_P" units="J_per_mol"/>
+        <variable name="mu_LK1K2" units="J_per_mol"/>
+        <variable name="mu_LK1K2P" units="J_per_mol"/>
+        <variable name="mu_Ubiq" units="J_per_mol"/>
+        <variable name="mu_LKKPU" units="J_per_mol"/>
+        <variable name="mu_LKKPUtag" units="J_per_mol"/>
+        <variable name="mu_LPUtag" units="J_per_mol"/>
+        <variable name="v_Re1" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_Re2" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_Re3" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_Re4" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_Re5" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_Re6" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_L</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_L</ci>
+                            <ci>q_L</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_K1</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K1</ci>
+                            <ci>q_K1</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_K2</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K2</ci>
+                            <ci>q_K2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_LK1</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_LK1</ci>
+                            <ci>q_LK1</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_P</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_P</ci>
+                            <ci>q_P</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_LK1K2</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_LK1K2</ci>
+                            <ci>q_LK1K2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_LK1K2P</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_LK1K2P</ci>
+                            <ci>q_LK1K2P</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ubiq</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ubiq</ci>
+                            <ci>q_Ubiq</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_LKKPU</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_LKKPU</ci>
+                            <ci>q_LKKPU</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_LKKPUtag</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_LKKPUtag</ci>
+                            <ci>q_LKKPUtag</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_LPUtag</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_LPUtag</ci>
+                            <ci>q_LPUtag</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Re1</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_Re1</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_L</ci>
+                                    <ci>mu_K1</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_LK1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Re2</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_Re2</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_LK1</ci>
+                                    <ci>mu_K2</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_LK1K2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Re3</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_Re3</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_P</ci>
+                                    <ci>mu_LK1K2</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_LK1K2P</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Re4</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_Re4</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Ubiq</ci>
+                                    <ci>mu_LK1K2P</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_LKKPU</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Re5</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_Re5</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_LKKPU</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_K1</ci>
+                                    <ci>mu_K2</ci>
+                                    <ci>mu_LPUtag</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Re6</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_Re6</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_LKKPU</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_LKKPUtag</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="RTK"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_L" variable_2="q_L"/>
+        <map_variables variable_1="q_K1" variable_2="q_K1"/>
+        <map_variables variable_1="q_K2" variable_2="q_K2"/>
+        <map_variables variable_1="q_LK1" variable_2="q_LK1"/>
+        <map_variables variable_1="q_P" variable_2="q_P"/>
+        <map_variables variable_1="q_LK1K2" variable_2="q_LK1K2"/>
+        <map_variables variable_1="q_LK1K2P" variable_2="q_LK1K2P"/>
+        <map_variables variable_1="q_Ubiq" variable_2="q_Ubiq"/>
+        <map_variables variable_1="q_LKKPU" variable_2="q_LKKPU"/>
+        <map_variables variable_1="q_LKKPUtag" variable_2="q_LKKPUtag"/>
+        <map_variables variable_1="q_LPUtag" variable_2="q_LPUtag"/>
+        <map_variables variable_1="v_Re1" variable_2="v_Re1"/>
+        <map_variables variable_1="v_Re2" variable_2="v_Re2"/>
+        <map_variables variable_1="v_Re3" variable_2="v_Re3"/>
+        <map_variables variable_1="v_Re4" variable_2="v_Re4"/>
+        <map_variables variable_1="v_Re5" variable_2="v_Re5"/>
+        <map_variables variable_1="v_Re6" variable_2="v_Re6"/>
+    </connection>
+    <connection>
+        <map_components component_1="RTK" component_2="RTK_parameters"/>
+        <map_variables variable_1="kappa_Re1" variable_2="kappa_Re1"/>
+        <map_variables variable_1="kappa_Re2" variable_2="kappa_Re2"/>
+        <map_variables variable_1="kappa_Re3" variable_2="kappa_Re3"/>
+        <map_variables variable_1="kappa_Re4" variable_2="kappa_Re4"/>
+        <map_variables variable_1="kappa_Re5" variable_2="kappa_Re5"/>
+        <map_variables variable_1="kappa_Re6" variable_2="kappa_Re6"/>
+        <map_variables variable_1="K_L" variable_2="K_L"/>
+        <map_variables variable_1="K_K1" variable_2="K_K1"/>
+        <map_variables variable_1="K_K2" variable_2="K_K2"/>
+        <map_variables variable_1="K_LK1" variable_2="K_LK1"/>
+        <map_variables variable_1="K_P" variable_2="K_P"/>
+        <map_variables variable_1="K_LK1K2" variable_2="K_LK1K2"/>
+        <map_variables variable_1="K_LK1K2P" variable_2="K_LK1K2P"/>
+        <map_variables variable_1="K_Ubiq" variable_2="K_Ubiq"/>
+        <map_variables variable_1="K_LKKPU" variable_2="K_LKKPU"/>
+        <map_variables variable_1="K_LKKPUtag" variable_2="K_LKKPUtag"/>
+        <map_variables variable_1="K_LPUtag" variable_2="K_LPUtag"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="RTK"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

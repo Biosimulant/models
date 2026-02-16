@@ -1,0 +1,987 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- T-type calcium channel-->
+<model name="BG_TCC_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="60000" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="0.04653" name="q_Ca_o" public_interface="out" units="fmol"/>
+        <variable initial_value="0.000001551" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <!--        var q_s00_TCC: fmol {init: 2.7399535E-06, pub: out};
+        var q_s10_TCC: fmol {init: 2.7399535E-06, pub: out};
+        var q_s01_TCC: fmol {init: 2.7399535E-06, pub: out};
+        var q_s11_TCC: fmol {init: 2.7399535E-06, pub: out};-->
+        <variable initial_value="3.653271338425772e-07" name="q_s00_TCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_s10_TCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_s01_TCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_s11_TCC" public_interface="out" units="fmol"/>
+        <!--        var q_mem: fC {init: -5e3, pub: out};-->
+        <variable name="q_mem" public_interface="out" units="fC"/>
+        <variable name="V_mem" units="volt"/>
+        <variable initial_value="8.31" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96500" name="F" public_interface="out" units="C_per_mol"/>
+        <variable name="v_TCC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_TCC" public_interface="in" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_TCC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_o</ci>
+                </apply>
+                <ci>v_TCC</ci>
+            </apply>
+        </math>
+        <!--        ode(q_mem, time) = I_mem_TCC+I_stim;-->
+        <!--        V_mem = q_mem/C_m;-->
+        <variable name="I_stim" units="fA"/>
+        <variable initial_value="1" name="stimPeriod" units="second"/>
+        <variable initial_value="0.0001" name="stimDuration" units="second"/>
+        <variable name="tPeriod" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>tPeriod</ci>
+                <apply>
+                    <minus/>
+                    <ci>time</ci>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <floor/>
+                            <apply>
+                                <divide/>
+                                <ci>time</ci>
+                                <ci>stimPeriod</ci>
+                            </apply>
+                        </apply>
+                        <ci>stimPeriod</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <!--                I_stim = sel
+                    case (tPeriod >= 0.3{second}) and (tPeriod <= 0.3{second}+stimDuration):
+                        0.075{volt}*C_m/stimDuration;
+                    otherwise:
+                        0.0{fA};
+                endsel;-->
+            <apply>
+                <eq/>
+                <ci>I_stim</ci>
+                <cn cellml:units="fA">0</cn>
+            </apply>
+            <!--                V_mem = sel
+                    case (tPeriod >= 0.3{second}) and (tPeriod <= 0.3{second}+stimDuration):
+                        0.05{volt};
+                    otherwise:
+                        -0.080{fA};
+                endsel;-->
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="volt">0.09</cn>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <geq/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">0</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">0.4</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="volt">0.06</cn>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">1.1</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">2.1</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <cn cellml:units="volt">0.04</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">2.2</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">3.1</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="volt">0.09</cn>
+                        </apply>
+                        <apply>
+                            <gt/>
+                            <ci>time</ci>
+                            <cn cellml:units="second">3.5</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="volt">0.08</cn>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_mem</ci>
+                <apply>
+                    <times/>
+                    <ci>V_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="TCC_parameters">
+        <!-- ORIGINAL TCC-->
+        <variable initial_value="11414.6" name="kappa_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1266.14" name="kappa_R1_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="4.33488" name="kappa_R2_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.34962" name="kappa_R3_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="7.44777" name="kappa_R4_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="28.7976" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="211.182" name="K_Ca_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.10659" name="K_S00_TCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.381738" name="K_S10_TCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="615.294" name="K_S01_TCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="111.498" name="K_S11_TCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2" name="zCa" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.876568910405296" name="z_df" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.576510778245838" name="z_ff" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.872117216889333" name="z_dr" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1.73582739545622" name="z_fr" public_interface="out" units="dimensionless"/>
+        <!-- Kr-->
+        <!--        var kappa_TCC: fmol_per_sec {init: 175.029, pub: out};
+        var kappa_R1_TCC: fmol_per_sec {init: 0.0794844, pub: out};
+        var kappa_R2_TCC: fmol_per_sec {init: 0.00212813, pub: out};
+        var kappa_R3_TCC: fmol_per_sec {init: 0.267259, pub: out};
+        var kappa_R4_TCC: fmol_per_sec {init: 2.18134, pub: out};
+        var K_Ca_i: per_fmol {init: 12.9706, pub: out};
+        var K_Ca_o: per_fmol {init: 95.1175, pub: out};
+        var K_S00_TCC: per_fmol {init: 0.0465841, pub: out};
+        var K_S10_TCC: per_fmol {init: 0.00570751, pub: out};
+        var K_S01_TCC: per_fmol {init: 1.73989, pub: out};
+        var K_S11_TCC: per_fmol {init: 0.213172, pub: out};
+        var zCa: dimensionless {init: 1, pub: out};
+        var z_df: dimensionless {init: 1.6149028778859738, pub: out};
+        var z_dr: dimensionless {init: -1.3218634652232777, pub: out};
+        var z_ff: dimensionless {init: -1.0273976425216251, pub: out};
+        var z_fr: dimensionless {init: -0.18153135376657775, pub: out};-->
+    </component>
+    <component name="TCC">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="zCa" public_interface="in" units="dimensionless"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="C_m" public_interface="in" units="fF"/>
+        <variable name="kappa_TCC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_Ca_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_o" public_interface="in" units="per_fmol"/>
+        <!-- state variables-->
+        <variable name="q_Ca_i" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_o" public_interface="in" units="fmol"/>
+        <variable name="q_mem" public_interface="in" units="fC"/>
+        <variable name="v_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="I_mem_TCC" public_interface="out" units="fA"/>
+        <variable name="u_Ca_i" units="J_per_mol"/>
+        <variable name="u_Ca_o" units="J_per_mol"/>
+        <variable name="V_mem" units="J_per_C"/>
+        <variable name="Am_TCC" units="J_per_mol"/>
+        <variable name="Af_Ca" units="J_per_mol"/>
+        <variable name="Ar_Ca" units="J_per_mol"/>
+        <!-- Constitutive relations - Convention: positive flow from inside to outside-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Am_TCC</ci>
+                <apply>
+                    <times/>
+                    <ci>zCa</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_Ca_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_i</ci>
+                            <ci>q_Ca_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_Ca_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_o</ci>
+                            <ci>q_Ca_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_Ca</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_s11_TCC</ci>
+                    <ci>u_Ca_i</ci>
+                    <ci>Am_TCC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_Ca</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_s11_TCC</ci>
+                    <ci>u_Ca_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_TCC</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>kappa_TCC</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_Ca</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_Ca</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_TCC</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>kappa_TCC</ci>
+                                        <ci>Am_TCC</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_TCC</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_Ca</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_Ca</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_TCC</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>zCa</ci>
+                            </apply>
+                            <ci>v_TCC</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>v_R1_TCC</ci>
+                            <apply>
+                                <minus/>
+                                <ci>z_dr</ci>
+                                <ci>z_df</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>v_R2_TCC</ci>
+                            <apply>
+                                <minus/>
+                                <ci>z_dr</ci>
+                                <ci>z_df</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>v_R3_TCC</ci>
+                            <apply>
+                                <minus/>
+                                <ci>z_fr</ci>
+                                <ci>z_ff</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>v_R4_TCC</ci>
+                            <apply>
+                                <minus/>
+                                <ci>z_fr</ci>
+                                <ci>z_ff</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- GATE-->
+        <variable name="v_s00_TCC" units="fmol_per_sec"/>
+        <variable name="v_s10_TCC" units="fmol_per_sec"/>
+        <variable name="v_s01_TCC" units="fmol_per_sec"/>
+        <variable name="v_s11_TCC" units="fmol_per_sec"/>
+        <variable name="v_R1_TCC" units="fmol_per_sec"/>
+        <variable name="v_R2_TCC" units="fmol_per_sec"/>
+        <variable name="v_R3_TCC" units="fmol_per_sec"/>
+        <variable name="v_R4_TCC" units="fmol_per_sec"/>
+        <variable name="mu_s00_TCC" units="J_per_mol"/>
+        <variable name="mu_s10_TCC" units="J_per_mol"/>
+        <variable name="mu_s01_TCC" units="J_per_mol"/>
+        <variable name="mu_s11_TCC" units="J_per_mol"/>
+        <variable name="Af_R1_TCC" units="J_per_mol"/>
+        <variable name="Ar_R1_TCC" units="J_per_mol"/>
+        <variable name="Af_R2_TCC" units="J_per_mol"/>
+        <variable name="Ar_R2_TCC" units="J_per_mol"/>
+        <variable name="Af_R3_TCC" units="J_per_mol"/>
+        <variable name="Ar_R3_TCC" units="J_per_mol"/>
+        <variable name="Af_R4_TCC" units="J_per_mol"/>
+        <variable name="Ar_R4_TCC" units="J_per_mol"/>
+        <variable name="kappa_R1_TCC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R2_TCC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R3_TCC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R4_TCC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_S00_TCC" public_interface="in" units="per_fmol"/>
+        <variable name="K_S10_TCC" public_interface="in" units="per_fmol"/>
+        <variable name="K_S01_TCC" public_interface="in" units="per_fmol"/>
+        <variable name="K_S11_TCC" public_interface="in" units="per_fmol"/>
+        <variable name="z_df" public_interface="in" units="dimensionless"/>
+        <variable name="z_ff" public_interface="in" units="dimensionless"/>
+        <variable name="z_dr" public_interface="in" units="dimensionless"/>
+        <variable name="z_fr" public_interface="in" units="dimensionless"/>
+        <variable name="q_s00_TCC" public_interface="in" units="fmol"/>
+        <variable name="q_s10_TCC" public_interface="in" units="fmol"/>
+        <variable name="q_s01_TCC" public_interface="in" units="fmol"/>
+        <variable name="q_s11_TCC" public_interface="in" units="fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Af_R1_TCC</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_s00_TCC</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_df</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_R1_TCC</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_s10_TCC</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_dr</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_R2_TCC</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_s01_TCC</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_df</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_R2_TCC</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_s11_TCC</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_dr</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_R3_TCC</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_s00_TCC</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_ff</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_R3_TCC</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_s01_TCC</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_fr</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_R4_TCC</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_s10_TCC</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_ff</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_R4_TCC</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_s11_TCC</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_fr</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R1_TCC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R1_TCC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_R1_TCC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_R1_TCC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R2_TCC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R2_TCC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_R2_TCC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_R2_TCC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R3_TCC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R3_TCC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_R3_TCC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_R3_TCC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R4_TCC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R4_TCC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_R4_TCC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_R4_TCC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_s00_TCC</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R1_TCC</ci>
+                    </apply>
+                    <ci>v_R3_TCC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_s10_TCC</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_R1_TCC</ci>
+                    <ci>v_R4_TCC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_s01_TCC</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_R3_TCC</ci>
+                    <ci>v_R2_TCC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_s11_TCC</ci>
+                <apply>
+                    <plus/>
+                    <ci>v_R2_TCC</ci>
+                    <ci>v_R4_TCC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_s00_TCC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S00_TCC</ci>
+                            <ci>q_s00_TCC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_s10_TCC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S10_TCC</ci>
+                            <ci>q_s10_TCC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_s01_TCC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S01_TCC</ci>
+                            <ci>q_s01_TCC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_s11_TCC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S11_TCC</ci>
+                            <ci>q_s11_TCC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_s00_TCC</ci>
+                </apply>
+                <ci>v_s00_TCC</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_s10_TCC</ci>
+                </apply>
+                <ci>v_s10_TCC</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_s01_TCC</ci>
+                </apply>
+                <ci>v_s01_TCC</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_s11_TCC</ci>
+                </apply>
+                <ci>v_s11_TCC</ci>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="TCC"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_s00_TCC" variable_2="q_s00_TCC"/>
+        <map_variables variable_1="q_s01_TCC" variable_2="q_s01_TCC"/>
+        <map_variables variable_1="q_s10_TCC" variable_2="q_s10_TCC"/>
+        <map_variables variable_1="q_s11_TCC" variable_2="q_s11_TCC"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="v_TCC" variable_2="v_TCC"/>
+        <map_variables variable_1="I_mem_TCC" variable_2="I_mem_TCC"/>
+    </connection>
+    <connection>
+        <map_components component_1="TCC_parameters" component_2="TCC"/>
+        <map_variables variable_1="kappa_TCC" variable_2="kappa_TCC"/>
+        <map_variables variable_1="kappa_R1_TCC" variable_2="kappa_R1_TCC"/>
+        <map_variables variable_1="kappa_R2_TCC" variable_2="kappa_R2_TCC"/>
+        <map_variables variable_1="kappa_R3_TCC" variable_2="kappa_R3_TCC"/>
+        <map_variables variable_1="kappa_R4_TCC" variable_2="kappa_R4_TCC"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="K_S00_TCC" variable_2="K_S00_TCC"/>
+        <map_variables variable_1="K_S10_TCC" variable_2="K_S10_TCC"/>
+        <map_variables variable_1="K_S01_TCC" variable_2="K_S01_TCC"/>
+        <map_variables variable_1="K_S11_TCC" variable_2="K_S11_TCC"/>
+        <map_variables variable_1="z_df" variable_2="z_df"/>
+        <map_variables variable_1="z_ff" variable_2="z_ff"/>
+        <map_variables variable_1="z_dr" variable_2="z_dr"/>
+        <map_variables variable_1="z_fr" variable_2="z_fr"/>
+        <map_variables variable_1="zCa" variable_2="zCa"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

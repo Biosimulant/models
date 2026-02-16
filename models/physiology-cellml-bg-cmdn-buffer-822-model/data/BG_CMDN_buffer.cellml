@@ -1,0 +1,230 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="cardiac_AP_CMDN_only" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="pL" units_ref="pL"/>
+    </import>
+    <component name="environment">
+        <variable initial_value="0" name="t" public_interface="out" units="second"/>
+        <variable initial_value="8.314" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96485" name="F" public_interface="out" units="C_per_mol"/>
+        <variable initial_value="153400" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="0.00456" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <variable initial_value="1.8088" name="q_CMDN" public_interface="out" units="fmol"/>
+        <variable initial_value="0.0912" name="q_CMDN_Ca" public_interface="out" units="fmol"/>
+        <variable name="v_b2" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_CMDN</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_b2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_CMDN_Ca</ci>
+                </apply>
+                <ci>v_b2</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_b2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="CMDN_parameters">
+        <variable initial_value="22.0647" name="K_CMDN" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.044337" name="K_CMDN_Ca" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.022218" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1412.6324" name="kappa_b2" public_interface="out" units="fmol_per_sec"/>
+    </component>
+    <component name="CMDN_buffer">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="K_CMDN" public_interface="in" units="per_fmol"/>
+        <variable name="K_CMDN_Ca" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_i" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_b2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="q_CMDN" public_interface="in" units="fmol"/>
+        <variable name="q_CMDN_Ca" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_i" public_interface="in" units="fmol"/>
+        <variable name="mu_CMDN" units="J_per_mol"/>
+        <variable name="mu_CMDN_Ca" units="J_per_mol"/>
+        <variable name="mu_Ca_i" units="J_per_mol"/>
+        <variable name="Af_b2" units="J_per_mol"/>
+        <variable name="Ar_b2" units="J_per_mol"/>
+        <variable name="v_b2" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Af_b2</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_Ca_i</ci>
+                    <ci>mu_CMDN</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_b2</ci>
+                <ci>mu_CMDN_Ca</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_CMDN</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_CMDN</ci>
+                            <ci>q_CMDN</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_CMDN_Ca</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_CMDN_Ca</ci>
+                            <ci>q_CMDN_Ca</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_i</ci>
+                            <ci>q_Ca_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_b2</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_b2</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_b2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_b2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="CMDN_buffer" component_2="CMDN_parameters"/>
+        <map_variables variable_1="K_CMDN" variable_2="K_CMDN"/>
+        <map_variables variable_1="K_CMDN_Ca" variable_2="K_CMDN_Ca"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="kappa_b2" variable_2="kappa_b2"/>
+    </connection>
+    <connection>
+        <map_components component_1="CMDN_buffer" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="q_CMDN" variable_2="q_CMDN"/>
+        <map_variables variable_1="q_CMDN_Ca" variable_2="q_CMDN_Ca"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="v_b2" variable_2="v_b2"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

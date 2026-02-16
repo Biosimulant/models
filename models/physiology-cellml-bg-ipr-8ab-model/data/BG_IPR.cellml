@@ -1,0 +1,3155 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="individual_IPR" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="millivolt" units_ref="millivolt"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <!-- initial values-->
+        <variable initial_value="0.007540192" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <variable initial_value="0.763997897" name="q_Ca_SR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-3" name="q_IP3" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_000_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_001_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_010_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_011_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_100_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_101_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_110_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_111_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_000_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_001_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_010_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_011_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_100_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_101_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_110_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_111_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_000_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_001_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_010_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_011_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_100_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_101_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_110_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_111_IPR" public_interface="out" units="fmol"/>
+        <variable name="IP3_stim" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>IP3_stim</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="fmol_per_sec">100</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second" type="e-notation">6<sep/>-2</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second" type="e-notation">7<sep/>-2</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="fmol_per_sec">100</cn>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second" type="e-notation">9<sep/>-2</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second" type="e-notation">10<sep/>-2</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="fmol_per_sec">0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <!-- From submodule-->
+        <variable name="v_R_IPR_main" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R1_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R2_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R3_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R4_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R5_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R6_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R7_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R8_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R9_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R10_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R11_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R1_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R2_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R3_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R4_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R5_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R6_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R7_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R8_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R9_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R10_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R11_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R1_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R2_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R3_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R4_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R5_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R6_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R7_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R8_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R9_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R10_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R11_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <minus/>
+                                        <apply>
+                                            <plus/>
+                                            <apply>
+                                                <minus/>
+                                                <apply>
+                                                    <minus/>
+                                                    <apply>
+                                                        <plus/>
+                                                        <apply>
+                                                            <minus/>
+                                                            <apply>
+                                                                <minus/>
+                                                                <apply>
+                                                                    <plus/>
+                                                                    <apply>
+                                                                        <minus/>
+                                                                        <apply>
+                                                                            <minus/>
+                                                                            <apply>
+                                                                                <plus/>
+                                                                                <apply>
+                                                                                    <minus/>
+                                                                                    <apply>
+                                                                                        <minus/>
+                                                                                        <ci>v_R_IPR_main</ci>
+                                                                                        <ci>v_R1_a_IPR</ci>
+                                                                                    </apply>
+                                                                                    <ci>v_R2_a_IPR</ci>
+                                                                                </apply>
+                                                                                <ci>v_R3_a_IPR</ci>
+                                                                                <ci>v_R4_a_IPR</ci>
+                                                                            </apply>
+                                                                            <ci>v_R5_a_IPR</ci>
+                                                                        </apply>
+                                                                        <ci>v_R6_a_IPR</ci>
+                                                                    </apply>
+                                                                    <ci>v_R7_a_IPR</ci>
+                                                                    <ci>v_R8_a_IPR</ci>
+                                                                </apply>
+                                                                <ci>v_R1_b_IPR</ci>
+                                                            </apply>
+                                                            <ci>v_R2_b_IPR</ci>
+                                                        </apply>
+                                                        <ci>v_R3_b_IPR</ci>
+                                                        <ci>v_R4_b_IPR</ci>
+                                                    </apply>
+                                                    <ci>v_R5_b_IPR</ci>
+                                                </apply>
+                                                <ci>v_R6_b_IPR</ci>
+                                            </apply>
+                                            <ci>v_R7_b_IPR</ci>
+                                            <ci>v_R8_b_IPR</ci>
+                                        </apply>
+                                        <ci>v_R1_c_IPR</ci>
+                                    </apply>
+                                    <ci>v_R2_c_IPR</ci>
+                                </apply>
+                                <ci>v_R3_c_IPR</ci>
+                                <ci>v_R4_c_IPR</ci>
+                            </apply>
+                            <ci>v_R5_c_IPR</ci>
+                        </apply>
+                        <ci>v_R6_c_IPR</ci>
+                    </apply>
+                    <ci>v_R7_c_IPR</ci>
+                    <ci>v_R8_c_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_SR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_IPR_main</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_IP3</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <plus/>
+                                    <apply>
+                                        <minus/>
+                                        <apply>
+                                            <plus/>
+                                            <apply>
+                                                <minus/>
+                                                <apply>
+                                                    <plus/>
+                                                    <apply>
+                                                        <minus/>
+                                                        <apply>
+                                                            <plus/>
+                                                            <apply>
+                                                                <minus/>
+                                                                <ci>v_R9_a_IPR</ci>
+                                                            </apply>
+                                                            <ci>v_R10_a_IPR</ci>
+                                                        </apply>
+                                                        <ci>v_R11_a_IPR</ci>
+                                                    </apply>
+                                                    <ci>v_R12_a_IPR</ci>
+                                                </apply>
+                                                <ci>v_R9_b_IPR</ci>
+                                            </apply>
+                                            <ci>v_R10_b_IPR</ci>
+                                        </apply>
+                                        <ci>v_R11_b_IPR</ci>
+                                    </apply>
+                                    <ci>v_R12_b_IPR</ci>
+                                </apply>
+                                <ci>v_R9_c_IPR</ci>
+                            </apply>
+                            <ci>v_R10_c_IPR</ci>
+                        </apply>
+                        <ci>v_R11_c_IPR</ci>
+                    </apply>
+                    <ci>v_R12_c_IPR</ci>
+                    <ci>IP3_stim</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Ca conservation-->
+        <variable name="Ca_tot" units="fmol"/>
+        <variable name="Ca_gate" units="fmol"/>
+        <!-- repeats in terms are due to the possibility of 2 Ca bound (one activating, other inactivating)-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Ca_gate</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_Sa_001_IPR</ci>
+                    <ci>q_Sa_101_IPR</ci>
+                    <ci>q_Sa_011_IPR</ci>
+                    <ci>q_Sa_111_IPR</ci>
+                    <ci>q_Sa_010_IPR</ci>
+                    <ci>q_Sa_011_IPR</ci>
+                    <ci>q_Sa_110_IPR</ci>
+                    <ci>q_Sa_111_IPR</ci>
+                    <ci>q_Sb_001_IPR</ci>
+                    <ci>q_Sb_101_IPR</ci>
+                    <ci>q_Sb_011_IPR</ci>
+                    <ci>q_Sb_111_IPR</ci>
+                    <ci>q_Sb_010_IPR</ci>
+                    <ci>q_Sb_011_IPR</ci>
+                    <ci>q_Sb_110_IPR</ci>
+                    <ci>q_Sb_111_IPR</ci>
+                    <ci>q_Sc_001_IPR</ci>
+                    <ci>q_Sc_101_IPR</ci>
+                    <ci>q_Sc_011_IPR</ci>
+                    <ci>q_Sc_111_IPR</ci>
+                    <ci>q_Sc_010_IPR</ci>
+                    <ci>q_Sc_011_IPR</ci>
+                    <ci>q_Sc_110_IPR</ci>
+                    <ci>q_Sc_111_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ca_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_Ca_i</ci>
+                    <ci>q_Ca_SR</ci>
+                    <ci>Ca_gate</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="IPR_parameters">
+        <variable initial_value="1.61481e+08" name="kappa_R_IPR_main" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0180631" name="kappa_R1_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.45765" name="kappa_R2_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0957773" name="kappa_R3_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.80631" name="kappa_R4_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="7.15849e-05" name="kappa_R5_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00297939" name="kappa_R6_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.36184" name="kappa_R7_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6505.35" name="kappa_R8_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.128757" name="kappa_R9_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0426298" name="kappa_R10_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.68272" name="kappa_R11_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="205415" name="kappa_R12_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0180631" name="kappa_R1_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.45765" name="kappa_R2_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0957773" name="kappa_R3_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.80631" name="kappa_R4_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="7.15849e-05" name="kappa_R5_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00297939" name="kappa_R6_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.36184" name="kappa_R7_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6505.35" name="kappa_R8_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.128757" name="kappa_R9_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0426298" name="kappa_R10_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.68272" name="kappa_R11_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="205415" name="kappa_R12_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0180631" name="kappa_R1_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.45765" name="kappa_R2_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0957773" name="kappa_R3_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.80631" name="kappa_R4_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="7.15849e-05" name="kappa_R5_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00297939" name="kappa_R6_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.36184" name="kappa_R7_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6505.35" name="kappa_R8_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.128757" name="kappa_R9_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0426298" name="kappa_R10_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.68272" name="kappa_R11_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="205415" name="kappa_R12_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="617.368" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1004.58" name="K_Ca_SR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="523369" name="K_IP3" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4.83415" name="K_Sa_000_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.59995" name="K_Sa_001_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.911695" name="K_Sa_010_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.301742" name="K_Sa_011_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1219.81" name="K_Sa_100_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2930.79" name="K_Sa_101_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000253146" name="K_Sa_110_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="552.73" name="K_Sa_111_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4.83415" name="K_Sb_000_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.59995" name="K_Sb_001_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.911695" name="K_Sb_010_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.301742" name="K_Sb_011_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1219.81" name="K_Sb_100_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2930.79" name="K_Sb_101_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000253146" name="K_Sb_110_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="552.73" name="K_Sb_111_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4.83415" name="K_Sc_000_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.59995" name="K_Sc_001_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.911695" name="K_Sc_010_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.301742" name="K_Sc_011_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1219.81" name="K_Sc_100_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2930.79" name="K_Sc_101_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000253146" name="K_Sc_110_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="552.73" name="K_Sc_111_IPR" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="IPR">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- parameters-->
+        <variable name="kappa_R_IPR_main" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R1_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R2_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R3_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R4_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R5_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R6_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R7_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R8_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R9_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R10_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R11_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R12_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R1_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R2_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R3_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R4_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R5_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R6_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R7_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R8_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R9_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R10_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R11_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R12_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R1_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R2_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R3_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R4_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R5_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R6_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R7_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R8_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R9_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R10_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R11_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R12_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_Ca_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_SR" public_interface="in" units="per_fmol"/>
+        <variable name="K_IP3" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sa_000_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sa_001_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sa_010_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sa_011_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sa_100_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sa_101_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sa_110_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sa_111_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sb_000_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sb_001_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sb_010_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sb_011_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sb_100_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sb_101_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sb_110_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sb_111_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sc_000_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sc_001_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sc_010_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sc_011_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sc_100_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sc_101_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sc_110_IPR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Sc_111_IPR" public_interface="in" units="per_fmol"/>
+        <!-- Input from global environment-->
+        <variable name="q_Ca_i" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_SR" public_interface="in" units="fmol"/>
+        <variable name="q_IP3" public_interface="in" units="fmol"/>
+        <variable name="q_Sa_000_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sa_001_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sa_010_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sa_011_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sa_100_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sa_101_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sa_110_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sa_111_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sb_000_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sb_001_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sb_010_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sb_011_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sb_100_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sb_101_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sb_110_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sb_111_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sc_000_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sc_001_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sc_010_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sc_011_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sc_100_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sc_101_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sc_110_IPR" public_interface="in" units="fmol"/>
+        <variable name="q_Sc_111_IPR" public_interface="in" units="fmol"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_Ca_i" units="J_per_mol"/>
+        <variable name="mu_Ca_SR" units="J_per_mol"/>
+        <variable name="mu_IP3" units="J_per_mol"/>
+        <variable name="mu_Sa_000_IPR" units="J_per_mol"/>
+        <variable name="mu_Sa_001_IPR" units="J_per_mol"/>
+        <variable name="mu_Sa_010_IPR" units="J_per_mol"/>
+        <variable name="mu_Sa_011_IPR" units="J_per_mol"/>
+        <variable name="mu_Sa_100_IPR" units="J_per_mol"/>
+        <variable name="mu_Sa_101_IPR" units="J_per_mol"/>
+        <variable name="mu_Sa_110_IPR" units="J_per_mol"/>
+        <variable name="mu_Sa_111_IPR" units="J_per_mol"/>
+        <variable name="mu_Sb_000_IPR" units="J_per_mol"/>
+        <variable name="mu_Sb_001_IPR" units="J_per_mol"/>
+        <variable name="mu_Sb_010_IPR" units="J_per_mol"/>
+        <variable name="mu_Sb_011_IPR" units="J_per_mol"/>
+        <variable name="mu_Sb_100_IPR" units="J_per_mol"/>
+        <variable name="mu_Sb_101_IPR" units="J_per_mol"/>
+        <variable name="mu_Sb_110_IPR" units="J_per_mol"/>
+        <variable name="mu_Sb_111_IPR" units="J_per_mol"/>
+        <variable name="mu_Sc_000_IPR" units="J_per_mol"/>
+        <variable name="mu_Sc_001_IPR" units="J_per_mol"/>
+        <variable name="mu_Sc_010_IPR" units="J_per_mol"/>
+        <variable name="mu_Sc_011_IPR" units="J_per_mol"/>
+        <variable name="mu_Sc_100_IPR" units="J_per_mol"/>
+        <variable name="mu_Sc_101_IPR" units="J_per_mol"/>
+        <variable name="mu_Sc_110_IPR" units="J_per_mol"/>
+        <variable name="mu_Sc_111_IPR" units="J_per_mol"/>
+        <variable name="v_R_IPR_main_nogate" units="fmol_per_sec"/>
+        <variable name="v_R_IPR_main" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R1_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R2_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R3_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R4_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R5_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R6_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R7_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R8_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R9_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R10_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R11_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R12_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R1_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R2_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R3_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R4_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R5_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R6_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R7_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R8_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R9_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R10_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R11_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R12_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R1_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R2_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R3_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R4_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R5_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R6_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R7_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R8_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R9_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R10_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R11_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R12_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_Ca_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_i</ci>
+                            <ci>q_Ca_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_SR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_SR</ci>
+                            <ci>q_Ca_SR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_IP3</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_IP3</ci>
+                            <ci>q_IP3</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sa_000_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sa_000_IPR</ci>
+                            <ci>q_Sa_000_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sa_001_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sa_001_IPR</ci>
+                            <ci>q_Sa_001_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sa_010_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sa_010_IPR</ci>
+                            <ci>q_Sa_010_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sa_011_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sa_011_IPR</ci>
+                            <ci>q_Sa_011_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sa_100_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sa_100_IPR</ci>
+                            <ci>q_Sa_100_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sa_101_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sa_101_IPR</ci>
+                            <ci>q_Sa_101_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sa_110_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sa_110_IPR</ci>
+                            <ci>q_Sa_110_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sa_111_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sa_111_IPR</ci>
+                            <ci>q_Sa_111_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sb_000_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sb_000_IPR</ci>
+                            <ci>q_Sb_000_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sb_001_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sb_001_IPR</ci>
+                            <ci>q_Sb_001_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sb_010_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sb_010_IPR</ci>
+                            <ci>q_Sb_010_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sb_011_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sb_011_IPR</ci>
+                            <ci>q_Sb_011_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sb_100_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sb_100_IPR</ci>
+                            <ci>q_Sb_100_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sb_101_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sb_101_IPR</ci>
+                            <ci>q_Sb_101_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sb_110_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sb_110_IPR</ci>
+                            <ci>q_Sb_110_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sb_111_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sb_111_IPR</ci>
+                            <ci>q_Sb_111_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sc_000_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sc_000_IPR</ci>
+                            <ci>q_Sc_000_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sc_001_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sc_001_IPR</ci>
+                            <ci>q_Sc_001_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sc_010_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sc_010_IPR</ci>
+                            <ci>q_Sc_010_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sc_011_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sc_011_IPR</ci>
+                            <ci>q_Sc_011_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sc_100_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sc_100_IPR</ci>
+                            <ci>q_Sc_100_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sc_101_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sc_101_IPR</ci>
+                            <ci>q_Sc_101_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sc_110_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sc_110_IPR</ci>
+                            <ci>q_Sc_110_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Sc_111_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Sc_111_IPR</ci>
+                            <ci>q_Sc_111_IPR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R_IPR_main_nogate</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R_IPR_main</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ca_SR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ca_i</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R_IPR_main</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R_IPR_main</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Ca_SR</ci>
+                                    <ci>mu_Sa_110_IPR</ci>
+                                    <ci>mu_Sb_110_IPR</ci>
+                                    <ci>mu_Sc_110_IPR</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Ca_i</ci>
+                                    <ci>mu_Sa_110_IPR</ci>
+                                    <ci>mu_Sb_110_IPR</ci>
+                                    <ci>mu_Sc_110_IPR</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <!--        v_R_IPR_main = kappa_R_IPR_main*(exp((mu_Ca_SR+mu_Sa_110_IPR)/(R*T))-exp((mu_Ca_i+mu_Sa_110_IPR)/(R*T)));-->
+            <apply>
+                <eq/>
+                <ci>v_R1_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R1_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_000_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_001_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R2_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R2_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_001_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_011_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R3_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R3_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_011_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_010_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R4_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R4_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_010_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_000_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R5_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R5_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_100_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_101_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R6_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R6_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_101_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_111_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R7_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R7_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_111_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_110_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R8_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R8_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_110_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_100_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R9_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R9_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_001_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_101_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R10_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R10_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_100_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_000_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R11_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R11_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_011_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_111_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R12_a_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R12_a_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sa_110_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sa_010_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R1_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R1_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_000_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_001_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R2_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R2_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_001_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_011_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R3_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R3_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_011_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_010_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R4_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R4_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_010_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_000_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R5_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R5_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_100_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_101_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R6_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R6_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_101_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_111_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R7_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R7_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_111_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_110_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R8_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R8_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_110_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_100_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R9_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R9_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_001_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_101_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R10_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R10_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_100_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_000_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R11_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R11_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_011_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_111_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R12_b_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R12_b_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sb_110_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sb_010_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R1_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R1_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_000_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_001_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R2_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R2_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_001_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_011_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R3_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R3_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_011_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_010_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R4_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R4_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_010_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_000_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R5_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R5_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_100_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_101_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R6_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R6_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_101_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_111_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R7_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R7_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_111_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_110_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R8_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R8_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_110_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_100_IPR</ci>
+                                    <ci>mu_Ca_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R9_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R9_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_001_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_101_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R10_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R10_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_100_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_000_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R11_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R11_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_011_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_111_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R12_c_IPR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R12_c_IPR</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Sc_110_IPR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Sc_010_IPR</ci>
+                                    <ci>mu_IP3</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sa_000_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R1_a_IPR</ci>
+                    </apply>
+                    <ci>v_R4_a_IPR</ci>
+                    <ci>v_R10_a_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sa_001_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R1_a_IPR</ci>
+                        <ci>v_R2_a_IPR</ci>
+                    </apply>
+                    <ci>v_R9_a_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sa_010_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R3_a_IPR</ci>
+                        <ci>v_R4_a_IPR</ci>
+                    </apply>
+                    <ci>v_R12_a_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sa_011_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R2_a_IPR</ci>
+                        <ci>v_R3_a_IPR</ci>
+                    </apply>
+                    <ci>v_R11_a_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sa_100_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>v_R5_a_IPR</ci>
+                        </apply>
+                        <ci>v_R8_a_IPR</ci>
+                    </apply>
+                    <ci>v_R10_a_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sa_101_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R5_a_IPR</ci>
+                        <ci>v_R6_a_IPR</ci>
+                    </apply>
+                    <ci>v_R9_a_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sa_110_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R7_a_IPR</ci>
+                        <ci>v_R8_a_IPR</ci>
+                    </apply>
+                    <ci>v_R12_a_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sa_111_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R6_a_IPR</ci>
+                        <ci>v_R7_a_IPR</ci>
+                    </apply>
+                    <ci>v_R11_a_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sb_000_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R1_b_IPR</ci>
+                    </apply>
+                    <ci>v_R4_b_IPR</ci>
+                    <ci>v_R10_b_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sb_001_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R1_b_IPR</ci>
+                        <ci>v_R2_b_IPR</ci>
+                    </apply>
+                    <ci>v_R9_b_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sb_010_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R3_b_IPR</ci>
+                        <ci>v_R4_b_IPR</ci>
+                    </apply>
+                    <ci>v_R12_b_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sb_011_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R2_b_IPR</ci>
+                        <ci>v_R3_b_IPR</ci>
+                    </apply>
+                    <ci>v_R11_b_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sb_100_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>v_R5_b_IPR</ci>
+                        </apply>
+                        <ci>v_R8_b_IPR</ci>
+                    </apply>
+                    <ci>v_R10_b_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sb_101_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R5_b_IPR</ci>
+                        <ci>v_R6_b_IPR</ci>
+                    </apply>
+                    <ci>v_R9_b_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sb_110_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R7_b_IPR</ci>
+                        <ci>v_R8_b_IPR</ci>
+                    </apply>
+                    <ci>v_R12_b_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sb_111_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R6_b_IPR</ci>
+                        <ci>v_R7_b_IPR</ci>
+                    </apply>
+                    <ci>v_R11_b_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sc_000_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R1_c_IPR</ci>
+                    </apply>
+                    <ci>v_R4_c_IPR</ci>
+                    <ci>v_R10_c_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sc_001_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R1_c_IPR</ci>
+                        <ci>v_R2_c_IPR</ci>
+                    </apply>
+                    <ci>v_R9_c_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sc_010_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R3_c_IPR</ci>
+                        <ci>v_R4_c_IPR</ci>
+                    </apply>
+                    <ci>v_R12_c_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sc_011_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R2_c_IPR</ci>
+                        <ci>v_R3_c_IPR</ci>
+                    </apply>
+                    <ci>v_R11_c_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sc_100_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>v_R5_c_IPR</ci>
+                        </apply>
+                        <ci>v_R8_c_IPR</ci>
+                    </apply>
+                    <ci>v_R10_c_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sc_101_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R5_c_IPR</ci>
+                        <ci>v_R6_c_IPR</ci>
+                    </apply>
+                    <ci>v_R9_c_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sc_110_IPR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R7_c_IPR</ci>
+                        <ci>v_R8_c_IPR</ci>
+                    </apply>
+                    <ci>v_R12_c_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Sc_111_IPR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R6_c_IPR</ci>
+                        <ci>v_R7_c_IPR</ci>
+                    </apply>
+                    <ci>v_R11_c_IPR</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="IPR"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_SR" variable_2="q_Ca_SR"/>
+        <map_variables variable_1="q_IP3" variable_2="q_IP3"/>
+        <map_variables variable_1="q_Sa_000_IPR" variable_2="q_Sa_000_IPR"/>
+        <map_variables variable_1="q_Sa_001_IPR" variable_2="q_Sa_001_IPR"/>
+        <map_variables variable_1="q_Sa_010_IPR" variable_2="q_Sa_010_IPR"/>
+        <map_variables variable_1="q_Sa_011_IPR" variable_2="q_Sa_011_IPR"/>
+        <map_variables variable_1="q_Sa_100_IPR" variable_2="q_Sa_100_IPR"/>
+        <map_variables variable_1="q_Sa_101_IPR" variable_2="q_Sa_101_IPR"/>
+        <map_variables variable_1="q_Sa_110_IPR" variable_2="q_Sa_110_IPR"/>
+        <map_variables variable_1="q_Sa_111_IPR" variable_2="q_Sa_111_IPR"/>
+        <map_variables variable_1="q_Sb_000_IPR" variable_2="q_Sb_000_IPR"/>
+        <map_variables variable_1="q_Sb_001_IPR" variable_2="q_Sb_001_IPR"/>
+        <map_variables variable_1="q_Sb_010_IPR" variable_2="q_Sb_010_IPR"/>
+        <map_variables variable_1="q_Sb_011_IPR" variable_2="q_Sb_011_IPR"/>
+        <map_variables variable_1="q_Sb_100_IPR" variable_2="q_Sb_100_IPR"/>
+        <map_variables variable_1="q_Sb_101_IPR" variable_2="q_Sb_101_IPR"/>
+        <map_variables variable_1="q_Sb_110_IPR" variable_2="q_Sb_110_IPR"/>
+        <map_variables variable_1="q_Sb_111_IPR" variable_2="q_Sb_111_IPR"/>
+        <map_variables variable_1="q_Sc_000_IPR" variable_2="q_Sc_000_IPR"/>
+        <map_variables variable_1="q_Sc_001_IPR" variable_2="q_Sc_001_IPR"/>
+        <map_variables variable_1="q_Sc_010_IPR" variable_2="q_Sc_010_IPR"/>
+        <map_variables variable_1="q_Sc_011_IPR" variable_2="q_Sc_011_IPR"/>
+        <map_variables variable_1="q_Sc_100_IPR" variable_2="q_Sc_100_IPR"/>
+        <map_variables variable_1="q_Sc_101_IPR" variable_2="q_Sc_101_IPR"/>
+        <map_variables variable_1="q_Sc_110_IPR" variable_2="q_Sc_110_IPR"/>
+        <map_variables variable_1="q_Sc_111_IPR" variable_2="q_Sc_111_IPR"/>
+        <map_variables variable_1="v_R_IPR_main" variable_2="v_R_IPR_main"/>
+        <map_variables variable_1="v_R1_a_IPR" variable_2="v_R1_a_IPR"/>
+        <map_variables variable_1="v_R2_a_IPR" variable_2="v_R2_a_IPR"/>
+        <map_variables variable_1="v_R3_a_IPR" variable_2="v_R3_a_IPR"/>
+        <map_variables variable_1="v_R4_a_IPR" variable_2="v_R4_a_IPR"/>
+        <map_variables variable_1="v_R5_a_IPR" variable_2="v_R5_a_IPR"/>
+        <map_variables variable_1="v_R6_a_IPR" variable_2="v_R6_a_IPR"/>
+        <map_variables variable_1="v_R7_a_IPR" variable_2="v_R7_a_IPR"/>
+        <map_variables variable_1="v_R8_a_IPR" variable_2="v_R8_a_IPR"/>
+        <map_variables variable_1="v_R9_a_IPR" variable_2="v_R9_a_IPR"/>
+        <map_variables variable_1="v_R10_a_IPR" variable_2="v_R10_a_IPR"/>
+        <map_variables variable_1="v_R11_a_IPR" variable_2="v_R11_a_IPR"/>
+        <map_variables variable_1="v_R12_a_IPR" variable_2="v_R12_a_IPR"/>
+        <map_variables variable_1="v_R1_b_IPR" variable_2="v_R1_b_IPR"/>
+        <map_variables variable_1="v_R2_b_IPR" variable_2="v_R2_b_IPR"/>
+        <map_variables variable_1="v_R3_b_IPR" variable_2="v_R3_b_IPR"/>
+        <map_variables variable_1="v_R4_b_IPR" variable_2="v_R4_b_IPR"/>
+        <map_variables variable_1="v_R5_b_IPR" variable_2="v_R5_b_IPR"/>
+        <map_variables variable_1="v_R6_b_IPR" variable_2="v_R6_b_IPR"/>
+        <map_variables variable_1="v_R7_b_IPR" variable_2="v_R7_b_IPR"/>
+        <map_variables variable_1="v_R8_b_IPR" variable_2="v_R8_b_IPR"/>
+        <map_variables variable_1="v_R9_b_IPR" variable_2="v_R9_b_IPR"/>
+        <map_variables variable_1="v_R10_b_IPR" variable_2="v_R10_b_IPR"/>
+        <map_variables variable_1="v_R11_b_IPR" variable_2="v_R11_b_IPR"/>
+        <map_variables variable_1="v_R12_b_IPR" variable_2="v_R12_b_IPR"/>
+        <map_variables variable_1="v_R1_c_IPR" variable_2="v_R1_c_IPR"/>
+        <map_variables variable_1="v_R2_c_IPR" variable_2="v_R2_c_IPR"/>
+        <map_variables variable_1="v_R3_c_IPR" variable_2="v_R3_c_IPR"/>
+        <map_variables variable_1="v_R4_c_IPR" variable_2="v_R4_c_IPR"/>
+        <map_variables variable_1="v_R5_c_IPR" variable_2="v_R5_c_IPR"/>
+        <map_variables variable_1="v_R6_c_IPR" variable_2="v_R6_c_IPR"/>
+        <map_variables variable_1="v_R7_c_IPR" variable_2="v_R7_c_IPR"/>
+        <map_variables variable_1="v_R8_c_IPR" variable_2="v_R8_c_IPR"/>
+        <map_variables variable_1="v_R9_c_IPR" variable_2="v_R9_c_IPR"/>
+        <map_variables variable_1="v_R10_c_IPR" variable_2="v_R10_c_IPR"/>
+        <map_variables variable_1="v_R11_c_IPR" variable_2="v_R11_c_IPR"/>
+        <map_variables variable_1="v_R12_c_IPR" variable_2="v_R12_c_IPR"/>
+    </connection>
+    <connection>
+        <map_components component_1="IPR" component_2="IPR_parameters"/>
+        <map_variables variable_1="kappa_R_IPR_main" variable_2="kappa_R_IPR_main"/>
+        <map_variables variable_1="kappa_R1_a_IPR" variable_2="kappa_R1_a_IPR"/>
+        <map_variables variable_1="kappa_R2_a_IPR" variable_2="kappa_R2_a_IPR"/>
+        <map_variables variable_1="kappa_R3_a_IPR" variable_2="kappa_R3_a_IPR"/>
+        <map_variables variable_1="kappa_R4_a_IPR" variable_2="kappa_R4_a_IPR"/>
+        <map_variables variable_1="kappa_R5_a_IPR" variable_2="kappa_R5_a_IPR"/>
+        <map_variables variable_1="kappa_R6_a_IPR" variable_2="kappa_R6_a_IPR"/>
+        <map_variables variable_1="kappa_R7_a_IPR" variable_2="kappa_R7_a_IPR"/>
+        <map_variables variable_1="kappa_R8_a_IPR" variable_2="kappa_R8_a_IPR"/>
+        <map_variables variable_1="kappa_R9_a_IPR" variable_2="kappa_R9_a_IPR"/>
+        <map_variables variable_1="kappa_R10_a_IPR" variable_2="kappa_R10_a_IPR"/>
+        <map_variables variable_1="kappa_R11_a_IPR" variable_2="kappa_R11_a_IPR"/>
+        <map_variables variable_1="kappa_R12_a_IPR" variable_2="kappa_R12_a_IPR"/>
+        <map_variables variable_1="kappa_R1_b_IPR" variable_2="kappa_R1_b_IPR"/>
+        <map_variables variable_1="kappa_R2_b_IPR" variable_2="kappa_R2_b_IPR"/>
+        <map_variables variable_1="kappa_R3_b_IPR" variable_2="kappa_R3_b_IPR"/>
+        <map_variables variable_1="kappa_R4_b_IPR" variable_2="kappa_R4_b_IPR"/>
+        <map_variables variable_1="kappa_R5_b_IPR" variable_2="kappa_R5_b_IPR"/>
+        <map_variables variable_1="kappa_R6_b_IPR" variable_2="kappa_R6_b_IPR"/>
+        <map_variables variable_1="kappa_R7_b_IPR" variable_2="kappa_R7_b_IPR"/>
+        <map_variables variable_1="kappa_R8_b_IPR" variable_2="kappa_R8_b_IPR"/>
+        <map_variables variable_1="kappa_R9_b_IPR" variable_2="kappa_R9_b_IPR"/>
+        <map_variables variable_1="kappa_R10_b_IPR" variable_2="kappa_R10_b_IPR"/>
+        <map_variables variable_1="kappa_R11_b_IPR" variable_2="kappa_R11_b_IPR"/>
+        <map_variables variable_1="kappa_R12_b_IPR" variable_2="kappa_R12_b_IPR"/>
+        <map_variables variable_1="kappa_R1_c_IPR" variable_2="kappa_R1_c_IPR"/>
+        <map_variables variable_1="kappa_R2_c_IPR" variable_2="kappa_R2_c_IPR"/>
+        <map_variables variable_1="kappa_R3_c_IPR" variable_2="kappa_R3_c_IPR"/>
+        <map_variables variable_1="kappa_R4_c_IPR" variable_2="kappa_R4_c_IPR"/>
+        <map_variables variable_1="kappa_R5_c_IPR" variable_2="kappa_R5_c_IPR"/>
+        <map_variables variable_1="kappa_R6_c_IPR" variable_2="kappa_R6_c_IPR"/>
+        <map_variables variable_1="kappa_R7_c_IPR" variable_2="kappa_R7_c_IPR"/>
+        <map_variables variable_1="kappa_R8_c_IPR" variable_2="kappa_R8_c_IPR"/>
+        <map_variables variable_1="kappa_R9_c_IPR" variable_2="kappa_R9_c_IPR"/>
+        <map_variables variable_1="kappa_R10_c_IPR" variable_2="kappa_R10_c_IPR"/>
+        <map_variables variable_1="kappa_R11_c_IPR" variable_2="kappa_R11_c_IPR"/>
+        <map_variables variable_1="kappa_R12_c_IPR" variable_2="kappa_R12_c_IPR"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_SR" variable_2="K_Ca_SR"/>
+        <map_variables variable_1="K_IP3" variable_2="K_IP3"/>
+        <map_variables variable_1="K_Sa_000_IPR" variable_2="K_Sa_000_IPR"/>
+        <map_variables variable_1="K_Sa_001_IPR" variable_2="K_Sa_001_IPR"/>
+        <map_variables variable_1="K_Sa_010_IPR" variable_2="K_Sa_010_IPR"/>
+        <map_variables variable_1="K_Sa_011_IPR" variable_2="K_Sa_011_IPR"/>
+        <map_variables variable_1="K_Sa_100_IPR" variable_2="K_Sa_100_IPR"/>
+        <map_variables variable_1="K_Sa_101_IPR" variable_2="K_Sa_101_IPR"/>
+        <map_variables variable_1="K_Sa_110_IPR" variable_2="K_Sa_110_IPR"/>
+        <map_variables variable_1="K_Sa_111_IPR" variable_2="K_Sa_111_IPR"/>
+        <map_variables variable_1="K_Sb_000_IPR" variable_2="K_Sb_000_IPR"/>
+        <map_variables variable_1="K_Sb_001_IPR" variable_2="K_Sb_001_IPR"/>
+        <map_variables variable_1="K_Sb_010_IPR" variable_2="K_Sb_010_IPR"/>
+        <map_variables variable_1="K_Sb_011_IPR" variable_2="K_Sb_011_IPR"/>
+        <map_variables variable_1="K_Sb_100_IPR" variable_2="K_Sb_100_IPR"/>
+        <map_variables variable_1="K_Sb_101_IPR" variable_2="K_Sb_101_IPR"/>
+        <map_variables variable_1="K_Sb_110_IPR" variable_2="K_Sb_110_IPR"/>
+        <map_variables variable_1="K_Sb_111_IPR" variable_2="K_Sb_111_IPR"/>
+        <map_variables variable_1="K_Sc_000_IPR" variable_2="K_Sc_000_IPR"/>
+        <map_variables variable_1="K_Sc_001_IPR" variable_2="K_Sc_001_IPR"/>
+        <map_variables variable_1="K_Sc_010_IPR" variable_2="K_Sc_010_IPR"/>
+        <map_variables variable_1="K_Sc_011_IPR" variable_2="K_Sc_011_IPR"/>
+        <map_variables variable_1="K_Sc_100_IPR" variable_2="K_Sc_100_IPR"/>
+        <map_variables variable_1="K_Sc_101_IPR" variable_2="K_Sc_101_IPR"/>
+        <map_variables variable_1="K_Sc_110_IPR" variable_2="K_Sc_110_IPR"/>
+        <map_variables variable_1="K_Sc_111_IPR" variable_2="K_Sc_111_IPR"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="IPR"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

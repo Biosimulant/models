@@ -1,0 +1,4165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="bertram_satin_pedersen_luciani_sherman_2007" cmeta:id="bertram_2007">
+  <documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <articleinfo>
+        <title>Interaction of glycolysis and mitochondrial respiration in metabolic oscillations of pancreatic islets</title>
+        <author>
+          <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+          <affiliation>
+            <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+          </affiliation>
+        </author>
+      </articleinfo>
+      <section id="sec_status">
+        <title>Model Status</title>
+        <para>This CellML model has been coded by translating the authors original XPPAUT.ode file, which can be found at http://www.math.fsu.edu/~bertram/software/islet/BJ_07/mitophan.ode. The model runs in PCEnv in COR and is able to produce the published results. The parameters have been chosen to recreate the bursting behaviour seen in figures 3 and 4 of the original paper. Some equations have inconsistent magnitudes due to the fact that some units are defined in milliseconds whereas others are defined in seconds.</para>
+      </section>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+        <para>Glucose metabolism plays a key signalling role in insulin-secreting pancreatic beta cells. In addition to generating ATP - the ubiquitous form of energy used to fuel many cellular processes - glucose metabolism in pancreatic beta cells is also the means by which blood glucose levels are monitored, ensuring an appropriate level of insulin secretion. ATP-sensitive potassium channels in the plasma membrane are activated by ADP and are inactivated by ATP, therefore a high ATP/ADP ratio results in a reduced number of open, ATP-sensitive, potassium channels. In turn, this results in membrane depolarisation and voltage-sensitive calcium channels open. The resulting influx of calcium ions into the cell cytosol induces insulin secretion, which in a healthy individual typically occurs in oscillatory waves. These can be fast with an oscillatory period of less than a minute, or slow with a duration of 2 to 7 minutes, or they can be a combination of fast and slow waves. This oscillatory pattern of insulin secretion appears to have a physiological function which is of particular interest since it is lost in patients with type II diabetes.</para>
+        <para>
+          Although the definitive mechanisms underlying these insulin oscillations are unknown, in the paper described here, Richard Bertram
+          <emphasis>et al.</emphasis>
+          suggest that calcium feedback onto ATP production or consumption is responsible for the fast component of the insulin oscillations, while oscillations in the glycolytic pathway are responsible for the slow component. Furthermore, they build these phenomena into a mathematical model that combines a model of mitochondrial metabolism with models of glycolytic oscillations, plasma membrane electrical activity, and calcium handling in the cytosol and endoplasmic reticulum (summarised in the figure below).
+        </para>
+        <informalfigure float="0" id="fig_reaction_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>model diagram</title>
+              </objectinfo>
+              <imagedata fileref="bertram_2007.png" />
+            </imageobject>
+          </mediaobject>
+          <caption>Schematic diagram of the model components and the variables which are exchanged between the components.</caption>
+        </informalfigure>
+        <para>The original paper reference is cited below:</para>
+        <para>
+          Interaction of glycolysis and mitochondrial respiration in metabolic oscillations of pancreatic islets, Richard Bertram, Leslie S. Satin, Morten Gram Pedersen, Dan S. Luciani, and Arthur Sherman, 2007,
+          <emphasis>Biophysical Journal</emphasis>
+          , 92, 1544-1555.
+          <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=17172305&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 17172305</ulink>
+        </para>
+        <para>
+          The authors highlight that the original model code can be downloaded
+          <ulink url="http://www.math.fsu.edu/~bertram/software/islet/BJ_07/mitophan.ode">here</ulink>
+          .
+        </para>
+      </sect1>
+    </article>
+  </documentation>
+  <units name="second_order_rate_constant">
+    <unit exponent="-1.0" units="micromolar" />
+    <unit exponent="-1.0" units="millisecond" />
+  </units>
+  <units name="femtoampere">
+    <unit prefix="femto" units="ampere" />
+  </units>
+  <units name="per_millivolt">
+    <unit exponent="-1.0" units="millivolt" />
+  </units>
+  <units name="micromolar">
+    <unit prefix="micro" units="mole" />
+    <unit exponent="-1.0" units="litre" />
+  </units>
+  <units name="micromolar_millisecond_femtoampere">
+    <unit units="micromolar" />
+    <unit exponent="-1.0" units="millisecond" />
+    <unit exponent="-1.0" prefix="pico" units="ampere" />
+  </units>
+  <units name="micromolar_second">
+    <unit exponent="-1.0" units="second" />
+    <unit units="micromolar" />
+  </units>
+  <units name="millimolar">
+    <unit exponent="-1.0" units="litre" />
+    <unit prefix="milli" units="mole" />
+  </units>
+  <units name="millisecond">
+    <unit prefix="milli" units="second" />
+  </units>
+  <units name="per_micromolar">
+    <unit exponent="-1.0" units="micromolar" />
+  </units>
+  <units name="micromolar_millisecond">
+    <unit units="micromolar" />
+    <unit exponent="-1.0" units="millisecond" />
+  </units>
+  <units name="per_micromolar_millisecond_millivolt">
+    <unit exponent="-1.0" units="millisecond" />
+    <unit exponent="-1.0" units="millivolt" />
+    <unit exponent="-1.0" units="micromolar" />
+  </units>
+  <units name="picosiemens">
+    <unit prefix="pico" units="siemens" />
+  </units>
+  <units name="minute">
+    <unit multiplier="60.0" units="second" />
+  </units>
+  <units name="micromolar_millivolt">
+    <unit units="micromolar" />
+    <unit exponent="-1.0" units="millivolt" />
+  </units>
+  <units name="first_order_rate_constant">
+    <unit exponent="-1.0" units="millisecond" />
+  </units>
+  <units name="millivolt">
+    <unit prefix="milli" units="volt" />
+  </units>
+  <units name="femtofarad">
+    <unit prefix="femto" units="farad" />
+  </units>
+  <units name="micromolar_millisecond_millivolt">
+    <unit exponent="-1.0" units="millisecond" />
+    <unit units="micromolar" />
+    <unit exponent="-1.0" units="millivolt" />
+  </units>
+  <units name="millimolar_millisecond">
+    <unit units="millimolar" />
+    <unit exponent="-1.0" units="millisecond" />
+  </units>
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="millisecond" />
+  </component>
+  <component name="membrane">
+    <variable cmeta:id="membrane_Vm" initial_value="-60.0" name="Vm" public_interface="out" units="millivolt" />
+    <variable cmeta:id="membrane.cm" initial_value="5300.0" name="cm" units="femtofarad" />
+    <variable cmeta:id="membrane.Ica" name="Ica" public_interface="in" units="femtoampere" />
+    <variable cmeta:id="membrane.Ik" name="Ik" public_interface="in" units="femtoampere" />
+    <variable cmeta:id="membrane.Ikca" name="Ikca" public_interface="in" units="femtoampere" />
+    <variable cmeta:id="membrane.Ikatp" name="Ikatp" public_interface="in" units="femtoampere" />
+    <variable cmeta:id="membrane.time" name="time" public_interface="in" units="millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>Vm</ci>
+        </apply>
+        <apply>
+          <divide />
+          <apply>
+            <minus />
+            <apply>
+              <plus />
+              <ci>Ik</ci>
+              <ci>Ica</ci>
+              <ci>Ikca</ci>
+              <ci>Ikatp</ci>
+            </apply>
+          </apply>
+          <ci>cm</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Ik" cmeta:id="Ik">
+    <variable cmeta:id="Ik.Ik" name="Ik" public_interface="out" units="femtoampere" />
+    <variable cmeta:id="Ik.gK" initial_value="2700.0" name="gK" units="picosiemens" />
+    <variable cmeta:id="Ik.time" name="time" public_interface="in" private_interface="out" units="millisecond" />
+    <variable cmeta:id="Ik.VK" name="VK" public_interface="in" units="millivolt" />
+    <variable cmeta:id="Ik.Vm" name="Vm" public_interface="in" private_interface="out" units="millivolt" />
+    <variable cmeta:id="Ik.n" name="n" private_interface="in" units="dimensionless" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>Ik</ci>
+        <apply>
+          <times />
+          <ci>gK</ci>
+          <ci>n</ci>
+          <apply>
+            <minus />
+            <ci>Vm</ci>
+            <ci>VK</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="n" cmeta:id="n">
+    <variable cmeta:id="n_n" initial_value="0.0" name="n" public_interface="out" units="dimensionless" />
+    <variable cmeta:id="n.n_infinity" name="n_infinity" units="dimensionless" />
+    <variable cmeta:id="n.tau_n" initial_value="20.0" name="tau_n" units="millisecond" />
+    <variable cmeta:id="n.vn" initial_value="-16.0" name="vn" units="millivolt" />
+    <variable cmeta:id="n.sn" initial_value="5.0" name="sn" units="millivolt" />
+    <variable cmeta:id="n.time" name="time" public_interface="in" units="millisecond" />
+    <variable cmeta:id="n.Vm" name="Vm" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>n</ci>
+        </apply>
+        <apply>
+          <divide />
+          <apply>
+            <minus />
+            <ci>n_infinity</ci>
+            <ci>n</ci>
+          </apply>
+          <ci>tau_n</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>n_infinity</ci>
+        <apply>
+          <divide />
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+          <apply>
+            <plus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+            <apply>
+              <exp />
+              <apply>
+                <divide />
+                <apply>
+                  <minus />
+                  <ci>vn</ci>
+                  <ci>Vm</ci>
+                </apply>
+                <ci>sn</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Ica" cmeta:id="Ica">
+    <variable cmeta:id="Ica.Ica" name="Ica" public_interface="out" units="femtoampere" />
+    <variable cmeta:id="Ica.gCa" initial_value="1000.0" name="gCa" units="picosiemens" />
+    <variable cmeta:id="Ica.time" name="time" public_interface="in" units="millisecond" />
+    <variable cmeta:id="Ica.VCa" name="VCa" public_interface="in" units="millivolt" />
+    <variable cmeta:id="Ica.Vm" name="Vm" public_interface="in" private_interface="out" units="millivolt" />
+    <variable cmeta:id="Ica.m_infinity" name="m_infinity" private_interface="in" units="dimensionless" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>Ica</ci>
+        <apply>
+          <times />
+          <ci>gCa</ci>
+          <ci>m_infinity</ci>
+          <apply>
+            <minus />
+            <ci>Vm</ci>
+            <ci>VCa</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="m" cmeta:id="m">
+    <variable cmeta:id="m.m_infinity" name="m_infinity" public_interface="out" units="dimensionless" />
+    <variable cmeta:id="m.v" initial_value="-20.0" name="v" units="millivolt" />
+    <variable cmeta:id="m.sm" initial_value="12.0" name="sm" units="millivolt" />
+    <variable cmeta:id="m.Vm" name="Vm" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>m_infinity</ci>
+        <apply>
+          <divide />
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+          <apply>
+            <plus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+            <apply>
+              <exp />
+              <apply>
+                <divide />
+                <apply>
+                  <minus />
+                  <ci>v</ci>
+                  <ci>Vm</ci>
+                </apply>
+                <ci>sm</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Ikca" cmeta:id="Ikca">
+    <variable cmeta:id="Ikca.Ikca" name="Ikca" public_interface="out" units="femtoampere" />
+    <variable cmeta:id="Ikca.gkCa" initial_value="300.0" name="gkCa" units="picosiemens" />
+    <variable cmeta:id="Ikca.kd" initial_value="0.5" name="kd" units="micromolar" />
+    <variable cmeta:id="Ikca.time" name="time" public_interface="in" units="millisecond" />
+    <variable cmeta:id="Ikca.VK" name="VK" public_interface="in" units="millivolt" />
+    <variable cmeta:id="Ikca.c" name="c" public_interface="in" units="micromolar" />
+    <variable cmeta:id="Ikca.Vm" name="Vm" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>Ikca</ci>
+        <apply>
+          <times />
+          <apply>
+            <divide />
+            <ci>gkCa</ci>
+            <apply>
+              <plus />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+              <apply>
+                <power />
+                <apply>
+                  <divide />
+                  <ci>kd</ci>
+                  <ci>c</ci>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <minus />
+            <ci>Vm</ci>
+            <ci>VK</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Ikatp" cmeta:id="Ikatp">
+    <variable cmeta:id="Ikatp.Ikatp" name="Ikatp" public_interface="out" units="femtoampere" />
+    <variable cmeta:id="Ikatp.gkATP_" initial_value="16000.0" name="gkATP_" units="picosiemens" />
+    <variable cmeta:id="Ikatp.katpo" name="katpo" units="dimensionless" />
+    <variable cmeta:id="Ikatp.topo" name="topo" units="dimensionless" />
+    <variable cmeta:id="Ikatp.bottomo" name="bottomo" units="dimensionless" />
+    <variable cmeta:id="Ikatp.mgadp" name="mgadp" units="micromolar" />
+    <variable cmeta:id="Ikatp.adp3m" name="adp3m" units="micromolar" />
+    <variable cmeta:id="Ikatp.atp4m" name="atp4m" units="micromolar" />
+    <variable cmeta:id="Ikatp.time" name="time" public_interface="in" units="millisecond" />
+    <variable cmeta:id="Ikatp.VK" name="VK" public_interface="in" units="millivolt" />
+    <variable cmeta:id="Ikatp.atp" name="atp" public_interface="in" units="micromolar" />
+    <variable cmeta:id="Ikatp.adp" name="adp" public_interface="in" units="micromolar" />
+    <variable cmeta:id="Ikatp.Vm" name="Vm" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>Ikatp</ci>
+        <apply>
+          <times />
+          <ci>gkATP_</ci>
+          <ci>katpo</ci>
+          <apply>
+            <minus />
+            <ci>Vm</ci>
+            <ci>VK</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>katpo</ci>
+        <apply>
+          <divide />
+          <ci>topo</ci>
+          <ci>bottomo</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topo</ci>
+        <apply>
+          <plus />
+          <apply>
+            <times />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.08</cn>
+            <apply>
+              <plus />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+              <apply>
+                <divide />
+                <apply>
+                  <times />
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+                  <ci>mgadp</ci>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">17.0</cn>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.89</cn>
+            <apply>
+              <power />
+              <apply>
+                <divide />
+                <ci>mgadp</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">17.0</cn>
+              </apply>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottomo</ci>
+        <apply>
+          <times />
+          <apply>
+            <power />
+            <apply>
+              <plus />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+              <apply>
+                <divide />
+                <ci>mgadp</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">17.0</cn>
+              </apply>
+            </apply>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+          </apply>
+          <apply>
+            <plus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+            <apply>
+              <divide />
+              <ci>adp3m</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">26.0</cn>
+            </apply>
+            <apply>
+              <divide />
+              <ci>atp4m</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1.0</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>mgadp</ci>
+        <apply>
+          <times />
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.165</cn>
+          <ci>adp</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>adp3m</ci>
+        <apply>
+          <times />
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.135</cn>
+          <ci>adp</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>atp4m</ci>
+        <apply>
+          <times />
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.05</cn>
+          <ci>atp</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JGPDH" cmeta:id="JGPDH">
+    <variable cmeta:id="JGPDH_JGPDH" name="JGPDH" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JGPDH.kGPDH" initial_value="0.0005" name="kGPDH" units="micromolar_millisecond" />
+    <variable cmeta:id="JGPDH.FBP" name="FBP" public_interface="in" units="micromolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JGPDH</ci>
+        <apply>
+          <times />
+          <ci>kGPDH</ci>
+          <apply>
+            <root />
+            <apply>
+              <abs />
+              <apply>
+                <divide />
+                <ci>FBP</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="G6P" cmeta:id="G6P">
+    <variable cmeta:id="G6P.G6P" initial_value="301.0" name="G6P" public_interface="out" units="micromolar" />
+    <variable cmeta:id="G6P.JGK_ms" name="JGK_ms" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="G6P.JPFK_ms" name="JPFK_ms" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="G6P.time" name="time" public_interface="in" units="millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>G6P</ci>
+        </apply>
+        <apply>
+          <minus />
+          <ci>JGK_ms</ci>
+          <ci>JPFK_ms</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="FBP" cmeta:id="FBP">
+    <variable cmeta:id="FBP_FBP" initial_value="2.16" name="FBP" public_interface="out" units="micromolar" />
+    <variable cmeta:id="FBP.JPFK_ms" name="JPFK_ms" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="FBP.JGPDH" name="JGPDH" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="FBP.time" name="time" public_interface="in" units="millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>FBP</ci>
+        </apply>
+        <apply>
+          <minus />
+          <ci>JPFK_ms</ci>
+          <apply>
+            <times />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.5</cn>
+            <ci>JGPDH</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="F6P" cmeta:id="F6P">
+    <variable cmeta:id="F6P_F6P" name="F6P" public_interface="out" units="micromolar" />
+    <variable cmeta:id="F6P.G6P" name="G6P" public_interface="in" units="micromolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>F6P</ci>
+        <apply>
+          <times />
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.3</cn>
+          <ci>G6P</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JPFK" cmeta:id="JPFK">
+    <variable cmeta:id="JPFK.JPFK" name="JPFK" public_interface="out" units="micromolar_second" />
+    <variable cmeta:id="JPFK.JPFK_ms" name="JPFK_ms" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JPFK.bottom1" initial_value="1" name="bottom1" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa1" initial_value="0" name="topa1" units="dimensionless" />
+    <variable cmeta:id="JPFK.k1" initial_value="30" name="k1" units="micromolar" />
+    <variable cmeta:id="JPFK.k2" initial_value="1" name="k2" units="micromolar" />
+    <variable cmeta:id="JPFK.k3" initial_value="50000" name="k3" units="micromolar" />
+    <variable cmeta:id="JPFK.k4" initial_value="1000" name="k4" units="micromolar" />
+    <variable cmeta:id="JPFK.VmaxPFK" initial_value="5.0" name="VmaxPFK" units="micromolar_millisecond" />
+    <variable cmeta:id="JPFK.atp" name="atp" public_interface="in" units="micromolar" />
+    <variable cmeta:id="JPFK.weight2" name="weight2" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa2" name="topa2" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom2" name="bottom2" units="dimensionless" />
+    <variable cmeta:id="JPFK.F6P" name="F6P" public_interface="in" units="micromolar" />
+    <variable cmeta:id="JPFK.topa3" name="topa3" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight3" name="weight3" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom3" name="bottom3" units="dimensionless" />
+    <variable cmeta:id="JPFK.f13" initial_value="0.02" name="f13" units="dimensionless" />
+    <variable cmeta:id="JPFK.f43" initial_value="20" name="f43" units="dimensionless" />
+    <variable cmeta:id="JPFK.f23" initial_value="0.2" name="f23" units="dimensionless" />
+    <variable cmeta:id="JPFK.f42" initial_value="20" name="f42" units="dimensionless" />
+    <variable cmeta:id="JPFK.f41" initial_value="20" name="f41" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight4" name="weight4" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa4" name="topa4" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom4" name="bottom4" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight5" name="weight5" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa5" name="topa5" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom5" name="bottom5" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight6" name="weight6" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa6" name="topa6" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom6" name="bottom6" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight7" name="weight7" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa7" name="topa7" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom7" name="bottom7" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight8" name="weight8" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa8" name="topa8" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom8" name="bottom8" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight9" name="weight9" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa9" name="topa9" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom9" name="bottom9" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight10" name="weight10" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa10" name="topa10" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom10" name="bottom10" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight11" name="weight11" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa11" name="topa11" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom11" name="bottom11" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight12" name="weight12" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa12" name="topa12" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom12" name="bottom12" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight13" name="weight13" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa13" name="topa13" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom13" name="bottom13" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight14" name="weight14" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa14" name="topa14" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom14" name="bottom14" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight15" name="weight15" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa15" name="topa15" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom15" name="bottom15" units="dimensionless" />
+    <variable cmeta:id="JPFK.weight16" name="weight16" units="dimensionless" />
+    <variable cmeta:id="JPFK.topa16" name="topa16" units="dimensionless" />
+    <variable cmeta:id="JPFK.bottom16" name="bottom16" units="dimensionless" />
+    <variable cmeta:id="JPFK.topb" name="topb" units="dimensionless" />
+    <variable cmeta:id="JPFK.FBP" name="FBP" public_interface="in" units="micromolar" />
+    <variable cmeta:id="JPFK.AMP" name="AMP" public_interface="in" units="micromolar" />
+    <variable cmeta:id="JPFK.lambda" initial_value="0.06" name="lambda" units="dimensionless" />
+    <variable cmeta:id="JPFK.kappa" name="kappa" public_interface="in" units="dimensionless" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="pfk">
+      <apply>
+        <eq />
+        <ci>JPFK_ms</ci>
+        <apply>
+          <times />
+          <ci>kappa</ci>
+          <ci>JPFK</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>JPFK</ci>
+        <apply>
+          <divide />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>lambda</ci>
+              <ci>VmaxPFK</ci>
+              <ci>topa16</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>VmaxPFK</ci>
+              <ci>topb</ci>
+            </apply>
+          </apply>
+          <ci>bottom16</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="0001">
+      <apply>
+        <eq />
+        <ci>weight2</ci>
+        <apply>
+          <divide />
+          <apply>
+            <power />
+            <ci>atp</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+          </apply>
+          <apply>
+            <times />
+            <ci>k4</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa2</ci>
+        <ci>topa1</ci>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom2</ci>
+        <apply>
+          <plus />
+          <ci>bottom1</ci>
+          <ci>weight2</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="0010">
+      <apply>
+        <eq />
+        <ci>weight3</ci>
+        <apply>
+          <divide />
+          <apply>
+            <power />
+            <ci>F6P</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+          </apply>
+          <apply>
+            <times />
+            <ci>k3</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa3</ci>
+        <apply>
+          <plus />
+          <ci>topa2</ci>
+          <ci>weight3</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom3</ci>
+        <apply>
+          <plus />
+          <ci>bottom2</ci>
+          <ci>weight3</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="0011">
+      <apply>
+        <eq />
+        <ci>weight4</ci>
+        <apply>
+          <divide />
+          <apply>
+            <power />
+            <apply>
+              <times />
+              <ci>F6P</ci>
+              <ci>atp</ci>
+            </apply>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+          </apply>
+          <apply>
+            <times />
+            <ci>f43</ci>
+            <ci>k3</ci>
+            <ci>k4</ci>
+            <apply>
+              <power />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa4</ci>
+        <apply>
+          <plus />
+          <ci>topa3</ci>
+          <ci>weight4</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom4</ci>
+        <apply>
+          <plus />
+          <ci>bottom3</ci>
+          <ci>weight4</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="0100">
+      <apply>
+        <eq />
+        <ci>weight5</ci>
+        <apply>
+          <divide />
+          <ci>FBP</ci>
+          <ci>k2</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa5</ci>
+        <ci>topa4</ci>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom5</ci>
+        <apply>
+          <plus />
+          <ci>bottom4</ci>
+          <ci>weight5</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="0101">
+      <apply>
+        <eq />
+        <ci>weight6</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>FBP</ci>
+            <apply>
+              <power />
+              <ci>atp</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>k2</ci>
+            <ci>k4</ci>
+            <ci>f42</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa6</ci>
+        <ci>topa5</ci>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom6</ci>
+        <apply>
+          <plus />
+          <ci>bottom5</ci>
+          <ci>weight6</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="0110">
+      <apply>
+        <eq />
+        <ci>weight7</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>FBP</ci>
+            <apply>
+              <power />
+              <ci>F6P</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>k2</ci>
+            <ci>k3</ci>
+            <ci>f23</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa7</ci>
+        <apply>
+          <plus />
+          <ci>topa6</ci>
+          <ci>weight7</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom7</ci>
+        <apply>
+          <plus />
+          <ci>bottom6</ci>
+          <ci>weight7</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="0111">
+      <apply>
+        <eq />
+        <ci>weight8</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>FBP</ci>
+            <apply>
+              <power />
+              <ci>F6P</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+            <apply>
+              <power />
+              <ci>atp</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>k2</ci>
+            <ci>k3</ci>
+            <ci>k4</ci>
+            <ci>f23</ci>
+            <ci>f42</ci>
+            <ci>f43</ci>
+            <apply>
+              <power />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa8</ci>
+        <apply>
+          <plus />
+          <ci>topa7</ci>
+          <ci>weight8</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom8</ci>
+        <apply>
+          <plus />
+          <ci>bottom7</ci>
+          <ci>weight8</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1000">
+      <apply>
+        <eq />
+        <ci>weight9</ci>
+        <apply>
+          <divide />
+          <ci>AMP</ci>
+          <ci>k1</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa9</ci>
+        <ci>topa8</ci>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom9</ci>
+        <apply>
+          <plus />
+          <ci>bottom8</ci>
+          <ci>weight9</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1001">
+      <apply>
+        <eq />
+        <ci>weight10</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>AMP</ci>
+            <apply>
+              <power />
+              <ci>atp</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>k1</ci>
+            <ci>k4</ci>
+            <ci>f41</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa10</ci>
+        <ci>topa9</ci>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom10</ci>
+        <apply>
+          <plus />
+          <ci>bottom9</ci>
+          <ci>weight10</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1010">
+      <apply>
+        <eq />
+        <ci>weight11</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>AMP</ci>
+            <apply>
+              <power />
+              <ci>F6P</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>k1</ci>
+            <ci>k3</ci>
+            <ci>f13</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa11</ci>
+        <apply>
+          <plus />
+          <ci>topa10</ci>
+          <ci>weight11</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom11</ci>
+        <apply>
+          <plus />
+          <ci>bottom10</ci>
+          <ci>weight11</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1011">
+      <apply>
+        <eq />
+        <ci>weight12</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>AMP</ci>
+            <apply>
+              <power />
+              <ci>F6P</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+            <apply>
+              <power />
+              <ci>atp</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>k1</ci>
+            <ci>k3</ci>
+            <ci>k4</ci>
+            <ci>f13</ci>
+            <ci>f41</ci>
+            <ci>f43</ci>
+            <apply>
+              <power />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa12</ci>
+        <apply>
+          <plus />
+          <ci>topa11</ci>
+          <ci>weight12</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom12</ci>
+        <apply>
+          <plus />
+          <ci>bottom11</ci>
+          <ci>weight12</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1100">
+      <apply>
+        <eq />
+        <ci>weight13</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>AMP</ci>
+            <ci>FBP</ci>
+          </apply>
+          <apply>
+            <times />
+            <ci>k1</ci>
+            <ci>k2</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa13</ci>
+        <ci>topa12</ci>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom13</ci>
+        <apply>
+          <plus />
+          <ci>bottom12</ci>
+          <ci>weight13</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1101">
+      <apply>
+        <eq />
+        <ci>weight14</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>AMP</ci>
+            <ci>FBP</ci>
+            <apply>
+              <power />
+              <ci>atp</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>k1</ci>
+            <ci>k2</ci>
+            <ci>k4</ci>
+            <ci>f42</ci>
+            <ci>f41</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa14</ci>
+        <ci>topa13</ci>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom14</ci>
+        <apply>
+          <plus />
+          <ci>bottom13</ci>
+          <ci>weight14</ci>
+        </apply>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1110">
+      <apply>
+        <eq />
+        <ci>weight15</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>AMP</ci>
+            <ci>FBP</ci>
+            <apply>
+              <power />
+              <ci>F6P</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>k1</ci>
+            <ci>k2</ci>
+            <ci>k3</ci>
+            <ci>f23</ci>
+            <ci>f13</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa15</ci>
+        <ci>topa14</ci>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom15</ci>
+        <apply>
+          <plus />
+          <ci>bottom14</ci>
+          <ci>weight15</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topb</ci>
+        <ci>weight15</ci>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1111">
+      <apply>
+        <eq />
+        <ci>weight16</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>AMP</ci>
+            <ci>FBP</ci>
+            <apply>
+              <power />
+              <ci>F6P</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+            <apply>
+              <power />
+              <ci>atp</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>k1</ci>
+            <ci>k2</ci>
+            <ci>k3</ci>
+            <ci>k4</ci>
+            <ci>f23</ci>
+            <ci>f13</ci>
+            <ci>f42</ci>
+            <ci>f41</ci>
+            <ci>f43</ci>
+            <apply>
+              <power />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>topa16</ci>
+        <apply>
+          <plus />
+          <ci>topa15</ci>
+          <ci>weight16</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>bottom16</ci>
+        <apply>
+          <plus />
+          <ci>bottom15</ci>
+          <ci>weight16</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JPDH" cmeta:id="JPDH">
+    <variable cmeta:id="JPDH.JPDH" name="JPDH" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JPDH.p1" initial_value="400.0" name="p1" units="dimensionless" />
+    <variable cmeta:id="JPDH.p2" initial_value="1.0" name="p2" units="dimensionless" />
+    <variable cmeta:id="JPDH.p3" initial_value="0.01" name="p3" units="micromolar" />
+    <variable cmeta:id="JPDH.JGPDHbas" initial_value="0.0005" name="JGPDHbas" units="micromolar_millisecond" />
+    <variable cmeta:id="JPDH.NADm" name="NADm" public_interface="in" units="millimolar" />
+    <variable cmeta:id="JPDH.Cam" name="Cam" public_interface="in" units="micromolar" />
+    <variable cmeta:id="JPDH.NADHm" name="NADHm" public_interface="in" units="millimolar" />
+    <variable cmeta:id="JPDH.JGPDH" name="JGPDH" public_interface="in" units="micromolar_millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JPDH</ci>
+        <apply>
+          <times />
+          <apply>
+            <divide />
+            <ci>p1</ci>
+            <apply>
+              <plus />
+              <ci>p2</ci>
+              <apply>
+                <divide />
+                <ci>NADHm</ci>
+                <ci>NADm</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <divide />
+            <ci>Cam</ci>
+            <apply>
+              <plus />
+              <ci>p3</ci>
+              <ci>Cam</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <ci>JGPDH</ci>
+            <ci>JGPDHbas</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="NADHm" cmeta:id="NADHm">
+    <variable cmeta:id="NADHm_NADHm" initial_value="0.4" name="NADHm" public_interface="out" units="millimolar" />
+    <variable cmeta:id="NADHm.gamma" name="gamma" public_interface="in" units="dimensionless" />
+    <variable cmeta:id="NADHm.JPDH" name="JPDH" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="NADHm.JO" name="JO" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="NADHm.time" name="time" public_interface="in" units="millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>NADHm</ci>
+        </apply>
+        <apply>
+          <times />
+          <ci>gamma</ci>
+          <apply>
+            <minus />
+            <ci>JPDH</ci>
+            <ci>JO</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JO" cmeta:id="JO">
+    <variable cmeta:id="JO.JO" name="JO" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JO.p4" initial_value="0.6" name="p4" units="micromolar_millisecond" />
+    <variable cmeta:id="JO.p5" initial_value="0.1" name="p5" units="millimolar" />
+    <variable cmeta:id="JO.p6" initial_value="177.0" name="p6" units="millivolt" />
+    <variable cmeta:id="JO.p7" initial_value="5.0" name="p7" units="millivolt" />
+    <variable cmeta:id="JO.NADHm" name="NADHm" public_interface="in" units="millimolar" />
+    <variable cmeta:id="JO.delta_psi" name="delta_psi" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JO</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>p4</ci>
+            <apply>
+              <divide />
+              <ci>NADHm</ci>
+              <apply>
+                <plus />
+                <ci>p5</ci>
+                <ci>NADHm</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+            <apply>
+              <exp />
+              <apply>
+                <divide />
+                <apply>
+                  <minus />
+                  <ci>delta_psi</ci>
+                  <ci>p6</ci>
+                </apply>
+                <ci>p7</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="NADm" cmeta:id="NADm">
+    <variable cmeta:id="NADm.NADm" name="NADm" public_interface="out" units="millimolar" />
+    <variable cmeta:id="NADm.NADmtot" initial_value="10.0" name="NADmtot" units="millimolar" />
+    <variable cmeta:id="NADm.NADHm" name="NADHm" public_interface="in" units="millimolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>NADm</ci>
+        <apply>
+          <minus />
+          <ci>NADmtot</ci>
+          <ci>NADHm</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="delta_psi" cmeta:id="delta_psi">
+    <variable cmeta:id="delta_psi_delta_psi" initial_value="164.0" name="delta_psi" public_interface="out" units="millivolt" />
+    <variable cmeta:id="delta_psi.Cmito" initial_value="1.8" name="Cmito" units="micromolar_millivolt" />
+    <variable cmeta:id="delta_psi.JHres" name="JHres" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="delta_psi.JHatp" name="JHatp" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="delta_psi.JANT" name="JANT" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="delta_psi.JHleak" name="JHleak" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="delta_psi.JNaCa" name="JNaCa" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="delta_psi.Juni" name="Juni" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="delta_psi.time" name="time" public_interface="in" units="millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>delta_psi</ci>
+        </apply>
+        <apply>
+          <divide />
+          <apply>
+            <minus />
+            <ci>JHres</ci>
+            <apply>
+              <plus />
+              <ci>JHatp</ci>
+              <ci>JANT</ci>
+              <ci>JHleak</ci>
+              <ci>JNaCa</ci>
+              <apply>
+                <times />
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+                <ci>Juni</ci>
+              </apply>
+            </apply>
+          </apply>
+          <ci>Cmito</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JHres" cmeta:id="JHres">
+    <variable cmeta:id="JHres.JHres" name="JHres" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JHres.p8" initial_value="7.0" name="p8" units="micromolar_millisecond" />
+    <variable cmeta:id="JHres.p9" initial_value="0.1" name="p9" units="millimolar" />
+    <variable cmeta:id="JHres.p10" initial_value="177.0" name="p10" units="millivolt" />
+    <variable cmeta:id="JHres.p11" initial_value="5.0" name="p11" units="millivolt" />
+    <variable cmeta:id="JHres.NADHm" name="NADHm" public_interface="in" units="millimolar" />
+    <variable cmeta:id="JHres.delta_psi" name="delta_psi" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JHres</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>p8</ci>
+            <apply>
+              <divide />
+              <ci>NADHm</ci>
+              <apply>
+                <plus />
+                <ci>p9</ci>
+                <ci>NADHm</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+            <apply>
+              <exp />
+              <apply>
+                <divide />
+                <apply>
+                  <minus />
+                  <ci>delta_psi</ci>
+                  <ci>p10</ci>
+                </apply>
+                <ci>p11</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JF1F0" cmeta:id="JF1F0">
+    <variable cmeta:id="JF1F0.JF1F0" name="JF1F0" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JF1F0.p13" initial_value="10.0" name="p13" units="millimolar" />
+    <variable cmeta:id="JF1F0.p14" initial_value="190.0" name="p14" units="millivolt" />
+    <variable cmeta:id="JF1F0.p15" initial_value="8.5" name="p15" units="millivolt" />
+    <variable cmeta:id="JF1F0.p16" initial_value="35.0" name="p16" units="micromolar_millisecond" />
+    <variable cmeta:id="JF1F0.ATPm" name="ATPm" public_interface="in" units="millimolar" />
+    <variable cmeta:id="JF1F0.delta_psi" name="delta_psi" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JF1F0</ci>
+        <apply>
+          <divide />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>p16</ci>
+              <ci>p13</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>p13</ci>
+              <ci>ATPm</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+            <apply>
+              <exp />
+              <apply>
+                <divide />
+                <apply>
+                  <minus />
+                  <ci>p14</ci>
+                  <ci>delta_psi</ci>
+                </apply>
+                <ci>p15</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JHatp" cmeta:id="JHatp">
+    <variable cmeta:id="JHatp.JHatp" name="JHatp" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JHatp.JF1F0" name="JF1F0" public_interface="in" units="micromolar_millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JHatp</ci>
+        <apply>
+          <times />
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3.0</cn>
+          <ci>JF1F0</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JGK" cmeta:id="JGK">
+    <variable cmeta:id="JGK.JGK_ms" name="JGK_ms" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JGK.JGK" initial_value="0.4" name="JGK" units="micromolar_second" />
+    <variable cmeta:id="JGK.kappa" name="kappa" public_interface="in" units="dimensionless" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JGK_ms</ci>
+        <apply>
+          <times />
+          <ci>kappa</ci>
+          <ci>JGK</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JHleak" cmeta:id="JHleak">
+    <variable cmeta:id="JHleak.JHleak" name="JHleak" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JHleak.p17" initial_value="0.002" name="p17" units="micromolar_millisecond_millivolt" />
+    <variable cmeta:id="JHleak.p18" initial_value="-0.03" name="p18" units="micromolar_millisecond" />
+    <variable cmeta:id="JHleak.delta_psi" name="delta_psi" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JHleak</ci>
+        <apply>
+          <plus />
+          <apply>
+            <times />
+            <ci>p17</ci>
+            <ci>delta_psi</ci>
+          </apply>
+          <ci>p18</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JANT" cmeta:id="JANT">
+    <variable cmeta:id="JANT.JANT" name="JANT" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JANT.p19" initial_value="0.35" name="p19" units="micromolar_millisecond" />
+    <variable cmeta:id="JANT.p20" initial_value="2.0" name="p20" units="dimensionless" />
+    <variable cmeta:id="JANT.FRT" initial_value="0.037410133" name="FRT" units="per_millivolt" />
+    <variable cmeta:id="JANT.RATm" name="RATm" public_interface="in" units="dimensionless" />
+    <variable cmeta:id="JANT.delta_psi" name="delta_psi" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JANT</ci>
+        <apply>
+          <times />
+          <ci>p19</ci>
+          <apply>
+            <divide />
+            <apply>
+              <divide />
+              <ci>RATm</ci>
+              <apply>
+                <plus />
+                <ci>RATm</ci>
+                <ci>p20</ci>
+              </apply>
+            </apply>
+            <apply>
+              <exp />
+              <apply>
+                <times />
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">-0.5</cn>
+                <ci>FRT</ci>
+                <ci>delta_psi</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="RATm">
+    <variable cmeta:id="RATm.RATm" name="RATm" public_interface="out" units="dimensionless" />
+    <variable cmeta:id="RATm.ATPm" name="ATPm" public_interface="in" units="millimolar" />
+    <variable cmeta:id="RATm.ADPm" name="ADPm" public_interface="in" units="millimolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>RATm</ci>
+        <apply>
+          <divide />
+          <ci>ATPm</ci>
+          <ci>ADPm</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Juni" cmeta:id="Juni">
+    <variable cmeta:id="Juni.Juni" name="Juni" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="Juni.p21" initial_value="0.04" name="p21" units="per_micromolar_millisecond_millivolt" />
+    <variable cmeta:id="Juni.p22" initial_value="1.1" name="p22" units="second_order_rate_constant" />
+    <variable cmeta:id="Juni.c" name="c" public_interface="in" units="micromolar" />
+    <variable cmeta:id="Juni.delta_psi" name="delta_psi" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>Juni</ci>
+        <apply>
+          <times />
+          <apply>
+            <minus />
+            <apply>
+              <times />
+              <ci>p21</ci>
+              <ci>delta_psi</ci>
+            </apply>
+            <ci>p22</ci>
+          </apply>
+          <apply>
+            <power />
+            <ci>c</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JNaCa" cmeta:id="JNaCa">
+    <variable cmeta:id="JNaCa.JNaCa" name="JNaCa" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JNaCa.p23" initial_value="0.01" name="p23" units="micromolar_millisecond" />
+    <variable cmeta:id="JNaCa.p24" initial_value="0.016" name="p24" units="per_millivolt" />
+    <variable cmeta:id="JNaCa.c" name="c" public_interface="in" units="micromolar" />
+    <variable cmeta:id="JNaCa.Cam" name="Cam" public_interface="in" units="micromolar" />
+    <variable cmeta:id="JNaCa.delta_psi" name="delta_psi" public_interface="in" units="millivolt" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JNaCa</ci>
+        <apply>
+          <times />
+          <apply>
+            <divide />
+            <ci>p23</ci>
+            <ci>c</ci>
+          </apply>
+          <ci>Cam</ci>
+          <apply>
+            <exp />
+            <apply>
+              <times />
+              <ci>p24</ci>
+              <ci>delta_psi</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Cam" cmeta:id="Cam">
+    <variable cmeta:id="Cam_Cam" initial_value="0.2" name="Cam" public_interface="out" units="micromolar" />
+    <variable cmeta:id="Cam.fmito" initial_value="0.01" name="fmito" units="dimensionless" />
+    <variable cmeta:id="Cam.Jmito" name="Jmito" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="Cam.time" name="time" public_interface="in" units="millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>Cam</ci>
+        </apply>
+        <apply>
+          <times />
+          <apply>
+            <minus />
+            <ci>fmito</ci>
+          </apply>
+          <ci>Jmito</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Jmito">
+    <variable cmeta:id="Jmito.Jmito" name="Jmito" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="Jmito.JNaCa" name="JNaCa" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="Jmito.Juni" name="Juni" public_interface="in" units="micromolar_millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>Jmito</ci>
+        <apply>
+          <minus />
+          <ci>JNaCa</ci>
+          <ci>Juni</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ADPm" cmeta:id="ADPm">
+    <variable cmeta:id="ADPm_ADPm" initial_value="11.1" name="ADPm" public_interface="out" units="millimolar" />
+    <variable cmeta:id="ADPm.gamma" name="gamma" public_interface="in" units="dimensionless" />
+    <variable cmeta:id="ADPm.JANT" name="JANT" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="ADPm.JF1F0" name="JF1F0" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="ADPm.time" name="time" public_interface="in" units="millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ADPm</ci>
+        </apply>
+        <apply>
+          <times />
+          <ci>gamma</ci>
+          <apply>
+            <minus />
+            <ci>JANT</ci>
+            <ci>JF1F0</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ATPm" cmeta:id="ATPm">
+    <variable cmeta:id="ATPm.ATPm" name="ATPm" public_interface="out" units="millimolar" />
+    <variable cmeta:id="ATPm.Amtot" initial_value="15.0" name="Amtot" units="millimolar" />
+    <variable cmeta:id="ATPm.ADPm" name="ADPm" public_interface="in" units="millimolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>ATPm</ci>
+        <apply>
+          <minus />
+          <ci>Amtot</ci>
+          <ci>ADPm</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="adp" cmeta:id="adp">
+    <variable cmeta:id="adp_adp" initial_value="1137.0" name="adp" public_interface="out" units="micromolar" />
+    <variable cmeta:id="adp.delta" name="delta" public_interface="in" units="dimensionless" />
+    <variable cmeta:id="adp.Jhyd" name="Jhyd" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="adp.JANT" name="JANT" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="adp.time" name="time" public_interface="in" units="millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>adp</ci>
+        </apply>
+        <apply>
+          <plus />
+          <apply>
+            <times />
+            <apply>
+              <minus />
+              <ci>delta</ci>
+            </apply>
+            <ci>JANT</ci>
+          </apply>
+          <ci>Jhyd</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Jhyd" cmeta:id="Jhyd">
+    <variable cmeta:id="Jhyd.Jhyd" name="Jhyd" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="Jhyd.khyd" initial_value="0.00005" name="khyd" units="second_order_rate_constant" />
+    <variable cmeta:id="Jhyd.khydbas" initial_value="0.00005" name="khydbas" units="first_order_rate_constant" />
+    <variable cmeta:id="Jhyd.c" name="c" public_interface="in" units="micromolar" />
+    <variable cmeta:id="Jhyd.atp" name="atp" public_interface="in" units="micromolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>Jhyd</ci>
+        <apply>
+          <times />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>khyd</ci>
+              <ci>c</ci>
+            </apply>
+            <ci>khydbas</ci>
+          </apply>
+          <ci>atp</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="atp" cmeta:id="atp">
+    <variable cmeta:id="atp_atp" name="atp" public_interface="out" units="micromolar" />
+    <variable cmeta:id="atp.atot" initial_value="2500.0" name="atot" units="micromolar" />
+    <variable cmeta:id="atp.adp" name="adp" public_interface="in" units="micromolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>atp</ci>
+        <apply>
+          <minus />
+          <ci>atot</ci>
+          <ci>adp</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="c" cmeta:id="c">
+    <variable cmeta:id="c.c" initial_value="0.17" name="c" public_interface="out" units="micromolar" />
+    <variable cmeta:id="c.fcyt" initial_value="0.01" name="fcyt" units="dimensionless" />
+    <variable cmeta:id="c.delta" name="delta" public_interface="in" units="dimensionless" />
+    <variable cmeta:id="c.Jer" name="Jer" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="c.Jmem" name="Jmem" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="c.Jmito" name="Jmito" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="c.time" name="time" public_interface="in" units="millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>c</ci>
+        </apply>
+        <apply>
+          <times />
+          <ci>fcyt</ci>
+          <apply>
+            <plus />
+            <ci>Jmem</ci>
+            <ci>Jer</ci>
+            <apply>
+              <times />
+              <ci>delta</ci>
+              <ci>Jmito</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Jmem" cmeta:id="Jmem">
+    <variable cmeta:id="Jmem.Jmem" name="Jmem" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="Jmem.kPMCA" initial_value="0.1" name="kPMCA" units="first_order_rate_constant" />
+    <variable cmeta:id="Jmem.alpha" initial_value="4.5E-6" name="alpha" units="micromolar_millisecond_femtoampere" />
+    <variable cmeta:id="Jmem.Cbas" initial_value="0.05" name="Cbas" units="micromolar" />
+    <variable cmeta:id="Jmem.c" name="c" public_interface="in" units="micromolar" />
+    <variable cmeta:id="Jmem.Ica" name="Ica" public_interface="in" units="femtoampere" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>Jmem</ci>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>alpha</ci>
+              <ci>Ica</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>kPMCA</ci>
+              <apply>
+                <minus />
+                <ci>c</ci>
+                <ci>Cbas</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Jleak" cmeta:id="Jleak">
+    <variable cmeta:id="Jleak.Jleak" name="Jleak" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="Jleak.pleak" initial_value="0.0002" name="pleak" units="first_order_rate_constant" />
+    <variable cmeta:id="Jleak.c" name="c" public_interface="in" units="micromolar" />
+    <variable cmeta:id="Jleak.Caer" name="Caer" public_interface="in" units="micromolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>Jleak</ci>
+        <apply>
+          <times />
+          <ci>pleak</ci>
+          <apply>
+            <minus />
+            <ci>Caer</ci>
+            <ci>c</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="JSERCA" cmeta:id="JSERCA">
+    <variable cmeta:id="JSERCA.JSERCA" name="JSERCA" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="JSERCA.kSERCA" initial_value="0.4" name="kSERCA" units="first_order_rate_constant" />
+    <variable cmeta:id="JSERCA.c" name="c" public_interface="in" units="micromolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>JSERCA</ci>
+        <apply>
+          <times />
+          <ci>kSERCA</ci>
+          <ci>c</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Jer" cmeta:id="Jer">
+    <variable cmeta:id="Jer.Jer" name="Jer" public_interface="out" units="micromolar_millisecond" />
+    <variable cmeta:id="Jer.Jleak" name="Jleak" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="Jer.JSERCA" name="JSERCA" public_interface="in" units="micromolar_millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>Jer</ci>
+        <apply>
+          <minus />
+          <ci>Jleak</ci>
+          <ci>JSERCA</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Caer" cmeta:id="Caer">
+    <variable cmeta:id="Caer_Caer" initial_value="345.0" name="Caer" public_interface="out" units="micromolar" />
+    <variable cmeta:id="Caer.fer" initial_value="0.01" name="fer" units="dimensionless" />
+    <variable cmeta:id="Caer.Vc_Ver" initial_value="31.0" name="Vc_Ver" units="dimensionless" />
+    <variable cmeta:id="Caer.Jer" name="Jer" public_interface="in" units="micromolar_millisecond" />
+    <variable cmeta:id="Caer.time" name="time" public_interface="in" units="millisecond" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>Caer</ci>
+        </apply>
+        <apply>
+          <times />
+          <apply>
+            <minus />
+            <ci>fer</ci>
+          </apply>
+          <ci>Vc_Ver</ci>
+          <ci>Jer</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="model_parameters">
+    <variable cmeta:id="model_parameters.gamma" initial_value="0.001" name="gamma" public_interface="out" units="dimensionless" />
+    <variable cmeta:id="model_parameters.kappa" initial_value="0.001" name="kappa" public_interface="out" units="dimensionless" />
+    <variable cmeta:id="model_parameters.delta" name="delta" public_interface="out" units="dimensionless" />
+    <variable cmeta:id="model_parameters.VK" initial_value="-75.0" name="VK" public_interface="out" units="millivolt" />
+    <variable cmeta:id="model_parameters.VCa" initial_value="25.0" name="VCa" public_interface="out" units="millivolt" />
+    <variable cmeta:id="model_parameters.AMP" initial_value="500.0" name="AMP" public_interface="out" units="micromolar" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>delta</ci>
+        <apply>
+          <divide />
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3.9</cn>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">53.2</cn>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <group>
+    <relationship_ref relationship="containment" />
+    <component_ref component="membrane">
+      <component_ref component="Ik">
+        <component_ref component="n" />
+      </component_ref>
+      <component_ref component="Ikatp" />
+      <component_ref component="Ikca" />
+      <component_ref component="Ica">
+        <component_ref component="m" />
+      </component_ref>
+    </component_ref>
+  </group>
+  <group>
+    <relationship_ref relationship="encapsulation" />
+    <component_ref component="Ik">
+      <component_ref component="n" />
+    </component_ref>
+    <component_ref component="Ica">
+      <component_ref component="m" />
+    </component_ref>
+  </group>
+  <connection>
+    <map_components component_1="environment" component_2="delta_psi" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="RATm" component_2="JANT" />
+    <map_variables variable_1="RATm" variable_2="RATm" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="adp" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="FBP" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="Juni" component_2="Jmito" />
+    <map_variables variable_1="Juni" variable_2="Juni" />
+  </connection>
+  <connection>
+    <map_components component_1="JHatp" component_2="delta_psi" />
+    <map_variables variable_1="JHatp" variable_2="JHatp" />
+  </connection>
+  <connection>
+    <map_components component_1="Ica" component_2="Jmem" />
+    <map_variables variable_1="Ica" variable_2="Ica" />
+  </connection>
+  <connection>
+    <map_components component_1="JANT" component_2="adp" />
+    <map_variables variable_1="JANT" variable_2="JANT" />
+  </connection>
+  <connection>
+    <map_components component_1="JGK" component_2="G6P" />
+    <map_variables variable_1="JGK_ms" variable_2="JGK_ms" />
+  </connection>
+  <connection>
+    <map_components component_1="Ik" component_2="membrane" />
+    <map_variables variable_1="Ik" variable_2="Ik" />
+  </connection>
+  <connection>
+    <map_components component_1="membrane" component_2="Ikatp" />
+    <map_variables variable_1="Vm" variable_2="Vm" />
+  </connection>
+  <connection>
+    <map_components component_1="delta_psi" component_2="JF1F0" />
+    <map_variables variable_1="delta_psi" variable_2="delta_psi" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Ik" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="NADm" component_2="JPDH" />
+    <map_variables variable_1="NADm" variable_2="NADm" />
+  </connection>
+  <connection>
+    <map_components component_1="ADPm" component_2="ATPm" />
+    <map_variables variable_1="ADPm" variable_2="ADPm" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="Ik" />
+    <map_variables variable_1="VK" variable_2="VK" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Ikca" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="membrane" component_2="Ikca" />
+    <map_variables variable_1="Vm" variable_2="Vm" />
+  </connection>
+  <connection>
+    <map_components component_1="Ik" component_2="n" />
+    <map_variables variable_1="Vm" variable_2="Vm" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="delta_psi" component_2="JO" />
+    <map_variables variable_1="delta_psi" variable_2="delta_psi" />
+  </connection>
+  <connection>
+    <map_components component_1="JGPDH" component_2="FBP" />
+    <map_variables variable_1="JGPDH" variable_2="JGPDH" />
+  </connection>
+  <connection>
+    <map_components component_1="c" component_2="Juni" />
+    <map_variables variable_1="c" variable_2="c" />
+  </connection>
+  <connection>
+    <map_components component_1="ATPm" component_2="RATm" />
+    <map_variables variable_1="ATPm" variable_2="ATPm" />
+  </connection>
+  <connection>
+    <map_components component_1="c" component_2="Jleak" />
+    <map_variables variable_1="c" variable_2="c" />
+  </connection>
+  <connection>
+    <map_components component_1="JO" component_2="NADHm" />
+    <map_variables variable_1="JO" variable_2="JO" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="NADHm" />
+    <map_variables variable_1="gamma" variable_2="gamma" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="c" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="JANT" component_2="ADPm" />
+    <map_variables variable_1="JANT" variable_2="JANT" />
+  </connection>
+  <connection>
+    <map_components component_1="JNaCa" component_2="Jmito" />
+    <map_variables variable_1="JNaCa" variable_2="JNaCa" />
+  </connection>
+  <connection>
+    <map_components component_1="Jmito" component_2="Cam" />
+    <map_variables variable_1="Jmito" variable_2="Jmito" />
+  </connection>
+  <connection>
+    <map_components component_1="Jer" component_2="Caer" />
+    <map_variables variable_1="Jer" variable_2="Jer" />
+  </connection>
+  <connection>
+    <map_components component_1="G6P" component_2="F6P" />
+    <map_variables variable_1="G6P" variable_2="G6P" />
+  </connection>
+  <connection>
+    <map_components component_1="delta_psi" component_2="JHleak" />
+    <map_variables variable_1="delta_psi" variable_2="delta_psi" />
+  </connection>
+  <connection>
+    <map_components component_1="m" component_2="Ica" />
+    <map_variables variable_1="m_infinity" variable_2="m_infinity" />
+  </connection>
+  <connection>
+    <map_components component_1="delta_psi" component_2="JHres" />
+    <map_variables variable_1="delta_psi" variable_2="delta_psi" />
+  </connection>
+  <connection>
+    <map_components component_1="JNaCa" component_2="delta_psi" />
+    <map_variables variable_1="JNaCa" variable_2="JNaCa" />
+  </connection>
+  <connection>
+    <map_components component_1="Cam" component_2="JNaCa" />
+    <map_variables variable_1="Cam" variable_2="Cam" />
+  </connection>
+  <connection>
+    <map_components component_1="JPFK" component_2="FBP" />
+    <map_variables variable_1="JPFK_ms" variable_2="JPFK_ms" />
+  </connection>
+  <connection>
+    <map_components component_1="NADHm" component_2="JPDH" />
+    <map_variables variable_1="NADHm" variable_2="NADHm" />
+  </connection>
+  <connection>
+    <map_components component_1="JANT" component_2="delta_psi" />
+    <map_variables variable_1="JANT" variable_2="JANT" />
+  </connection>
+  <connection>
+    <map_components component_1="Caer" component_2="Jleak" />
+    <map_variables variable_1="Caer" variable_2="Caer" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Caer" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="atp" component_2="Jhyd" />
+    <map_variables variable_1="atp" variable_2="atp" />
+  </connection>
+  <connection>
+    <map_components component_1="JPFK" component_2="G6P" />
+    <map_variables variable_1="JPFK_ms" variable_2="JPFK_ms" />
+  </connection>
+  <connection>
+    <map_components component_1="c" component_2="JSERCA" />
+    <map_variables variable_1="c" variable_2="c" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="JGK" />
+    <map_variables variable_1="kappa" variable_2="kappa" />
+  </connection>
+  <connection>
+    <map_components component_1="Ikca" component_2="membrane" />
+    <map_variables variable_1="Ikca" variable_2="Ikca" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="JPFK" />
+    <map_variables variable_1="kappa" variable_2="kappa" />
+    <map_variables variable_1="AMP" variable_2="AMP" />
+  </connection>
+  <connection>
+    <map_components component_1="membrane" component_2="Ica" />
+    <map_variables variable_1="Vm" variable_2="Vm" />
+  </connection>
+  <connection>
+    <map_components component_1="delta_psi" component_2="Juni" />
+    <map_variables variable_1="delta_psi" variable_2="delta_psi" />
+  </connection>
+  <connection>
+    <map_components component_1="Jmem" component_2="c" />
+    <map_variables variable_1="Jmem" variable_2="Jmem" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Ica" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="NADHm" component_2="JO" />
+    <map_variables variable_1="NADHm" variable_2="NADHm" />
+  </connection>
+  <connection>
+    <map_components component_1="delta_psi" component_2="JANT" />
+    <map_variables variable_1="delta_psi" variable_2="delta_psi" />
+  </connection>
+  <connection>
+    <map_components component_1="ADPm" component_2="RATm" />
+    <map_variables variable_1="ADPm" variable_2="ADPm" />
+  </connection>
+  <connection>
+    <map_components component_1="Jleak" component_2="Jer" />
+    <map_variables variable_1="Jleak" variable_2="Jleak" />
+  </connection>
+  <connection>
+    <map_components component_1="JGPDH" component_2="JPDH" />
+    <map_variables variable_1="JGPDH" variable_2="JGPDH" />
+  </connection>
+  <connection>
+    <map_components component_1="ATPm" component_2="JF1F0" />
+    <map_variables variable_1="ATPm" variable_2="ATPm" />
+  </connection>
+  <connection>
+    <map_components component_1="F6P" component_2="JPFK" />
+    <map_variables variable_1="F6P" variable_2="F6P" />
+  </connection>
+  <connection>
+    <map_components component_1="atp" component_2="Ikatp" />
+    <map_variables variable_1="atp" variable_2="atp" />
+  </connection>
+  <connection>
+    <map_components component_1="n" component_2="Ik" />
+    <map_variables variable_1="n" variable_2="n" />
+  </connection>
+  <connection>
+    <map_components component_1="membrane" component_2="Ik" />
+    <map_variables variable_1="Vm" variable_2="Vm" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="membrane" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="FBP" component_2="JGPDH" />
+    <map_variables variable_1="FBP" variable_2="FBP" />
+  </connection>
+  <connection>
+    <map_components component_1="Jmito" component_2="c" />
+    <map_variables variable_1="Jmito" variable_2="Jmito" />
+  </connection>
+  <connection>
+    <map_components component_1="delta_psi" component_2="JNaCa" />
+    <map_variables variable_1="delta_psi" variable_2="delta_psi" />
+  </connection>
+  <connection>
+    <map_components component_1="JF1F0" component_2="ADPm" />
+    <map_variables variable_1="JF1F0" variable_2="JF1F0" />
+  </connection>
+  <connection>
+    <map_components component_1="JF1F0" component_2="JHatp" />
+    <map_variables variable_1="JF1F0" variable_2="JF1F0" />
+  </connection>
+  <connection>
+    <map_components component_1="JSERCA" component_2="Jer" />
+    <map_variables variable_1="JSERCA" variable_2="JSERCA" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="Ica" />
+    <map_variables variable_1="VCa" variable_2="VCa" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="Ikca" />
+    <map_variables variable_1="VK" variable_2="VK" />
+  </connection>
+  <connection>
+    <map_components component_1="atp" component_2="JPFK" />
+    <map_variables variable_1="atp" variable_2="atp" />
+  </connection>
+  <connection>
+    <map_components component_1="c" component_2="Jhyd" />
+    <map_variables variable_1="c" variable_2="c" />
+  </connection>
+  <connection>
+    <map_components component_1="c" component_2="Ikca" />
+    <map_variables variable_1="c" variable_2="c" />
+  </connection>
+  <connection>
+    <map_components component_1="c" component_2="Jmem" />
+    <map_variables variable_1="c" variable_2="c" />
+  </connection>
+  <connection>
+    <map_components component_1="c" component_2="JNaCa" />
+    <map_variables variable_1="c" variable_2="c" />
+  </connection>
+  <connection>
+    <map_components component_1="FBP" component_2="JPFK" />
+    <map_variables variable_1="FBP" variable_2="FBP" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="ADPm" />
+    <map_variables variable_1="gamma" variable_2="gamma" />
+  </connection>
+  <connection>
+    <map_components component_1="Ikatp" component_2="membrane" />
+    <map_variables variable_1="Ikatp" variable_2="Ikatp" />
+  </connection>
+  <connection>
+    <map_components component_1="adp" component_2="atp" />
+    <map_variables variable_1="adp" variable_2="adp" />
+  </connection>
+  <connection>
+    <map_components component_1="Ica" component_2="membrane" />
+    <map_variables variable_1="Ica" variable_2="Ica" />
+  </connection>
+  <connection>
+    <map_components component_1="JPDH" component_2="NADHm" />
+    <map_variables variable_1="JPDH" variable_2="JPDH" />
+  </connection>
+  <connection>
+    <map_components component_1="NADHm" component_2="NADm" />
+    <map_variables variable_1="NADHm" variable_2="NADHm" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Ikatp" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ADPm" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="Cam" component_2="JPDH" />
+    <map_variables variable_1="Cam" variable_2="Cam" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Cam" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="adp" component_2="Ikatp" />
+    <map_variables variable_1="adp" variable_2="adp" />
+  </connection>
+  <connection>
+    <map_components component_1="JHres" component_2="delta_psi" />
+    <map_variables variable_1="JHres" variable_2="JHres" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="G6P" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="adp" />
+    <map_variables variable_1="delta" variable_2="delta" />
+  </connection>
+  <connection>
+    <map_components component_1="Ica" component_2="m" />
+    <map_variables variable_1="Vm" variable_2="Vm" />
+  </connection>
+  <connection>
+    <map_components component_1="Jhyd" component_2="adp" />
+    <map_variables variable_1="Jhyd" variable_2="Jhyd" />
+  </connection>
+  <connection>
+    <map_components component_1="Jer" component_2="c" />
+    <map_variables variable_1="Jer" variable_2="Jer" />
+  </connection>
+  <connection>
+    <map_components component_1="Juni" component_2="delta_psi" />
+    <map_variables variable_1="Juni" variable_2="Juni" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="Ikatp" />
+    <map_variables variable_1="VK" variable_2="VK" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="c" />
+    <map_variables variable_1="delta" variable_2="delta" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="NADHm" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="NADHm" component_2="JHres" />
+    <map_variables variable_1="NADHm" variable_2="NADHm" />
+  </connection>
+  <connection>
+    <map_components component_1="JHleak" component_2="delta_psi" />
+    <map_variables variable_1="JHleak" variable_2="JHleak" />
+  </connection>
+  <rdf:RDF xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:j.0="http://www.cellml.org/metadata/simulation/1.0#" xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" xmlns="http://purl.org/dc/elements/1.1/" xmlns:j.1="http://www.cellml.org/bqs/1.0#" xmlns:opb="http://bhi.washington.edu/OPB#" xmlns:j.2="http://imc.org/vCard/3.0#">
+    <rdf:Description rdf:about="">
+      <creator>
+        <rdf:Description rdf:about="rdf:#36f278b6-676a-49b5-8bfc-5ac98e780f18">
+          <vcard:N>
+            <rdf:Description rdf:about="rdf:#32cf057c-3c04-4fe9-9de0-f5ee5d554a8c">
+              <vcard:Other xml:lang="en">May</vcard:Other>
+              <vcard:Given xml:lang="en">Catherine</vcard:Given>
+              <vcard:Family xml:lang="en">Lloyd</vcard:Family>
+            </rdf:Description>
+          </vcard:N>
+          <vcard:ORG>
+            <rdf:Description rdf:about="rdf:#ba4b7891-ba81-492e-9252-f15e71613a1f">
+              <vcard:Orgname xml:lang="en">The University of Auckland</vcard:Orgname>
+              <vcard:Orgunit xml:lang="en">The Bioengineering Institute</vcard:Orgunit>
+            </rdf:Description>
+          </vcard:ORG>
+          <vcard:EMAIL>
+            <j.2:internet rdf:about="rdf:#f9b85675-800a-4ad5-8700-fd7d6c3716b5">
+              <rdf:value xml:lang="en">c.lloyd@auckland.ac.nz</rdf:value>
+            </j.2:internet>
+          </vcard:EMAIL>
+        </rdf:Description>
+      </creator>
+      <cmeta:comment>
+        <rdf:Description rdf:about="rdf:#a3742dff-e666-4511-a0ea-e9d16928636b">
+          <creator>
+            <rdf:Description rdf:about="rdf:#a2949648-b149-4e32-a597-d1f034845cbb">
+              <vcard:FN xml:lang="en">Catherine Lloyd</vcard:FN>
+            </rdf:Description>
+          </creator>
+          <rdf:value xml:lang="en">This CellML model has been coded by translating the authors original XPPAUT .ode file, which can be found at http://www.math.fsu.edu/~bertram/software/islet/BJ_07/mitophan.ode . The model runs in PCEnv and is able to produce the published results. The parameters have been chosen to recreate the bursting behaviour seen in figures 3 and 4 of the original paper.</rdf:value>
+        </rdf:Description>
+      </cmeta:comment>
+      <publisher xml:lang="en">The University of Auckland, Bioengineering Institute</publisher>
+      <dcterms:created>
+        <rdf:Description rdf:about="rdf:#c804800b-9d75-48c6-a17b-1bae6971cf0b">
+          <dcterms:W3CDTF xml:lang="en">2007-08-08T00:00:00+00:00</dcterms:W3CDTF>
+        </rdf:Description>
+      </dcterms:created>
+      <cmeta:modification>
+        <rdf:Description rdf:about="rdf:#8e2efc20-61b3-4a1f-85e3-52bf9597aa7c">
+          <rdf:value xml:lang="en">Updated curation status</rdf:value>
+          <dcterms:modified>
+            <rdf:Description rdf:about="rdf:#1e49c0e0-f217-4146-a23c-cbf9c38cf9aa">
+              <dcterms:W3CDTF xml:lang="en">2009-05-15T16:19:11+12:00</dcterms:W3CDTF>
+            </rdf:Description>
+          </dcterms:modified>
+          <cmeta:modifier>
+            <rdf:Description rdf:about="rdf:#5ea496a2-1ac6-4ef8-af89-4de7d882df8d">
+              <vcard:N>
+                <rdf:Description rdf:about="rdf:#f2debc3c-1b1e-459d-803f-e36f0a2ccb6a">
+                  <vcard:Other xml:lang="en">Richard</vcard:Other>
+                  <vcard:Given xml:lang="en">James</vcard:Given>
+                  <vcard:Family xml:lang="en">Lawson</vcard:Family>
+                </rdf:Description>
+              </vcard:N>
+            </rdf:Description>
+          </cmeta:modifier>
+        </rdf:Description>
+      </cmeta:modification>
+      <cmeta:modification>
+        <rdf:Description rdf:about="rdf:#c97021cb-7852-401d-bf7f-fa909244908a">
+          <rdf:value xml:lang="en">Model has been fixed such that it now recreates the published results. This required a slight deviation from the equations in the published paper and the author's original .ODE code was used instead.</rdf:value>
+          <dcterms:modified>
+            <rdf:Description rdf:about="rdf:#1b325d19-ff55-4cd4-a5a5-e0b84a543161">
+              <dcterms:W3CDTF xml:lang="en">2007-11-01T17:17:08+13:00</dcterms:W3CDTF>
+            </rdf:Description>
+          </dcterms:modified>
+          <cmeta:modifier>
+            <rdf:Description rdf:about="rdf:#88e651a4-5feb-4853-a901-0bb4d9230bad">
+              <vcard:N>
+                <rdf:Description rdf:about="rdf:#bd76e739-47b5-44f8-8786-a92bd4721dbb">
+                  <vcard:Other xml:lang="en">May</vcard:Other>
+                  <vcard:Given xml:lang="en">Catherine</vcard:Given>
+                  <vcard:Family xml:lang="en">Lloyd</vcard:Family>
+                </rdf:Description>
+              </vcard:N>
+            </rdf:Description>
+          </cmeta:modifier>
+        </rdf:Description>
+      </cmeta:modification>
+    </rdf:Description>
+    <rdf:Description rdf:about="#FBP">
+      <title xml:lang="en">FBP</title>
+      <dcterms:alternative xml:lang="en">fructose 1-6-bisphosphate</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#ATPm.ATPm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_79">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_41">
+              <ro:part_of>
+                <rdf:Description rdf:about="#entity_29">
+                  <ro:part_of>
+                    <rdf:Description rdf:about="#entity_14">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_15">
+                          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:16016" />
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:85704" />
+                    </rdf:Description>
+                  </ro:part_of>
+                  <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0005739" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:15422" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#atp_atp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_87">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_16">
+              <ro:part_of rdf:resource="#entity_14" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:15422" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#delta_psi.JHleak">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_49">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Proton leakage into mitochondria</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#n.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#membrane.Ik">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_2">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_1">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="#mediator_1">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_8">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0008076" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="#sink_3" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_6">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_1">
+                          <ro:part_of>
+                            <rdf:Description rdf:about="#entity_2">
+                              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:85704" />
+                            </rdf:Description>
+                          </ro:part_of>
+                          <semsim:name>Electrical/Calcium compartment</semsim:name>
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29103" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="#sink_2" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_7">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_4">
+                          <ro:part_of rdf:resource="#entity_2" />
+                          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0005739" />
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29103" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_3" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference rdf:resource="#entity_7" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_2" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference rdf:resource="#entity_6" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Voltage gated delayed rectifier potassium current</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00318" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ik.Ik">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_5">
+          <semsim:physicalPropertyOf rdf:resource="#process_1" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00318" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#adp.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#RATm.ADPm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_65">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_42">
+              <ro:part_of rdf:resource="#entity_29" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:16761" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Caer_Caer">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_103">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_43">
+              <ro:part_of>
+                <rdf:Description rdf:about="#entity_44">
+                  <ro:part_of rdf:resource="#entity_14" />
+                  <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0005783" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29108" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JO">
+      <title xml:lang="en">JO</title>
+      <dcterms:alternative xml:lang="en">rate of oxygen consumption at the final stage of the electron transport chain</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jmem.Ica">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_94">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_0">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="#mediator_0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_5">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0005891" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="#sink_1" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_3">
+                      <ro:part_of rdf:resource="#entity_4" />
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29108" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="#sink_0" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_0">
+                      <ro:part_of rdf:resource="#entity_1" />
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29108" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_1" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference rdf:resource="#entity_3" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_0" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference rdf:resource="#entity_0" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Voltage gated calcium rectifier current.</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00318" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Cam.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jmem.Jmem">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_92">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_12">
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_13" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_45">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_46">
+                          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:85704" />
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29108" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Calcium flux across the plasma membrane.</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Calcium flux across the plasma membrane.</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JANT.JANT">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_62">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_7">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="#mediator_4">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_35">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0051503" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="#sink_5" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_33">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_34">
+                          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:66836" />
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:15422" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_8" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_32">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_21">
+                          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0005739" />
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:15422" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>ATP flux through the adenine nucleotide translocator</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JGPDH.FBP">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_22">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_22">
+              <ro:part_of rdf:resource="#entity_14" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/uniprot/Q9QXD6" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#bertram_2007" semsim:modelName="bertram_2007" bqmodel:isDescribedBy="17172305">
+      <semsim:unknown>Bertram et al.'s 2007 mathematical model of the interaction between glycolysis and mitochondrial respiration in metabolic oscillations of pancreatic islets.@en</semsim:unknown>
+      <semsim:modelName>bertram_satin_pedersen_luciani_sherman_2007</semsim:modelName>
+      <j.1:reference>
+        <rdf:Description rdf:about="rdf:#012a3aab-34af-4afe-8650-4bdc34727035">
+          <j.1:JournalArticle>
+            <rdf:Description rdf:about="rdf:#0ff5fc9d-4064-436d-b3b1-ae14222721b9">
+              <title xml:lang="en">Intra- and inter-islet synchronization of metabolically driven insulin secretion</title>
+              <j.1:volume xml:lang="en">92</j.1:volume>
+              <creator>
+                <rdf:Seq rdf:about="rdf:#2e328e3d-8d0f-4053-a33a-ec4a88ec02d1">
+                  <rdf:li>
+                    <j.1:Person rdf:about="rdf:#7c19c0fd-da35-48bf-8a20-557d03ba3dca">
+                      <vcard:N>
+                        <rdf:Description rdf:about="rdf:#1be0a9c7-a41f-40c3-8833-31e4b7d5aa69">
+                          <vcard:Given xml:lang="en">Richard</vcard:Given>
+                          <vcard:Family xml:lang="en">Bertram</vcard:Family>
+                        </rdf:Description>
+                      </vcard:N>
+                    </j.1:Person>
+                  </rdf:li>
+                  <rdf:li>
+                    <j.1:Person rdf:about="rdf:#277e0dbd-6f8e-4ff3-92d0-655156f45996">
+                      <vcard:N>
+                        <rdf:Description rdf:about="rdf:#61fa33eb-42ed-44dd-a832-ab693f11c1a7">
+                          <vcard:Other xml:lang="en">S</vcard:Other>
+                          <vcard:Given xml:lang="en">Leslie</vcard:Given>
+                          <vcard:Family xml:lang="en">Satin</vcard:Family>
+                        </rdf:Description>
+                      </vcard:N>
+                    </j.1:Person>
+                  </rdf:li>
+                  <rdf:li>
+                    <j.1:Person rdf:about="rdf:#3c0e41bc-e930-4953-9766-3e6c24fea28f">
+                      <vcard:N>
+                        <rdf:Description rdf:about="rdf:#1cb2cf9d-6144-4a99-b4ef-13f14e54c321">
+                          <vcard:Other xml:lang="en">Gram</vcard:Other>
+                          <vcard:Given xml:lang="en">Morten</vcard:Given>
+                          <vcard:Family xml:lang="en">Pedersen</vcard:Family>
+                        </rdf:Description>
+                      </vcard:N>
+                    </j.1:Person>
+                  </rdf:li>
+                  <rdf:li>
+                    <j.1:Person rdf:about="rdf:#ee0b50e8-3725-4686-94c2-e5631ed15fd5">
+                      <vcard:N>
+                        <rdf:Description rdf:about="rdf:#4439cc00-6b6c-404c-ba3a-b2f7e995a6d6">
+                          <vcard:Other xml:lang="en">S</vcard:Other>
+                          <vcard:Given xml:lang="en">Dan</vcard:Given>
+                          <vcard:Family xml:lang="en">Luciani</vcard:Family>
+                        </rdf:Description>
+                      </vcard:N>
+                    </j.1:Person>
+                  </rdf:li>
+                  <rdf:li>
+                    <j.1:Person rdf:about="rdf:#235d03f6-ee8d-445c-b18a-4e27c8e7b37e">
+                      <vcard:N>
+                        <rdf:Description rdf:about="rdf:#27931d14-8e29-4d4c-9704-e1514c216d4a">
+                          <vcard:Given xml:lang="en">Arthur</vcard:Given>
+                          <vcard:Family xml:lang="en">Sherman</vcard:Family>
+                        </rdf:Description>
+                      </vcard:N>
+                    </j.1:Person>
+                  </rdf:li>
+                </rdf:Seq>
+              </creator>
+              <j.1:Journal>
+                <rdf:Description rdf:about="rdf:#3fba7436-416c-4514-bf7f-3d2cb1195c92">
+                  <title xml:lang="en">Biophysical Journal</title>
+                </rdf:Description>
+              </j.1:Journal>
+              <j.1:first_page xml:lang="en">1544</j.1:first_page>
+              <dcterms:issued>
+                <rdf:Description rdf:about="rdf:#019b9efb-00c5-4d1b-bd67-ac99ff007e4c">
+                  <dcterms:W3CDTF xml:lang="en">2007-03-01</dcterms:W3CDTF>
+                </rdf:Description>
+              </dcterms:issued>
+              <j.1:last_page xml:lang="en">1555</j.1:last_page>
+            </rdf:Description>
+          </j.1:JournalArticle>
+          <j.1:Pubmed_id xml:lang="en">17172305</j.1:Pubmed_id>
+        </rdf:Description>
+      </j.1:reference>
+      <j.1:reference>
+        <rdf:Description rdf:about="rdf:#42d5789e-bf3e-43fd-a29d-f58969be8d2e">
+          <subject>
+            <rdf:Description rdf:about="rdf:#0b7c13cf-d604-4245-8e3b-56d4883bf1a5">
+              <rdf:value>
+                <rdf:Bag rdf:about="rdf:#33d04e93-d71c-44b4-b72c-fae4c5e47d5d">
+                  <rdf:li xml:lang="en">insulin</rdf:li>
+                  <rdf:li xml:lang="en">pancreatic beta cell</rdf:li>
+                  <rdf:li xml:lang="en">glycolysis</rdf:li>
+                  <rdf:li xml:lang="en">endocrine</rdf:li>
+                  <rdf:li xml:lang="en">mitochondria</rdf:li>
+                  <rdf:li xml:lang="en">metabolism</rdf:li>
+                </rdf:Bag>
+              </rdf:value>
+              <j.1:subject_type xml:lang="en">keyword</j.1:subject_type>
+            </rdf:Description>
+          </subject>
+        </rdf:Description>
+      </j.1:reference>
+      <title xml:lang="en">Bertram et al.'s 2007 mathematical model of the interaction between glycolysis and mitochondrial respiration in metabolic oscillations of pancreatic islets.</title>
+      <cmeta:comment>
+        <rdf:Description rdf:about="rdf:#f710ad62-688b-41ae-b40e-79b3ae921cc8">
+          <creator>
+            <rdf:Description rdf:about="rdf:#3d8d3258-0dc1-4859-bc1f-da6fdb478381">
+              <vcard:FN xml:lang="en">Catherine Lloyd</vcard:FN>
+            </rdf:Description>
+          </creator>
+          <rdf:value xml:lang="en">This is a CellML description of Bertram et al.'s 2007 mathematical model of the interaction between glycolysis and mitochondrial respiration in metabolic oscillations of pancreatic islets.</rdf:value>
+        </rdf:Description>
+      </cmeta:comment>
+      <j.0:simulation rdf:parseType="Resource">
+        <j.0:boundIntervals rdf:parseType="Collection">
+          <rdf:Description>
+            <j.0:nonstandard-pointDensity xml:lang="en">100000</j.0:nonstandard-pointDensity>
+            <j.0:endingValue xml:lang="en">600000</j.0:endingValue>
+            <j.0:maximumStepSize xml:lang="en">10</j.0:maximumStepSize>
+          </rdf:Description>
+        </j.0:boundIntervals>
+      </j.0:simulation>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikca.Vm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_13">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JHres.delta_psi">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_54">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Mitochondrial inner membrane potential changes</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikatp.atp4m">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_17">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#environment_time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#m">
+      <title xml:lang="en">m</title>
+      <dcterms:alternative xml:lang="en">voltage-dependent calcium current m gate</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#ADPm.JF1F0">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_78">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_10">
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_11" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_40">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0016887" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Flux of F1F0 ATP synthase</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux of F1F0 ATP synthase</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#NADm.NADm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_43">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_27">
+              <ro:part_of rdf:resource="#entity_21" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:13389" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikatp.adp3m">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_16">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#n">
+      <title xml:lang="en">n</title>
+      <dcterms:alternative xml:lang="en">voltage-dependent potassium current n gate</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JHatp">
+      <title xml:lang="en">JHatp</title>
+      <title xml:lang="en">JGK</title>
+      <dcterms:alternative xml:lang="en">rate of the glucokinase reaction</dcterms:alternative>
+      <dcterms:alternative xml:lang="en">rate of ATP-driven proton flux</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#G6P.G6P">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_23">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_23">
+              <ro:part_of rdf:resource="#entity_14" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:21008" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JHres.NADHm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_53">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_30">
+              <ro:part_of rdf:resource="#entity_21" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:16908" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#ADPm.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#G6P.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#delta_psi.Juni">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_51">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_9">
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_10" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_38">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_39">
+                          <ro:part_of rdf:resource="#entity_21" />
+                          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/uniprot/Q6P6Q9" />
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29108" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Flux through calcium uniporters</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux through calcium uniporters</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JNaCa.c">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_70">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_13">
+              <ro:part_of rdf:resource="#entity_14" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29108" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPFK.F6P">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_30">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_24">
+              <ro:part_of>
+                <rdf:Description rdf:about="#entity_25">
+                  <ro:part_of rdf:resource="#entity_14" />
+                  <semsim:name>Glycolytic compartment</semsim:name>
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:88003" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikatp.Vm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_20">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#FBP_FBP">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_24">
+          <semsim:physicalPropertyOf rdf:resource="#entity_22" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#NADHm.JPDH">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_38">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_6">
+              <semsim:name>Flux of pyruvate dehydrogenase in the mitochondria</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPDH.JGPDH">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_36">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_4">
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="#sink_4" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_20">
+                      <ro:part_of rdf:resource="#entity_21" />
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:70817" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_6" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_18">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_19">
+                          <semsim:name>Glycolytic compartment</semsim:name>
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:70817" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Glyceraldehyde 3-P dehydrogenase flux out of glycolytic compartment</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#m.Vm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_10">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPDH.NADHm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_35">
+          <semsim:physicalPropertyOf rdf:resource="#entity_30" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#delta_psi.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#atp.adp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_88">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_17">
+              <ro:part_of rdf:resource="#entity_14" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:16761" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jer">
+      <title xml:lang="en">Jer</title>
+      <dcterms:alternative xml:lang="en">rate of calcium flux out of the endoplasmic reticulum</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jer.Jleak">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_101">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_13">
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_14" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference rdf:resource="#entity_43" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Calcium leak out of ER</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Calcium leak flux out of ER</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#ADPm_ADPm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_76">
+          <semsim:physicalPropertyOf rdf:resource="#entity_42" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JO.delta_psi">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_42">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Mitochondrial inner membrane potential changes</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikatp">
+      <title xml:lang="en">Ikatp</title>
+      <dcterms:alternative xml:lang="en">ATP-sensitive potassium current</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jhyd.Jhyd">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_84">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Cystolic hydrolysis of ATP in the electrical/calcium compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Juni.c">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_67">
+          <semsim:physicalPropertyOf rdf:resource="#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPDH">
+      <title xml:lang="en">JPDH</title>
+      <dcterms:alternative xml:lang="en">rate of the pyruvate dehydrogenase reaction</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ik.Vm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_6">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JSERCA.c">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_99">
+          <semsim:physicalPropertyOf rdf:resource="#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JHres.JHres">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_52">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux through respiration-driven proton pumps</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#ATPm">
+      <title xml:lang="en">ATPm</title>
+      <dcterms:alternative xml:lang="en">mitochondrial ATP</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jhyd.atp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_86">
+          <semsim:physicalPropertyOf rdf:resource="#entity_16" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#delta_psi_delta_psi">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_45">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Mitochondrial inner membrane potential changes</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPFK">
+      <title xml:lang="en">JPFK</title>
+      <dcterms:alternative xml:lang="en">rate of the phosphofructokinase reaction</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#membrane_Vm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_0">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jleak.Caer">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_97">
+          <semsim:physicalPropertyOf rdf:resource="#entity_43" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jleak.Jleak">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_95">
+          <semsim:physicalPropertyOf rdf:resource="#process_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Calcium leak flux out of ER</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JSERCA">
+      <title xml:lang="en">JSERCA</title>
+      <dcterms:alternative xml:lang="en">rate of calcium flux into the endoplasmic reticulum through the SERCA pumps</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JHleak.JHleak">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_60">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Proton leakage into mitochondria</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPFK.JPFK">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_28">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_5">
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_7" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_26">
+                      <ro:part_of rdf:resource="#entity_19" />
+                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0008443" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Phosphofructokinase reaction rate in the glycolyticcompartment</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#delta_psi.JNaCa">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_50">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_8">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="#mediator_5">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_37">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0005432" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="#sink_6" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_36">
+                      <ro:part_of rdf:resource="#entity_34" />
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29108" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_9" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_28">
+                      <ro:part_of rdf:resource="#entity_29" />
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29108" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Calcium flux from mitochondria to the cytosol</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Calcium flux from mitochondria to the cytosol</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#adp">
+      <title xml:lang="en">adp</title>
+      <dcterms:alternative xml:lang="en">cytosolic ADP concentration</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ik.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#delta_psi.JHatp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_47">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Phosphorylation protein flux</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#adp.Jhyd">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_82">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Cystolic hydrolysis of ATP in the electrical/calcium compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#n.Vm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_7">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#F6P_F6P">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_26">
+          <semsim:physicalPropertyOf rdf:resource="#entity_24" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#NADm.NADHm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_44">
+          <semsim:physicalPropertyOf rdf:resource="#entity_30" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JHatp.JHatp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_58">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Phosphorylation protein flux</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ica.Vm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_9">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#atp">
+      <title xml:lang="en">atp</title>
+      <dcterms:alternative xml:lang="en">cytosolic ATP</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JNaCa.delta_psi">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_72">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Mitochondrial inner membrane potential changes</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#membrane.Ikca">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_3">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_2">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="#mediator_2">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_11">
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/uniprot/Q62976" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_4" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_9">
+                      <ro:part_of>
+                        <rdf:Description rdf:about="#entity_10">
+                          <semsim:name>Electrical/Calcium compartment</semsim:name>
+                        </rdf:Description>
+                      </ro:part_of>
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:29103" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Calcium-activated K+ current</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00318" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Calcium activated K+ current (K+ is activated by cystolic Ca2+).</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikca.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#JNaCa.Cam">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_71">
+          <semsim:physicalPropertyOf rdf:resource="#entity_28" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#c.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikatp.adp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_19">
+          <semsim:physicalPropertyOf rdf:resource="#entity_17" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jer.JSERCA">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_102">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_14">
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="#sink_7" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference rdf:resource="#entity_43" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_15" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference rdf:resource="#entity_36" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Flux of Ca2+ into the ER from the cytosol through SERCA</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux into the ER from the cytosol is through SERCA</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Cam_Cam">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_73">
+          <semsim:physicalPropertyOf rdf:resource="#entity_28" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jhyd">
+      <title xml:lang="en">Jhyd</title>
+      <dcterms:alternative xml:lang="en">cytosolic hydrolysis of ATP</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikatp.atp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_18">
+          <semsim:physicalPropertyOf rdf:resource="#entity_16" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#c.c">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_89">
+          <semsim:physicalPropertyOf rdf:resource="#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Juni">
+      <title xml:lang="en">Juni</title>
+      <dcterms:alternative xml:lang="en">calcium flux into the mitochondria through a calcium uniporter</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JF1F0.ATPm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_56">
+          <semsim:physicalPropertyOf rdf:resource="#entity_41" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPFK.atp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_29">
+          <semsim:physicalPropertyOf rdf:resource="#entity_16" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JANT.delta_psi">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_63">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Mitochondrial inner membrane potential changes</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#RATm.ATPm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_64">
+          <semsim:physicalPropertyOf rdf:resource="#entity_41" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikca.Ikca">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_11">
+          <semsim:physicalPropertyOf rdf:resource="#process_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00318" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Calcium activated K+ current (K+ is activated by cystolic Ca2+).</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jmem">
+      <title xml:lang="en">Jmem</title>
+      <dcterms:alternative xml:lang="en">rate of calcium flux across the plasma membrane</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ica.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#JGPDH_JGPDH">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_21">
+          <semsim:physicalPropertyOf rdf:resource="#process_4" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Caer.Jer">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_104">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_11">
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_12" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference rdf:resource="#entity_43" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>Flux of calcium out of the endoplasmic reticulum</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux of calcium out of the endoplasmic reticulun</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#adp.JANT">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_83">
+          <semsim:physicalPropertyOf rdf:resource="#process_7" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#adp_adp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_81">
+          <semsim:physicalPropertyOf rdf:resource="#entity_17" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPDH.Cam">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_34">
+          <semsim:physicalPropertyOf rdf:resource="#entity_28" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JNaCa">
+      <title xml:lang="en">JNaCa</title>
+      <dcterms:alternative xml:lang="en">calcium flux out of the mitochondria into the cytosol through the sodium-calcium ion exchanger</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JF1F0">
+      <title xml:lang="en">JF1F0</title>
+      <dcterms:alternative xml:lang="en">rate of the F1F0 ATP synthase catalysed reaction</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JHres">
+      <title xml:lang="en">JHres</title>
+      <dcterms:alternative xml:lang="en">flux through respiration-driven proton pumps</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#NADHm.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#NADHm">
+      <title xml:lang="en">NADHm</title>
+      <dcterms:alternative xml:lang="en">mitochondrial NADH</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Juni.Juni">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_66">
+          <semsim:physicalPropertyOf rdf:resource="#process_9" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux through calcium uniporters</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JO.NADHm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_41">
+          <semsim:physicalPropertyOf rdf:resource="#entity_30" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikatp.Ikatp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_14">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#process_3">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="#mediator_3">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="#entity_12">
+                      <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:64338" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="#source_5" semsim:hasMultiplier="1.0">
+                  <semsim:hasPhysicalEntityReference rdf:resource="#entity_9" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:name>ATP-sensitive K+ current</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00318" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>ATP-sensitive potassium current in electrical/calcium compartment of the pancreatic beta cell</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#membrane.Ikatp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_4">
+          <semsim:physicalPropertyOf rdf:resource="#process_3" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00318" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>ATP-sensitive potassium current in electrical/calcium compartment of the pancreatic beta cell</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JF1F0.delta_psi">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_57">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Mitochondrial inner membrane potential changes</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jmito.JNaCa">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_74">
+          <semsim:physicalPropertyOf rdf:resource="#process_8" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Calcium flux from mitochondria to the cytosol</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#c.Jmem">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_91">
+          <semsim:physicalPropertyOf rdf:resource="#process_12" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Calcium flux across the plasma membrane.</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jer.Jer">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_100">
+          <semsim:physicalPropertyOf rdf:resource="#process_11" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux of calcium out of the endoplasmic reticulun</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Cam">
+      <title xml:lang="en">Cam</title>
+      <dcterms:alternative xml:lang="en">mitochondrial calcium concentration</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Caer">
+      <title xml:lang="en">Caer</title>
+      <dcterms:alternative xml:lang="en">calcium</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Caer.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#NADHm_NADHm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_37">
+          <semsim:physicalPropertyOf rdf:resource="#entity_30" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JF1F0.JF1F0">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_55">
+          <semsim:physicalPropertyOf rdf:resource="#process_10" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux of F1F0 ATP synthase</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPDH.NADm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_33">
+          <semsim:physicalPropertyOf rdf:resource="#entity_27" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#delta_psi.JANT">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_48">
+          <semsim:physicalPropertyOf rdf:resource="#process_7" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ica.Ica">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_8">
+          <semsim:physicalPropertyOf rdf:resource="#process_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00318" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#F6P">
+      <title xml:lang="en">F6P</title>
+      <dcterms:alternative xml:lang="en">fructose 6-phosphate</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ica">
+      <title xml:lang="en">Ica</title>
+      <dcterms:alternative xml:lang="en">voltage-dependent calcium current</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#membrane.Ica">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_1">
+          <semsim:physicalPropertyOf rdf:resource="#process_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00318" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JO.JO">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_40">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="#entity_31">
+              <ro:part_of rdf:resource="#entity_21" />
+              <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/chebi/CHEBI:15379" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Consumption of Oxygen by the mitochondria</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jleak">
+      <title xml:lang="en">Jleak</title>
+      <dcterms:alternative xml:lang="en">rate of calcium leakage out of the endoplasmic reticulum</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jhyd.c">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_85">
+          <semsim:physicalPropertyOf rdf:resource="#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#delta_psi.JHres">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_46">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux through respiration-driven proton pumps</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#membrane.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#ADPm">
+      <title xml:lang="en">ADPm</title>
+      <dcterms:alternative xml:lang="en">mitochondrial ADP</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JHatp.JF1F0">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_59">
+          <semsim:physicalPropertyOf rdf:resource="#process_10" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux of F1F0 ATP synthase</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#c">
+      <title xml:lang="en">c</title>
+      <dcterms:alternative xml:lang="en">cytosolic calcium</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#FBP.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#G6P">
+      <title xml:lang="en">G6P</title>
+      <dcterms:alternative xml:lang="en">glucose 6-phosphate</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikca">
+      <title xml:lang="en">Ikca</title>
+      <dcterms:alternative xml:lang="en">calcium-activated potassium current</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jleak.c">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_96">
+          <semsim:physicalPropertyOf rdf:resource="#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#NADm">
+      <title xml:lang="en">NADm</title>
+      <dcterms:alternative xml:lang="en">mitochondrial NAD</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JGPDH">
+      <title xml:lang="en">JGPDH</title>
+      <dcterms:alternative xml:lang="en">rate of the glyceride 3-P dehydrogenase reaction</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JNaCa.JNaCa">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_69">
+          <semsim:physicalPropertyOf rdf:resource="#process_8" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Calcium flux from mitochondria to the cytosol</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPDH.JPDH">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_32">
+          <semsim:physicalPropertyOf rdf:resource="#process_6" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JSERCA.JSERCA">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_98">
+          <semsim:physicalPropertyOf rdf:resource="#process_14" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux into the ER from the cytosol is through SERCA</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JHleak">
+      <title xml:lang="en">JHleak</title>
+      <dcterms:alternative xml:lang="en">proton leakage into the mitochodria down the proton gradient</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#NADHm.JO">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_39">
+          <semsim:physicalPropertyOf rdf:resource="#entity_31" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Consumption of Oxygen by the mitochondria</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikca.c">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_12">
+          <semsim:physicalPropertyOf rdf:resource="#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#delta_psi">
+      <title xml:lang="en">delta_psi</title>
+      <dcterms:alternative xml:lang="en">mitochondrial inner membrane potential</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikatp.time">
+      <bqbiol:is rdf:resource="https://identifiers.org/opb/OPB_01023" />
+    </rdf:Description>
+    <rdf:Description rdf:about="#JANT">
+      <title xml:lang="en">JANT</title>
+      <dcterms:alternative xml:lang="en">rate of ADP and ATP flux through the adenine nucleotide translocator</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Juni.delta_psi">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_68">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Mitochondrial inner membrane potential changes</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JHleak.delta_psi">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_61">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00378" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Mitochondrial inner membrane potential changes</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ikatp.mgadp">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_15">
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#F6P.G6P">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_27">
+          <semsim:physicalPropertyOf rdf:resource="#entity_23" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#c.Jer">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_90">
+          <semsim:physicalPropertyOf rdf:resource="#process_11" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux of calcium out of the endoplasmic reticulun</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#JPFK.FBP">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_31">
+          <semsim:physicalPropertyOf rdf:resource="#entity_22" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jmem.c">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_93">
+          <semsim:physicalPropertyOf rdf:resource="#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#FBP.JGPDH">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_25">
+          <semsim:physicalPropertyOf rdf:resource="#process_4" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Ik">
+      <title xml:lang="en">Ik</title>
+      <dcterms:alternative xml:lang="en">voltage-dependent potassium current</dcterms:alternative>
+    </rdf:Description>
+    <rdf:Description rdf:about="#Jmito.Juni">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_75">
+          <semsim:physicalPropertyOf rdf:resource="#process_9" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux through calcium uniporters</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="#ATPm.ADPm">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_80">
+          <semsim:physicalPropertyOf rdf:resource="#entity_42" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+    <rdf:Description rdf:about="#ADPm.JANT">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="#property_77">
+          <semsim:physicalPropertyOf rdf:resource="#process_7" />
+          <semsim:hasPhysicalDefinition rdf:resource="https://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+    </rdf:Description>
+  </rdf:RDF>
+</model>
+

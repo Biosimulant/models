@@ -1,0 +1,326 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- NOTE: ATP was used in G_GHK fitting, but it is not treated as an input species to the bond graph of this model.-->
+<model name="cardiac_AP_K_ATP_only" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+    </import>
+    <component name="environment">
+        <variable initial_value="0" name="t" public_interface="out" units="second"/>
+        <variable initial_value="8.314" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96485" name="F" public_interface="out" units="C_per_mol"/>
+        <variable initial_value="153400" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="27.9828" name="q_K_o" public_interface="out" units="fmol"/>
+        <variable initial_value="5510" name="q_K_i" public_interface="out" units="fmol"/>
+        <variable name="v_K_ATP" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_K_o</ci>
+                </apply>
+                <ci>v_K_ATP</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_K_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_K_ATP</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="-13039" name="q_mem" public_interface="out" units="fC"/>
+        <variable name="I_mem_K_ATP" public_interface="in" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_mem</ci>
+                </apply>
+                <ci>I_mem_K_ATP</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="K_ATP_parameters">
+        <variable initial_value="1.1812e-05" name="kappa_K_ATP" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="9.99086e-05" name="K_K_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000663229" name="K_K_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1" name="zK" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="K_ATP">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="C_m" public_interface="in" units="fF"/>
+        <variable name="K_K_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_K_i" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_K_ATP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="zK" public_interface="in" units="dimensionless"/>
+        <variable name="q_K_o" public_interface="in" units="fmol"/>
+        <variable name="q_K_i" public_interface="in" units="fmol"/>
+        <variable name="q_mem" public_interface="in" units="fC"/>
+        <variable name="mu_K_o" units="J_per_mol"/>
+        <variable name="mu_K_i" units="J_per_mol"/>
+        <variable name="Am_K_ATP" units="J_per_mol"/>
+        <variable name="Af_K_ATP" units="J_per_mol"/>
+        <variable name="Ar_K_ATP" units="J_per_mol"/>
+        <variable name="v_K_ATP" public_interface="out" units="fmol_per_sec"/>
+        <variable name="V_mem" units="volt"/>
+        <variable name="I_mem_K_ATP" public_interface="out" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_K_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K_o</ci>
+                            <ci>q_K_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_K_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K_i</ci>
+                            <ci>q_K_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_K_ATP</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_K_i</ci>
+                    <apply>
+                        <times/>
+                        <ci>zK</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Am_K_ATP</ci>
+                <apply>
+                    <times/>
+                    <ci>zK</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_K_ATP</ci>
+                <ci>mu_K_o</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_K_ATP</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <apply>
+                        <minus/>
+                        <ci>zK</ci>
+                    </apply>
+                    <ci>v_K_ATP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_K_ATP</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>kappa_K_ATP</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_K_ATP</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_K_ATP</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_K_ATP</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>kappa_K_ATP</ci>
+                                        <ci>Am_K_ATP</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_K_ATP</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_K_ATP</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_K_ATP</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="K_ATP" component_2="K_ATP_parameters"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="kappa_K_ATP" variable_2="kappa_K_ATP"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <connection>
+        <map_components component_1="K_ATP" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="v_K_ATP" variable_2="v_K_ATP"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_K_ATP" variable_2="I_mem_K_ATP"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

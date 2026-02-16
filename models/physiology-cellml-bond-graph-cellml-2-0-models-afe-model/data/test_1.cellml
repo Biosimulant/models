@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/2.0#" name="test_1" id="b4da55">
+  <units name="millisecond" id="b4da56">
+    <unit prefix="milli" units="second" id="b4da5c"/>
+  </units>
+  <units name="concentration_unit" id="b4da57">
+    <unit prefix="micro" units="mole" id="b4da5d"/>
+    <unit exponent="-1" prefix="nano" units="litre" id="b4da5e"/>
+  </units>
+  <units name="flow_rate_unit" id="b4da58">
+    <unit units="concentration_unit" id="b4da5f"/>
+    <unit exponent="-1" prefix="milli" units="second" id="b4da60"/>
+  </units>
+  <units name="mV" id="b4da59">
+    <unit prefix="milli" units="volt" id="b4da61"/>
+  </units>
+  <units name="C_per_mol" id="b4da5a">
+    <unit units="coulomb" id="b4da62"/>
+    <unit exponent="-1" prefix="1" units="mole" id="b4da63"/>
+  </units>
+  <units name="J_per_K_per_mol" id="b4da5b">
+    <unit units="joule" id="b4da64"/>
+    <unit exponent="-1" prefix="1" units="kelvin" id="b4da65"/>
+    <unit exponent="-1" prefix="1" units="mole" id="b4da66"/>
+  </units>
+  <component name="main" id="b4da67">
+    <variable name="t" units="millisecond" interface="public" id="b4da68"/>
+    <variable name="T" units="kelvin" initial_value="310" interface="public" id="b4da69"/>
+    <variable name="F" units="C_per_mol" initial_value="96485" interface="public" id="b4da6a"/>
+    <variable name="R" units="J_per_K_per_mol" initial_value="8.31" interface="public" id="b4da6b"/>
+    <variable name="n_Ai" units="dimensionless" initial_value="2" interface="public" id="b4da6c"/>
+    <variable name="n_Ao" units="dimensionless" initial_value="5" interface="public" id="b4da6d"/>
+    <variable name="V_SS" units="flow_rate_unit" interface="public" id="b4da6e"/>
+    <variable name="q_Ao" units="concentration_unit" initial_value="3" interface="public" id="b4da6f"/>
+    <variable name="q_Ai" units="concentration_unit" initial_value="2" interface="public" id="b4da70"/>
+    <variable name="p1" units="dimensionless" initial_value="19.6913717343264" interface="public" id="b4da71"/>
+    <variable name="p2" units="dimensionless" initial_value="0.496904688659334" interface="public" id="b4da72"/>
+    <variable name="p3" units="dimensionless" initial_value="1.1628425668181" interface="public" id="b4da73"/>
+    <variable name="p4" units="dimensionless" initial_value="0.844848303528878" interface="public" id="b4da74"/>
+    <variable name="p5" units="dimensionless" initial_value="0.680520344464175" interface="public" id="b4da75"/>
+    <variable name="p6" units="dimensionless" initial_value="0.949770713377036" interface="public" id="b4da76"/>
+    <variable name="X" units="dimensionless" initial_value="0" interface="public" id="b4da77"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:cellml="http://www.cellml.org/cellml/2.0#">
+      <apply>
+        <eq/>
+        <ci>V_SS</ci>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci>p1</ci>
+              <ci>q_Ao</ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci>p2</ci>
+              <ci>q_Ai</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>p3</ci>
+            <apply>
+              <times/>
+              <ci>p4</ci>
+              <ci>q_Ao</ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci>p5</ci>
+              <ci>q_Ai</ci>
+              <ci>q_Ao</ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci>p6</ci>
+              <ci>q_Ai</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>t</ci>
+          </bvar>
+          <ci>X</ci>
+        </apply>
+        <cn cellml:units="dimensionless">0</cn>
+      </apply>
+    </math>
+  </component>
+</model>

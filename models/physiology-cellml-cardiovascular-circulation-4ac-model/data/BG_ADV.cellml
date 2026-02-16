@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="BG_ADV" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="Units.cellml">
+        <units name="m3" units_ref="m3"/>
+        <units name="m3_per_s" units_ref="m3_per_s"/>
+        <units name="m3_per_s2" units_ref="m3_per_s2"/>
+        <units name="m6_per_J" units_ref="m6_per_J"/>
+        <units name="per_m" units_ref="per_m"/>
+        <units name="J_per_m3" units_ref="J_per_m3"/>
+        <units name="Js_per_m6" units_ref="Js_per_m6"/>
+        <units name="Js2_per_m6" units_ref="Js2_per_m6"/>
+        <units name="Js2_per_m5" units_ref="Js2_per_m5"/>
+        <units name="J_per_s" units_ref="J_per_s"/>
+        <units name="J_per_m6" units_ref="J_per_m6"/>
+        <units name="Js_per_m3" units_ref="Js_per_m3"/>
+        <units name="UnitValve" units_ref="UnitValve"/>
+    </import>
+    <import xlink:href="Parameters86.cellml">
+        <component component_ref="Parameters_Test" name="Parameters_Test"/>
+    </import>
+    <import xlink:href="BG_Modules.cellml">
+        <component component_ref="pv_jII_type" name="parent_vessel_module"/>
+    </import>
+    <import xlink:href="BG_Modules.cellml">
+        <component component_ref="pv_type" name="first_vessel_module"/>
+    </import>
+    <import xlink:href="BG_Modules.cellml">
+        <component component_ref="pv_type" name="second_vessel_module"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+    </component>
+    <component name="main">
+        <variable name="t" private_interface="out" public_interface="in" units="second"/>
+        <variable name="u_in" private_interface="out" units="J_per_m3"/>
+        <variable name="v_in" private_interface="in" units="m3_per_s"/>
+        <variable initial_value="1.0e-6" name="v_out_1" private_interface="out" units="m3_per_s"/>
+        <variable initial_value="0.5e-6" name="v_out_2" private_interface="out" units="m3_per_s"/>
+        <variable name="conc" private_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>u_in</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <sin/>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dimensionless">5</cn>
+                                <ci>t</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="main" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="main" component_2="parent_vessel_module"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="v_in" variable_2="v"/>
+        <map_variables variable_1="u_in" variable_2="u_in"/>
+        <map_variables variable_1="conc" variable_2="c_in"/>
+    </connection>
+    <connection>
+        <map_components component_1="main" component_2="first_vessel_module"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="v_out_1" variable_2="v_out"/>
+    </connection>
+    <connection>
+        <map_components component_1="main" component_2="second_vessel_module"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="v_out_2" variable_2="v_out"/>
+    </connection>
+    <connection>
+        <map_components component_1="parent_vessel_module" component_2="first_vessel_module"/>
+        <map_variables variable_1="v_out_1" variable_2="v"/>
+        <map_variables variable_1="u" variable_2="u_in"/>
+        <map_variables variable_1="c_out" variable_2="c_in"/>
+    </connection>
+    <connection>
+        <map_components component_1="parent_vessel_module" component_2="second_vessel_module"/>
+        <map_variables variable_1="v_out_2" variable_2="v"/>
+        <map_variables variable_1="u" variable_2="u_in"/>
+        <!--        vars c_out and c_in;-->
+    </connection>
+    <component name="parent_vessel">
+        <variable name="u" public_interface="in" units="J_per_m3"/>
+        <variable name="v" public_interface="in" units="m3_per_s"/>
+        <variable name="E" public_interface="in" units="J_per_m3"/>
+        <variable name="r" public_interface="in" units="metre"/>
+        <variable name="h" public_interface="in" units="metre"/>
+        <variable name="l" public_interface="in" units="metre"/>
+    </component>
+    <component name="first_vessel">
+        <variable name="u" public_interface="in" units="J_per_m3"/>
+        <variable name="v" public_interface="in" units="m3_per_s"/>
+        <variable name="E" public_interface="in" units="J_per_m3"/>
+        <variable name="r" public_interface="in" units="metre"/>
+        <variable name="h" public_interface="in" units="metre"/>
+        <variable name="l" public_interface="in" units="metre"/>
+    </component>
+    <component name="second_vessel">
+        <variable name="u" public_interface="in" units="J_per_m3"/>
+        <variable name="v" public_interface="in" units="m3_per_s"/>
+        <variable name="E" public_interface="in" units="J_per_m3"/>
+        <variable name="r" public_interface="in" units="metre"/>
+        <variable name="h" public_interface="in" units="metre"/>
+        <variable name="l" public_interface="in" units="metre"/>
+    </component>
+    <connection>
+        <map_components component_1="parent_vessel" component_2="parent_vessel_module"/>
+        <map_variables variable_1="u" variable_2="u"/>
+        <map_variables variable_1="v" variable_2="v"/>
+        <map_variables variable_1="E" variable_2="E_m"/>
+        <map_variables variable_1="r" variable_2="radius"/>
+        <map_variables variable_1="h" variable_2="thickness"/>
+        <map_variables variable_1="l" variable_2="length"/>
+    </connection>
+    <connection>
+        <map_components component_1="first_vessel" component_2="first_vessel_module"/>
+        <map_variables variable_1="u" variable_2="u"/>
+        <map_variables variable_1="v" variable_2="v"/>
+        <map_variables variable_1="E" variable_2="E_m"/>
+        <map_variables variable_1="r" variable_2="radius"/>
+        <map_variables variable_1="h" variable_2="thickness"/>
+        <map_variables variable_1="l" variable_2="length"/>
+    </connection>
+    <connection>
+        <map_components component_1="second_vessel" component_2="second_vessel_module"/>
+        <map_variables variable_1="u" variable_2="u"/>
+        <map_variables variable_1="v" variable_2="v"/>
+        <map_variables variable_1="E" variable_2="E_m"/>
+        <map_variables variable_1="r" variable_2="radius"/>
+        <map_variables variable_1="h" variable_2="thickness"/>
+        <map_variables variable_1="l" variable_2="length"/>
+    </connection>
+    <connection>
+        <map_components component_1="Parameters_Test" component_2="parent_vessel_module"/>
+        <map_variables variable_1="l_parent_vessel" variable_2="l"/>
+        <map_variables variable_1="E_parent_vessel" variable_2="E"/>
+        <map_variables variable_1="r_parent_vessel" variable_2="r"/>
+    </connection>
+    <connection>
+        <map_components component_1="Parameters_Test" component_2="first_vessel_module"/>
+        <map_variables variable_1="l_first_vessel" variable_2="l"/>
+        <map_variables variable_1="E_first_vessel" variable_2="E"/>
+        <map_variables variable_1="r_first_vessel" variable_2="r"/>
+    </connection>
+    <connection>
+        <map_components component_1="Parameters_Test" component_2="second_vessel_module"/>
+        <map_variables variable_1="l_second_vessel" variable_2="l"/>
+        <map_variables variable_1="E_second_vessel" variable_2="E"/>
+        <map_variables variable_1="r_second_vessel" variable_2="r"/>
+    </connection>
+    <group>
+        <relationship_ref relationship="encapsulation"/>
+        <component_ref component="main">
+            <component_ref component="Parameters_Test"/>
+            <component_ref component="first_vessel_module"/>
+            <component_ref component="second_vessel_module"/>
+            <component_ref component="parent_vessel_module"/>
+            <component_ref component="first_vessel"/>
+            <component_ref component="second_vessel"/>
+            <component_ref component="parent_vessel"/>
+        </component_ref>
+    </group>
+</model>

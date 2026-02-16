@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="CaB_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="per_mol" units_ref="per_mol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="mol_per_s" units_ref="mol_per_s"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="mA_per_mM" units_ref="mA_per_mM"/>
+    </import>
+    <component name="environment">
+        <variable name="t" public_interface="out" units="second"/>
+        <variable initial_value="1e6" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="25.8" name="w_i" public_interface="out" units="pL"/>
+        <variable initial_value="3.52" name="w_o" public_interface="out" units="pL"/>
+        <variable initial_value="-8.5e4" name="q_mem" public_interface="out" units="fC"/>
+        <variable initial_value="8.31" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96500" name="F" public_interface="out" units="C_per_mol"/>
+        <variable name="v_CaB" public_interface="in" units="fmol_per_sec"/>
+        <variable initial_value="9.3276" name="q_Ca_o" public_interface="out" units="fmol"/>
+        <variable initial_value="0.00456" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <variable name="V_mem" public_interface="out" units="J_per_C"/>
+        <variable name="I_mem_CaB" public_interface="in" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_CaB</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_o</ci>
+                </apply>
+                <ci>v_CaB</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_mem</ci>
+                </apply>
+                <ci>I_mem_CaB</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="CaB_parameters">
+        <variable initial_value="2.73233e-05" name="kappa_CaB" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.000151953" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00100872" name="K_Ca_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2" name="zCa" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="CaB">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="zCa" public_interface="in" units="dimensionless"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="K_Ca_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_o" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_CaB" public_interface="in" units="fmol_per_sec"/>
+        <variable name="q_Ca_i" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_o" public_interface="in" units="fmol"/>
+        <variable name="mu_Ca_i" units="J_per_mol"/>
+        <variable name="mu_Ca_o" units="J_per_mol"/>
+        <variable name="Af_CaB" units="J_per_mol"/>
+        <variable name="Ar_CaB" units="J_per_mol"/>
+        <variable name="Am_CaB" units="J_per_mol"/>
+        <variable name="q_mem" public_interface="in" units="fC"/>
+        <variable name="v_CaB" public_interface="out" units="fmol_per_sec"/>
+        <variable name="I_mem_CaB" public_interface="out" units="fA"/>
+        <variable name="V_mem" public_interface="in" units="J_per_C"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_Ca_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_i</ci>
+                            <ci>q_Ca_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_o</ci>
+                            <ci>q_Ca_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_CaB</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_Ca_i</ci>
+                    <apply>
+                        <times/>
+                        <ci>zCa</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_CaB</ci>
+                <ci>mu_Ca_o</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Am_CaB</ci>
+                <apply>
+                    <times/>
+                    <ci>zCa</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_CaB</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>kappa_CaB</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_CaB</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_CaB</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_CaB</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>kappa_CaB</ci>
+                                        <ci>Am_CaB</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_CaB</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_CaB</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_CaB</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_CaB</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>zCa</ci>
+                    </apply>
+                    <ci>F</ci>
+                    <ci>v_CaB</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="CaB"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+        <map_variables variable_1="v_CaB" variable_2="v_CaB"/>
+        <map_variables variable_1="I_mem_CaB" variable_2="I_mem_CaB"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="V_mem" variable_2="V_mem"/>
+    </connection>
+    <connection>
+        <map_components component_1="CaB" component_2="CaB_parameters"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="kappa_CaB" variable_2="kappa_CaB"/>
+        <map_variables variable_1="zCa" variable_2="zCa"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

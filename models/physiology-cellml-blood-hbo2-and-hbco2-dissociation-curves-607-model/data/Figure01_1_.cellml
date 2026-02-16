@@ -1,0 +1,1822 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="my_model" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#">
+    <!--Nima October 2020 (CellML version of the mathematical model of O2 and CO2 saturations of hemoglobin which was first developed by Ranjan K. Dash and James B. Bassingthwaighte in Matlab, Jsim and SBML-->
+    <units name="M">
+        <unit units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="per_M">
+        <unit exponent="-1" units="M"/>
+    </units>
+    <units name="mmHg">
+        <unit multiplier="133.322" units="newton"/>
+        <unit exponent="-2" units="metre"/>
+    </units>
+    <units name="M_per_mmHg">
+        <unit units="M"/>
+        <unit exponent="-1" units="mmHg"/>
+    </units>
+    <units name="C">
+        <unit units="celsius"/>
+    </units>
+    <component name="main">
+        <!-- Parameters those are fixed in the model (i.e., water fractions, hemoglobin
+ concentration in RBCs, equilibrium constants, and Hill coefficient)-->
+        <!--fractional water space in plasma-->
+        <variable initial_value="0.94" name="Wpl" units="dimensionless"/>
+        <!--fractional water space in RBCs-->
+        <variable initial_value="0.65" name="Wrbc" units="dimensionless"/>
+        <!--Gibbs-Donnan ratio across RBC membrane-->
+        <variable initial_value="0.69" name="Rrbc" units="dimensionless"/>
+        <!--hemoglobin concentration in RBCs;M-->
+        <variable initial_value="5.18e-3" name="Hbrbc" units="M"/>
+        <!--CO2 + HbNH2 equilibrium constant-->
+        <variable initial_value="2.95e-5" name="K2" units="dimensionless"/>
+        <!--HbNHCOOH dissociation constant; M-->
+        <variable initial_value="1.0e-6" name="K2dp" units="M"/>
+        <!--kf2p/kb2p; 1/M-->
+        <variable name="K2p" units="per_M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>K2p</ci>
+                <apply>
+                    <divide/>
+                    <ci>K2</ci>
+                    <ci>K2dp</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--CO2 + O2HbNH2 equilibrium constant-->
+        <variable initial_value="2.51e-5" name="K3" units="dimensionless"/>
+        <!--O2HbNHCOOH dissociation constant; M-->
+        <variable initial_value="1.0e-6" name="K3dp" units="M"/>
+        <!--kf3p/kb3p; 1/M-->
+        <variable name="K3p" units="per_M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>K3p</ci>
+                <apply>
+                    <divide/>
+                    <ci>K3</ci>
+                    <ci>K3dp</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--HbNH3+ dissociation constant; M-->
+        <variable initial_value="2.63e-8" name="K5dp" units="M"/>
+        <!--O2HbNH3+ dissociation constant; M-->
+        <variable initial_value="1.91e-8" name="K6dp" units="M"/>
+        <!--Hill coefficient-->
+        <variable initial_value="2.7" name="nhill" units="dimensionless"/>
+        <variable name="n0" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>n0</ci>
+                <apply>
+                    <minus/>
+                    <ci>nhill</ci>
+                    <cn cellml:units="dimensionless">1.0</cn>
+                </apply>
+            </apply>
+        </math>
+        <!-- Variables those are privately fixed in the model with the standard 
+ physiological values (i.e., pH0, pCO20, DPG0, Temp0)-->
+        <!--standard O2 partial pressure in blood; mmHg-->
+        <variable initial_value="100.0" name="pO20" units="mmHg"/>
+        <!--standard CO2 partial pressure in blood; mmHg-->
+        <variable initial_value="40.0" name="pCO20" units="mmHg"/>
+        <!--standard pH in RBCs-->
+        <variable initial_value="7.24" name="pH0" units="dimensionless"/>
+        <!--standard 2;3-DPG concentration in RBCs; M-->
+        <variable initial_value="4.65e-3" name="DPG0" units="M"/>
+        <!--standard temperature in blood;degC-->
+        <variable initial_value="37.0" name="Temp0" units="C"/>
+        <!--a multiplicative factor; M/mmHg-->
+        <variable name="Fact" units="M_per_mmHg"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Fact</ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless" type="e-notation">1.0<sep/>-6</cn>
+                    <ci>Wpl</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--solubility of O2 in water at 37 C; M/mmHg-->
+        <variable name="alpha_O2_0" units="M_per_mmHg"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>alpha_O2_0</ci>
+                <apply>
+                    <times/>
+                    <ci>Fact</ci>
+                    <cn cellml:units="dimensionless">1.37</cn>
+                </apply>
+            </apply>
+        </math>
+        <!--solubility of CO2 in water at 37 C; M/mmHg-->
+        <variable name="alpha_CO2_0" units="M_per_mmHg"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>alpha_CO2_0</ci>
+                <apply>
+                    <times/>
+                    <ci>Fact</ci>
+                    <cn cellml:units="dimensionless">30.7</cn>
+                </apply>
+            </apply>
+        </math>
+        <!--standard O2 concentration in RBCs; M-->
+        <variable name="O20" units="M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>O20</ci>
+                <apply>
+                    <times/>
+                    <ci>alpha_O2_0</ci>
+                    <ci>pO20</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--standard CO2 concentration in RBCs; M-->
+        <variable name="CO20" units="M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>CO20</ci>
+                <apply>
+                    <times/>
+                    <ci>alpha_CO2_0</ci>
+                    <ci>pCO20</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--standard H+ concentration in RBCs; M-->
+        <variable name="Hp0" units="M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Hp0</ci>
+                <apply>
+                    <power/>
+                    <cn cellml:units="dimensionless">10</cn>
+                    <apply>
+                        <minus/>
+                        <ci>pH0</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--standard pH in plasma-->
+        <variable name="pHpl0" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>pHpl0</ci>
+                <apply>
+                    <minus/>
+                    <ci>pH0</ci>
+                    <apply>
+                        <log/>
+                        <ci>Rrbc</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--standard pO2 at 50% SHbO2; mmHg-->
+        <variable initial_value="26.6" name="P500" units="mmHg"/>
+        <!--standard O2 at 50% SHbO2; M-->
+        <variable name="C500" units="M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>C500</ci>
+                <apply>
+                    <times/>
+                    <ci>alpha_O2_0</ci>
+                    <ci>P500</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Calculation of intermediate variables and the indices n1, n2, n3, and 
+ n4 in the computations of SHbO2 & SHbCO2-->
+        <!--fractional water space in blood-->
+        <variable name="Wbl" units="dimensionless"/>
+        <!--temperature in blood;degC-->
+        <variable initial_value="37.0" name="Temp" units="dimensionless"/>
+        <!--Hematocrit; volume fraction of blood occupied by RBCs-->
+        <variable initial_value="0.45" name="Hct" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Wbl</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>Hct</ci>
+                        </apply>
+                        <ci>Wpl</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>Hct</ci>
+                        <ci>Wrbc</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--pH in plasma-->
+        <variable name="pHpl" units="dimensionless"/>
+        <!--pH in rbc-->
+        <variable initial_value="6.68" name="pH" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>pH</ci>
+                </apply>
+                <cn cellml:units="dimensionless">1</cn>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>pHpl</ci>
+                <apply>
+                    <minus/>
+                    <ci>pH</ci>
+                    <apply>
+                        <log/>
+                        <ci>Rrbc</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="pHpldiff" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>pHpldiff</ci>
+                <apply>
+                    <minus/>
+                    <ci>pHpl</ci>
+                    <ci>pHpl0</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--rbc pCo2,mmHg-->
+        <variable initial_value="40" name="pCO2" units="mmHg"/>
+        <variable name="pCO2diff" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>pCO2diff</ci>
+                <apply>
+                    <minus/>
+                    <ci>pCO2</ci>
+                    <ci>pCO20</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--rbc pO2,mmHg-->
+        <variable initial_value="80" name="pO2" units="mmHg"/>
+        <!-- Concentration of 2,3-DPG in RBCs,M-->
+        <variable initial_value="4.65e-3" name="DPG" units="M"/>
+        <variable name="pHdiff" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>pHdiff</ci>
+                <apply>
+                    <minus/>
+                    <ci>pH</ci>
+                    <ci>pH0</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="DPGdiff" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>DPGdiff</ci>
+                <apply>
+                    <minus/>
+                    <ci>DPG</ci>
+                    <ci>DPG0</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="Tempdiff" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Tempdiff</ci>
+                <apply>
+                    <minus/>
+                    <ci>Temp</ci>
+                    <ci>Temp0</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--solubility of O2 in water-->
+        <variable name="alpha_O2" units="M_per_mmHg"/>
+        <!--solubility of CO2 in water-->
+        <variable name="alpha_CO2" units="M_per_mmHg"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>alpha_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>Fact</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1.37</cn>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dimensionless">0.0137</cn>
+                                <ci>Tempdiff</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">0.00058</cn>
+                            <apply>
+                                <power/>
+                                <ci>Tempdiff</ci>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>alpha_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>Fact</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">30.7</cn>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dimensionless">0.57</cn>
+                                <ci>Tempdiff</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">0.02</cn>
+                            <apply>
+                                <power/>
+                                <ci>Tempdiff</ci>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="pK1" units="dimensionless"/>
+        <!--pK of CO2 hydration reaction,-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>pK1</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">6.091</cn>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">0.0434</cn>
+                            <ci>pHpldiff</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">0.0014</cn>
+                        <ci>Tempdiff</ci>
+                        <ci>pHpldiff</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--Equilibrium constant for overall CO2 hydration reaction,M-->
+        <variable name="K1" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>K1</ci>
+                <apply>
+                    <power/>
+                    <cn cellml:units="dimensionless">10</cn>
+                    <apply>
+                        <minus/>
+                        <ci>pK1</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--M-->
+        <variable name="O2" units="M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>O2</ci>
+                <apply>
+                    <times/>
+                    <ci>alpha_O2</ci>
+                    <ci>pO2</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--M-->
+        <variable name="CO2" units="M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>alpha_CO2</ci>
+                    <ci>pCO2</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--H+ concentration in RBCs,M-->
+        <variable name="Hp" units="M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Hp</ci>
+                <apply>
+                    <power/>
+                    <cn cellml:units="dimensionless">10</cn>
+                    <apply>
+                        <minus/>
+                        <ci>pH</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--H+ concentration in plasma,M-->
+        <variable name="Hppl" units="M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Hppl</ci>
+                <apply>
+                    <power/>
+                    <cn cellml:units="dimensionless">10</cn>
+                    <apply>
+                        <minus/>
+                        <ci>pHpl</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--*******-->
+        <variable name="Term1" units="per_M"/>
+        <variable name="Term2" units="per_M"/>
+        <variable name="Term3" units="dimensionless"/>
+        <variable name="Term4" units="dimensionless"/>
+        <variable name="Term10" units="per_M"/>
+        <variable name="Term20" units="per_M"/>
+        <variable name="Term30" units="dimensionless"/>
+        <variable name="Term40" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Term1</ci>
+                <apply>
+                    <times/>
+                    <ci>K2p</ci>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>K2dp</ci>
+                            <ci>Hp</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Term2</ci>
+                <apply>
+                    <times/>
+                    <ci>K3p</ci>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>K3dp</ci>
+                            <ci>Hp</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Term3</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <divide/>
+                        <ci>Hp</ci>
+                        <ci>K5dp</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Term4</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <divide/>
+                        <ci>Hp</ci>
+                        <ci>K6dp</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Term10</ci>
+                <apply>
+                    <times/>
+                    <ci>K2p</ci>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>K2dp</ci>
+                            <ci>Hp0</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Term20</ci>
+                <apply>
+                    <times/>
+                    <ci>K3p</ci>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>K3dp</ci>
+                            <ci>Hp0</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Term30</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <divide/>
+                        <ci>Hp0</ci>
+                        <ci>K5dp</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Term40</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <divide/>
+                        <ci>Hp0</ci>
+                        <ci>K6dp</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="Kratio10" units="dimensionless"/>
+        <variable name="Kratio11" units="dimensionless"/>
+        <variable name="Kratio12" units="dimensionless"/>
+        <variable name="Kratio20" units="M"/>
+        <variable name="Kratio21" units="M"/>
+        <variable name="Kratio22" units="M"/>
+        <!--1/M-->
+        <variable name="K4dp" units="dimensionless"/>
+        <!--1/M-->
+        <variable name="K4tp" units="per_M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Kratio10</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Term10</ci>
+                            <ci>CO20</ci>
+                        </apply>
+                        <ci>Term30</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Term20</ci>
+                            <ci>CO20</ci>
+                        </apply>
+                        <ci>Term40</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Kratio11</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Term1</ci>
+                            <ci>CO20</ci>
+                        </apply>
+                        <ci>Term3</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Term2</ci>
+                            <ci>CO20</ci>
+                        </apply>
+                        <ci>Term4</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Kratio12</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Term10</ci>
+                            <ci>alpha_CO2_0</ci>
+                            <ci>pCO2</ci>
+                        </apply>
+                        <ci>Term30</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Term20</ci>
+                            <ci>alpha_CO2_0</ci>
+                            <ci>pCO2</ci>
+                        </apply>
+                        <ci>Term40</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>K4dp</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Kratio10</ci>
+                        <apply>
+                            <power/>
+                            <ci>O20</ci>
+                            <ci>n0</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <ci>C500</ci>
+                        <ci>nhill</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>K4tp</ci>
+                <apply>
+                    <divide/>
+                    <ci>K4dp</ci>
+                    <apply>
+                        <power/>
+                        <ci>O20</ci>
+                        <ci>n0</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Kratio20</ci>
+                <apply>
+                    <divide/>
+                    <ci>Kratio10</ci>
+                    <ci>K4tp</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Kratio21</ci>
+                <apply>
+                    <divide/>
+                    <ci>Kratio11</ci>
+                    <ci>K4tp</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Kratio22</ci>
+                <apply>
+                    <divide/>
+                    <ci>Kratio12</ci>
+                    <ci>K4tp</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--mmHg-->
+        <variable name="P501" units="mmHg"/>
+        <!--mmHg-->
+        <variable name="P502" units="mmHg"/>
+        <!--mmHg-->
+        <variable name="P503" units="mmHg"/>
+        <!--mmHg-->
+        <variable name="P504" units="mmHg"/>
+        <!--M-->
+        <variable name="C501" units="M"/>
+        <!--M-->
+        <variable name="C502" units="M"/>
+        <!--M-->
+        <variable name="C503" units="M"/>
+        <!--M-->
+        <variable name="C504" units="M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>P501</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">26.765</cn>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">21.279</cn>
+                            <ci>pHdiff</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">8.872</cn>
+                        <apply>
+                            <power/>
+                            <ci>pHdiff</ci>
+                            <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P502</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dimensionless">26.80</cn>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">0.0428</cn>
+                        <ci>pCO2diff</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless" type="e-notation">3.64<sep/>-5</cn>
+                        <apply>
+                            <power/>
+                            <ci>pCO2diff</ci>
+                            <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P503</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">26.78</cn>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">795.633533</cn>
+                            <ci>DPGdiff</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">19660.8947</cn>
+                        <apply>
+                            <power/>
+                            <ci>DPGdiff</ci>
+                            <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P504</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dimensionless">26.75</cn>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">1.4945</cn>
+                        <ci>Tempdiff</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">0.04335</cn>
+                        <apply>
+                            <power/>
+                            <ci>Tempdiff</ci>
+                            <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">0.0007</cn>
+                        <apply>
+                            <power/>
+                            <ci>Tempdiff</ci>
+                            <cn cellml:units="dimensionless">3</cn>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C501</ci>
+                <apply>
+                    <times/>
+                    <ci>alpha_O2_0</ci>
+                    <ci>P501</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C502</ci>
+                <apply>
+                    <times/>
+                    <ci>alpha_O2_0</ci>
+                    <ci>P502</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C503</ci>
+                <apply>
+                    <times/>
+                    <ci>alpha_O2_0</ci>
+                    <ci>P503</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C504</ci>
+                <apply>
+                    <times/>
+                    <ci>alpha_O2</ci>
+                    <ci>P504</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="n1" units="dimensionless"/>
+        <variable name="n2" units="dimensionless"/>
+        <variable name="n3" units="dimensionless"/>
+        <variable name="n4" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>n1</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <apply>
+                            <lt/>
+                            <apply>
+                                <abs/>
+                                <apply>
+                                    <minus/>
+                                    <ci>pH</ci>
+                                    <ci>pH0</ci>
+                                </apply>
+                            </apply>
+                            <cn cellml:units="dimensionless" type="e-notation">1.0<sep/>-6</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <log/>
+                                    <ci>Kratio21</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>nhill</ci>
+                                    <apply>
+                                        <log/>
+                                        <ci>C501</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <ci>pH</ci>
+                                <ci>pH0</ci>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>n2</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <apply>
+                            <lt/>
+                            <apply>
+                                <abs/>
+                                <apply>
+                                    <minus/>
+                                    <ci>pCO2</ci>
+                                    <ci>pCO20</ci>
+                                </apply>
+                            </apply>
+                            <cn cellml:units="dimensionless" type="e-notation">1.0<sep/>-6</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <log/>
+                                    <ci>Kratio22</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>nhill</ci>
+                                    <apply>
+                                        <log/>
+                                        <ci>C502</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <log/>
+                                    <ci>CO20</ci>
+                                </apply>
+                                <apply>
+                                    <log/>
+                                    <ci>CO2</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>n3</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <apply>
+                            <lt/>
+                            <apply>
+                                <abs/>
+                                <apply>
+                                    <minus/>
+                                    <ci>DPG</ci>
+                                    <ci>DPG0</ci>
+                                </apply>
+                            </apply>
+                            <cn cellml:units="dimensionless" type="e-notation">1.0<sep/>-6</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <log/>
+                                    <ci>Kratio20</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>nhill</ci>
+                                    <apply>
+                                        <log/>
+                                        <ci>C503</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <log/>
+                                    <ci>DPG0</ci>
+                                </apply>
+                                <apply>
+                                    <log/>
+                                    <ci>DPG</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>n4</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <apply>
+                            <lt/>
+                            <apply>
+                                <abs/>
+                                <apply>
+                                    <minus/>
+                                    <ci>Temp</ci>
+                                    <ci>Temp0</ci>
+                                </apply>
+                            </apply>
+                            <cn cellml:units="dimensionless" type="e-notation">1.0<sep/>-6</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <log/>
+                                    <ci>Kratio20</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>nhill</ci>
+                                    <apply>
+                                        <log/>
+                                        <ci>C504</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <log/>
+                                    <ci>Temp0</ci>
+                                </apply>
+                                <apply>
+                                    <log/>
+                                    <ci>Temp</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <variable name="Term5" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Term5</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <ci>Hp0</ci>
+                            <ci>Hp</ci>
+                        </apply>
+                        <ci>n1</ci>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <ci>CO20</ci>
+                            <ci>CO2</ci>
+                        </apply>
+                        <ci>n2</ci>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <ci>DPG0</ci>
+                            <ci>DPG</ci>
+                        </apply>
+                        <ci>n3</ci>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <ci>Temp0</ci>
+                            <ci>Temp</ci>
+                        </apply>
+                        <ci>n4</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--% Calculation of Hill coefficients (KHbO2 and KHbCO2); O2 and CO2 saturations
+% of hemoglobin (SHbO2 and SHbCO2); and O2 and CO2 contents in blood. These 
+% are computed as functions of pO2 and pCO2. Also compute the concentrations
+% of all the components of HbO2 and HbCO2.-->
+        <variable name="K4p" units="per_M"/>
+        <variable name="KHbO2" units="per_M"/>
+        <variable name="KHbCO2" units="per_M"/>
+        <variable name="SHbO2" units="dimensionless"/>
+        <variable name="SHbCO2" units="dimensionless"/>
+        <variable name="O2free" units="M"/>
+        <variable name="O2bound" units="M"/>
+        <variable name="O2total" units="M"/>
+        <variable name="O2content" units="M"/>
+        <variable name="CO2free" units="M"/>
+        <variable name="CO2bicarb" units="M"/>
+        <variable name="CO2bound" units="M"/>
+        <variable name="CO2total" units="M"/>
+        <variable name="CO2content" units="M"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>K4p</ci>
+                <apply>
+                    <times/>
+                    <ci>K4dp</ci>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <ci>O2</ci>
+                            <ci>O20</ci>
+                        </apply>
+                        <ci>n0</ci>
+                    </apply>
+                    <ci>Term5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>KHbO2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>K4p</ci>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <ci>Term2</ci>
+                                <ci>CO2</ci>
+                            </apply>
+                            <ci>Term4</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Term1</ci>
+                            <ci>CO2</ci>
+                        </apply>
+                        <ci>Term3</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>KHbCO2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <ci>Term1</ci>
+                        <apply>
+                            <times/>
+                            <ci>Term2</ci>
+                            <ci>K4p</ci>
+                            <ci>O2</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>Term3</ci>
+                        <apply>
+                            <times/>
+                            <ci>Term4</ci>
+                            <ci>K4p</ci>
+                            <ci>O2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>SHbO2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>KHbO2</ci>
+                        <ci>O2</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <times/>
+                            <ci>KHbO2</ci>
+                            <ci>O2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>SHbCO2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>KHbCO2</ci>
+                        <ci>CO2</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <times/>
+                            <ci>KHbCO2</ci>
+                            <ci>CO2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2free</ci>
+                <apply>
+                    <times/>
+                    <ci>Wbl</ci>
+                    <ci>alpha_O2</ci>
+                    <ci>pO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2bound</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">4</cn>
+                    <ci>Hct</ci>
+                    <ci>Hbrbc</ci>
+                    <ci>SHbO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2total</ci>
+                <apply>
+                    <plus/>
+                    <ci>O2free</ci>
+                    <ci>O2bound</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2content</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">2225.6</cn>
+                    <ci>O2total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2free</ci>
+                <apply>
+                    <times/>
+                    <ci>Wbl</ci>
+                    <ci>alpha_CO2</ci>
+                    <ci>pCO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2bicarb</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                    <ci>Hct</ci>
+                                </apply>
+                                <ci>Wpl</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>Hct</ci>
+                                <ci>Wrbc</ci>
+                                <ci>Rrbc</ci>
+                            </apply>
+                        </apply>
+                        <ci>K1</ci>
+                        <ci>alpha_CO2</ci>
+                        <ci>pCO2</ci>
+                    </apply>
+                    <ci>Hppl</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2bound</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">4</cn>
+                    <ci>Hct</ci>
+                    <ci>Hbrbc</ci>
+                    <ci>SHbCO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2total</ci>
+                <apply>
+                    <plus/>
+                    <ci>CO2free</ci>
+                    <ci>CO2bicarb</ci>
+                    <ci>CO2bound</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2content</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">2225.6</cn>
+                    <ci>CO2total</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--        var a: dimensionless {init: 1};-->
+        <variable name="t" units="second"/>
+        <!--        ode(a, t) = 1{dimensionless};-->
+        <!-- M,	// free O2 in plasm-->
+        <variable name="O2freepl1" units="M"/>
+        <!-- ml/dL, 	// mL free O2 per 100 mL plasma, orig had no units.-->
+        <variable name="O2freepl2" units="dimensionless"/>
+        <!-- M, 	// free O2 in RBCs-->
+        <variable name="O2freerbc1" units="M"/>
+        <!-- ml/dL;	// mL free O2 per 100 mL RBCs, orig had no units.-->
+        <variable name="O2freerbc2" units="dimensionless"/>
+        <!-- M, 	// bound O2 in RBCs-->
+        <variable name="O2boundrbc1" units="M"/>
+        <!-- ml/dL,	// mL bound O2 per 100 mL RBCs, orig had no units.-->
+        <variable name="O2boundrbc2" units="dimensionless"/>
+        <!-- M, 		// free CO2 in plasma-->
+        <variable name="CO2freepl1" units="M"/>
+        <!-- ml/dL,	// mL CO2 per 100 mL plasma, orig had no units.-->
+        <variable name="CO2freepl2" units="dimensionless"/>
+        <!-- M, 		// free CO2 in RBCs-->
+        <variable name="CO2freerbc1" units="M"/>
+        <!-- ml/dL, 	// mL CO2 per 100 mL RBCs, orig had no units.-->
+        <variable name="CO2freerbc2" units="dimensionless"/>
+        <!-- M, 	// bicarb in plasma-->
+        <variable name="CO2bicarbpl1" units="M"/>
+        <!-- ml/dL, 	// mL bicarb per 100 mL plasma, orig had no units.-->
+        <variable name="CO2bicarbpl2" units="dimensionless"/>
+        <!-- M, 	// bicarb in RBCs-->
+        <variable name="CO2bicarbrbc1" units="M"/>
+        <!-- ml/dL, 	// mL bicarb per 100 mL RBCs, orig had no units.-->
+        <variable name="CO2bicarbrbc2" units="dimensionless"/>
+        <!-- M, 	// bound CO2 in RBCs-->
+        <variable name="CO2boundrbc1" units="M"/>
+        <!-- ml/dL;// mL bound CO2 per 100 mL RBCs, orig had no units. -->
+        <variable name="CO2boundrbc2" units="dimensionless"/>
+        <!-- M,	// HbNH2 concentration in RBCs, M-->
+        <variable name="HbNH2" units="M"/>
+        <!-- M,	// HbNH3+ concentration in RBCs, M-->
+        <variable name="HbNH3p" units="M"/>
+        <!-- M,	// O2HbNH2 concentration in RBCs, M-->
+        <variable name="O2HbNH2" units="M"/>
+        <!-- M,	// O2HbNH3+ concentration in RBCs, M-->
+        <variable name="O2HbNH3p" units="M"/>
+        <!-- M,	// HbNHCOOH concentration in RBCs, M-->
+        <variable name="HbNHCOOH" units="M"/>
+        <!-- M,	// HbNHCOO- concentration in RBCs, M-->
+        <variable name="HbNHCOOm" units="M"/>
+        <!-- M,// O2HbNHCOOH concentration in RBCs, M-->
+        <variable name="O2HbNHCOOH" units="M"/>
+        <!-- M,// O2HbNHCOO- concentration in RBCs, M-->
+        <variable name="O2HbNHCOOm" units="M"/>
+        <!-- O2 saturation of hemoglobin from kinetics, unitless-->
+        <variable name="SHbO2kin" units="dimensionless"/>
+        <!-- O2 saturation of hemoglobin from kinetics, unitless-->
+        <variable name="SHbCO2kin" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>HbNH2</ci>
+                <apply>
+                    <divide/>
+                    <ci>Hbrbc</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Term1</ci>
+                            <ci>CO2</ci>
+                        </apply>
+                        <ci>Term3</ci>
+                        <apply>
+                            <times/>
+                            <ci>K4p</ci>
+                            <ci>O2</ci>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <ci>Term2</ci>
+                                    <ci>CO2</ci>
+                                </apply>
+                                <ci>Term4</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>HbNH3p</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>HbNH2</ci>
+                        <ci>Hp</ci>
+                    </apply>
+                    <ci>K5dp</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2HbNH2</ci>
+                <apply>
+                    <times/>
+                    <ci>K4p</ci>
+                    <ci>O2</ci>
+                    <ci>HbNH2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2HbNH3p</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>O2HbNH2</ci>
+                        <ci>Hp</ci>
+                    </apply>
+                    <ci>K6dp</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>HbNHCOOH</ci>
+                <apply>
+                    <times/>
+                    <ci>K2p</ci>
+                    <ci>CO2</ci>
+                    <ci>HbNH2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>HbNHCOOm</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>K2dp</ci>
+                        <ci>HbNHCOOH</ci>
+                    </apply>
+                    <ci>Hp</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2HbNHCOOH</ci>
+                <apply>
+                    <times/>
+                    <ci>K3p</ci>
+                    <ci>CO2</ci>
+                    <ci>O2HbNH2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2HbNHCOOm</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>K3dp</ci>
+                        <ci>O2HbNHCOOH</ci>
+                    </apply>
+                    <ci>Hp</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>SHbO2kin</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <ci>O2HbNH2</ci>
+                        <ci>O2HbNH3p</ci>
+                        <ci>O2HbNHCOOH</ci>
+                        <ci>O2HbNHCOOm</ci>
+                    </apply>
+                    <ci>Hbrbc</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>SHbCO2kin</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <ci>HbNHCOOH</ci>
+                        <ci>HbNHCOOm</ci>
+                        <ci>O2HbNHCOOH</ci>
+                        <ci>O2HbNHCOOm</ci>
+                    </apply>
+                    <ci>Hbrbc</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2freepl1</ci>
+                <apply>
+                    <times/>
+                    <ci>Wpl</ci>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Hct</ci>
+                    </apply>
+                    <ci>alpha_O2</ci>
+                    <ci>pO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2freepl2</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">2225.6</cn>
+                    <ci>O2freepl1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2freerbc1</ci>
+                <apply>
+                    <times/>
+                    <ci>Wrbc</ci>
+                    <ci>Hct</ci>
+                    <ci>alpha_O2</ci>
+                    <ci>pO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2freerbc2</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">2225.6</cn>
+                    <ci>O2freerbc1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2boundrbc1</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">4</cn>
+                    <ci>Hct</ci>
+                    <ci>Hbrbc</ci>
+                    <ci>SHbO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>O2boundrbc2</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">2225.6</cn>
+                    <ci>O2boundrbc1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2freepl1</ci>
+                <apply>
+                    <times/>
+                    <ci>Wpl</ci>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Hct</ci>
+                    </apply>
+                    <ci>alpha_CO2</ci>
+                    <ci>pCO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2freepl2</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">2225.6</cn>
+                    <ci>CO2freepl1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2freerbc1</ci>
+                <apply>
+                    <times/>
+                    <ci>Wrbc</ci>
+                    <ci>Hct</ci>
+                    <ci>alpha_CO2</ci>
+                    <ci>pCO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2freerbc2</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">2225.6</cn>
+                    <ci>CO2freerbc1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2bicarbpl1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Wpl</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>Hct</ci>
+                        </apply>
+                        <ci>K1</ci>
+                        <ci>alpha_CO2</ci>
+                        <ci>pCO2</ci>
+                    </apply>
+                    <ci>Hppl</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2bicarbpl2</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">2225.6</cn>
+                    <ci>CO2bicarbpl1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2bicarbrbc1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Wrbc</ci>
+                        <ci>Hct</ci>
+                        <ci>Rrbc</ci>
+                        <ci>K1</ci>
+                        <ci>alpha_CO2</ci>
+                        <ci>pCO2</ci>
+                    </apply>
+                    <ci>Hppl</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2bicarbrbc2</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">2225.6</cn>
+                    <ci>CO2bicarbrbc1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2boundrbc1</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">4</cn>
+                    <ci>Hct</ci>
+                    <ci>Hbrbc</ci>
+                    <ci>SHbCO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2boundrbc2</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">2225.6</cn>
+                    <ci>CO2boundrbc1</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

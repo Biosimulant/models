@@ -1,0 +1,250 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="BG6" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <!-- Enzyme catalyzed reaction (kinetic, SS reduced & MM)-->
+    <units name="mol_per_s">
+        <unit units="mole"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="per_mol">
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <component name="main">
+        <variable initial_value="0" name="t" units="second"/>
+        <!-- State variables & flux variables-->
+        <variable initial_value="30" name="q_1" units="mole"/>
+        <variable initial_value="0" name="q_2" units="mole"/>
+        <variable initial_value="10" name="q_3" units="mole"/>
+        <variable initial_value="0" name="q_4" units="mole"/>
+        <variable name="v_1" units="mol_per_s"/>
+        <variable name="v_2" units="mol_per_s"/>
+        <variable name="v_SS" units="mol_per_s"/>
+        <variable name="v_MM" units="mol_per_s"/>
+        <!-- Constitutive parameters-->
+        <variable initial_value="0.1" name="K_1" units="per_mol"/>
+        <variable initial_value="0.1" name="K_2" units="per_mol"/>
+        <variable initial_value="0.1" name="K_3" units="per_mol"/>
+        <variable initial_value="0.1" name="K_4" units="per_mol"/>
+        <variable initial_value="10" name="kappa_1" units="mol_per_s"/>
+        <variable initial_value="10" name="kappa_2" units="mol_per_s"/>
+        <variable name="E_0" units="mole"/>
+        <variable name="k_m" units="mole"/>
+        <variable name="v_max" units="mol_per_s"/>
+        <!-- Conservation laws-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>E_0</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_3</ci>
+                    <ci>q_4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_2</ci>
+                </apply>
+                <ci>v_2</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_3</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_2</ci>
+                    <ci>v_1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_4</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_1</ci>
+                    <ci>v_2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_1</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_1</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>K_1</ci>
+                            <ci>q_1</ci>
+                            <ci>K_3</ci>
+                            <ci>q_3</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>K_4</ci>
+                            <ci>q_4</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_2</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_2</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>K_4</ci>
+                            <ci>q_4</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>K_2</ci>
+                            <ci>q_2</ci>
+                            <ci>K_3</ci>
+                            <ci>q_3</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <!-- Reduced models (SS & MM)        -->
+            <apply>
+                <eq/>
+                <ci>v_SS</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>E_0</ci>
+                        <ci>kappa_1</ci>
+                        <ci>kappa_2</ci>
+                        <ci>K_3</ci>
+                        <ci>K_4</ci>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <times/>
+                                <ci>K_1</ci>
+                                <ci>q_1</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>K_2</ci>
+                                <ci>q_2</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>K_4</ci>
+                            <apply>
+                                <plus/>
+                                <ci>kappa_1</ci>
+                                <ci>kappa_2</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>kappa_1</ci>
+                            <ci>K_1</ci>
+                            <ci>K_3</ci>
+                            <ci>q_1</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>kappa_2</ci>
+                            <ci>K_2</ci>
+                            <ci>K_3</ci>
+                            <ci>q_2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_max</ci>
+                <apply>
+                    <times/>
+                    <ci>E_0</ci>
+                    <ci>kappa_2</ci>
+                    <ci>K_4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_m</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>kappa_1</ci>
+                            <ci>kappa_2</ci>
+                        </apply>
+                        <ci>K_4</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>kappa_1</ci>
+                        <ci>K_1</ci>
+                        <ci>K_3</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_MM</ci>
+                <apply>
+                    <times/>
+                    <ci>v_max</ci>
+                    <apply>
+                        <divide/>
+                        <ci>q_1</ci>
+                        <apply>
+                            <plus/>
+                            <ci>k_m</ci>
+                            <ci>q_1</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

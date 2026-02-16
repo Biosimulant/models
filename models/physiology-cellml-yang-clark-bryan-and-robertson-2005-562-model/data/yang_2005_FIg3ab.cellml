@@ -1,0 +1,326 @@
+<?xml version='1.0'?>
+<model cmeta:id="yang_2005_Fig3ab" name="yang_2005_Fig3ab" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="yang_et_al_2005cd.cellml">
+        <component component_ref="VSMC_relaxation" name="VSMC_relaxation"/>
+        <component component_ref="Ca2_entry" name="Ca2_entry"/>
+        <component component_ref="smooth_muscle_contraction" name="smooth_muscle_contraction"/>
+    </import>
+    <units name="per_s">
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="millivolt">
+        <unit prefix="milli" units="volt"/>
+    </units>
+    <units name="nanomolar">
+        <unit prefix="nano" units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="nm_per_s">
+        <unit units="nanomolar"/>
+        <unit units="per_s"/>
+    </units>
+    <units name="micromolar">
+        <unit prefix="micro" units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="per_nM_per_s">
+        <unit exponent="-1" units="nanomolar"/>
+        <unit units="per_s"/>
+    </units>
+    <units name="per_microM_per_s">
+        <unit exponent="-1" units="micromolar"/>
+        <unit units="per_s"/>
+    </units>
+    <units name="microM_per_s">
+        <unit units="micromolar"/>
+        <unit units="per_s"/>
+    </units>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+    </component>
+    <component name="sGC_activation">
+        <variable initial_value="1" name="E_b" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="E_6c" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="E_5c" public_interface="out" units="dimensionless"/>
+        <variable initial_value="2" name="k_1" units="per_nM_per_s"/>
+        <variable initial_value="100" name="k_m1" units="per_s"/>
+        <variable initial_value="0.1" name="k_2" units="per_s"/>
+        <variable initial_value="0.003" name="k_3" units="per_nM_per_s"/>
+        <variable name="k_4" units="per_s"/>
+        <variable initial_value="220" name="NO" units="nanomolar"/>
+        <variable initial_value="3" name="J_no" units="nm_per_s"/>
+        <variable initial_value="0.01" name="k_dno" units="per_s"/>
+        <variable initial_value="0.4" name="K_4" public_interface="out" units="per_s"/>
+        <variable initial_value="0" name="m" public_interface="out" units="dimensionless"/>
+        <variable name="cGMP" public_interface="in" units="micromolar"/>
+        <variable name="E0" units="dimensionless"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>E_b</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+                            <ci>k_1</ci>
+                        </apply>
+                        <ci>E_b</ci>
+                        <ci>NO</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_m1</ci>
+                        <ci>E_6c</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_4</ci>
+                        <ci>E_5c</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>E_6c</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <times/>
+                                <ci>k_1</ci>
+                                <ci>E_b</ci>
+                                <ci>NO</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>k_m1</ci>
+                                <ci>E_6c</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k_2</ci>
+                            <ci>E_6c</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_3</ci>
+                        <ci>E_6c</ci>
+                        <ci>NO</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>E_5c</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>k_3</ci>
+                            <ci>E_6c</ci>
+                            <ci>NO</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k_2</ci>
+                            <ci>E_6c</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_4</ci>
+                        <ci>E_5c</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_4</ci>
+                <apply>
+                    <times/>
+                    <ci>K_4</ci>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <ci>cGMP</ci>
+                            <cn cellml:units="micromolar">1</cn>
+                        </apply>
+                        <ci>m</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>NO</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>J_no</ci>
+                    <apply>
+                        <times/>
+                        <ci>k_dno</ci>
+                        <ci>NO</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>E0</ci>
+                <apply>
+                    <plus/>
+                    <ci>E_b</ci>
+                    <ci>E_6c</ci>
+                    <ci>E_5c</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="c_GMP">
+        <variable initial_value="1.26" name="V_max_sGC" public_interface="out" units="microM_per_s"/>
+        <variable name="E_5c" public_interface="in" units="dimensionless"/>
+        <variable initial_value="0" name="cGMP" public_interface="out" units="micromolar"/>
+        <variable name="V_max_pde" units="microM_per_s"/>
+        <variable initial_value="2" name="K_m_pde" units="micromolar"/>
+        <variable initial_value="0.0695" name="k_pde" public_interface="out" units="per_s"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="V_p" public_interface="out" units="microM_per_s"/>
+        <variable name="V_d" public_interface="out" units="microM_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>cGMP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>V_max_sGC</ci>
+                        <ci>E_5c</ci>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>cGMP</ci>
+                            <ci>V_max_pde</ci>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <ci>K_m_pde</ci>
+                            <ci>cGMP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>V_max_pde</ci>
+                <apply>
+                    <times/>
+                    <ci>k_pde</ci>
+                    <ci>cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>V_p</ci>
+                <apply>
+                    <times/>
+                    <ci>V_max_sGC</ci>
+                    <ci>E_5c</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>V_d</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>cGMP</ci>
+                        <ci>V_max_pde</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>K_m_pde</ci>
+                        <ci>cGMP</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="smooth_muscle_contraction" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="sGC_activation" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="c_GMP" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="sGC_activation" component_2="c_GMP"/>
+        <map_variables variable_1="E_5c" variable_2="E_5c"/>
+        <map_variables variable_1="cGMP" variable_2="cGMP"/>
+    </connection>
+    <connection>
+        <map_components component_1="c_GMP" component_2="VSMC_relaxation"/>
+        <map_variables variable_1="cGMP" variable_2="cGMP"/>
+    </connection>
+    <connection>
+        <map_components component_1="Ca2_entry" component_2="VSMC_relaxation"/>
+        <map_variables variable_1="R_cGMP" variable_2="R_cGMP"/>
+        <map_variables variable_1="R_NO" variable_2="R_NO"/>
+    </connection>
+    <connection>
+        <map_components component_1="smooth_muscle_contraction" component_2="VSMC_relaxation"/>
+        <map_variables variable_1="R_mlcp" variable_2="R_mlcp"/>
+    </connection>
+    <connection>
+        <map_components component_1="Ca2_entry" component_2="smooth_muscle_contraction"/>
+        <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+    </connection>
+    <!-- Your code goes here-->
+</model>

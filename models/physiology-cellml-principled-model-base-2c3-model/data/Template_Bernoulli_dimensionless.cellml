@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<model name="Template_Bernoulli_dimensionless" cmeta:id="Template_Bernoulli_dimensionless"
+    xmlns="http://www.cellml.org/cellml/1.1#"
+    xmlns:cellml="http://www.cellml.org/cellml/1.1#"
+    xmlns:cmeta="http://www.cellml.org/metadata/1.0#"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    >
+    
+    <import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Units_Cellular_Systems.cellml">
+		<units name="m2_per_N" units_ref="m2_per_N"/>
+		<units name="N_per_m2" units_ref="N_per_m2"/>
+    </import>
+    
+   <component name="Template_Bernoulli_dimensionless">
+      <variable name="y_i" units="dimensionless" public_interface="in"/>
+      <variable name="beta_y" units="m2_per_N" public_interface="in"/>
+      <variable name="stress" units="N_per_m2" public_interface="in"/>
+      <variable name="y_max" units="dimensionless" public_interface="in"/>
+      <variable name="y" units="dimensionless" public_interface="out"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <apply>
+            <eq/>
+            <ci>y</ci>
+            <apply>
+               <root/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <power/>
+                        <ci>y_i</ci>
+                        <cn cellml:units="dimensionless">2</cn>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <exponentiale/>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <minus/>
+                              <ci>beta_y</ci>
+                           </apply>
+                           <ci>stress</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <power/>
+                        <ci>y_max</ci>
+                        <cn cellml:units="dimensionless">2</cn>
+                     </apply>
+                     <apply>
+                        <abs/>
+                        <apply>
+                           <minus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <power/>
+                              <exponentiale/>
+                              <apply>
+                                 <times/>
+                                 <apply>
+                                    <minus/>
+                                    <ci>beta_y</ci>
+                                 </apply>
+                                 <ci>stress</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+    </math>
+      
+   </component>
+   
+</model>

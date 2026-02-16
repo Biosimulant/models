@@ -1,0 +1,735 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="individual_NBC" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="pL" units_ref="pL"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <!-- initial values-->
+        <variable initial_value="481.46" name="q_Na_i" public_interface="out" units="fmol"/>
+        <variable initial_value="725.48" name="q_Na_o" public_interface="out" units="fmol"/>
+        <variable initial_value="509.2" name="q_HCO3_i" public_interface="out" units="fmol"/>
+        <variable initial_value="122.295" name="q_HCO3_o" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S1_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S2_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S3_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S4_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S5_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S6_NBC" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="v_R61_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R23_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R34_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R45_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R56_NBC" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Na_i</ci>
+                </apply>
+                <ci>v_R56_NBC</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Na_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R12_NBC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_HCO3_i</ci>
+                </apply>
+                <ci>v_R45_NBC</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_HCO3_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R23_NBC</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="NBC_parameters">
+        <variable initial_value="11.2463" name="kappa_R61_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="57085.3" name="kappa_R12_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="22295.6" name="kappa_R23_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="23.7134" name="kappa_R34_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.000390516" name="kappa_R45_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1011" name="kappa_R56_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.293614" name="K_Na_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00678889" name="K_Na_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="13.9895" name="K_HCO3_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000101456" name="K_HCO3_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.131038" name="K_S1_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="22.4502" name="K_S2_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="9.46612e-05" name="K_S3_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="5404.45" name="K_S4_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1267.63" name="K_S5_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0233294" name="K_S6_NBC" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="NBC">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- parameters-->
+        <variable name="kappa_R61_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R12_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R23_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R34_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R45_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R56_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_Na_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_Na_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_HCO3_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_HCO3_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_S1_NBC" public_interface="in" units="per_fmol"/>
+        <variable name="K_S2_NBC" public_interface="in" units="per_fmol"/>
+        <variable name="K_S3_NBC" public_interface="in" units="per_fmol"/>
+        <variable name="K_S4_NBC" public_interface="in" units="per_fmol"/>
+        <variable name="K_S5_NBC" public_interface="in" units="per_fmol"/>
+        <variable name="K_S6_NBC" public_interface="in" units="per_fmol"/>
+        <!-- Input from global environment-->
+        <variable name="q_Na_i" public_interface="in" units="fmol"/>
+        <variable name="q_Na_o" public_interface="in" units="fmol"/>
+        <variable name="q_HCO3_i" public_interface="in" units="fmol"/>
+        <variable name="q_HCO3_o" public_interface="in" units="fmol"/>
+        <variable name="q_S1_NBC" public_interface="in" units="fmol"/>
+        <variable name="q_S2_NBC" public_interface="in" units="fmol"/>
+        <variable name="q_S3_NBC" public_interface="in" units="fmol"/>
+        <variable name="q_S4_NBC" public_interface="in" units="fmol"/>
+        <variable name="q_S5_NBC" public_interface="in" units="fmol"/>
+        <variable name="q_S6_NBC" public_interface="in" units="fmol"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_Na_i" units="J_per_mol"/>
+        <variable name="mu_Na_o" units="J_per_mol"/>
+        <variable name="mu_HCO3_i" units="J_per_mol"/>
+        <variable name="mu_HCO3_o" units="J_per_mol"/>
+        <variable name="mu_S1_NBC" units="J_per_mol"/>
+        <variable name="mu_S2_NBC" units="J_per_mol"/>
+        <variable name="mu_S3_NBC" units="J_per_mol"/>
+        <variable name="mu_S4_NBC" units="J_per_mol"/>
+        <variable name="mu_S5_NBC" units="J_per_mol"/>
+        <variable name="mu_S6_NBC" units="J_per_mol"/>
+        <variable name="v_R61_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R12_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R23_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R34_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R45_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R56_NBC" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_Na_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Na_i</ci>
+                            <ci>q_Na_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Na_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Na_o</ci>
+                            <ci>q_Na_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_HCO3_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_HCO3_i</ci>
+                            <ci>q_HCO3_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_HCO3_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_HCO3_o</ci>
+                            <ci>q_HCO3_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S1_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S1_NBC</ci>
+                            <ci>q_S1_NBC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S2_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S2_NBC</ci>
+                            <ci>q_S2_NBC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S3_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S3_NBC</ci>
+                            <ci>q_S3_NBC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S4_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S4_NBC</ci>
+                            <ci>q_S4_NBC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S5_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S5_NBC</ci>
+                            <ci>q_S5_NBC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S6_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S6_NBC</ci>
+                            <ci>q_S6_NBC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R61_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R61_NBC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S6_NBC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S1_NBC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R12_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R12_NBC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Na_o</ci>
+                                    <ci>mu_S1_NBC</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S2_NBC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R23_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R23_NBC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_HCO3_o</ci>
+                                    <ci>mu_S2_NBC</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S3_NBC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R34_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R34_NBC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S3_NBC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S4_NBC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R45_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R45_NBC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S4_NBC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_S5_NBC</ci>
+                                    <ci>mu_HCO3_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R56_NBC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R56_NBC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S5_NBC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_S6_NBC</ci>
+                                    <ci>mu_Na_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S1_NBC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R61_NBC</ci>
+                    <ci>v_R12_NBC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S2_NBC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R12_NBC</ci>
+                    <ci>v_R23_NBC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S3_NBC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R23_NBC</ci>
+                    <ci>v_R34_NBC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S4_NBC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R34_NBC</ci>
+                    <ci>v_R45_NBC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S5_NBC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R45_NBC</ci>
+                    <ci>v_R56_NBC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S6_NBC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R56_NBC</ci>
+                    <ci>v_R61_NBC</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- check conservation -->
+        <variable name="B_tot" units="fmol"/>
+        <variable name="S_tot" units="fmol"/>
+        <variable name="Na_tot" units="fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>B_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_HCO3_i</ci>
+                    <ci>q_HCO3_o</ci>
+                    <ci>q_S3_NBC</ci>
+                    <ci>q_S4_NBC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>S_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_S1_NBC</ci>
+                    <ci>q_S2_NBC</ci>
+                    <ci>q_S3_NBC</ci>
+                    <ci>q_S4_NBC</ci>
+                    <ci>q_S5_NBC</ci>
+                    <ci>q_S6_NBC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Na_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_Na_i</ci>
+                    <ci>q_Na_o</ci>
+                    <ci>q_S6_NBC</ci>
+                    <ci>q_S1_NBC</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="NBC"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_HCO3_i" variable_2="q_HCO3_i"/>
+        <map_variables variable_1="q_HCO3_o" variable_2="q_HCO3_o"/>
+        <map_variables variable_1="q_S1_NBC" variable_2="q_S1_NBC"/>
+        <map_variables variable_1="q_S2_NBC" variable_2="q_S2_NBC"/>
+        <map_variables variable_1="q_S3_NBC" variable_2="q_S3_NBC"/>
+        <map_variables variable_1="q_S4_NBC" variable_2="q_S4_NBC"/>
+        <map_variables variable_1="q_S5_NBC" variable_2="q_S5_NBC"/>
+        <map_variables variable_1="q_S6_NBC" variable_2="q_S6_NBC"/>
+        <map_variables variable_1="v_R61_NBC" variable_2="v_R61_NBC"/>
+        <map_variables variable_1="v_R12_NBC" variable_2="v_R12_NBC"/>
+        <map_variables variable_1="v_R23_NBC" variable_2="v_R23_NBC"/>
+        <map_variables variable_1="v_R34_NBC" variable_2="v_R34_NBC"/>
+        <map_variables variable_1="v_R45_NBC" variable_2="v_R45_NBC"/>
+        <map_variables variable_1="v_R56_NBC" variable_2="v_R56_NBC"/>
+    </connection>
+    <connection>
+        <map_components component_1="NBC" component_2="NBC_parameters"/>
+        <map_variables variable_1="kappa_R61_NBC" variable_2="kappa_R61_NBC"/>
+        <map_variables variable_1="kappa_R12_NBC" variable_2="kappa_R12_NBC"/>
+        <map_variables variable_1="kappa_R23_NBC" variable_2="kappa_R23_NBC"/>
+        <map_variables variable_1="kappa_R34_NBC" variable_2="kappa_R34_NBC"/>
+        <map_variables variable_1="kappa_R45_NBC" variable_2="kappa_R45_NBC"/>
+        <map_variables variable_1="kappa_R56_NBC" variable_2="kappa_R56_NBC"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_HCO3_i" variable_2="K_HCO3_i"/>
+        <map_variables variable_1="K_HCO3_o" variable_2="K_HCO3_o"/>
+        <map_variables variable_1="K_S1_NBC" variable_2="K_S1_NBC"/>
+        <map_variables variable_1="K_S2_NBC" variable_2="K_S2_NBC"/>
+        <map_variables variable_1="K_S3_NBC" variable_2="K_S3_NBC"/>
+        <map_variables variable_1="K_S4_NBC" variable_2="K_S4_NBC"/>
+        <map_variables variable_1="K_S5_NBC" variable_2="K_S5_NBC"/>
+        <map_variables variable_1="K_S6_NBC" variable_2="K_S6_NBC"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="NBC"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+</model>

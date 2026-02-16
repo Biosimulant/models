@@ -1,0 +1,26 @@
+# Winslow, Rice, Jafri, Marban, Ororke, 1999
+
+**Source**: [physiome](https://models.physiomeproject.org/workspace/winslow_rice_jafri_marban_ororke_1999)
+**Standard**: cellml
+**Authors**: physiome
+
+## Description
+
+Faithful wrapper of upstream CELLML model.
+
+
+## Usage
+
+This model was auto-generated from the physiome repository.
+
+```yaml
+# In a space.yaml wiring file:
+models:
+  - repo: Biosimulant/models
+    alias: model
+    manifest_path: models/physiology-cellml-winslow-rice-jafri-marban-ororke-1999-winslowricejafrimarbanororke1999-model/model.yaml
+```
+
+## Tags
+
+physiology, cellml, physiome, auto-generated

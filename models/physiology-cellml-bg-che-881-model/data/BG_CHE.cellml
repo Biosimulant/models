@@ -1,0 +1,758 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="individual_CHE" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="pL" units_ref="pL"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <!-- initial values-->
+        <variable initial_value="5.36764E-06" name="q_OH_i" public_interface="out" units="fmol"/>
+        <variable initial_value="1.30166E-06" name="q_OH_o" public_interface="out" units="fmol"/>
+        <variable initial_value="824.6" name="q_Cl_i" public_interface="out" units="fmol"/>
+        <variable initial_value="725.48" name="q_Cl_o" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S1_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S2_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S3_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S4_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S5_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S6_CHE" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="v_R61_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R23_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R34_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R45_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R56_CHE" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_OH_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R56_CHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_OH_o</ci>
+                </apply>
+                <ci>v_R12_CHE</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Cl_i</ci>
+                </apply>
+                <ci>v_R45_CHE</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Cl_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R23_CHE</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="pH_i" units="dimensionless"/>
+        <variable name="pH_o" units="dimensionless"/>
+        <variable name="cOH_i" units="mM"/>
+        <variable name="cOH_o" units="mM"/>
+        <variable initial_value="38" name="w_i" units="pL"/>
+        <variable initial_value="5.182" name="w_o" units="pL"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>cOH_i</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_OH_i</ci>
+                    <ci>w_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>cOH_o</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_OH_o</ci>
+                    <ci>w_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>pH_i</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dimensionless">14</cn>
+                    <apply>
+                        <log/>
+                        <ci>cOH_i</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>pH_o</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dimensionless">14</cn>
+                    <apply>
+                        <log/>
+                        <ci>cOH_o</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="CHE_parameters">
+        <variable initial_value="8.77838" name="kappa_R61_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.031295" name="kappa_R12_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="50940.7" name="kappa_R23_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.000192726" name="kappa_R34_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.96501e+06" name="kappa_R45_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.82153e+06" name="kappa_R56_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0253475" name="K_OH_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="7203.46" name="K_OH_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.015572" name="K_Cl_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00442538" name="K_Cl_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="28.479" name="K_S1_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="856.026" name="K_S2_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="353352" name="K_S3_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="6070.81" name="K_S4_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.569962" name="K_S5_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.4887" name="K_S6_CHE" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="CHE">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- parameters-->
+        <variable name="kappa_R61_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R12_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R23_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R34_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R45_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R56_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_OH_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_OH_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_Cl_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_Cl_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_S1_CHE" public_interface="in" units="per_fmol"/>
+        <variable name="K_S2_CHE" public_interface="in" units="per_fmol"/>
+        <variable name="K_S3_CHE" public_interface="in" units="per_fmol"/>
+        <variable name="K_S4_CHE" public_interface="in" units="per_fmol"/>
+        <variable name="K_S5_CHE" public_interface="in" units="per_fmol"/>
+        <variable name="K_S6_CHE" public_interface="in" units="per_fmol"/>
+        <!-- Input from global environment-->
+        <variable name="q_OH_i" public_interface="in" units="fmol"/>
+        <variable name="q_OH_o" public_interface="in" units="fmol"/>
+        <variable name="q_Cl_i" public_interface="in" units="fmol"/>
+        <variable name="q_Cl_o" public_interface="in" units="fmol"/>
+        <variable name="q_S1_CHE" public_interface="in" units="fmol"/>
+        <variable name="q_S2_CHE" public_interface="in" units="fmol"/>
+        <variable name="q_S3_CHE" public_interface="in" units="fmol"/>
+        <variable name="q_S4_CHE" public_interface="in" units="fmol"/>
+        <variable name="q_S5_CHE" public_interface="in" units="fmol"/>
+        <variable name="q_S6_CHE" public_interface="in" units="fmol"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_OH_i" units="J_per_mol"/>
+        <variable name="mu_OH_o" units="J_per_mol"/>
+        <variable name="mu_Cl_i" units="J_per_mol"/>
+        <variable name="mu_Cl_o" units="J_per_mol"/>
+        <variable name="mu_S1_CHE" units="J_per_mol"/>
+        <variable name="mu_S2_CHE" units="J_per_mol"/>
+        <variable name="mu_S3_CHE" units="J_per_mol"/>
+        <variable name="mu_S4_CHE" units="J_per_mol"/>
+        <variable name="mu_S5_CHE" units="J_per_mol"/>
+        <variable name="mu_S6_CHE" units="J_per_mol"/>
+        <variable name="v_R61_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R12_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R23_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R34_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R45_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R56_CHE" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_OH_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_OH_i</ci>
+                            <ci>q_OH_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_OH_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_OH_o</ci>
+                            <ci>q_OH_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Cl_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Cl_i</ci>
+                            <ci>q_Cl_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Cl_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Cl_o</ci>
+                            <ci>q_Cl_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S1_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S1_CHE</ci>
+                            <ci>q_S1_CHE</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S2_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S2_CHE</ci>
+                            <ci>q_S2_CHE</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S3_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S3_CHE</ci>
+                            <ci>q_S3_CHE</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S4_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S4_CHE</ci>
+                            <ci>q_S4_CHE</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S5_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S5_CHE</ci>
+                            <ci>q_S5_CHE</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S6_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S6_CHE</ci>
+                            <ci>q_S6_CHE</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R61_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R61_CHE</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S6_CHE</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S1_CHE</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R12_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R12_CHE</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S1_CHE</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_S2_CHE</ci>
+                                    <ci>mu_OH_o</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R23_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R23_CHE</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_S2_CHE</ci>
+                                    <ci>mu_Cl_o</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S3_CHE</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R34_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R34_CHE</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S3_CHE</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S4_CHE</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R45_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R45_CHE</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S4_CHE</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_S5_CHE</ci>
+                                    <ci>mu_Cl_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R56_CHE</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R56_CHE</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_S5_CHE</ci>
+                                    <ci>mu_OH_i</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S6_CHE</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S1_CHE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R61_CHE</ci>
+                    <ci>v_R12_CHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S2_CHE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R12_CHE</ci>
+                    <ci>v_R23_CHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S3_CHE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R23_CHE</ci>
+                    <ci>v_R34_CHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S4_CHE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R34_CHE</ci>
+                    <ci>v_R45_CHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S5_CHE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R45_CHE</ci>
+                    <ci>v_R56_CHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S6_CHE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R56_CHE</ci>
+                    <ci>v_R61_CHE</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="CHE"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_OH_i" variable_2="q_OH_i"/>
+        <map_variables variable_1="q_OH_o" variable_2="q_OH_o"/>
+        <map_variables variable_1="q_Cl_i" variable_2="q_Cl_i"/>
+        <map_variables variable_1="q_Cl_o" variable_2="q_Cl_o"/>
+        <map_variables variable_1="q_S1_CHE" variable_2="q_S1_CHE"/>
+        <map_variables variable_1="q_S2_CHE" variable_2="q_S2_CHE"/>
+        <map_variables variable_1="q_S3_CHE" variable_2="q_S3_CHE"/>
+        <map_variables variable_1="q_S4_CHE" variable_2="q_S4_CHE"/>
+        <map_variables variable_1="q_S5_CHE" variable_2="q_S5_CHE"/>
+        <map_variables variable_1="q_S6_CHE" variable_2="q_S6_CHE"/>
+        <map_variables variable_1="v_R61_CHE" variable_2="v_R61_CHE"/>
+        <map_variables variable_1="v_R12_CHE" variable_2="v_R12_CHE"/>
+        <map_variables variable_1="v_R23_CHE" variable_2="v_R23_CHE"/>
+        <map_variables variable_1="v_R34_CHE" variable_2="v_R34_CHE"/>
+        <map_variables variable_1="v_R45_CHE" variable_2="v_R45_CHE"/>
+        <map_variables variable_1="v_R56_CHE" variable_2="v_R56_CHE"/>
+    </connection>
+    <connection>
+        <map_components component_1="CHE" component_2="CHE_parameters"/>
+        <map_variables variable_1="kappa_R61_CHE" variable_2="kappa_R61_CHE"/>
+        <map_variables variable_1="kappa_R12_CHE" variable_2="kappa_R12_CHE"/>
+        <map_variables variable_1="kappa_R23_CHE" variable_2="kappa_R23_CHE"/>
+        <map_variables variable_1="kappa_R34_CHE" variable_2="kappa_R34_CHE"/>
+        <map_variables variable_1="kappa_R45_CHE" variable_2="kappa_R45_CHE"/>
+        <map_variables variable_1="kappa_R56_CHE" variable_2="kappa_R56_CHE"/>
+        <map_variables variable_1="K_OH_i" variable_2="K_OH_i"/>
+        <map_variables variable_1="K_OH_o" variable_2="K_OH_o"/>
+        <map_variables variable_1="K_Cl_i" variable_2="K_Cl_i"/>
+        <map_variables variable_1="K_Cl_o" variable_2="K_Cl_o"/>
+        <map_variables variable_1="K_S1_CHE" variable_2="K_S1_CHE"/>
+        <map_variables variable_1="K_S2_CHE" variable_2="K_S2_CHE"/>
+        <map_variables variable_1="K_S3_CHE" variable_2="K_S3_CHE"/>
+        <map_variables variable_1="K_S4_CHE" variable_2="K_S4_CHE"/>
+        <map_variables variable_1="K_S5_CHE" variable_2="K_S5_CHE"/>
+        <map_variables variable_1="K_S6_CHE" variable_2="K_S6_CHE"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="CHE"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

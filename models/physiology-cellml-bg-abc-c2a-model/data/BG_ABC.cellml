@@ -1,0 +1,600 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="individual_ABC" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="millivolt" units_ref="millivolt"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <!-- initial values-->
+        <variable initial_value="1e-6" name="q_S_i" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-3" name="q_S_o" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-6" name="q_E_ADP" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-6" name="q_E_ATP" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-4" name="q_ATP" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-6" name="q_ADP" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-6" name="q_Pi" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-6" name="q_S_E_ATP" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-6" name="q_S_E_ADP" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="v_ReABind" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_ReSBind" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_ReHyd" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_ReRel" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S_i</ci>
+                </apply>
+                <ci>v_ReHyd</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_ReSBind</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_E_ADP</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_ReSBind</ci>
+                    </apply>
+                    <ci>v_ReRel</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_E_ATP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_ReABind</ci>
+                    <ci>v_ReSBind</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_ATP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_ReABind</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_ADP</ci>
+                </apply>
+                <ci>v_ReABind</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Pi</ci>
+                </apply>
+                <ci>v_ReHyd</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S_E_ATP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_ReSBind</ci>
+                    <ci>v_ReHyd</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S_E_ADP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_ReHyd</ci>
+                    <ci>v_ReRel</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="ABC_parameters">
+        <variable initial_value="0.509703" name="kappa_ReABind" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.85478e-07" name="kappa_ReSBind" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="185478" name="kappa_ReHyd" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="48186.7" name="kappa_ReRel" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.58747e-11" name="K_S_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="6.46339e+08" name="K_S_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000905319" name="K_E_ADP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="5.7767" name="K_E_ATP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.50077e+06" name="K_ATP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.35199e-10" name="K_ADP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="6.83676e-15" name="K_Pi" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.141881" name="K_S_E_ATP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.546122" name="K_S_E_ADP" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="ABC">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- parameters-->
+        <variable name="kappa_ReABind" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_ReSBind" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_ReHyd" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_ReRel" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_S_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_S_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_E_ADP" public_interface="in" units="per_fmol"/>
+        <variable name="K_E_ATP" public_interface="in" units="per_fmol"/>
+        <variable name="K_ATP" public_interface="in" units="per_fmol"/>
+        <variable name="K_ADP" public_interface="in" units="per_fmol"/>
+        <variable name="K_Pi" public_interface="in" units="per_fmol"/>
+        <variable name="K_S_E_ATP" public_interface="in" units="per_fmol"/>
+        <variable name="K_S_E_ADP" public_interface="in" units="per_fmol"/>
+        <!-- Input from global environment-->
+        <variable name="q_S_i" public_interface="in" units="fmol"/>
+        <variable name="q_S_o" public_interface="in" units="fmol"/>
+        <variable name="q_E_ADP" public_interface="in" units="fmol"/>
+        <variable name="q_E_ATP" public_interface="in" units="fmol"/>
+        <variable name="q_ATP" public_interface="in" units="fmol"/>
+        <variable name="q_ADP" public_interface="in" units="fmol"/>
+        <variable name="q_Pi" public_interface="in" units="fmol"/>
+        <variable name="q_S_E_ATP" public_interface="in" units="fmol"/>
+        <variable name="q_S_E_ADP" public_interface="in" units="fmol"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_S_i" units="J_per_mol"/>
+        <variable name="mu_S_o" units="J_per_mol"/>
+        <variable name="mu_E_ADP" units="J_per_mol"/>
+        <variable name="mu_E_ATP" units="J_per_mol"/>
+        <variable name="mu_ATP" units="J_per_mol"/>
+        <variable name="mu_ADP" units="J_per_mol"/>
+        <variable name="mu_Pi" units="J_per_mol"/>
+        <variable name="mu_S_E_ATP" units="J_per_mol"/>
+        <variable name="mu_S_E_ADP" units="J_per_mol"/>
+        <variable name="v_ReABind" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_ReSBind" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_ReHyd" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_ReRel" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_S_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S_i</ci>
+                            <ci>q_S_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S_o</ci>
+                            <ci>q_S_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_E_ADP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_E_ADP</ci>
+                            <ci>q_E_ADP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_E_ATP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_E_ATP</ci>
+                            <ci>q_E_ATP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_ATP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_ATP</ci>
+                            <ci>q_ATP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_ADP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_ADP</ci>
+                            <ci>q_ADP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Pi</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Pi</ci>
+                            <ci>q_Pi</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S_E_ATP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S_E_ATP</ci>
+                            <ci>q_S_E_ATP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_S_E_ADP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_S_E_ADP</ci>
+                            <ci>q_S_E_ADP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_ReABind</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_ReABind</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_E_ADP</ci>
+                                    <ci>mu_ATP</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_E_ATP</ci>
+                                    <ci>mu_ADP</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_ReSBind</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_ReSBind</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_S_o</ci>
+                                    <ci>mu_E_ATP</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S_E_ATP</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_ReHyd</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_ReHyd</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S_E_ATP</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_S_E_ADP</ci>
+                                    <ci>mu_Pi</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_ReRel</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_ReRel</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_S_E_ADP</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_S_i</ci>
+                                    <ci>mu_E_ADP</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="ABC"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_S_i" variable_2="q_S_i"/>
+        <map_variables variable_1="q_S_o" variable_2="q_S_o"/>
+        <map_variables variable_1="q_E_ADP" variable_2="q_E_ADP"/>
+        <map_variables variable_1="q_E_ATP" variable_2="q_E_ATP"/>
+        <map_variables variable_1="q_ATP" variable_2="q_ATP"/>
+        <map_variables variable_1="q_ADP" variable_2="q_ADP"/>
+        <map_variables variable_1="q_Pi" variable_2="q_Pi"/>
+        <map_variables variable_1="q_S_E_ATP" variable_2="q_S_E_ATP"/>
+        <map_variables variable_1="q_S_E_ADP" variable_2="q_S_E_ADP"/>
+        <map_variables variable_1="v_ReABind" variable_2="v_ReABind"/>
+        <map_variables variable_1="v_ReSBind" variable_2="v_ReSBind"/>
+        <map_variables variable_1="v_ReHyd" variable_2="v_ReHyd"/>
+        <map_variables variable_1="v_ReRel" variable_2="v_ReRel"/>
+    </connection>
+    <connection>
+        <map_components component_1="ABC" component_2="ABC_parameters"/>
+        <map_variables variable_1="kappa_ReABind" variable_2="kappa_ReABind"/>
+        <map_variables variable_1="kappa_ReSBind" variable_2="kappa_ReSBind"/>
+        <map_variables variable_1="kappa_ReHyd" variable_2="kappa_ReHyd"/>
+        <map_variables variable_1="kappa_ReRel" variable_2="kappa_ReRel"/>
+        <map_variables variable_1="K_S_i" variable_2="K_S_i"/>
+        <map_variables variable_1="K_S_o" variable_2="K_S_o"/>
+        <map_variables variable_1="K_E_ADP" variable_2="K_E_ADP"/>
+        <map_variables variable_1="K_E_ATP" variable_2="K_E_ATP"/>
+        <map_variables variable_1="K_ATP" variable_2="K_ATP"/>
+        <map_variables variable_1="K_ADP" variable_2="K_ADP"/>
+        <map_variables variable_1="K_Pi" variable_2="K_Pi"/>
+        <map_variables variable_1="K_S_E_ATP" variable_2="K_S_E_ATP"/>
+        <map_variables variable_1="K_S_E_ADP" variable_2="K_S_E_ADP"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="ABC"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

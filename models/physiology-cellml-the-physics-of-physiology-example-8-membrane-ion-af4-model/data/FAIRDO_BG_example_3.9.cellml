@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="BG6" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <!-- The Nernst-Planck equation-->
+    <units name="dim">
+        <unit units="dimensionless"/>
+    </units>
+    <units name="mol_per_s">
+        <unit units="mole"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="per_mol">
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="C_per_mol">
+        <unit units="coulomb"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="J_per_mol">
+        <unit units="joule"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="J_per_C">
+        <unit units="joule"/>
+        <unit exponent="-1" units="coulomb"/>
+    </units>
+    <component name="main">
+        <variable initial_value="0" name="t" units="second"/>
+        <variable initial_value="9.64853321e4" name="F" units="C_per_mol"/>
+        <variable initial_value="2578.73058" name="RT" units="J_per_mol"/>
+        <!-- R=8.31446262 J/mol/K, T=310.15 K, -->
+        <!-- State variables-->
+        <variable initial_value="3" name="q_i_1" units="mole"/>
+        <variable initial_value="0" name="q_i_2" units="mole"/>
+        <variable initial_value="0" name="q_e_m" units="coulomb"/>
+        <variable name="v_i_m" units="mol_per_s"/>
+        <variable name="u_i_1" units="J_per_mol"/>
+        <variable name="u_i_2" units="J_per_mol"/>
+        <variable initial_value="-0.080" name="u_e_m" units="J_per_C"/>
+        <variable name="u_f_m" units="J_per_mol"/>
+        <variable name="u_r_m" units="J_per_mol"/>
+        <variable name="u_nernst" units="J_per_C"/>
+        <variable initial_value="1" name="z_q" units="dim"/>
+        <!-- Constitutive parameters-->
+        <variable initial_value="20" name="K_q_i_1" units="per_mol"/>
+        <variable initial_value="20" name="K_q_i_2" units="per_mol"/>
+        <variable initial_value="10" name="kappa_i_m" units="mol_per_s"/>
+        <!-- Conservation laws-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_i_1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_i_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_i_2</ci>
+                </apply>
+                <ci>v_i_m</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_e_m</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>z_q</ci>
+                    </apply>
+                    <ci>F</ci>
+                    <ci>v_i_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_f_m</ci>
+                <apply>
+                    <plus/>
+                    <ci>u_i_1</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_q</ci>
+                        <ci>F</ci>
+                        <ci>u_e_m</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_r_m</ci>
+                <ci>u_i_2</ci>
+            </apply>
+            <!-- Constitutive relations-->
+            <apply>
+                <eq/>
+                <ci>u_i_1</ci>
+                <apply>
+                    <times/>
+                    <ci>RT</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_q_i_1</ci>
+                            <ci>q_i_1</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_i_2</ci>
+                <apply>
+                    <times/>
+                    <ci>RT</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_q_i_2</ci>
+                            <ci>q_i_2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_i_m</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_i_m</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>u_f_m</ci>
+                                <ci>RT</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>u_r_m</ci>
+                                <ci>RT</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_nernst</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>RT</ci>
+                        <apply>
+                            <times/>
+                            <ci>z_q</ci>
+                            <ci>F</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>K_q_i_2</ci>
+                                <ci>q_i_2</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>K_q_i_1</ci>
+                                <ci>q_i_1</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

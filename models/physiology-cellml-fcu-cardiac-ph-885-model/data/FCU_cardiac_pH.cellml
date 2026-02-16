@@ -1,0 +1,708 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="FCU_cardiac_pH" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="millivolt" units_ref="millivolt"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <import xlink:href="AE/BG_AE.cellml">
+        <component component_ref="AE" name="AE"/>
+    </import>
+    <import xlink:href="CHE/BG_CHE.cellml">
+        <component component_ref="CHE" name="CHE"/>
+    </import>
+    <import xlink:href="CO2_hyd/BG_CO2_hyd.cellml">
+        <component component_ref="CO2_hyd" name="CO2_hyd"/>
+    </import>
+    <import xlink:href="NBC/BG_NBC.cellml">
+        <component component_ref="NBC" name="NBC"/>
+    </import>
+    <import xlink:href="NHE/BG_NHE.cellml">
+        <component component_ref="NHE" name="NHE"/>
+    </import>
+    <import xlink:href="pH_B1/BG_pH_B1.cellml">
+        <component component_ref="pH_B1" name="pH_B1"/>
+    </import>
+    <import xlink:href="pH_B2/BG_pH_B2.cellml">
+        <component component_ref="pH_B2" name="pH_B2"/>
+    </import>
+    <component name="BG_parameters">
+        <variable initial_value="0.24087" name="kappa_R61_AE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="770508" name="kappa_R12_AE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="192939" name="kappa_R23_AE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00694111" name="kappa_R34_AE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="189724" name="kappa_R45_AE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="759563" name="kappa_R56_AE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="7.95543" name="kappa_R61_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0283611" name="kappa_R12_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="64516" name="kappa_R23_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.000244086" name="kappa_R34_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="3.75516e+06" name="kappa_R45_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.65076e+06" name="kappa_R56_CHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00018267" name="kappa_Re_CO2hyd" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.758017" name="kappa_R61_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="167885" name="kappa_R12_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="257175" name="kappa_R23_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="273.529" name="kappa_R34_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00450451" name="kappa_R45_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="43.4747" name="kappa_R56_NBC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2076.03" name="kappa_R61_NHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="104.001" name="kappa_R12_NHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5982.98" name="kappa_R23_NHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.000130522" name="kappa_R34_NHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1630.31" name="kappa_R45_NHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="28.278" name="kappa_R56_NHE" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="974.566" name="kappa_Re_B1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_Re_B2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0766951" name="K_HCO3_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="3.80421e-05" name="K_HCO3_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.30705" name="K_Cl_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000151922" name="K_Cl_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1440.61" name="K_S1_AE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="9682.05" name="K_S2_AE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="51000.5" name="K_S3_AE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="51864.9" name="K_S4_AE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.664318" name="K_S5_AE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1461.37" name="K_S6_AE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.698479" name="K_OH_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="345.593" name="K_OH_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="31.4251" name="K_S1_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="28954.8" name="K_S2_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="279001" name="K_S3_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4793.4" name="K_S4_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0335637" name="K_S5_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.539255" name="K_S6_CHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.01691e+08" name="K_CO2_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="39.0188" name="K_H_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.67679" name="K_Na_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000228816" name="K_Na_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="73.877" name="K_S1_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="290.079" name="K_S2_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00031185" name="K_S3_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="17804.4" name="K_S4_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.12019e+06" name="K_S5_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="13.1527" name="K_S6_NBC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0131633" name="K_H_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="6.13294e-05" name="K_S1_NHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="8022.54" name="K_S2_NHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="217.335" name="K_S3_NHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="797.586" name="K_S4_NHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.35735" name="K_S5_NHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000225558" name="K_S6_NHE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="39.3849" name="K_B1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0370592" name="K_HB1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_B2" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_HB2" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="509.2" name="q_HCO3_i" public_interface="out" units="fmol"/>
+        <variable initial_value="122.2952" name="q_HCO3_o" public_interface="out" units="fmol"/>
+        <variable initial_value="824.6" name="q_Cl_i" public_interface="out" units="fmol"/>
+        <variable initial_value="725.48" name="q_Cl_o" public_interface="out" units="fmol"/>
+        <variable initial_value="5.36764E-06" name="q_OH_i" public_interface="out" units="fmol"/>
+        <variable initial_value="1.30166E-06" name="q_OH_o" public_interface="out" units="fmol"/>
+        <variable initial_value="481.46" name="q_Na_i" public_interface="out" units="fmol"/>
+        <variable initial_value="725.48" name="q_Na_o" public_interface="out" units="fmol"/>
+        <variable initial_value="2.69019E-06" name="q_H_i" public_interface="out" units="fmol"/>
+        <variable initial_value="2.06299E-07" name="q_H_o" public_interface="out" units="fmol"/>
+        <variable initial_value="3199.6" name="q_B1" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-12" name="q_HB1" public_interface="out" units="fmol"/>
+        <variable initial_value="1117.2" name="q_B2" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-12" name="q_HB2" public_interface="out" units="fmol"/>
+        <variable initial_value="46.968" name="q_CO2_i" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S1_AE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S2_AE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S3_AE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S4_AE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S5_AE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S6_AE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S1_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S2_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S3_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S4_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S5_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S6_CHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S1_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S2_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S3_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S4_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S5_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S6_NBC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S1_NHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S2_NHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S3_NHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S4_NHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S5_NHE" public_interface="out" units="fmol"/>
+        <variable initial_value="1.666e-7" name="q_S6_NHE" public_interface="out" units="fmol"/>
+        <!-- AE imports-->
+        <variable name="v_R61_AE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_AE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R23_AE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R34_AE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R45_AE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R56_AE" public_interface="in" units="fmol_per_sec"/>
+        <!-- CHE imports-->
+        <variable name="v_R61_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R23_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R34_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R45_CHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R56_CHE" public_interface="in" units="fmol_per_sec"/>
+        <!-- CO2_hyd imports-->
+        <variable name="v_Re_CO2hyd" public_interface="in" units="fmol_per_sec"/>
+        <!-- NBC imports-->
+        <variable name="v_R61_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R23_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R34_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R45_NBC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R56_NBC" public_interface="in" units="fmol_per_sec"/>
+        <!-- NHE imports-->
+        <variable name="v_R61_NHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_NHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R23_NHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R34_NHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R45_NHE" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R56_NHE" public_interface="in" units="fmol_per_sec"/>
+        <!-- pH_B1 imports-->
+        <variable name="v_Re_B1" public_interface="in" units="fmol_per_sec"/>
+        <!-- pH_B2 imports-->
+        <variable name="v_Re_B2" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_HCO3_i</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R56_AE</ci>
+                    </apply>
+                    <ci>v_R45_NBC</ci>
+                    <ci>v_Re_CO2hyd</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_HCO3_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R12_AE</ci>
+                    <ci>v_R23_NBC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Cl_i</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>v_R45_AE</ci>
+                    <ci>v_R45_CHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Cl_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R23_AE</ci>
+                    </apply>
+                    <ci>v_R23_CHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Na_i</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>v_R56_NBC</ci>
+                    <ci>v_R45_NHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Na_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R12_NBC</ci>
+                    </apply>
+                    <ci>v_R23_NHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_OH_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R56_CHE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_OH_o</ci>
+                </apply>
+                <ci>v_R12_CHE</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_H_i</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <ci>v_R56_NHE</ci>
+                            </apply>
+                            <ci>v_Re_B1</ci>
+                        </apply>
+                        <ci>v_Re_B2</ci>
+                    </apply>
+                    <ci>v_Re_CO2hyd</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_H_o</ci>
+                </apply>
+                <ci>v_R12_NHE</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_B1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re_B1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_HB1</ci>
+                </apply>
+                <ci>v_Re_B1</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_B2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re_B2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_HB2</ci>
+                </apply>
+                <ci>v_Re_B2</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_CO2_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re_CO2hyd</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="pH_i" units="dimensionless"/>
+        <variable name="pH_o" units="dimensionless"/>
+        <variable name="cH_i" units="mM"/>
+        <variable name="cH_o" units="mM"/>
+        <variable initial_value="38" name="w_i" units="pL"/>
+        <variable initial_value="5.182" name="w_o" units="pL"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>cH_i</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_H_i</ci>
+                    <ci>w_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>cH_o</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_H_o</ci>
+                    <ci>w_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>pH_i</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <log/>
+                        <ci>cH_i</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>pH_o</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <log/>
+                        <ci>cH_o</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="AE"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_HCO3_i" variable_2="q_HCO3_i"/>
+        <map_variables variable_1="q_HCO3_o" variable_2="q_HCO3_o"/>
+        <map_variables variable_1="q_Cl_i" variable_2="q_Cl_i"/>
+        <map_variables variable_1="q_Cl_o" variable_2="q_Cl_o"/>
+        <map_variables variable_1="q_S1_AE" variable_2="q_S1_AE"/>
+        <map_variables variable_1="q_S2_AE" variable_2="q_S2_AE"/>
+        <map_variables variable_1="q_S3_AE" variable_2="q_S3_AE"/>
+        <map_variables variable_1="q_S4_AE" variable_2="q_S4_AE"/>
+        <map_variables variable_1="q_S5_AE" variable_2="q_S5_AE"/>
+        <map_variables variable_1="q_S6_AE" variable_2="q_S6_AE"/>
+        <map_variables variable_1="v_R61_AE" variable_2="v_R61_AE"/>
+        <map_variables variable_1="v_R12_AE" variable_2="v_R12_AE"/>
+        <map_variables variable_1="v_R23_AE" variable_2="v_R23_AE"/>
+        <map_variables variable_1="v_R34_AE" variable_2="v_R34_AE"/>
+        <map_variables variable_1="v_R45_AE" variable_2="v_R45_AE"/>
+        <map_variables variable_1="v_R56_AE" variable_2="v_R56_AE"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="CHE"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_OH_i" variable_2="q_OH_i"/>
+        <map_variables variable_1="q_OH_o" variable_2="q_OH_o"/>
+        <map_variables variable_1="q_Cl_i" variable_2="q_Cl_i"/>
+        <map_variables variable_1="q_Cl_o" variable_2="q_Cl_o"/>
+        <map_variables variable_1="q_S1_CHE" variable_2="q_S1_CHE"/>
+        <map_variables variable_1="q_S2_CHE" variable_2="q_S2_CHE"/>
+        <map_variables variable_1="q_S3_CHE" variable_2="q_S3_CHE"/>
+        <map_variables variable_1="q_S4_CHE" variable_2="q_S4_CHE"/>
+        <map_variables variable_1="q_S5_CHE" variable_2="q_S5_CHE"/>
+        <map_variables variable_1="q_S6_CHE" variable_2="q_S6_CHE"/>
+        <map_variables variable_1="v_R61_CHE" variable_2="v_R61_CHE"/>
+        <map_variables variable_1="v_R12_CHE" variable_2="v_R12_CHE"/>
+        <map_variables variable_1="v_R23_CHE" variable_2="v_R23_CHE"/>
+        <map_variables variable_1="v_R34_CHE" variable_2="v_R34_CHE"/>
+        <map_variables variable_1="v_R45_CHE" variable_2="v_R45_CHE"/>
+        <map_variables variable_1="v_R56_CHE" variable_2="v_R56_CHE"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="CO2_hyd"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_CO2_i" variable_2="q_CO2_i"/>
+        <map_variables variable_1="q_HCO3_i" variable_2="q_HCO3_i"/>
+        <map_variables variable_1="q_H_i" variable_2="q_H_i"/>
+        <map_variables variable_1="v_Re_CO2hyd" variable_2="v_Re_CO2hyd"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="NBC"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_HCO3_i" variable_2="q_HCO3_i"/>
+        <map_variables variable_1="q_HCO3_o" variable_2="q_HCO3_o"/>
+        <map_variables variable_1="q_S1_NBC" variable_2="q_S1_NBC"/>
+        <map_variables variable_1="q_S2_NBC" variable_2="q_S2_NBC"/>
+        <map_variables variable_1="q_S3_NBC" variable_2="q_S3_NBC"/>
+        <map_variables variable_1="q_S4_NBC" variable_2="q_S4_NBC"/>
+        <map_variables variable_1="q_S5_NBC" variable_2="q_S5_NBC"/>
+        <map_variables variable_1="q_S6_NBC" variable_2="q_S6_NBC"/>
+        <map_variables variable_1="v_R61_NBC" variable_2="v_R61_NBC"/>
+        <map_variables variable_1="v_R12_NBC" variable_2="v_R12_NBC"/>
+        <map_variables variable_1="v_R23_NBC" variable_2="v_R23_NBC"/>
+        <map_variables variable_1="v_R34_NBC" variable_2="v_R34_NBC"/>
+        <map_variables variable_1="v_R45_NBC" variable_2="v_R45_NBC"/>
+        <map_variables variable_1="v_R56_NBC" variable_2="v_R56_NBC"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="NHE"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_H_i" variable_2="q_H_i"/>
+        <map_variables variable_1="q_H_o" variable_2="q_H_o"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_S1_NHE" variable_2="q_S1_NHE"/>
+        <map_variables variable_1="q_S2_NHE" variable_2="q_S2_NHE"/>
+        <map_variables variable_1="q_S3_NHE" variable_2="q_S3_NHE"/>
+        <map_variables variable_1="q_S4_NHE" variable_2="q_S4_NHE"/>
+        <map_variables variable_1="q_S5_NHE" variable_2="q_S5_NHE"/>
+        <map_variables variable_1="q_S6_NHE" variable_2="q_S6_NHE"/>
+        <map_variables variable_1="v_R61_NHE" variable_2="v_R61_NHE"/>
+        <map_variables variable_1="v_R12_NHE" variable_2="v_R12_NHE"/>
+        <map_variables variable_1="v_R23_NHE" variable_2="v_R23_NHE"/>
+        <map_variables variable_1="v_R34_NHE" variable_2="v_R34_NHE"/>
+        <map_variables variable_1="v_R45_NHE" variable_2="v_R45_NHE"/>
+        <map_variables variable_1="v_R56_NHE" variable_2="v_R56_NHE"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="pH_B1"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_H_i" variable_2="q_H_i"/>
+        <map_variables variable_1="q_B1" variable_2="q_B1"/>
+        <map_variables variable_1="q_HB1" variable_2="q_HB1"/>
+        <map_variables variable_1="v_Re_B1" variable_2="v_Re_B1"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="pH_B2"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_H_i" variable_2="q_H_i"/>
+        <map_variables variable_1="q_B2" variable_2="q_B2"/>
+        <map_variables variable_1="q_HB2" variable_2="q_HB2"/>
+        <map_variables variable_1="v_Re_B2" variable_2="v_Re_B2"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="AE"/>
+        <map_variables variable_1="kappa_R61_AE" variable_2="kappa_R61_AE"/>
+        <map_variables variable_1="kappa_R12_AE" variable_2="kappa_R12_AE"/>
+        <map_variables variable_1="kappa_R23_AE" variable_2="kappa_R23_AE"/>
+        <map_variables variable_1="kappa_R34_AE" variable_2="kappa_R34_AE"/>
+        <map_variables variable_1="kappa_R45_AE" variable_2="kappa_R45_AE"/>
+        <map_variables variable_1="kappa_R56_AE" variable_2="kappa_R56_AE"/>
+        <map_variables variable_1="K_HCO3_i" variable_2="K_HCO3_i"/>
+        <map_variables variable_1="K_HCO3_o" variable_2="K_HCO3_o"/>
+        <map_variables variable_1="K_Cl_i" variable_2="K_Cl_i"/>
+        <map_variables variable_1="K_Cl_o" variable_2="K_Cl_o"/>
+        <map_variables variable_1="K_S1_AE" variable_2="K_S1_AE"/>
+        <map_variables variable_1="K_S2_AE" variable_2="K_S2_AE"/>
+        <map_variables variable_1="K_S3_AE" variable_2="K_S3_AE"/>
+        <map_variables variable_1="K_S4_AE" variable_2="K_S4_AE"/>
+        <map_variables variable_1="K_S5_AE" variable_2="K_S5_AE"/>
+        <map_variables variable_1="K_S6_AE" variable_2="K_S6_AE"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="CHE"/>
+        <map_variables variable_1="kappa_R61_CHE" variable_2="kappa_R61_CHE"/>
+        <map_variables variable_1="kappa_R12_CHE" variable_2="kappa_R12_CHE"/>
+        <map_variables variable_1="kappa_R23_CHE" variable_2="kappa_R23_CHE"/>
+        <map_variables variable_1="kappa_R34_CHE" variable_2="kappa_R34_CHE"/>
+        <map_variables variable_1="kappa_R45_CHE" variable_2="kappa_R45_CHE"/>
+        <map_variables variable_1="kappa_R56_CHE" variable_2="kappa_R56_CHE"/>
+        <map_variables variable_1="K_OH_i" variable_2="K_OH_i"/>
+        <map_variables variable_1="K_OH_o" variable_2="K_OH_o"/>
+        <map_variables variable_1="K_Cl_i" variable_2="K_Cl_i"/>
+        <map_variables variable_1="K_Cl_o" variable_2="K_Cl_o"/>
+        <map_variables variable_1="K_S1_CHE" variable_2="K_S1_CHE"/>
+        <map_variables variable_1="K_S2_CHE" variable_2="K_S2_CHE"/>
+        <map_variables variable_1="K_S3_CHE" variable_2="K_S3_CHE"/>
+        <map_variables variable_1="K_S4_CHE" variable_2="K_S4_CHE"/>
+        <map_variables variable_1="K_S5_CHE" variable_2="K_S5_CHE"/>
+        <map_variables variable_1="K_S6_CHE" variable_2="K_S6_CHE"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="CO2_hyd"/>
+        <map_variables variable_1="kappa_Re_CO2hyd" variable_2="kappa_Re_CO2hyd"/>
+        <map_variables variable_1="K_CO2_i" variable_2="K_CO2_i"/>
+        <map_variables variable_1="K_HCO3_i" variable_2="K_HCO3_i"/>
+        <map_variables variable_1="K_H_i" variable_2="K_H_i"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="NBC"/>
+        <map_variables variable_1="kappa_R61_NBC" variable_2="kappa_R61_NBC"/>
+        <map_variables variable_1="kappa_R12_NBC" variable_2="kappa_R12_NBC"/>
+        <map_variables variable_1="kappa_R23_NBC" variable_2="kappa_R23_NBC"/>
+        <map_variables variable_1="kappa_R34_NBC" variable_2="kappa_R34_NBC"/>
+        <map_variables variable_1="kappa_R45_NBC" variable_2="kappa_R45_NBC"/>
+        <map_variables variable_1="kappa_R56_NBC" variable_2="kappa_R56_NBC"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_HCO3_i" variable_2="K_HCO3_i"/>
+        <map_variables variable_1="K_HCO3_o" variable_2="K_HCO3_o"/>
+        <map_variables variable_1="K_S1_NBC" variable_2="K_S1_NBC"/>
+        <map_variables variable_1="K_S2_NBC" variable_2="K_S2_NBC"/>
+        <map_variables variable_1="K_S3_NBC" variable_2="K_S3_NBC"/>
+        <map_variables variable_1="K_S4_NBC" variable_2="K_S4_NBC"/>
+        <map_variables variable_1="K_S5_NBC" variable_2="K_S5_NBC"/>
+        <map_variables variable_1="K_S6_NBC" variable_2="K_S6_NBC"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="NHE"/>
+        <map_variables variable_1="kappa_R61_NHE" variable_2="kappa_R61_NHE"/>
+        <map_variables variable_1="kappa_R12_NHE" variable_2="kappa_R12_NHE"/>
+        <map_variables variable_1="kappa_R23_NHE" variable_2="kappa_R23_NHE"/>
+        <map_variables variable_1="kappa_R34_NHE" variable_2="kappa_R34_NHE"/>
+        <map_variables variable_1="kappa_R45_NHE" variable_2="kappa_R45_NHE"/>
+        <map_variables variable_1="kappa_R56_NHE" variable_2="kappa_R56_NHE"/>
+        <map_variables variable_1="K_H_i" variable_2="K_H_i"/>
+        <map_variables variable_1="K_H_o" variable_2="K_H_o"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_S1_NHE" variable_2="K_S1_NHE"/>
+        <map_variables variable_1="K_S2_NHE" variable_2="K_S2_NHE"/>
+        <map_variables variable_1="K_S3_NHE" variable_2="K_S3_NHE"/>
+        <map_variables variable_1="K_S4_NHE" variable_2="K_S4_NHE"/>
+        <map_variables variable_1="K_S5_NHE" variable_2="K_S5_NHE"/>
+        <map_variables variable_1="K_S6_NHE" variable_2="K_S6_NHE"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="pH_B1"/>
+        <map_variables variable_1="kappa_Re_B1" variable_2="kappa_Re_B1"/>
+        <map_variables variable_1="K_H_i" variable_2="K_H_i"/>
+        <map_variables variable_1="K_B1" variable_2="K_B1"/>
+        <map_variables variable_1="K_HB1" variable_2="K_HB1"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="pH_B2"/>
+        <map_variables variable_1="kappa_Re_B2" variable_2="kappa_Re_B2"/>
+        <map_variables variable_1="K_H_i" variable_2="K_H_i"/>
+        <map_variables variable_1="K_B2" variable_2="K_B2"/>
+        <map_variables variable_1="K_HB2" variable_2="K_HB2"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="AE"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="CHE"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="CO2_hyd"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="NBC"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="NHE"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="pH_B1"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="pH_B2"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+</model>

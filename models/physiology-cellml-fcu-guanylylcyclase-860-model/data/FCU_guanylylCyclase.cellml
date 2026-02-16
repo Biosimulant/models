@@ -1,0 +1,354 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="FCU_guanylylCyclase" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <import xlink:href="cGMP/BG_cGMP.cellml">
+        <component component_ref="cGMP" name="cGMP"/>
+    </import>
+    <import xlink:href="sGC/BG_sGC.cellml">
+        <component component_ref="sGC" name="sGC"/>
+    </import>
+    <component name="BG_parameters">
+        <variable initial_value="192.663" name="kappa_R_1a_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00328297" name="kappa_R_1b_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="56591.2" name="kappa_R_2a_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0110353" name="kappa_R_2b_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="3.61127e+06" name="kappa_R_1_sGC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00328297" name="kappa_R_2_sGC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="4.92446" name="kappa_R_3_sGC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0361127" name="kappa_R_4_sGC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.01" name="kappa_R_DNO_sGC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="17040" name="K_GTP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.304602" name="K_E5c" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1" name="K_cGMP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="17.6706" name="K_PDE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="5190.42" name="K_GTP_E5c" public_interface="out" units="per_fmol"/>
+        <variable initial_value="35.3412" name="K_cGMP_PDE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0051282" name="K_GMP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0276911" name="K_Eb" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1" name="K_NO" public_interface="out" units="per_fmol"/>
+        <variable initial_value="30.4602" name="K_E6c" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.1" name="K_NO_product" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="environment">
+        <variable name="t" public_interface="out" units="second"/>
+        <variable initial_value="1" name="vol_myo" public_interface="out" units="pL"/>
+        <!-- concentrations and molar amounts of GC, PDE, GMP, AM/M (etc) need to be sourced - they are currently guesses.-->
+        <variable initial_value="1e-6" name="q_cGMP" public_interface="out" units="fmol"/>
+        <variable initial_value="0.0005" name="q_GTP" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_E5c" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-10" name="q_PDE" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_GTP_E5c" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_cGMP_PDE" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_GMP" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-6" name="q_Eb" public_interface="out" units="fmol"/>
+        <variable initial_value="0.00836" name="q_NO" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_E6c" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_NO_product" public_interface="out" units="fmol"/>
+        <!-- cGMP imports-->
+        <variable name="v_R_1a_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_1b_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_2a_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_2b_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <!-- sGC imports-->
+        <variable name="v_R_1_sGC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_2_sGC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_3_sGC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_4_sGC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_DNO_sGC" public_interface="in" units="fmol_per_sec"/>
+        <!-- constant rate of NO generation, converted from kinetic model J_NO-->
+        <variable initial_value="0.000114" name="v_NO_generation" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_cGMP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <ci>v_R_1b_cGMP</ci>
+                            <ci>v_R_2a_cGMP</ci>
+                        </apply>
+                        <ci>v_R_2b_cGMP</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">2</cn>
+                        <ci>v_R_4_sGC</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_GTP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_1a_cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_E5c</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>v_R_1a_cGMP</ci>
+                        </apply>
+                        <ci>v_R_1b_cGMP</ci>
+                        <ci>v_R_2_sGC</ci>
+                        <ci>v_R_3_sGC</ci>
+                    </apply>
+                    <ci>v_R_4_sGC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_PDE</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R_2a_cGMP</ci>
+                    </apply>
+                    <ci>v_R_2b_cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_GTP_E5c</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_1a_cGMP</ci>
+                    <ci>v_R_1b_cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_cGMP_PDE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_2a_cGMP</ci>
+                    <ci>v_R_2b_cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_GMP</ci>
+                </apply>
+                <ci>v_R_2b_cGMP</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Eb</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R_1_sGC</ci>
+                    </apply>
+                    <ci>v_R_4_sGC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_NO</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <minus/>
+                                <ci>v_R_1_sGC</ci>
+                            </apply>
+                            <ci>v_R_4_sGC</ci>
+                        </apply>
+                        <ci>v_R_DNO_sGC</ci>
+                    </apply>
+                    <ci>v_NO_generation</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_E6c</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R_1_sGC</ci>
+                        <ci>v_R_2_sGC</ci>
+                    </apply>
+                    <ci>v_R_3_sGC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_NO_product</ci>
+                </apply>
+                <ci>v_R_DNO_sGC</ci>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="cGMP"/>
+        <map_variables variable_1="t" variable_2="time"/>
+        <map_variables variable_1="q_GTP" variable_2="q_GTP"/>
+        <map_variables variable_1="q_E5c" variable_2="q_E5c"/>
+        <map_variables variable_1="q_cGMP" variable_2="q_cGMP"/>
+        <map_variables variable_1="q_PDE" variable_2="q_PDE"/>
+        <map_variables variable_1="q_GTP_E5c" variable_2="q_GTP_E5c"/>
+        <map_variables variable_1="q_cGMP_PDE" variable_2="q_cGMP_PDE"/>
+        <map_variables variable_1="q_GMP" variable_2="q_GMP"/>
+        <map_variables variable_1="v_R_1a_cGMP" variable_2="v_R_1a_cGMP"/>
+        <map_variables variable_1="v_R_1b_cGMP" variable_2="v_R_1b_cGMP"/>
+        <map_variables variable_1="v_R_2a_cGMP" variable_2="v_R_2a_cGMP"/>
+        <map_variables variable_1="v_R_2b_cGMP" variable_2="v_R_2b_cGMP"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="sGC"/>
+        <map_variables variable_1="t" variable_2="time"/>
+        <map_variables variable_1="q_Eb" variable_2="q_Eb"/>
+        <map_variables variable_1="q_NO" variable_2="q_NO"/>
+        <map_variables variable_1="q_E6c" variable_2="q_E6c"/>
+        <map_variables variable_1="q_E5c" variable_2="q_E5c"/>
+        <map_variables variable_1="q_cGMP" variable_2="q_cGMP"/>
+        <map_variables variable_1="q_NO_product" variable_2="q_NO_product"/>
+        <map_variables variable_1="v_R_1_sGC" variable_2="v_R_1_sGC"/>
+        <map_variables variable_1="v_R_2_sGC" variable_2="v_R_2_sGC"/>
+        <map_variables variable_1="v_R_3_sGC" variable_2="v_R_3_sGC"/>
+        <map_variables variable_1="v_R_4_sGC" variable_2="v_R_4_sGC"/>
+        <map_variables variable_1="v_R_DNO_sGC" variable_2="v_R_DNO_sGC"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="cGMP"/>
+        <map_variables variable_1="kappa_R_1a_cGMP" variable_2="kappa_R_1a_cGMP"/>
+        <map_variables variable_1="kappa_R_1b_cGMP" variable_2="kappa_R_1b_cGMP"/>
+        <map_variables variable_1="kappa_R_2a_cGMP" variable_2="kappa_R_2a_cGMP"/>
+        <map_variables variable_1="kappa_R_2b_cGMP" variable_2="kappa_R_2b_cGMP"/>
+        <map_variables variable_1="K_GTP" variable_2="K_GTP"/>
+        <map_variables variable_1="K_E5c" variable_2="K_E5c"/>
+        <map_variables variable_1="K_cGMP" variable_2="K_cGMP"/>
+        <map_variables variable_1="K_PDE" variable_2="K_PDE"/>
+        <map_variables variable_1="K_GTP_E5c" variable_2="K_GTP_E5c"/>
+        <map_variables variable_1="K_cGMP_PDE" variable_2="K_cGMP_PDE"/>
+        <map_variables variable_1="K_GMP" variable_2="K_GMP"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="sGC"/>
+        <map_variables variable_1="kappa_R_1_sGC" variable_2="kappa_R_1_sGC"/>
+        <map_variables variable_1="kappa_R_2_sGC" variable_2="kappa_R_2_sGC"/>
+        <map_variables variable_1="kappa_R_3_sGC" variable_2="kappa_R_3_sGC"/>
+        <map_variables variable_1="kappa_R_4_sGC" variable_2="kappa_R_4_sGC"/>
+        <map_variables variable_1="kappa_R_DNO_sGC" variable_2="kappa_R_DNO_sGC"/>
+        <map_variables variable_1="K_Eb" variable_2="K_Eb"/>
+        <map_variables variable_1="K_NO" variable_2="K_NO"/>
+        <map_variables variable_1="K_E6c" variable_2="K_E6c"/>
+        <map_variables variable_1="K_E5c" variable_2="K_E5c"/>
+        <map_variables variable_1="K_cGMP" variable_2="K_cGMP"/>
+        <map_variables variable_1="K_NO_product" variable_2="K_NO_product"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="cGMP"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="sGC"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+</model>

@@ -1,0 +1,279 @@
+<?xml version='1.0'?>
+<model name="Morphine_Transplacental" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="Morphine_Transplacental_Units.cellml">
+        <units name="mL" units_ref="mL"/>
+        <units name="minute" units_ref="minute"/>
+        <units name="per_min" units_ref="per_min"/>
+        <units name="mL_per_min" units_ref="mL_per_min"/>
+        <units name="ng" units_ref="ng"/>
+        <units name="per_mL" units_ref="per_mL"/>
+        <units name="ng_per_mL" units_ref="ng_per_mL"/>
+    </import>
+    <component name="main">
+        <variable initial_value="250" name="V_mr" units="mL"/>
+        <variable initial_value="0.15" name="V_ma" units="mL"/>
+        <variable initial_value="0.15" name="V_fv" units="mL"/>
+        <variable initial_value="150" name="V_fr" units="mL"/>
+        <variable initial_value="68.7" name="V_ch" units="mL"/>
+        <variable initial_value="1.34" name="V_fc" units="mL"/>
+        <variable initial_value="6.03" name="V_mi" units="mL"/>
+        <variable initial_value="2.68" name="V_t" units="mL"/>
+        <variable initial_value="74.7" name="V_mp" units="mL"/>
+        <variable initial_value="13" name="Q_m" units="mL_per_min"/>
+        <variable initial_value="4" name="Q_f" units="mL_per_min"/>
+        <variable initial_value="1.25" name="PS_MVMacteff" units="mL_per_min"/>
+        <variable initial_value="5.92" name="PS_MVMdiff" units="mL_per_min"/>
+        <variable initial_value="2.3" name="PS_BMdiff" units="mL_per_min"/>
+        <variable initial_value="55" name="dose" units="ng_per_mL"/>
+        <variable initial_value="0" name="t" units="minute"/>
+        <!--initial condition-->
+        <variable initial_value="dose" name="C_mr" units="ng_per_mL"/>
+        <variable initial_value="0" name="C_ma" units="ng_per_mL"/>
+        <variable initial_value="0" name="C_mp" units="ng_per_mL"/>
+        <variable initial_value="0" name="C_t" units="ng_per_mL"/>
+        <variable initial_value="0" name="C_fc" units="ng_per_mL"/>
+        <variable initial_value="0" name="C_fv" units="ng_per_mL"/>
+        <variable initial_value="0" name="C_fr" units="ng_per_mL"/>
+        <!--ODE system-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>C_mr</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_m</ci>
+                        <apply>
+                            <minus/>
+                            <ci>C_mp</ci>
+                            <ci>C_mr</ci>
+                        </apply>
+                    </apply>
+                    <ci>V_mr</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>C_ma</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_m</ci>
+                        <apply>
+                            <minus/>
+                            <ci>C_mr</ci>
+                            <ci>C_ma</ci>
+                        </apply>
+                    </apply>
+                    <ci>V_ma</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>C_mp</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>Q_m</ci>
+                                <apply>
+                                    <minus/>
+                                    <ci>C_ma</ci>
+                                    <ci>C_mp</ci>
+                                </apply>
+                            </apply>
+                            <ci>V_mp</ci>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <plus/>
+                                    <ci>PS_MVMacteff</ci>
+                                    <ci>PS_MVMdiff</ci>
+                                </apply>
+                                <ci>C_t</ci>
+                            </apply>
+                            <ci>V_mp</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>PS_MVMdiff</ci>
+                            <ci>C_mp</ci>
+                        </apply>
+                        <ci>V_mp</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>C_t</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>PS_MVMdiff</ci>
+                                <ci>C_mp</ci>
+                            </apply>
+                            <ci>V_t</ci>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>PS_BMdiff</ci>
+                                <ci>C_fc</ci>
+                            </apply>
+                            <ci>V_t</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <ci>PS_MVMacteff</ci>
+                                <ci>PS_MVMdiff</ci>
+                                <ci>PS_BMdiff</ci>
+                            </apply>
+                            <ci>C_t</ci>
+                        </apply>
+                        <ci>V_t</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>C_fc</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>Q_f</ci>
+                                <apply>
+                                    <minus/>
+                                    <ci>C_fr</ci>
+                                    <ci>C_fc</ci>
+                                </apply>
+                            </apply>
+                            <ci>V_fc</ci>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>PS_BMdiff</ci>
+                                <ci>C_t</ci>
+                            </apply>
+                            <ci>V_fc</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>PS_BMdiff</ci>
+                            <ci>C_fc</ci>
+                        </apply>
+                        <ci>V_fc</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>C_fv</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_f</ci>
+                        <apply>
+                            <minus/>
+                            <ci>C_fc</ci>
+                            <ci>C_fv</ci>
+                        </apply>
+                    </apply>
+                    <ci>V_fv</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>C_fr</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_f</ci>
+                        <apply>
+                            <minus/>
+                            <ci>C_fv</ci>
+                            <ci>C_fr</ci>
+                        </apply>
+                    </apply>
+                    <ci>V_fr</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

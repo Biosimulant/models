@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="reversal_potential" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+    <units name="K">
+        <unit units="kelvin"/>
+    </units>
+    <units name="mM">
+        <unit units="nmol"/>
+        <unit exponent="-3" units="mm"/>
+    </units>
+    <units name="nmol">
+        <unit prefix="nano" units="mole"/>
+    </units>
+    <units name="mm">
+        <unit prefix="milli" units="metre"/>
+    </units>
+    <units name="gas_constant">
+        <unit units="pJ"/>
+        <unit exponent="-1" units="nmol"/>
+        <unit exponent="-1" units="K"/>
+    </units>
+    <units name="pJ">
+        <unit prefix="pico" units="joule"/>
+    </units>
+    <units name="faradays_constant">
+        <unit units="nC"/>
+        <unit exponent="-1" units="nmol"/>
+    </units>
+    <units name="nC">
+        <unit prefix="nano" units="coulomb"/>
+    </units>
+    <units name="mV">
+        <unit prefix="milli" units="volt"/>
+    </units>
+    <units name="per_second">
+        <unit exponent="-1" units="second"/>
+    </units>
+    <component name="environment">
+        <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+    </component>
+    <component cmeta:id="ca-nernst-calculation" name="Ca_ion">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable cmeta:id="valence" initial_value="2" name="z" public_interface="out" units="dimensionless"/>
+        <variable cmeta:id="temperature" initial_value="310.5" name="T" units="K"/>
+        <variable cmeta:id="cai" initial_value="0.000075" name="Ca_i" units="mM"/>
+        <variable cmeta:id="cao" initial_value="2" name="Ca_o" units="mM"/>
+        <variable cmeta:id="gas-constant" initial_value="8314.472" name="R" public_interface="out" units="gas_constant"/>
+        <variable cmeta:id="faradays-constant" initial_value="96485.0" name="F" public_interface="out" units="faradays_constant"/>
+        <variable cmeta:id="nernst-potential" name="V_Ca" public_interface="out" units="mV"/>
+        <variable name="kappa_L1" public_interface="out" units="per_second"/>
+        <variable initial_value="0.132" name="kappa_P1" public_interface="out" units="per_second"/>
+        <variable name="kappa_L2" public_interface="out" units="per_second"/>
+        <variable initial_value="3.78" name="kappa_P2" public_interface="out" units="per_second"/>
+        <variable initial_value="0.054" name="kappa_L2_0" units="per_second"/>
+        <variable initial_value="2.4" name="kappa_L2_1" units="per_second"/>
+        <variable name="Kd_Ca" units="mM"/>
+        <variable initial_value="3" name="n" units="dimensionless"/>
+        <variable initial_value="0.24" name="gamma" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply id="kappa_L1_calculation">
+                <eq/>
+                <ci>kappa_L1</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="per_second">0.000005</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <geq/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">0</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">40</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="per_second">0.00002</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply id="kappa_L2_calculation">
+                <eq/>
+                <ci>kappa_L2</ci>
+                <apply>
+                    <plus/>
+                    <ci>kappa_L2_0</ci>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_L2_1</ci>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <ci>Kd_Ca</ci>
+                                    <ci>Ca_i</ci>
+                                </apply>
+                                <ci>n</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="Kd_Ca_calculation">
+                <eq/>
+                <ci>Kd_Ca</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="mM">0.001</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <geq/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">0</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">80</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="mM" type="e-notation">5<sep/>-6</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>V_Ca</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>R</ci>
+                            <ci>T</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>z</ci>
+                            <ci>F</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <divide/>
+                            <ci>Ca_o</ci>
+                            <ci>Ca_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="Ca_i_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>Ca_i</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <plus/>
+                                <ci>kappa_L1</ci>
+                                <ci>kappa_P1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>gamma</ci>
+                                    <apply>
+                                        <plus/>
+                                        <ci>kappa_L2</ci>
+                                        <ci>kappa_P2</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <ci>Ca_i</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>kappa_L1</ci>
+                        <ci>Ca_o</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="Ca_ion" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+</model>

@@ -1,0 +1,243 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="BG3" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#">
+    <!-- Bond graph model of a coupled electrical-mechanical system (voice coil)-->
+    <!-- electrical units-->
+    <units name="per_s">
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="C_per_s">
+        <unit units="coulomb"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="C_per_s2">
+        <unit units="coulomb"/>
+        <unit exponent="-2" units="second"/>
+    </units>
+    <units name="J_per_C">
+        <unit units="joule"/>
+        <unit exponent="-1" units="coulomb"/>
+    </units>
+    <units name="J_per_C2">
+        <unit units="joule"/>
+        <unit exponent="-2" units="coulomb"/>
+    </units>
+    <units name="Js_per_C2">
+        <unit units="joule"/>
+        <unit units="second"/>
+        <unit exponent="-2" units="coulomb"/>
+    </units>
+    <units name="Js2_per_C2">
+        <unit units="joule"/>
+        <unit exponent="2" units="second"/>
+        <unit exponent="-2" units="coulomb"/>
+    </units>
+    <!--TF units-->
+    <units name="Js_per_C_m">
+        <unit units="joule"/>
+        <unit units="second"/>
+        <unit exponent="-1" units="coulomb"/>
+        <unit exponent="-1" units="metre"/>
+    </units>
+    <!--mechanical units-->
+    <units name="m_per_s">
+        <unit units="metre"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="m_per_s2">
+        <unit units="metre"/>
+        <unit exponent="-2" units="second"/>
+    </units>
+    <units name="J_per_m">
+        <unit units="joule"/>
+        <unit exponent="-1" units="metre"/>
+    </units>
+    <units name="J_per_m2">
+        <unit units="joule"/>
+        <unit exponent="-2" units="metre"/>
+    </units>
+    <units name="Js_per_m2">
+        <unit units="joule"/>
+        <unit units="second"/>
+        <unit exponent="-2" units="metre"/>
+    </units>
+    <units name="Js2_per_m2">
+        <unit units="joule"/>
+        <unit exponent="2" units="second"/>
+        <unit exponent="-2" units="metre"/>
+    </units>
+    <component name="Environment">
+        <variable name="u_in_e" public_interface="out" units="J_per_C"/>
+        <variable initial_value="0" name="t" public_interface="out" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>u_in_e</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="J_per_C">50</cn>
+                    <apply>
+                        <sin/>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="per_s">50</cn>
+                            <cn cellml:units="dimensionless">2</cn>
+                            <pi/>
+                            <ci>t</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="Voice_coil_equations">
+        <!-- State variables-->
+        <variable name="t" public_interface="in" units="second"/>
+        <variable initial_value="0" name="v_1_e" units="C_per_s"/>
+        <variable name="a_1_e" units="C_per_s2"/>
+        <variable initial_value="0" name="q_C_m" units="metre"/>
+        <variable initial_value="0" name="v_2_m" units="m_per_s"/>
+        <variable name="a_2_m" units="m_per_s2"/>
+        <variable name="u_in_e" public_interface="in" units="J_per_C"/>
+        <variable name="u_R_e" units="J_per_C"/>
+        <variable name="u_L_e" units="J_per_C"/>
+        <variable name="u_1_e" units="J_per_C"/>
+        <variable name="u_2_m" units="J_per_m"/>
+        <variable name="u_C_m" units="J_per_m"/>
+        <variable name="u_R_m" units="J_per_m"/>
+        <variable name="u_L_m" units="J_per_m"/>
+        <!-- Constitutive parameters -->
+        <variable initial_value="1" name="E_1" units="J_per_C2"/>
+        <variable initial_value="100" name="E_2" units="J_per_m2"/>
+        <variable initial_value="5" name="R_1_e" units="Js_per_C2"/>
+        <variable initial_value="0.4" name="R_2_m" units="Js_per_m2"/>
+        <variable initial_value="0.2" name="L_1_e" units="Js2_per_C2"/>
+        <variable initial_value="0.01" name="L_2_m" units="Js2_per_m2"/>
+        <!-- TF parameters: this depends on the number of coil turns and the magnetic flux.-->
+        <variable initial_value="6" name="Bl" units="Js_per_C_m"/>
+        <!-- Conservation laws-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>v_1_e</ci>
+                </apply>
+                <ci>a_1_e</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_C_m</ci>
+                </apply>
+                <ci>v_2_m</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>v_2_m</ci>
+                </apply>
+                <ci>a_2_m</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_in_e</ci>
+                <apply>
+                    <plus/>
+                    <ci>u_R_e</ci>
+                    <ci>u_L_e</ci>
+                    <ci>u_1_e</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_2_m</ci>
+                <apply>
+                    <plus/>
+                    <ci>u_C_m</ci>
+                    <ci>u_R_m</ci>
+                    <ci>u_L_m</ci>
+                </apply>
+            </apply>
+            <!-- Constitutive relations-->
+            <apply>
+                <eq/>
+                <ci>u_R_e</ci>
+                <apply>
+                    <times/>
+                    <ci>R_1_e</ci>
+                    <ci>v_1_e</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_L_e</ci>
+                <apply>
+                    <times/>
+                    <ci>L_1_e</ci>
+                    <ci>a_1_e</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_1_e</ci>
+                <apply>
+                    <times/>
+                    <ci>Bl</ci>
+                    <ci>v_2_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_2_m</ci>
+                <apply>
+                    <times/>
+                    <ci>Bl</ci>
+                    <ci>v_1_e</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_C_m</ci>
+                <apply>
+                    <times/>
+                    <ci>E_2</ci>
+                    <ci>q_C_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_R_m</ci>
+                <apply>
+                    <times/>
+                    <ci>R_2_m</ci>
+                    <ci>v_2_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_L_m</ci>
+                <apply>
+                    <times/>
+                    <ci>L_2_m</ci>
+                    <ci>a_2_m</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="Environment" component_2="Voice_coil_equations"/>
+        <map_variables variable_1="u_in_e" variable_2="u_in_e"/>
+        <map_variables variable_1="t" variable_2="t"/>
+    </connection>
+</model>

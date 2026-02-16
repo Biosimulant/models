@@ -1,0 +1,395 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="WC_co2" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <!-- Wagner-Cano SS respiratory model -->
+    <units name="dim">
+        <unit units="dimensionless"/>
+    </units>
+    <units name="per_mmol">
+        <unit exponent="-1" prefix="milli" units="mole"/>
+    </units>
+    <units name="per_J">
+        <unit exponent="-1" units="joule"/>
+    </units>
+    <units name="L_per_s">
+        <unit units="litre"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="L_per_mmol">
+        <unit units="litre"/>
+        <unit exponent="-1" prefix="milli" units="mole"/>
+    </units>
+    <units name="mmol_per_s">
+        <unit prefix="milli" units="mole"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="mmol_per_L">
+        <unit prefix="milli" units="mole"/>
+        <unit exponent="-1" units="liter"/>
+    </units>
+    <units name="kPa">
+        <unit units="joule"/>
+        <unit exponent="-1" units="liter"/>
+    </units>
+    <units name="mmol_per_s_per_kPa">
+        <unit prefix="milli" units="mole"/>
+        <unit exponent="-1" units="second"/>
+        <unit exponent="-1" units="kPa"/>
+    </units>
+    <component name="main">
+        <variable initial_value="101.33" name="P_B" units="kPa"/>
+        <variable name="p_l_cO2" units="kPa"/>
+        <variable name="p_lc_cO2" units="kPa"/>
+        <variable name="p_mc_cO2" units="kPa"/>
+        <variable name="p_m_cO2" units="kPa"/>
+        <!--        var p_m_50: kPa {init: 0.03333};
+        var p_50_O2: kPa {init: 3.573};-->
+        <variable initial_value="0" name="V_In_air" units="L_per_s"/>
+        <variable initial_value="1" name="V_In_air_max" units="L_per_s"/>
+        <variable initial_value="0" name="V_Ex_air" units="L_per_s"/>
+        <variable initial_value="1" name="V_Ex_air_max" units="L_per_s"/>
+        <!--        var Q_m_O2max: mmol_per_s {init: 2.842};-->
+        <variable name="Q_l_cO2" units="mmol_per_s"/>
+        <variable name="Q_m_cO2" units="mmol_per_s"/>
+        <variable name="C_lc_cO2" units="mmol_per_L"/>
+        <variable name="C_mc_cO2" units="mmol_per_L"/>
+        <!--        var C_O2_max: mmol_per_L {init: 8.615};-->
+        <variable initial_value="0" name="t" units="dim"/>
+        <variable initial_value="0.005" name="F_In_cO2" units="dim"/>
+        <variable initial_value="0.70" name="F_Ex_cO2" units="dim"/>
+        <variable initial_value="3" name="n" units="dim"/>
+        <variable initial_value="22.4e-3" name="f_cO2" units="L_per_mmol"/>
+        <variable initial_value="0.383" name="V_b" units="L_per_s"/>
+        <variable initial_value="0.237" name="D_l_cO2" units="mmol_per_s_per_kPa"/>
+        <variable initial_value="0.5692" name="D_m_cO2" units="mmol_per_s_per_kPa"/>
+        <variable name="CO2_T" public_interface="in" units="mmol_per_L"/>
+        <!--unsure of this-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>V_Ex_air</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dim">1.0</cn>
+                    </apply>
+                    <ci>V_Ex_air_max</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_l_cO2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>V_Ex_air</ci>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <divide/>
+                                <ci>p_l_cO2</ci>
+                                <ci>P_B</ci>
+                            </apply>
+                            <ci>F_In_cO2</ci>
+                        </apply>
+                    </apply>
+                    <ci>f_cO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_l_cO2</ci>
+                <apply>
+                    <times/>
+                    <ci>D_l_cO2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>p_l_cO2</ci>
+                        <ci>p_lc_cO2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_l_cO2</ci>
+                <apply>
+                    <times/>
+                    <ci>V_b</ci>
+                    <apply>
+                        <minus/>
+                        <ci>C_mc_cO2</ci>
+                        <ci>C_lc_cO2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_m_cO2</ci>
+                <ci>Q_l_cO2</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C_lc_cO2</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dim">462</cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dim">0.00415</cn>
+                                <ci>p_lc_cO2</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dim">340</cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="dim">0.0445</cn>
+                                </apply>
+                                <ci>p_lc_cO2</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C_mc_cO2</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dim">462</cn>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="dim">0.00415</cn>
+                                    <ci>p_mc_cO2</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dim">340</cn>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <minus/>
+                                        <cn cellml:units="dim">0.0445</cn>
+                                    </apply>
+                                    <ci>p_mc_cO2</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <ci>CO2_T</ci>
+                </apply>
+            </apply>
+            <!--        C_lc_O2 = C_O2_max*pow(p_lc_O2, n)/(pow(p_50_O2, n)+pow(p_lc_O2, n));
+        C_mc_O2 = C_O2_max*pow(p_mc_O2, n)/(pow(p_50_O2, n)+pow(p_mc_O2, n));-->
+            <apply>
+                <eq/>
+                <ci>Q_m_cO2</ci>
+                <apply>
+                    <times/>
+                    <ci>D_m_cO2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>p_mc_cO2</ci>
+                        <ci>p_m_cO2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_m_cO2</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dim">462</cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dim">0.00415</cn>
+                                <ci>p_m_cO2</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dim">340</cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="dim">0.0445</cn>
+                                </apply>
+                                <ci>p_m_cO2</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="pH">
+        <variable initial_value="6.1" name="pKHCO3_e" units="dim"/>
+        <variable initial_value="6.1" name="pKHCO3_p" units="dim"/>
+        <variable name="CO2_e" units="mmol_per_L"/>
+        <variable initial_value="1.2" name="CO2_p" units="mmol_per_L"/>
+        <variable initial_value="7.0" name="pHp" units="dim"/>
+        <variable name="pHe" units="dim"/>
+        <variable name="HCO3_e" units="mmol_per_L"/>
+        <variable name="HCO3_p" units="mmol_per_L"/>
+        <variable name="CO2_T" public_interface="out" units="mmol_per_L"/>
+        <variable initial_value="9.3" name="Hb_p" units="mmol_per_L"/>
+        <variable initial_value="21" name="Hb_e" units="mmol_per_L"/>
+        <variable name="f_e" units="dim"/>
+        <variable name="f_p" units="dim"/>
+        <variable initial_value="0.225" name="alpha_p" units="dim"/>
+        <variable initial_value="0.191" name="alpha_e" units="dim"/>
+        <variable initial_value="0" name="V_Ex_air" units="L_per_s"/>
+        <variable initial_value="1" name="V_Ex_air_max" units="L_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>CO2_e</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>alpha_e</ci>
+                        <ci>alpha_p</ci>
+                    </apply>
+                    <ci>CO2_p</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>pHe</ci>
+                <apply>
+                    <plus/>
+                    <ci>pHp</ci>
+                    <apply>
+                        <log/>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dim">3.094</cn>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dim">0.335</cn>
+                                <ci>pHp</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>HCO3_p</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <power/>
+                        <cn cellml:units="dim">10</cn>
+                        <apply>
+                            <minus/>
+                            <ci>pHp</ci>
+                            <ci>pKHCO3_p</ci>
+                        </apply>
+                    </apply>
+                    <ci>CO2_p</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>HCO3_e</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <power/>
+                        <cn cellml:units="dim">10</cn>
+                        <apply>
+                            <minus/>
+                            <ci>pHe</ci>
+                            <ci>pKHCO3_e</ci>
+                        </apply>
+                    </apply>
+                    <ci>CO2_e</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f_p</ci>
+                <apply>
+                    <divide/>
+                    <ci>Hb_p</ci>
+                    <ci>Hb_e</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f_e</ci>
+                <apply>
+                    <minus/>
+                    <cn cellml:units="dim">1</cn>
+                    <ci>f_p</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>CO2_T</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>CO2_p</ci>
+                            <ci>HCO3_p</ci>
+                        </apply>
+                        <ci>f_p</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>CO2_e</ci>
+                            <ci>HCO3_e</ci>
+                        </apply>
+                        <ci>f_e</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="pH" component_2="main"/>
+        <map_variables variable_1="CO2_T" variable_2="CO2_T"/>
+    </connection>
+</model>

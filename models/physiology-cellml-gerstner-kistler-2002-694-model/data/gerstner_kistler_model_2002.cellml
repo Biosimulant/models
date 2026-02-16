@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="gerstner_kistler_model_2002" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#">
+    <!-- See https://brian2.readthedocs.io/en/stable/user/converting_from_integrated_form.html.-->
+    <units name="millisecond">
+        <unit prefix="milli" units="second"/>
+    </units>
+    <units name="millivolt">
+        <unit prefix="milli" units="volt"/>
+    </units>
+    <units name="per_second">
+        <unit exponent="-1" units="second"/>
+    </units>
+    <component name="main">
+        <variable name="t" units="millisecond"/>
+        <variable initial_value="300" name="t_period" units="millisecond"/>
+        <variable name="t_relative" units="dimensionless"/>
+        <variable name="t_w_relative" units="dimensionless"/>
+        <variable initial_value="-50" name="V" units="millivolt"/>
+        <variable initial_value="-50" name="V_rest" units="millivolt"/>
+        <variable initial_value="0" name="g" units="millivolt"/>
+        <variable initial_value="10" name="tau" units="millisecond"/>
+        <variable name="w" units="millivolt"/>
+        <variable initial_value="13" name="w_start" units="millisecond"/>
+        <variable initial_value="1" name="w_duration" units="millisecond"/>
+        <variable initial_value="3" name="w_period" units="millisecond"/>
+        <variable initial_value="5" name="w_n" units="dimensionless"/>
+        <variable initial_value="200" name="w_value" units="millivolt"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>t_relative</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <rem/>
+                        <ci>t</ci>
+                        <ci>t_period</ci>
+                    </apply>
+                    <ci>w_start</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>t_w_relative</ci>
+                <apply>
+                    <rem/>
+                    <ci>t_relative</ci>
+                    <ci>w_period</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>w</ci>
+                <piecewise>
+                    <piece>
+                        <ci>w_value</ci>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <geq/>
+                                <ci>t_relative</ci>
+                                <cn cellml:units="millisecond">0</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>t_relative</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>w_n</ci>
+                                    <ci>w_period</ci>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>t_w_relative</ci>
+                                <ci>w_duration</ci>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="millivolt">0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>V</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>V_rest</ci>
+                            <ci>V</ci>
+                        </apply>
+                        <ci>g</ci>
+                    </apply>
+                    <ci>tau</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>g</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>g</ci>
+                        </apply>
+                        <ci>w</ci>
+                    </apply>
+                    <ci>tau</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

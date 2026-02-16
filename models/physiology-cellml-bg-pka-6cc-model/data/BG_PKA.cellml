@@ -1,0 +1,1139 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="BG_PKA" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="mM" units_ref="mM"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="3.212E-02" name="q_cAMP_init" units="fmol"/>
+        <variable initial_value="6.840E-03" name="q_PKI_init" units="fmol"/>
+        <variable initial_value="2.242E-02" name="q_PKACI_init" units="fmol"/>
+        <variable initial_value="3.800E-15" name="q_ARCI_init" units="fmol"/>
+        <variable initial_value="3.800E-15" name="q_A2RCI_init" units="fmol"/>
+        <variable initial_value="3.800E-15" name="q_CI_init" units="fmol"/>
+        <variable initial_value="3.800E-15" name="q_A2RI_init" units="fmol"/>
+        <variable initial_value="3.800E-15" name="q_PKACI_PKI_init" units="fmol"/>
+        <variable initial_value="9.500E-04" name="q_PKACII_init" units="fmol"/>
+        <variable initial_value="3.800E-15" name="q_ARCII_init" units="fmol"/>
+        <variable initial_value="3.800E-15" name="q_A2RCII_init" units="fmol"/>
+        <variable initial_value="3.800E-15" name="q_CII_init" units="fmol"/>
+        <variable initial_value="3.800E-15" name="q_A2RII_init" units="fmol"/>
+        <variable initial_value="3.800E-15" name="q_PKACII_PKI_init" units="fmol"/>
+        <!-- Global value-->
+        <variable name="q_cAMP" public_interface="out" units="fmol"/>
+        <variable name="q_PKI" public_interface="out" units="fmol"/>
+        <variable name="q_PKACI" public_interface="out" units="fmol"/>
+        <variable name="q_ARCI" public_interface="out" units="fmol"/>
+        <variable name="q_A2RCI" public_interface="out" units="fmol"/>
+        <variable name="q_CI" public_interface="out" units="fmol"/>
+        <variable name="q_A2RI" public_interface="out" units="fmol"/>
+        <variable name="q_PKACI_PKI" public_interface="out" units="fmol"/>
+        <variable name="q_PKACII" public_interface="out" units="fmol"/>
+        <variable name="q_ARCII" public_interface="out" units="fmol"/>
+        <variable name="q_A2RCII" public_interface="out" units="fmol"/>
+        <variable name="q_CII" public_interface="out" units="fmol"/>
+        <variable name="q_A2RII" public_interface="out" units="fmol"/>
+        <variable name="q_PKACII_PKI" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="q_cAMP_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_PKI_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_PKACI_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_ARCI_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_A2RCI_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_CI_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_A2RI_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_PKACI_PKI_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_PKACII_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_ARCII_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_A2RCII_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_CII_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_A2RII_mPKA" public_interface="in" units="fmol"/>
+        <variable name="q_PKACII_PKI_mPKA" public_interface="in" units="fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q_cAMP</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_cAMP_mPKA</ci>
+                    <ci>q_cAMP_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_PKI</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_PKI_mPKA</ci>
+                    <ci>q_PKI_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_PKACI</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_PKACI_mPKA</ci>
+                    <ci>q_PKACI_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_ARCI</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_ARCI_mPKA</ci>
+                    <ci>q_ARCI_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_A2RCI</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_A2RCI_mPKA</ci>
+                    <ci>q_A2RCI_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_CI</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_CI_mPKA</ci>
+                    <ci>q_CI_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_A2RI</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_A2RI_mPKA</ci>
+                    <ci>q_A2RI_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_PKACI_PKI</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_PKACI_PKI_mPKA</ci>
+                    <ci>q_PKACI_PKI_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_PKACII</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_PKACII_mPKA</ci>
+                    <ci>q_PKACII_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_ARCII</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_ARCII_mPKA</ci>
+                    <ci>q_ARCII_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_A2RCII</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_A2RCII_mPKA</ci>
+                    <ci>q_A2RCII_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_CII</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_CII_mPKA</ci>
+                    <ci>q_CII_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_A2RII</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_A2RII_mPKA</ci>
+                    <ci>q_A2RII_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_PKACII_PKI</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_PKACII_PKI_mPKA</ci>
+                    <ci>q_PKACII_PKI_init</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="PKA_parameters">
+        <variable initial_value="48.0417" name="kappa_aI" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="21.1895" name="kappa_bI" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="4.84331" name="kappa_dI" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="149.139" name="kappa_iI" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="48.0417" name="kappa_aII" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="21.1895" name="kappa_bII" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="4.84331" name="kappa_dII" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="149.139" name="kappa_iII" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0401879" name="K_cAMP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="14.3814" name="K_PKI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0478876" name="K_PKACI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.605095" name="K_ARCI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.3719" name="K_A2RCI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.96997" name="K_CI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0885687" name="K_A2RI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.194918" name="K_PKACI_PKI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0478876" name="K_PKACII" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.605095" name="K_ARCII" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.3719" name="K_A2RCII" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.96997" name="K_CII" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0885687" name="K_A2RII" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.194918" name="K_PKACII_PKI" public_interface="out" units="per_fmol"/>
+    </component>
+    <!-- active catalytic subunit of PKA is called C
+ CI and CII for type I and II PKA holoenzymes-->
+    <component name="PKA">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- PKA parameters-->
+        <variable name="kappa_aI" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_bI" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_dI" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_iI" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_aII" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_bII" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_dII" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_iII" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_cAMP" public_interface="in" units="per_fmol"/>
+        <variable name="K_PKI" public_interface="in" units="per_fmol"/>
+        <variable name="K_PKACI" public_interface="in" units="per_fmol"/>
+        <variable name="K_ARCI" public_interface="in" units="per_fmol"/>
+        <variable name="K_A2RCI" public_interface="in" units="per_fmol"/>
+        <variable name="K_CI" public_interface="in" units="per_fmol"/>
+        <variable name="K_A2RI" public_interface="in" units="per_fmol"/>
+        <variable name="K_PKACI_PKI" public_interface="in" units="per_fmol"/>
+        <variable name="K_PKACII" public_interface="in" units="per_fmol"/>
+        <variable name="K_ARCII" public_interface="in" units="per_fmol"/>
+        <variable name="K_A2RCII" public_interface="in" units="per_fmol"/>
+        <variable name="K_CII" public_interface="in" units="per_fmol"/>
+        <variable name="K_A2RII" public_interface="in" units="per_fmol"/>
+        <variable name="K_PKACII_PKI" public_interface="in" units="per_fmol"/>
+        <variable name="vaI" units="fmol_per_sec"/>
+        <variable name="vbI" units="fmol_per_sec"/>
+        <variable name="vdI" units="fmol_per_sec"/>
+        <variable name="viI" units="fmol_per_sec"/>
+        <variable name="vaII" units="fmol_per_sec"/>
+        <variable name="vbII" units="fmol_per_sec"/>
+        <variable name="vdII" units="fmol_per_sec"/>
+        <variable name="viII" units="fmol_per_sec"/>
+        <variable name="mu_cAMP" units="J_per_mol"/>
+        <variable name="mu_PKI" units="J_per_mol"/>
+        <variable name="mu_PKACI" units="J_per_mol"/>
+        <variable name="mu_ARCI" units="J_per_mol"/>
+        <variable name="mu_A2RCI" units="J_per_mol"/>
+        <variable name="mu_CI" units="J_per_mol"/>
+        <variable name="mu_A2RI" units="J_per_mol"/>
+        <variable name="mu_PKACI_PKI" units="J_per_mol"/>
+        <variable name="mu_PKACII" units="J_per_mol"/>
+        <variable name="mu_ARCII" units="J_per_mol"/>
+        <variable name="mu_A2RCII" units="J_per_mol"/>
+        <variable name="mu_CII" units="J_per_mol"/>
+        <variable name="mu_A2RII" units="J_per_mol"/>
+        <variable name="mu_PKACII_PKI" units="J_per_mol"/>
+        <!-- Input from global environment-->
+        <variable name="q_cAMP_global" public_interface="in" units="fmol"/>
+        <variable name="q_PKI_global" public_interface="in" units="fmol"/>
+        <variable name="q_PKACI_global" public_interface="in" units="fmol"/>
+        <variable name="q_ARCI_global" public_interface="in" units="fmol"/>
+        <variable name="q_A2RCI_global" public_interface="in" units="fmol"/>
+        <variable name="q_CI_global" public_interface="in" units="fmol"/>
+        <variable name="q_A2RI_global" public_interface="in" units="fmol"/>
+        <variable name="q_PKACI_PKI_global" public_interface="in" units="fmol"/>
+        <variable name="q_PKACII_global" public_interface="in" units="fmol"/>
+        <variable name="q_ARCII_global" public_interface="in" units="fmol"/>
+        <variable name="q_A2RCII_global" public_interface="in" units="fmol"/>
+        <variable name="q_CII_global" public_interface="in" units="fmol"/>
+        <variable name="q_A2RII_global" public_interface="in" units="fmol"/>
+        <variable name="q_PKACII_PKI_global" public_interface="in" units="fmol"/>
+        <!-- Output to global environment-->
+        <variable initial_value="1e-16" name="q_cAMP" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_PKI" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_PKACI" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_ARCI" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_A2RCI" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_CI" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_A2RI" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_PKACI_PKI" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_PKACII" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_ARCII" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_A2RCII" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_CII" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_A2RII" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_PKACII_PKI" public_interface="out" units="fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_cAMP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_cAMP</ci>
+                            <ci>q_cAMP_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PKI</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PKI</ci>
+                            <ci>q_PKI_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PKACI</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PKACI</ci>
+                            <ci>q_PKACI_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_ARCI</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_ARCI</ci>
+                            <ci>q_ARCI_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_A2RCI</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_A2RCI</ci>
+                            <ci>q_A2RCI_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_CI</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_CI</ci>
+                            <ci>q_CI_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_A2RI</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_A2RI</ci>
+                            <ci>q_A2RI_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PKACI_PKI</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PKACI_PKI</ci>
+                            <ci>q_PKACI_PKI_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PKACII</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PKACII</ci>
+                            <ci>q_PKACII_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_ARCII</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_ARCII</ci>
+                            <ci>q_ARCII_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_A2RCII</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_A2RCII</ci>
+                            <ci>q_A2RCII_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_CII</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_CII</ci>
+                            <ci>q_CII_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_A2RII</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_A2RII</ci>
+                            <ci>q_A2RII_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PKACII_PKI</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PKACII_PKI</ci>
+                            <ci>q_PKACII_PKI_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>vaI</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_aI</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PKACI</ci>
+                                    <ci>mu_cAMP</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_ARCI</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>vbI</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_bI</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_ARCI</ci>
+                                    <ci>mu_cAMP</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_A2RCI</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>vdI</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_dI</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_A2RCI</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_A2RI</ci>
+                                    <ci>mu_CI</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>viI</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_iI</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_CI</ci>
+                                    <ci>mu_PKI</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_PKACI_PKI</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>vaII</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_aII</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PKACII</ci>
+                                    <ci>mu_cAMP</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_ARCII</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>vbII</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_bII</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_ARCII</ci>
+                                    <ci>mu_cAMP</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_A2RCII</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>vdII</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_dII</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_A2RCII</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_A2RII</ci>
+                                    <ci>mu_CII</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>viII</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_iII</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_CII</ci>
+                                    <ci>mu_PKI</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_PKACII_PKI</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_cAMP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <ci>vaI</ci>
+                            </apply>
+                            <ci>vbI</ci>
+                        </apply>
+                        <ci>vaII</ci>
+                    </apply>
+                    <ci>vbII</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PKI</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>viI</ci>
+                    </apply>
+                    <ci>viII</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PKACI</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>vaI</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_ARCI</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>vaI</ci>
+                    <ci>vbI</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_A2RCI</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>vbI</ci>
+                    <ci>vdI</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_CI</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>vdI</ci>
+                    <ci>viI</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_A2RI</ci>
+                </apply>
+                <ci>vdI</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PKACI_PKI</ci>
+                </apply>
+                <ci>viI</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PKACII</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>vaII</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_ARCII</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>vaII</ci>
+                    <ci>vbII</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_A2RCII</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>vbII</ci>
+                    <ci>vdII</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_CII</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>vdII</ci>
+                    <ci>viII</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_A2RII</ci>
+                </apply>
+                <ci>vdII</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PKACII_PKI</ci>
+                </apply>
+                <ci>viII</ci>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="PKA"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_cAMP_mPKA" variable_2="q_cAMP"/>
+        <map_variables variable_1="q_cAMP" variable_2="q_cAMP_global"/>
+        <map_variables variable_1="q_PKI_mPKA" variable_2="q_PKI"/>
+        <map_variables variable_1="q_PKI" variable_2="q_PKI_global"/>
+        <map_variables variable_1="q_PKACI_mPKA" variable_2="q_PKACI"/>
+        <map_variables variable_1="q_PKACI" variable_2="q_PKACI_global"/>
+        <map_variables variable_1="q_ARCI_mPKA" variable_2="q_ARCI"/>
+        <map_variables variable_1="q_ARCI" variable_2="q_ARCI_global"/>
+        <map_variables variable_1="q_A2RCI_mPKA" variable_2="q_A2RCI"/>
+        <map_variables variable_1="q_A2RCI" variable_2="q_A2RCI_global"/>
+        <map_variables variable_1="q_CI_mPKA" variable_2="q_CI"/>
+        <map_variables variable_1="q_CI" variable_2="q_CI_global"/>
+        <map_variables variable_1="q_A2RI_mPKA" variable_2="q_A2RI"/>
+        <map_variables variable_1="q_A2RI" variable_2="q_A2RI_global"/>
+        <map_variables variable_1="q_PKACI_PKI_mPKA" variable_2="q_PKACI_PKI"/>
+        <map_variables variable_1="q_PKACI_PKI" variable_2="q_PKACI_PKI_global"/>
+        <map_variables variable_1="q_PKACII_mPKA" variable_2="q_PKACII"/>
+        <map_variables variable_1="q_PKACII" variable_2="q_PKACII_global"/>
+        <map_variables variable_1="q_ARCII_mPKA" variable_2="q_ARCII"/>
+        <map_variables variable_1="q_ARCII" variable_2="q_ARCII_global"/>
+        <map_variables variable_1="q_A2RCII_mPKA" variable_2="q_A2RCII"/>
+        <map_variables variable_1="q_A2RCII" variable_2="q_A2RCII_global"/>
+        <map_variables variable_1="q_CII_mPKA" variable_2="q_CII"/>
+        <map_variables variable_1="q_CII" variable_2="q_CII_global"/>
+        <map_variables variable_1="q_A2RII_mPKA" variable_2="q_A2RII"/>
+        <map_variables variable_1="q_A2RII" variable_2="q_A2RII_global"/>
+        <map_variables variable_1="q_PKACII_PKI_mPKA" variable_2="q_PKACII_PKI"/>
+        <map_variables variable_1="q_PKACII_PKI" variable_2="q_PKACII_PKI_global"/>
+    </connection>
+    <connection>
+        <map_components component_1="PKA_parameters" component_2="PKA"/>
+        <map_variables variable_1="kappa_aI" variable_2="kappa_aI"/>
+        <map_variables variable_1="kappa_bI" variable_2="kappa_bI"/>
+        <map_variables variable_1="kappa_dI" variable_2="kappa_dI"/>
+        <map_variables variable_1="kappa_iI" variable_2="kappa_iI"/>
+        <map_variables variable_1="kappa_aII" variable_2="kappa_aII"/>
+        <map_variables variable_1="kappa_bII" variable_2="kappa_bII"/>
+        <map_variables variable_1="kappa_dII" variable_2="kappa_dII"/>
+        <map_variables variable_1="kappa_iII" variable_2="kappa_iII"/>
+        <map_variables variable_1="K_cAMP" variable_2="K_cAMP"/>
+        <map_variables variable_1="K_PKI" variable_2="K_PKI"/>
+        <map_variables variable_1="K_PKACI" variable_2="K_PKACI"/>
+        <map_variables variable_1="K_ARCI" variable_2="K_ARCI"/>
+        <map_variables variable_1="K_A2RCI" variable_2="K_A2RCI"/>
+        <map_variables variable_1="K_CI" variable_2="K_CI"/>
+        <map_variables variable_1="K_A2RI" variable_2="K_A2RI"/>
+        <map_variables variable_1="K_PKACI_PKI" variable_2="K_PKACI_PKI"/>
+        <map_variables variable_1="K_PKACII" variable_2="K_PKACII"/>
+        <map_variables variable_1="K_ARCII" variable_2="K_ARCII"/>
+        <map_variables variable_1="K_A2RCII" variable_2="K_A2RCII"/>
+        <map_variables variable_1="K_CII" variable_2="K_CII"/>
+        <map_variables variable_1="K_A2RII" variable_2="K_A2RII"/>
+        <map_variables variable_1="K_PKACII_PKI" variable_2="K_PKACII_PKI"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="PKA"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>	
+</model>

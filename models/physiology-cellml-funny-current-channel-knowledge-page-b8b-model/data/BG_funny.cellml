@@ -1,0 +1,729 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="funnycurrent_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="153400" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="27.9828" name="q_K_o" public_interface="out" units="fmol"/>
+        <variable initial_value="5510" name="q_K_i" public_interface="out" units="fmol"/>
+        <variable initial_value="9.3276" name="q_Na_o" public_interface="out" units="fmol"/>
+        <variable initial_value="0.00456" name="q_Na_i" public_interface="out" units="fmol"/>
+        <variable initial_value="5.4799070E-06" name="q_x0_funny" public_interface="out" units="fmol"/>
+        <variable initial_value="5.4799070E-06" name="q_x1_funny" public_interface="out" units="fmol"/>
+        <variable initial_value="-8.5e4" name="q_mem" public_interface="out" units="fC"/>
+        <variable initial_value="8.31" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96500" name="F" public_interface="out" units="C_per_mol"/>
+        <variable name="v_funny_K" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_funny_Na" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_funny" public_interface="in" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_K_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_funny_K</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_K_o</ci>
+                </apply>
+                <ci>v_funny_K</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Na_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_funny_Na</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Na_o</ci>
+                </apply>
+                <ci>v_funny_Na</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_mem</ci>
+                </apply>
+                <ci>I_mem_funny</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="funny_parameters">
+        <variable initial_value="45.0247" name="kappa_funny_Na" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="91.4974" name="kappa_funny_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.188833" name="kappa_R_xf" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.80864" name="K_Na_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="13.2633" name="K_Na_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.57828" name="K_K_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="18.9074" name="K_K_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00306604" name="K_x0_funny" public_interface="out" units="per_fmol"/>
+        <variable initial_value="61.5887" name="K_x1_funny" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1" name="zNa" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1" name="zK" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-1.8309039" name="z_xff" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.787348905" name="z_xfr" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="funny">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="zNa" public_interface="in" units="dimensionless"/>
+        <variable name="zK" public_interface="in" units="dimensionless"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="C_m" public_interface="in" units="fF"/>
+        <variable name="kappa_funny_Na" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_funny_K" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_Na_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_Na_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_K_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_K_o" public_interface="in" units="per_fmol"/>
+        <!-- state variables-->
+        <variable name="q_K_i" public_interface="in" units="fmol"/>
+        <variable name="q_K_o" public_interface="in" units="fmol"/>
+        <variable name="q_Na_i" public_interface="in" units="fmol"/>
+        <variable name="q_Na_o" public_interface="in" units="fmol"/>
+        <variable name="q_mem" public_interface="in" units="fC"/>
+        <variable name="v_funny_K" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_funny_Na" public_interface="out" units="fmol_per_sec"/>
+        <variable name="I_mem_funny" public_interface="out" units="fA"/>
+        <variable name="mu_K_i" units="J_per_mol"/>
+        <variable name="mu_K_o" units="J_per_mol"/>
+        <variable name="mu_Na_i" units="J_per_mol"/>
+        <variable name="mu_Na_o" units="J_per_mol"/>
+        <variable name="V_mem" units="J_per_C"/>
+        <variable name="Am_Na" units="J_per_mol"/>
+        <variable name="Am_K" units="J_per_mol"/>
+        <variable name="Af_K" units="J_per_mol"/>
+        <variable name="Ar_K" units="J_per_mol"/>
+        <variable name="Af_Na" units="J_per_mol"/>
+        <variable name="Ar_Na" units="J_per_mol"/>
+        <!-- Convention: positive flow from inside to outside-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Am_K</ci>
+                <apply>
+                    <times/>
+                    <ci>zK</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Am_Na</ci>
+                <apply>
+                    <times/>
+                    <ci>zNa</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_K_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K_i</ci>
+                            <ci>q_K_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_K_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K_o</ci>
+                            <ci>q_K_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_K</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_x1_funny</ci>
+                    <ci>mu_K_i</ci>
+                    <ci>Am_K</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_K</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_x1_funny</ci>
+                    <ci>mu_K_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Na_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Na_i</ci>
+                            <ci>q_Na_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Na_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Na_o</ci>
+                            <ci>q_Na_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_Na</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_x1_funny</ci>
+                    <ci>mu_Na_i</ci>
+                    <ci>Am_Na</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_Na</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_x1_funny</ci>
+                    <ci>mu_Na_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_funny_K</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>kappa_funny_K</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_K</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_K</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_K</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <cn cellml:units="dimensionless">1</cn>
+                                        <ci>kappa_funny_K</ci>
+                                        <ci>Am_K</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_K</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_K</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_K</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_funny_Na</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>kappa_funny_Na</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_Na</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_Na</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_Na</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <cn cellml:units="dimensionless">1</cn>
+                                        <ci>kappa_funny_Na</ci>
+                                        <ci>Am_Na</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_Na</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_Na</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_Na</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_funny</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <minus/>
+                                    <ci>zK</ci>
+                                </apply>
+                                <ci>v_funny_K</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>zNa</ci>
+                                <ci>v_funny_Na</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>z_xfr</ci>
+                                <ci>v_xf</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>z_xff</ci>
+                            <ci>v_xf</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- GATE
+        x0 state = closed
+        x1_state = open-->
+        <variable name="q_x0_funny" public_interface="in" units="fmol"/>
+        <variable name="q_x1_funny" public_interface="in" units="fmol"/>
+        <variable name="kappa_R_xf" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_x0_funny" public_interface="in" units="per_fmol"/>
+        <variable name="K_x1_funny" public_interface="in" units="per_fmol"/>
+        <variable name="mu_x0_funny" units="J_per_mol"/>
+        <variable name="mu_x1_funny" units="J_per_mol"/>
+        <variable name="Af_R_xf" units="J_per_mol"/>
+        <variable name="Ar_R_xf" units="J_per_mol"/>
+        <variable name="z_xff" public_interface="in" units="dimensionless"/>
+        <variable name="z_xfr" public_interface="in" units="dimensionless"/>
+        <variable name="v_xf" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_x0_funny</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_x0_funny</ci>
+                            <ci>q_x0_funny</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_x1_funny</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_x1_funny</ci>
+                            <ci>q_x1_funny</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_R_xf</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_x0_funny</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_xff</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_R_xf</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_x1_funny</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_xfr</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_xf</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R_xf</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_R_xf</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_R_xf</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_x0_funny</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_xf</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_x1_funny</ci>
+                </apply>
+                <ci>v_xf</ci>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="funny"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_x0_funny" variable_2="q_x0_funny"/>
+        <map_variables variable_1="q_x1_funny" variable_2="q_x1_funny"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="v_funny_K" variable_2="v_funny_K"/>
+        <map_variables variable_1="v_funny_Na" variable_2="v_funny_Na"/>
+        <map_variables variable_1="I_mem_funny" variable_2="I_mem_funny"/>
+    </connection>
+    <connection>
+        <map_components component_1="funny" component_2="funny_parameters"/>
+        <map_variables variable_1="kappa_funny_Na" variable_2="kappa_funny_Na"/>
+        <map_variables variable_1="kappa_funny_K" variable_2="kappa_funny_K"/>
+        <map_variables variable_1="kappa_R_xf" variable_2="kappa_R_xf"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_x0_funny" variable_2="K_x0_funny"/>
+        <map_variables variable_1="K_x1_funny" variable_2="K_x1_funny"/>
+        <map_variables variable_1="z_xff" variable_2="z_xff"/>
+        <map_variables variable_1="z_xfr" variable_2="z_xfr"/>
+        <map_variables variable_1="zNa" variable_2="zNa"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+	
+</model>

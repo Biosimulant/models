@@ -1,0 +1,949 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="cardiac_AP_NCX_only" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+    </import>
+    <component name="environment">
+        <variable initial_value="0" name="t" public_interface="out" units="second"/>
+        <variable initial_value="8.314" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96485" name="F" public_interface="out" units="C_per_mol"/>
+        <variable initial_value="153400" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="9.3276" name="q_Ca_o" public_interface="out" units="fmol"/>
+        <variable initial_value="0.00456" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <variable initial_value="725.48" name="q_Na_o" public_interface="out" units="fmol"/>
+        <variable initial_value="380" name="q_Na_i" public_interface="out" units="fmol"/>
+        <variable initial_value="0.000103509" name="q_P1_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="0.000103509" name="q_P2_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="0.000103509" name="q_P3_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="0.000103509" name="q_P4_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="0.000103509" name="q_P5_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="0.000103509" name="q_P6_NCX" public_interface="out" units="fmol"/>
+        <variable name="v_Ca_o_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Ca_i_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Na_o_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Na_i_NCX" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_o</ci>
+                </apply>
+                <ci>v_Ca_o_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <ci>v_Ca_i_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Na_o</ci>
+                </apply>
+                <ci>v_Na_o_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Na_i</ci>
+                </apply>
+                <ci>v_Na_i_NCX</ci>
+            </apply>
+        </math>
+        <variable initial_value="-13039" name="q_mem" public_interface="out" units="fC"/>
+        <variable name="I_mem_NCX" public_interface="in" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_mem</ci>
+                </apply>
+                <ci>I_mem_NCX</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="NCX_parameters">
+        <variable initial_value="417309" name="kappa_1_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.39522e+07" name="kappa_2_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="472.755" name="kappa_3_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.39522e+07" name="kappa_4_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="417309" name="kappa_5_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.370405" name="kappa_6_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.93394e+08" name="K_1_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="14.1045" name="K_2_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="263471" name="K_3_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.39875e+06" name="K_4_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2373.73" name="K_5_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="956.214" name="K_6_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0137751" name="K_Na_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="10.2446" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.470129" name="K_Na_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="7572.91" name="K_Ca_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="3" name="nNa_o_NCX" public_interface="out" units="dimensionless"/>
+        <variable initial_value="3" name="nNa_i_NCX" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.55679" name="zf_NCX" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.44321" name="zr_NCX" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="NCX">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="C_m" public_interface="in" units="fF"/>
+        <variable name="K_1_NCX" public_interface="in" units="per_fmol"/>
+        <variable name="K_2_NCX" public_interface="in" units="per_fmol"/>
+        <variable name="K_3_NCX" public_interface="in" units="per_fmol"/>
+        <variable name="K_4_NCX" public_interface="in" units="per_fmol"/>
+        <variable name="K_5_NCX" public_interface="in" units="per_fmol"/>
+        <variable name="K_6_NCX" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_Na_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_Na_i" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_1_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_2_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_3_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_4_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_5_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_6_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="nNa_o_NCX" public_interface="in" units="dimensionless"/>
+        <variable name="nNa_i_NCX" public_interface="in" units="dimensionless"/>
+        <variable name="zf_NCX" public_interface="in" units="dimensionless"/>
+        <variable name="zr_NCX" public_interface="in" units="dimensionless"/>
+        <variable name="q_Ca_o" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_i" public_interface="in" units="fmol"/>
+        <variable name="q_Na_o" public_interface="in" units="fmol"/>
+        <variable name="q_Na_i" public_interface="in" units="fmol"/>
+        <variable name="q_P1_NCX" public_interface="in" units="fmol"/>
+        <variable name="q_P2_NCX" public_interface="in" units="fmol"/>
+        <variable name="q_P3_NCX" public_interface="in" units="fmol"/>
+        <variable name="q_P4_NCX" public_interface="in" units="fmol"/>
+        <variable name="q_P5_NCX" public_interface="in" units="fmol"/>
+        <variable name="q_P6_NCX" public_interface="in" units="fmol"/>
+        <variable name="q_mem" public_interface="in" units="fC"/>
+        <variable name="mu_Ca_o" units="J_per_mol"/>
+        <variable name="mu_Ca_i" units="J_per_mol"/>
+        <variable name="mu_Na_o" units="J_per_mol"/>
+        <variable name="mu_Na_i" units="J_per_mol"/>
+        <variable name="mu_P1_NCX" units="J_per_mol"/>
+        <variable name="mu_P2_NCX" units="J_per_mol"/>
+        <variable name="mu_P3_NCX" units="J_per_mol"/>
+        <variable name="mu_P4_NCX" units="J_per_mol"/>
+        <variable name="mu_P5_NCX" units="J_per_mol"/>
+        <variable name="mu_P6_NCX" units="J_per_mol"/>
+        <variable name="v_Ca_o_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_Ca_i_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_Na_o_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_Na_i_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_P1_NCX" units="fmol_per_sec"/>
+        <variable name="v_P2_NCX" units="fmol_per_sec"/>
+        <variable name="v_P3_NCX" units="fmol_per_sec"/>
+        <variable name="v_P4_NCX" units="fmol_per_sec"/>
+        <variable name="v_P5_NCX" units="fmol_per_sec"/>
+        <variable name="v_P6_NCX" units="fmol_per_sec"/>
+        <variable name="Af_r1" units="J_per_mol"/>
+        <variable name="Ar_r1" units="J_per_mol"/>
+        <variable name="v_r1" public_interface="out" units="fmol_per_sec"/>
+        <variable name="Af_r2" units="J_per_mol"/>
+        <variable name="Ar_r2" units="J_per_mol"/>
+        <variable name="v_r2" public_interface="out" units="fmol_per_sec"/>
+        <variable name="Af_r3" units="J_per_mol"/>
+        <variable name="Ar_r3" units="J_per_mol"/>
+        <variable name="v_r3" public_interface="out" units="fmol_per_sec"/>
+        <variable name="Af_r4" units="J_per_mol"/>
+        <variable name="Ar_r4" units="J_per_mol"/>
+        <variable name="v_r4" public_interface="out" units="fmol_per_sec"/>
+        <variable name="Af_r5" units="J_per_mol"/>
+        <variable name="Ar_r5" units="J_per_mol"/>
+        <variable name="v_r5" public_interface="out" units="fmol_per_sec"/>
+        <variable name="Af_r6" units="J_per_mol"/>
+        <variable name="Ar_r6" units="J_per_mol"/>
+        <variable name="v_r6" public_interface="out" units="fmol_per_sec"/>
+        <variable name="V_mem" units="volt"/>
+        <variable name="I_mem_NCX" public_interface="out" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_NCX</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>zf_NCX</ci>
+                            </apply>
+                            <ci>v_r6</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>zr_NCX</ci>
+                            <ci>v_r6</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_o</ci>
+                            <ci>q_Ca_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_i</ci>
+                            <ci>q_Ca_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Na_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Na_o</ci>
+                            <ci>q_Na_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Na_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Na_i</ci>
+                            <ci>q_Na_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_P1_NCX</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_1_NCX</ci>
+                            <ci>q_P1_NCX</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_P2_NCX</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_2_NCX</ci>
+                            <ci>q_P2_NCX</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_P3_NCX</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_3_NCX</ci>
+                            <ci>q_P3_NCX</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_P4_NCX</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_4_NCX</ci>
+                            <ci>q_P4_NCX</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_P5_NCX</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_5_NCX</ci>
+                            <ci>q_P5_NCX</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_P6_NCX</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_6_NCX</ci>
+                            <ci>q_P6_NCX</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_r1</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_1_NCX</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_r1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_r1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_r2</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_2_NCX</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_r2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_r2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_r3</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_3_NCX</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_r3</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_r3</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_r4</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_4_NCX</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_r4</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_r4</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_r5</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_5_NCX</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_r5</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_r5</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_r6</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_6_NCX</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_r6</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_r6</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_r1</ci>
+                <ci>mu_P1_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_r2</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_P2_NCX</ci>
+                    <ci>mu_Ca_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_r3</ci>
+                <ci>mu_P3_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_r4</ci>
+                <ci>mu_P4_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_r5</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_P5_NCX</ci>
+                    <apply>
+                        <times/>
+                        <ci>nNa_o_NCX</ci>
+                        <ci>mu_Na_o</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_r6</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>R</ci>
+                        <ci>T</ci>
+                        <apply>
+                            <ln/>
+                            <apply>
+                                <times/>
+                                <ci>K_6_NCX</ci>
+                                <ci>q_P6_NCX</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>zf_NCX</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_r1</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>nNa_i_NCX</ci>
+                        <ci>mu_Na_i</ci>
+                    </apply>
+                    <ci>mu_P2_NCX</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_r2</ci>
+                <ci>mu_P3_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_r3</ci>
+                <ci>mu_P4_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_r4</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_P5_NCX</ci>
+                    <ci>mu_Ca_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_r5</ci>
+                <ci>mu_P6_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_r6</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>R</ci>
+                        <ci>T</ci>
+                        <apply>
+                            <ln/>
+                            <apply>
+                                <times/>
+                                <ci>K_1_NCX</ci>
+                                <ci>q_P1_NCX</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>zr_NCX</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Ca_o_NCX</ci>
+                <ci>v_r4</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Ca_i_NCX</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_r2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Na_o_NCX</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>nNa_o_NCX</ci>
+                    </apply>
+                    <ci>v_r5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Na_i_NCX</ci>
+                <apply>
+                    <times/>
+                    <ci>nNa_i_NCX</ci>
+                    <ci>v_r1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_P1_NCX</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_r6</ci>
+                    <ci>v_r1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_P2_NCX</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_r1</ci>
+                    <ci>v_r2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_P3_NCX</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_r2</ci>
+                    <ci>v_r3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_P4_NCX</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_r4</ci>
+                    </apply>
+                    <ci>v_r3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_P5_NCX</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_r5</ci>
+                    </apply>
+                    <ci>v_r4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_P6_NCX</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_r6</ci>
+                    </apply>
+                    <ci>v_r5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_P1_NCX</ci>
+                </apply>
+                <ci>v_P1_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_P2_NCX</ci>
+                </apply>
+                <ci>v_P2_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_P3_NCX</ci>
+                </apply>
+                <ci>v_P3_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_P4_NCX</ci>
+                </apply>
+                <ci>v_P4_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_P5_NCX</ci>
+                </apply>
+                <ci>v_P5_NCX</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_P6_NCX</ci>
+                </apply>
+                <ci>v_P6_NCX</ci>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="NCX" component_2="NCX_parameters"/>
+        <map_variables variable_1="K_1_NCX" variable_2="K_1_NCX"/>
+        <map_variables variable_1="K_2_NCX" variable_2="K_2_NCX"/>
+        <map_variables variable_1="K_3_NCX" variable_2="K_3_NCX"/>
+        <map_variables variable_1="K_4_NCX" variable_2="K_4_NCX"/>
+        <map_variables variable_1="K_5_NCX" variable_2="K_5_NCX"/>
+        <map_variables variable_1="K_6_NCX" variable_2="K_6_NCX"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="kappa_1_NCX" variable_2="kappa_1_NCX"/>
+        <map_variables variable_1="kappa_2_NCX" variable_2="kappa_2_NCX"/>
+        <map_variables variable_1="kappa_3_NCX" variable_2="kappa_3_NCX"/>
+        <map_variables variable_1="kappa_4_NCX" variable_2="kappa_4_NCX"/>
+        <map_variables variable_1="kappa_5_NCX" variable_2="kappa_5_NCX"/>
+        <map_variables variable_1="kappa_6_NCX" variable_2="kappa_6_NCX"/>
+        <map_variables variable_1="nNa_o_NCX" variable_2="nNa_o_NCX"/>
+        <map_variables variable_1="nNa_i_NCX" variable_2="nNa_i_NCX"/>
+        <map_variables variable_1="zf_NCX" variable_2="zf_NCX"/>
+        <map_variables variable_1="zr_NCX" variable_2="zr_NCX"/>
+    </connection>
+    <connection>
+        <map_components component_1="NCX" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_P1_NCX" variable_2="q_P1_NCX"/>
+        <map_variables variable_1="q_P2_NCX" variable_2="q_P2_NCX"/>
+        <map_variables variable_1="q_P3_NCX" variable_2="q_P3_NCX"/>
+        <map_variables variable_1="q_P4_NCX" variable_2="q_P4_NCX"/>
+        <map_variables variable_1="q_P5_NCX" variable_2="q_P5_NCX"/>
+        <map_variables variable_1="q_P6_NCX" variable_2="q_P6_NCX"/>
+        <map_variables variable_1="v_Ca_o_NCX" variable_2="v_Ca_o_NCX"/>
+        <map_variables variable_1="v_Ca_i_NCX" variable_2="v_Ca_i_NCX"/>
+        <map_variables variable_1="v_Na_o_NCX" variable_2="v_Na_o_NCX"/>
+        <map_variables variable_1="v_Na_i_NCX" variable_2="v_Na_i_NCX"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_NCX" variable_2="I_mem_NCX"/>
+    </connection>
+</model>

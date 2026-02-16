@@ -1,0 +1,480 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="strain_channel" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="per_mol" units_ref="per_mol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_mol"/>
+        <units name="mol_per_s" units_ref="mol_per_s"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_s"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="mA_per_mM" units_ref="mA_per_mM"/>
+    </import>
+    <component name="environment">
+        <variable name="t" public_interface="out" units="second"/>
+        <variable initial_value="153400" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="9.3276" name="q_Na_o" public_interface="out" units="fmol"/>
+        <variable initial_value="0.00456" name="q_Na_i" public_interface="out" units="fmol"/>
+        <variable initial_value="-13039" name="q_mem" public_interface="out" units="fC"/>
+        <variable initial_value="8.31" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96500" name="F" public_interface="out" units="C_per_mol"/>
+        <variable name="v_NaChannel" public_interface="in" units="fmol_per_sec"/>
+        <variable name="V_mem" public_interface="out" units="J_per_C"/>
+        <variable name="I_mem_NaChannel" public_interface="in" units="fA"/>
+        <variable name="u_strain" public_interface="out" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Na_i</ci>
+                </apply>
+                <ci>v_NaChannel</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Na_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_NaChannel</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_mem</ci>
+                </apply>
+                <ci>I_mem_NaChannel</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+            <!-- strain is dimensionless-->
+            <apply>
+                <eq/>
+                <ci>u_strain</ci>
+                <cn cellml:units="dimensionless">0.05</cn>
+            </apply>
+        </math>
+    </component>
+    <component name="NaChannel_parameters">
+        <variable initial_value="0.0722023" name="kappa_NaChannel" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00781119" name="K_Na_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0518535" name="K_Na_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2" name="zNa" public_interface="out" units="dimensionless"/>
+        <variable initial_value="5e-88" name="Gamma" public_interface="out" units="J_per_mol"/>
+    </component>
+    <component name="NaChannel">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="zNa" public_interface="in" units="dimensionless"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="K_Na_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_Na_o" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_NaChannel" public_interface="in" units="fmol_per_sec"/>
+        <variable name="q_Na_i" public_interface="in" units="fmol"/>
+        <variable name="q_Na_o" public_interface="in" units="fmol"/>
+        <variable name="mu_Na_i" units="J_per_mol"/>
+        <variable name="mu_Na_o" units="J_per_mol"/>
+        <variable name="mu_membrane" units="J_per_mol"/>
+        <variable name="mu_strain" units="J_per_mol"/>
+        <variable name="Af_NaChannel" units="J_per_mol"/>
+        <variable name="Ar_NaChannel" units="J_per_mol"/>
+        <variable name="Am_NaChannel" units="J_per_mol"/>
+        <variable name="q_mem" public_interface="in" units="fC"/>
+        <variable name="v_NaChannel" public_interface="out" units="fmol_per_sec"/>
+        <variable name="I_mem_NaChannel" public_interface="out" units="fA"/>
+        <variable name="V_mem" public_interface="in" units="J_per_C"/>
+        <variable name="Gamma" public_interface="in" units="J_per_mol"/>
+        <variable name="u_strain" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_Na_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Na_i</ci>
+                            <ci>q_Na_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Na_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Na_o</ci>
+                            <ci>q_Na_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_membrane</ci>
+                <apply>
+                    <times/>
+                    <ci>zNa</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_strain</ci>
+                <apply>
+                    <times/>
+                    <ci>Gamma</ci>
+                    <ci>u_strain</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_NaChannel</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_Na_o</ci>
+                    <ci>mu_membrane</ci>
+                    <ci>mu_strain</ci>
+                    <ci>mu_O_gate</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_NaChannel</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_Na_i</ci>
+                    <ci>mu_O_gate</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Am_NaChannel</ci>
+                <apply>
+                    <times/>
+                    <ci>zNa</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_NaChannel</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>kappa_NaChannel</ci>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <ci>mu_O_gate</ci>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_NaChannel</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_NaChannel</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_NaChannel</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>kappa_NaChannel</ci>
+                                        <apply>
+                                            <exp/>
+                                            <apply>
+                                                <divide/>
+                                                <ci>mu_O_gate</ci>
+                                                <apply>
+                                                    <times/>
+                                                    <ci>R</ci>
+                                                    <ci>T</ci>
+                                                </apply>
+                                            </apply>
+                                        </apply>
+                                        <ci>Am_NaChannel</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_NaChannel</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_NaChannel</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_NaChannel</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_NaChannel</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>zNa</ci>
+                    </apply>
+                    <ci>F</ci>
+                    <ci>v_NaChannel</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--    
+ gate
+-->
+        <variable name="mu_O_gate" public_interface="out" units="J_per_mol"/>
+        <variable name="mu_C_gate" public_interface="out" units="J_per_mol"/>
+        <variable initial_value="1e-88" name="kappa_gate" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1e-88" name="K_O_gate" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-88" name="K_C_gate" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-88" name="q_O_gate" units="fmol"/>
+        <variable initial_value="1e-88" name="q_C_gate" units="fmol"/>
+        <variable name="v_gate" units="fmol_per_sec"/>
+        <!-- gate: only Open and Closed states-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_O_gate</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_O_gate</ci>
+                            <ci>q_O_gate</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_C_gate</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_C_gate</ci>
+                            <ci>q_C_gate</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_gate</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_gate</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_C_gate</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_O_gate</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_O_gate</ci>
+                </apply>
+                <ci>v_gate</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_C_gate</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_gate</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="NaChannel"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+        <map_variables variable_1="v_NaChannel" variable_2="v_NaChannel"/>
+        <map_variables variable_1="I_mem_NaChannel" variable_2="I_mem_NaChannel"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="V_mem" variable_2="V_mem"/>
+        <map_variables variable_1="u_strain" variable_2="u_strain"/>
+    </connection>
+    <connection>
+        <map_components component_1="NaChannel" component_2="NaChannel_parameters"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="kappa_NaChannel" variable_2="kappa_NaChannel"/>
+        <map_variables variable_1="zNa" variable_2="zNa"/>
+        <map_variables variable_1="Gamma" variable_2="Gamma"/>
+    </connection>
+</model>

@@ -1,0 +1,3352 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="my_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <!-- BG CVS MVP model -->
+    <units name="dim">
+        <unit units="dimensionless"/>
+    </units>
+    <units name="per_s">
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="L_per_s">
+        <unit units="litre"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="kPa">
+        <unit units="joule"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="L_per_s_per_kPa">
+        <unit units="L_per_s"/>
+        <unit exponent="-1" units="kPa"/>
+    </units>
+    <units name="kPa_per_L">
+        <unit units="kPa"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="kPa_s_per_L">
+        <unit units="kPa"/>
+        <unit exponent="-1" units="L_per_s"/>
+    </units>
+    <units name="Js2_per_m5">
+        <unit units="joule"/>
+        <unit exponent="2" units="second"/>
+        <unit exponent="-5" units="meter"/>
+    </units>
+    <units name="m_per_s2">
+        <unit units="meter"/>
+        <unit exponent="-2" units="second"/>
+    </units>
+    <units name="fmol">
+        <unit prefix="femto" units="mole"/>
+    </units>
+    <units name="per_fmol">
+        <unit exponent="-1" units="fmol"/>
+    </units>
+    <units name="fmol_per_s">
+        <unit units="fmol"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <component name="main">
+        <variable name="t" units="second"/>
+        <variable initial_value="1000" name="rho" units="Js2_per_m5"/>
+        <variable initial_value="9.81" name="g" units="m_per_s2"/>
+        <variable initial_value="90" name="theta_deg" units="dim"/>
+        <variable name="theta_rad" units="radian"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>theta_rad</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>theta_deg</ci>
+                        <pi/>
+                    </apply>
+                    <cn cellml:units="dim">180</cn>
+                </apply>
+            </apply>
+        </math>
+        <variable name="z" units="dim"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>z</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="dim">1</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>t</ci>
+                                <cn cellml:units="second">100</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>t</ci>
+                                <cn cellml:units="second">101</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="dim">0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <!-- Triangular waveform mt with period T. Triangular waveform delayed by a constant is mta-->
+        <variable initial_value="1" name="T" units="second"/>
+        <variable name="mt" units="dim"/>
+        <variable name="mta" units="dim"/>
+        <variable initial_value="0.1" name="delay" units="dim"/>
+        <variable initial_value="0.1" name="To_pk" units="dim"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mt</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <divide/>
+                        <ci>t</ci>
+                        <ci>T</ci>
+                    </apply>
+                    <apply>
+                        <floor/>
+                        <apply>
+                            <divide/>
+                            <ci>t</ci>
+                            <ci>T</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mta</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <divide/>
+                            <ci>t</ci>
+                            <ci>T</ci>
+                        </apply>
+                        <ci>delay</ci>
+                    </apply>
+                    <apply>
+                        <floor/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <ci>t</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>delay</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                            <ci>T</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Left ventricle-->
+        <variable initial_value="2.24894867772612" name="q_LV" units="litre"/>
+        <variable initial_value="0.005" name="q_LV_us" units="litre"/>
+        <variable name="u_LV" units="kPa"/>
+        <variable name="E_LV" units="kPa_per_L"/>
+        <variable initial_value="320" name="E_LVmax" units="kPa_per_L"/>
+        <variable initial_value="6.667" name="E_LVmin" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>E_LV</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>E_LVmax</ci>
+                                            <ci>E_LVmin</ci>
+                                        </apply>
+                                        <ci>mt</ci>
+                                    </apply>
+                                    <ci>To_pk</ci>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <times/>
+                                        <cn cellml:units="dim">0.5</cn>
+                                        <apply>
+                                            <minus/>
+                                            <cn cellml:units="dim">1</cn>
+                                            <apply>
+                                                <power/>
+                                                <apply>
+                                                    <divide/>
+                                                    <ci>mt</ci>
+                                                    <ci>To_pk</ci>
+                                                </apply>
+                                                <cn cellml:units="dimensionless">2</cn>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <ci>E_LVmin</ci>
+                        </apply>
+                        <apply>
+                            <lt/>
+                            <ci>mt</ci>
+                            <cn cellml:units="dim">0.4</cn>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>E_LVmax</ci>
+                                            <ci>E_LVmin</ci>
+                                        </apply>
+                                        <cn cellml:units="dim">0.4</cn>
+                                    </apply>
+                                    <ci>To_pk</ci>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <times/>
+                                        <cn cellml:units="dim">0.5</cn>
+                                        <apply>
+                                            <minus/>
+                                            <cn cellml:units="dim">1</cn>
+                                            <apply>
+                                                <power/>
+                                                <apply>
+                                                    <divide/>
+                                                    <cn cellml:units="dim">0.4</cn>
+                                                    <ci>To_pk</ci>
+                                                </apply>
+                                                <cn cellml:units="dimensionless">2</cn>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <ci>E_LVmin</ci>
+                        </apply>
+                        <apply>
+                            <lt/>
+                            <ci>mt</ci>
+                            <cn cellml:units="dim">0.6</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>E_LVmin</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_LV</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_MV</ci>
+                    <ci>v_AV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_LV</ci>
+                <apply>
+                    <times/>
+                    <ci>E_LV</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_LV</ci>
+                        <ci>q_LV_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Right ventricle-->
+        <variable initial_value="2.24212874273495" name="q_RV" units="litre"/>
+        <variable initial_value="0.01" name="q_RV_us" units="litre"/>
+        <variable name="u_RV" units="kPa"/>
+        <variable name="E_RV" units="kPa_per_L"/>
+        <variable initial_value="70" name="E_RVmax" units="kPa_per_L"/>
+        <variable initial_value="2" name="E_RVmin" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>E_RV</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>E_RVmax</ci>
+                                            <ci>E_RVmin</ci>
+                                        </apply>
+                                        <ci>mt</ci>
+                                    </apply>
+                                    <ci>To_pk</ci>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <times/>
+                                        <cn cellml:units="dim">0.5</cn>
+                                        <apply>
+                                            <minus/>
+                                            <cn cellml:units="dim">1</cn>
+                                            <apply>
+                                                <power/>
+                                                <apply>
+                                                    <divide/>
+                                                    <ci>mt</ci>
+                                                    <ci>To_pk</ci>
+                                                </apply>
+                                                <cn cellml:units="dimensionless">2</cn>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <ci>E_RVmin</ci>
+                        </apply>
+                        <apply>
+                            <lt/>
+                            <ci>mt</ci>
+                            <cn cellml:units="dim">0.4</cn>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>E_RVmax</ci>
+                                            <ci>E_RVmin</ci>
+                                        </apply>
+                                        <cn cellml:units="dim">0.4</cn>
+                                    </apply>
+                                    <ci>To_pk</ci>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <times/>
+                                        <cn cellml:units="dim">0.5</cn>
+                                        <apply>
+                                            <minus/>
+                                            <cn cellml:units="dim">1</cn>
+                                            <apply>
+                                                <power/>
+                                                <apply>
+                                                    <divide/>
+                                                    <cn cellml:units="dim">0.4</cn>
+                                                    <ci>To_pk</ci>
+                                                </apply>
+                                                <cn cellml:units="dimensionless">2</cn>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <ci>E_RVmin</ci>
+                        </apply>
+                        <apply>
+                            <lt/>
+                            <ci>mt</ci>
+                            <cn cellml:units="dim">0.6</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>E_RVmin</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_RV</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_TV</ci>
+                    <ci>v_PV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_RV</ci>
+                <apply>
+                    <times/>
+                    <ci>E_RV</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_RV</ci>
+                        <ci>q_RV_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Left atrium-->
+        <variable initial_value="1.50038322871398" name="q_LA" units="litre"/>
+        <variable initial_value="0.004" name="q_LA_us" units="litre"/>
+        <variable name="u_LA" units="kPa"/>
+        <variable initial_value="10" name="E_LA" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_LA</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_pulmV</ci>
+                    <ci>v_MV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_LA</ci>
+                <apply>
+                    <times/>
+                    <ci>E_LA</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_LA</ci>
+                        <ci>q_LA_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Right atrium-->
+        <variable initial_value="0.582873822068968" name="q_RA" units="litre"/>
+        <variable initial_value="0.004" name="q_RA_us" units="litre"/>
+        <variable name="u_RA" units="kPa"/>
+        <variable initial_value="10" name="E_RA" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_RA</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_headV</ci>
+                        <ci>v_lArmV</ci>
+                        <ci>v_rArmV</ci>
+                        <ci>v_V1</ci>
+                    </apply>
+                    <ci>v_TV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_RA</ci>
+                <apply>
+                    <times/>
+                    <ci>E_RA</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_RA</ci>
+                        <ci>q_RA_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Aortic valve-->
+        <variable name="v_AV" units="L_per_s"/>
+        <variable initial_value="1" name="R_AV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_AV</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <ci>u_LV</ci>
+                                <ci>u_AA</ci>
+                            </apply>
+                            <ci>R_AV</ci>
+                        </apply>
+                        <apply>
+                            <gt/>
+                            <ci>u_LV</ci>
+                            <ci>u_AA</ci>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="L_per_s">0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <!-- Pulmonary Valve-->
+        <variable name="v_PV" units="L_per_s"/>
+        <variable initial_value="1" name="R_PV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_PV</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <ci>u_RV</ci>
+                                <ci>u_pulmA</ci>
+                            </apply>
+                            <ci>R_PV</ci>
+                        </apply>
+                        <apply>
+                            <gt/>
+                            <ci>u_RV</ci>
+                            <ci>u_pulmA</ci>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="L_per_s">0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <!-- Tricuspid Valve-->
+        <variable name="v_TV" units="L_per_s"/>
+        <variable initial_value="1" name="R_TV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_TV</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <ci>u_RA</ci>
+                                <ci>u_RV</ci>
+                            </apply>
+                            <ci>R_TV</ci>
+                        </apply>
+                        <apply>
+                            <gt/>
+                            <ci>u_RA</ci>
+                            <ci>u_RV</ci>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="L_per_s">0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <!-- Mitral Valve-->
+        <variable name="v_MV" units="L_per_s"/>
+        <variable initial_value="1" name="R_MV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_MV</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <ci>u_LA</ci>
+                                <ci>u_LV</ci>
+                            </apply>
+                            <ci>R_MV</ci>
+                        </apply>
+                        <apply>
+                            <gt/>
+                            <ci>u_LA</ci>
+                            <ci>u_LV</ci>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="L_per_s">0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <!-- Lungs-->
+        <variable initial_value="0.274822042097049" name="q_pulmA" units="litre"/>
+        <variable initial_value="0.2" name="q_pulmA_us" units="litre"/>
+        <variable name="u_pulmA" units="kPa"/>
+        <variable initial_value="200" name="E_pulmA" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_pulmA</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PV</ci>
+                    <ci>v_lungA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_pulmA</ci>
+                <apply>
+                    <times/>
+                    <ci>E_pulmA</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_pulmA</ci>
+                        <ci>q_pulmA_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lungA" units="L_per_s"/>
+        <variable initial_value="1" name="R_lungA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lungA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_pulmA</ci>
+                        <ci>u_lungC</ci>
+                    </apply>
+                    <ci>R_lungA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.274821056256821" name="q_lungC" units="litre"/>
+        <variable initial_value="0.2" name="q_lungC_us" units="litre"/>
+        <variable name="u_lungC" units="kPa"/>
+        <variable initial_value="200" name="E_lungC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_lungC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_lungA</ci>
+                    <ci>v_pulmV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_lungC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_lungC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_lungC</ci>
+                        <ci>q_lungC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_pulmV" units="L_per_s"/>
+        <variable initial_value="1" name="R_pulmV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_pulmV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_lungC</ci>
+                        <ci>u_LA</ci>
+                    </apply>
+                    <ci>R_pulmV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Ascending aorta-->
+        <variable initial_value="1.43716360225001" name="q_AA" units="litre"/>
+        <variable initial_value="0.12" name="q_AA_us" units="litre"/>
+        <variable name="u_AA" units="kPa"/>
+        <variable initial_value="80" name="E_AA" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_AA</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <ci>v_AV</ci>
+                                <ci>v_A1</ci>
+                            </apply>
+                            <ci>v_brachiocephalicA</ci>
+                        </apply>
+                        <ci>v_lCCA</ci>
+                    </apply>
+                    <ci>v_lSubclavianA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_AA</ci>
+                <apply>
+                    <times/>
+                    <ci>E_AA</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_AA</ci>
+                        <ci>q_AA_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Head and neck-->
+        <variable name="v_brachiocephalicA" units="L_per_s"/>
+        <variable initial_value="100" name="R_brachiocephalicA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_brachiocephalicA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_AA</ci>
+                        <ci>u_brachiocephalicA</ci>
+                    </apply>
+                    <ci>R_brachiocephalicA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.658321340279823" name="q_brachiocephalicA" units="litre"/>
+        <variable initial_value="0.2" name="q_brachiocephalicA_us" units="litre"/>
+        <variable name="u_brachiocephalicA" units="kPa"/>
+        <variable initial_value="200" name="E_brachiocephalicA" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_brachiocephalicA</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_brachiocephalicA</ci>
+                        <ci>v_rSubclavianA</ci>
+                    </apply>
+                    <ci>v_rCCA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_brachiocephalicA</ci>
+                <apply>
+                    <times/>
+                    <ci>E_brachiocephalicA</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_brachiocephalicA</ci>
+                        <ci>q_brachiocephalicA_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_rSubclavianA" units="L_per_s"/>
+        <variable initial_value="100" name="R_rSubclavianA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rSubclavianA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_brachiocephalicA</ci>
+                        <ci>u_rSubclavianA</ci>
+                    </apply>
+                    <ci>R_rSubclavianA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_rCCA" units="L_per_s"/>
+        <variable initial_value="100" name="R_rCCA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rCCA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_brachiocephalicA</ci>
+                        <ci>u_headC</ci>
+                    </apply>
+                    <ci>R_rCCA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.578637981993128" name="q_rSubclavianA" units="litre"/>
+        <variable initial_value="0.2" name="q_rSubclavianA_us" units="litre"/>
+        <variable name="u_rSubclavianA" units="kPa"/>
+        <variable initial_value="200" name="E_rSubclavianA" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_rSubclavianA</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_rSubclavianA</ci>
+                        <ci>v_rBrachialA</ci>
+                    </apply>
+                    <ci>v_rVertebralA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_rSubclavianA</ci>
+                <apply>
+                    <times/>
+                    <ci>E_rSubclavianA</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_rSubclavianA</ci>
+                        <ci>q_rSubclavianA_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_rBrachialA" units="L_per_s"/>
+        <variable initial_value="100" name="R_rBrachialA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rBrachialA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_rSubclavianA</ci>
+                        <ci>u_rArmC</ci>
+                    </apply>
+                    <ci>R_rBrachialA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_rVertebralA" units="L_per_s"/>
+        <variable initial_value="100" name="R_rVertebralA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rVertebralA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_rSubclavianA</ci>
+                        <ci>u_headC</ci>
+                    </apply>
+                    <ci>R_rVertebralA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lCCA" units="L_per_s"/>
+        <variable initial_value="100" name="R_lCCA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lCCA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_AA</ci>
+                        <ci>u_headC</ci>
+                    </apply>
+                    <ci>R_lCCA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lSubclavianA" units="L_per_s"/>
+        <variable initial_value="100" name="R_lSubclavianA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lSubclavianA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_AA</ci>
+                        <ci>u_lSubclavianA</ci>
+                    </apply>
+                    <ci>R_lSubclavianA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.609560299960373" name="q_lSubclavianA" units="litre"/>
+        <variable initial_value="0.2" name="q_lSubclavianA_us" units="litre"/>
+        <variable name="u_lSubclavianA" units="kPa"/>
+        <variable initial_value="200" name="E_lSubclavianA" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_lSubclavianA</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_lSubclavianA</ci>
+                        <ci>v_lBrachialA</ci>
+                    </apply>
+                    <ci>v_lVertebralA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_lSubclavianA</ci>
+                <apply>
+                    <times/>
+                    <ci>E_lSubclavianA</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_lSubclavianA</ci>
+                        <ci>q_lSubclavianA_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lBrachialA" units="L_per_s"/>
+        <variable initial_value="100" name="R_lBrachialA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lBrachialA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_lSubclavianA</ci>
+                        <ci>u_lArmC</ci>
+                    </apply>
+                    <ci>R_lBrachialA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lVertebralA" units="L_per_s"/>
+        <variable initial_value="100" name="R_lVertebralA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lVertebralA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_lSubclavianA</ci>
+                        <ci>u_headC</ci>
+                    </apply>
+                    <ci>R_lVertebralA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.575700923676085" name="q_headC" units="litre"/>
+        <variable initial_value="0.2" name="q_headC_us" units="litre"/>
+        <variable name="u_headC" units="kPa"/>
+        <variable initial_value="200" name="E_headC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_headC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_rVertebralA</ci>
+                        <ci>v_rCCA</ci>
+                        <ci>v_lCCA</ci>
+                        <ci>v_lVertebralA</ci>
+                    </apply>
+                    <ci>v_headV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_headC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_headC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_headC</ci>
+                        <ci>q_headC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_headV" units="L_per_s"/>
+        <variable initial_value="100" name="R_headV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_headV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_headC</ci>
+                        <ci>u_RA</ci>
+                    </apply>
+                    <ci>R_headV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Left arm-->
+        <variable initial_value="0.380415025779693" name="q_lArmC" units="litre"/>
+        <variable initial_value="0.06" name="q_lArmC_us" units="litre"/>
+        <variable name="u_lArmC" units="kPa"/>
+        <variable initial_value="150" name="E_lArmC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_lArmC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_lBrachialA</ci>
+                    <ci>v_lArmV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_lArmC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_lArmC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_lArmC</ci>
+                        <ci>q_lArmC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lArmV" units="L_per_s"/>
+        <variable initial_value="100" name="R_lArmV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lArmV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_lArmC</ci>
+                        <ci>u_RA</ci>
+                    </apply>
+                    <ci>R_lArmV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Right arm-->
+        <variable initial_value="0.380415025779692" name="q_rArmC" units="litre"/>
+        <variable initial_value="0.06" name="q_rArmC_us" units="litre"/>
+        <variable name="u_rArmC" units="kPa"/>
+        <variable initial_value="150" name="E_rArmC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_rArmC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_rBrachialA</ci>
+                    <ci>v_rArmV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_rArmC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_rArmC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_rArmC</ci>
+                        <ci>q_rArmC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_rArmV" units="L_per_s"/>
+        <variable initial_value="100" name="R_rArmV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rArmV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_rArmC</ci>
+                        <ci>u_RA</ci>
+                    </apply>
+                    <ci>R_rArmV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Descending aorta-->
+        <variable initial_value="0.0726453866278764" name="q_A1" units="litre"/>
+        <variable initial_value="0.06" name="q_A1_us" units="litre"/>
+        <variable initial_value="0.0722595904606296" name="q_A2" units="litre"/>
+        <variable initial_value="0.06" name="q_A2_us" units="litre"/>
+        <variable initial_value="0.0717727262354559" name="q_A3" units="litre"/>
+        <variable initial_value="0.06" name="q_A3_us" units="litre"/>
+        <variable initial_value="0.0715328891139091" name="q_A4" units="litre"/>
+        <variable initial_value="0.06" name="q_A4_us" units="litre"/>
+        <variable initial_value="0.0714293557557069" name="q_A5" units="litre"/>
+        <variable initial_value="0.06" name="q_A5_us" units="litre"/>
+        <variable initial_value="0.0713497500336812" name="q_A6" units="litre"/>
+        <variable initial_value="0.06" name="q_A6_us" units="litre"/>
+        <variable initial_value="0.0712949341825069" name="q_A7" units="litre"/>
+        <variable initial_value="0.06" name="q_A7_us" units="litre"/>
+        <variable initial_value="0.0712201889071758" name="q_A8" units="litre"/>
+        <variable initial_value="0.06" name="q_A8_us" units="litre"/>
+        <variable name="v_A1" units="L_per_s"/>
+        <variable name="v_A2" units="L_per_s"/>
+        <variable name="v_A3" units="L_per_s"/>
+        <variable name="v_A4" units="L_per_s"/>
+        <variable name="v_A5" units="L_per_s"/>
+        <variable name="v_A6" units="L_per_s"/>
+        <variable name="v_A7" units="L_per_s"/>
+        <variable name="v_A8" units="L_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_A1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_A1</ci>
+                        <ci>v_A2</ci>
+                    </apply>
+                    <ci>v_lInfPhrenicA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_A2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_A2</ci>
+                        <ci>v_A3</ci>
+                    </apply>
+                    <ci>v_rInfPhrenicA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_A3</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_A3</ci>
+                        <ci>v_A4</ci>
+                    </apply>
+                    <ci>v_celiacA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_A4</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_A4</ci>
+                        <ci>v_A5</ci>
+                    </apply>
+                    <ci>v_supMesA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_A5</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_A5</ci>
+                        <ci>v_A6</ci>
+                    </apply>
+                    <ci>v_lRenalA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_A6</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_A6</ci>
+                        <ci>v_A7</ci>
+                    </apply>
+                    <ci>v_rRenalA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_A7</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_A7</ci>
+                        <ci>v_A8</ci>
+                    </apply>
+                    <ci>v_infMesA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_A8</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_A8</ci>
+                        <ci>v_lCommonIliacA</ci>
+                    </apply>
+                    <ci>v_rCommonIliacA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="u_A1" units="kPa"/>
+        <variable name="u_A2" units="kPa"/>
+        <variable name="u_A3" units="kPa"/>
+        <variable name="u_A4" units="kPa"/>
+        <variable name="u_A5" units="kPa"/>
+        <variable name="u_A6" units="kPa"/>
+        <variable name="u_A7" units="kPa"/>
+        <variable name="u_A8" units="kPa"/>
+        <variable initial_value="400" name="E_A1" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_A2" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_A3" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_A4" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_A5" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_A6" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_A7" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_A8" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>u_A1</ci>
+                <apply>
+                    <times/>
+                    <ci>E_A1</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_A1</ci>
+                        <ci>q_A1_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_A2</ci>
+                <apply>
+                    <times/>
+                    <ci>E_A2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_A2</ci>
+                        <ci>q_A2_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_A3</ci>
+                <apply>
+                    <times/>
+                    <ci>E_A3</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_A3</ci>
+                        <ci>q_A3_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_A4</ci>
+                <apply>
+                    <times/>
+                    <ci>E_A4</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_A4</ci>
+                        <ci>q_A4_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_A5</ci>
+                <apply>
+                    <times/>
+                    <ci>E_A5</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_A5</ci>
+                        <ci>q_A5_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_A6</ci>
+                <apply>
+                    <times/>
+                    <ci>E_A6</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_A6</ci>
+                        <ci>q_A6_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_A7</ci>
+                <apply>
+                    <times/>
+                    <ci>E_A7</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_A7</ci>
+                        <ci>q_A7_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_A8</ci>
+                <apply>
+                    <times/>
+                    <ci>E_A8</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_A8</ci>
+                        <ci>q_A8_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="10000000" name="R_A1" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_A2" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_A3" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_A4" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_A5" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_A6" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_A7" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_A8" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_A1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_AA</ci>
+                        <ci>u_A1</ci>
+                    </apply>
+                    <ci>R_A1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_A2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A1</ci>
+                        <ci>u_A2</ci>
+                    </apply>
+                    <ci>R_A2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_A3</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A2</ci>
+                        <ci>u_A3</ci>
+                    </apply>
+                    <ci>R_A3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_A4</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A3</ci>
+                        <ci>u_A4</ci>
+                    </apply>
+                    <ci>R_A4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_A5</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A4</ci>
+                        <ci>u_A5</ci>
+                    </apply>
+                    <ci>R_A5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_A6</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A5</ci>
+                        <ci>u_A6</ci>
+                    </apply>
+                    <ci>R_A6</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_A7</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A6</ci>
+                        <ci>u_A7</ci>
+                    </apply>
+                    <ci>R_A7</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_A8</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A7</ci>
+                        <ci>u_A8</ci>
+                    </apply>
+                    <ci>R_A8</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Left phrenic branch of the aorta-->
+        <variable name="v_lInfPhrenicA" units="L_per_s"/>
+        <variable initial_value="100" name="R_lInfPhrenicA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lInfPhrenicA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A1</ci>
+                        <ci>u_lAdrenalGlandC</ci>
+                    </apply>
+                    <ci>R_lInfPhrenicA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.226013520134949" name="q_lAdrenalGlandC" units="litre"/>
+        <variable initial_value="0.2" name="q_lAdrenalGlandC_us" units="litre"/>
+        <variable name="u_lAdrenalGlandC" units="kPa"/>
+        <variable initial_value="200" name="E_lAdrenalGlandC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_lAdrenalGlandC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_lInfPhrenicA</ci>
+                    <ci>v_lAdrenalV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_lAdrenalGlandC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_lAdrenalGlandC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_lAdrenalGlandC</ci>
+                        <ci>q_lAdrenalGlandC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lAdrenalV" units="L_per_s"/>
+        <variable initial_value="100" name="R_lAdrenalV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lAdrenalV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_lAdrenalGlandC</ci>
+                        <ci>u_lInfPhrenicV</ci>
+                    </apply>
+                    <ci>R_lAdrenalV</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.226425525942081" name="q_lInfPhrenicV" units="litre"/>
+        <variable initial_value="0.2" name="q_lInfPhrenicV_us" units="litre"/>
+        <variable name="u_lInfPhrenicV" units="kPa"/>
+        <variable initial_value="200" name="E_lInfPhrenicV" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_lInfPhrenicV</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_lAdrenalV</ci>
+                    <ci>v_lInfPhrenicV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_lInfPhrenicV</ci>
+                <apply>
+                    <times/>
+                    <ci>E_lInfPhrenicV</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_lInfPhrenicV</ci>
+                        <ci>q_lInfPhrenicV_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lInfPhrenicV" units="L_per_s"/>
+        <variable initial_value="100" name="R_lInfPhrenicV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lInfPhrenicV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_lInfPhrenicV</ci>
+                        <ci>u_V1</ci>
+                    </apply>
+                    <ci>R_lInfPhrenicV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Right phrenic branch of the aorta-->
+        <variable name="v_rInfPhrenicA" units="L_per_s"/>
+        <variable initial_value="100" name="R_rInfPhrenicA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rInfPhrenicA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A2</ci>
+                        <ci>u_rAdrenalGlandC</ci>
+                    </apply>
+                    <ci>R_rInfPhrenicA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.224729694488936" name="q_rAdrenalGlandC" units="litre"/>
+        <variable initial_value="0.2" name="q_rAdrenalGlandC_us" units="litre"/>
+        <variable name="u_rAdrenalGlandC" units="kPa"/>
+        <variable initial_value="200" name="E_rAdrenalGlandC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_rAdrenalGlandC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_rInfPhrenicA</ci>
+                    <ci>v_rAdrenalV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_rAdrenalGlandC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_rAdrenalGlandC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_rAdrenalGlandC</ci>
+                        <ci>q_rAdrenalGlandC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_rAdrenalV" units="L_per_s"/>
+        <variable initial_value="100" name="R_rAdrenalV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rAdrenalV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_rAdrenalGlandC</ci>
+                        <ci>u_rInfPhrenicV</ci>
+                    </apply>
+                    <ci>R_rAdrenalV</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.224899115493557" name="q_rInfPhrenicV" units="litre"/>
+        <variable initial_value="0.2" name="q_rInfPhrenicV_us" units="litre"/>
+        <variable name="u_rInfPhrenicV" units="kPa"/>
+        <variable initial_value="200" name="E_rInfPhrenicV" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_rInfPhrenicV</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_rAdrenalV</ci>
+                    <ci>v_rInfPhrenicV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_rInfPhrenicV</ci>
+                <apply>
+                    <times/>
+                    <ci>E_rInfPhrenicV</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_rInfPhrenicV</ci>
+                        <ci>q_rInfPhrenicV_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_rInfPhrenicV" units="L_per_s"/>
+        <variable initial_value="100" name="R_rInfPhrenicV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rInfPhrenicV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_rInfPhrenicV</ci>
+                        <ci>u_V2</ci>
+                    </apply>
+                    <ci>R_rInfPhrenicV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Celiac branch of the aorta -->
+        <variable name="v_celiacA" units="L_per_s"/>
+        <variable initial_value="100" name="R_celiacA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_celiacA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A3</ci>
+                        <ci>u_celiacA</ci>
+                    </apply>
+                    <ci>R_celiacA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.0715428919998289" name="q_celiacA" units="litre"/>
+        <variable initial_value="0.06" name="q_celiacA_us" units="litre"/>
+        <variable name="u_celiacA" units="kPa"/>
+        <variable initial_value="400" name="E_celiacA" units="kPa_per_L"/>
+        <variable initial_value="0.2" name="z_celiacA" units="meter"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_celiacA</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <ci>v_celiacA</ci>
+                                <ci>v_liverA</ci>
+                            </apply>
+                            <ci>v_stomachA</ci>
+                        </apply>
+                        <ci>v_spleenA</ci>
+                    </apply>
+                    <ci>v_pancreas1A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_celiacA</ci>
+                <apply>
+                    <times/>
+                    <ci>E_celiacA</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_celiacA</ci>
+                        <ci>q_celiacA_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Superior mesentery branch of the aorta -->
+        <variable name="v_supMesA" units="L_per_s"/>
+        <variable initial_value="100" name="R_supMesA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_supMesA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A4</ci>
+                        <ci>u_supMesA</ci>
+                    </apply>
+                    <ci>R_supMesA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.071414457768405" name="q_supMesA" units="litre"/>
+        <variable initial_value="0.06" name="q_supMesA_us" units="litre"/>
+        <variable name="u_supMesA" units="kPa"/>
+        <variable initial_value="400" name="E_supMesA" units="kPa_per_L"/>
+        <variable initial_value="0.2" name="z_supMesA" units="meter"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_supMesA</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <ci>v_supMesA</ci>
+                            <ci>v_pancreas2A</ci>
+                        </apply>
+                        <ci>v_intestineA</ci>
+                    </apply>
+                    <ci>v_colonA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_supMesA</ci>
+                <apply>
+                    <times/>
+                    <ci>E_supMesA</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_supMesA</ci>
+                        <ci>q_supMesA_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Left renal branch of the aorta-->
+        <variable name="v_lRenalA" units="L_per_s"/>
+        <variable initial_value="100" name="R_lRenalA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lRenalA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A5</ci>
+                        <ci>u_lGlomerulusC</ci>
+                    </apply>
+                    <ci>R_lRenalA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.222843940557744" name="q_lGlomerulusC" units="litre"/>
+        <variable initial_value="0.2" name="q_lGlomerulusC_us" units="litre"/>
+        <variable name="u_lGlomerulusC" units="kPa"/>
+        <variable initial_value="200" name="E_lGlomerulusC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_lGlomerulusC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_lRenalA</ci>
+                    <ci>v_lEffArteriol</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_lGlomerulusC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_lGlomerulusC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_lGlomerulusC</ci>
+                        <ci>q_lGlomerulusC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lEffArteriol" units="L_per_s"/>
+        <variable initial_value="100" name="R_lEffArteriol" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lEffArteriol</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_lGlomerulusC</ci>
+                        <ci>u_lPeritubularC</ci>
+                    </apply>
+                    <ci>R_lEffArteriol</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.222892809988734" name="q_lPeritubularC" units="litre"/>
+        <variable initial_value="0.2" name="q_lPeritubularC_us" units="litre"/>
+        <variable name="u_lPeritubularC" units="kPa"/>
+        <variable initial_value="200" name="E_lPeritubularC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_lPeritubularC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_lEffArteriol</ci>
+                    <ci>v_lRenalV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_lPeritubularC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_lPeritubularC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_lPeritubularC</ci>
+                        <ci>q_lPeritubularC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lRenalV" units="L_per_s"/>
+        <variable initial_value="100" name="R_lRenalV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lRenalV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_lPeritubularC</ci>
+                        <ci>u_V4</ci>
+                    </apply>
+                    <ci>R_lRenalV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Right renal branch of the aorta-->
+        <variable name="v_rRenalA" units="L_per_s"/>
+        <variable initial_value="100" name="R_rRenalA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rRenalA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A6</ci>
+                        <ci>u_rGlomerulusC</ci>
+                    </apply>
+                    <ci>R_rRenalA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.222680450943523" name="q_rGlomerulusC" units="litre"/>
+        <variable initial_value="0.2" name="q_rGlomerulusC_us" units="litre"/>
+        <variable name="u_rGlomerulusC" units="kPa"/>
+        <variable initial_value="200" name="E_rGlomerulusC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_rGlomerulusC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_rRenalA</ci>
+                    <ci>v_rEffArteriol</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_rGlomerulusC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_rGlomerulusC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_rGlomerulusC</ci>
+                        <ci>q_rGlomerulusC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_rEffArteriol" units="L_per_s"/>
+        <variable initial_value="100" name="R_rEffArteriol" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rEffArteriol</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_rGlomerulusC</ci>
+                        <ci>u_rPeritubularC</ci>
+                    </apply>
+                    <ci>R_rEffArteriol</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.222721287850087" name="q_rPeritubularC" units="litre"/>
+        <variable initial_value="0.2" name="q_rPeritubularC_us" units="litre"/>
+        <variable name="u_rPeritubularC" units="kPa"/>
+        <variable initial_value="200" name="E_rPeritubularC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_rPeritubularC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_rEffArteriol</ci>
+                    <ci>v_rRenalV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_rPeritubularC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_rPeritubularC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_rPeritubularC</ci>
+                        <ci>q_rPeritubularC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_rRenalV" units="L_per_s"/>
+        <variable initial_value="100" name="R_rRenalV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rRenalV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_rPeritubularC</ci>
+                        <ci>u_V5</ci>
+                    </apply>
+                    <ci>R_rRenalV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Inferior mesentery branch of the aorta -->
+        <variable name="v_infMesA" units="L_per_s"/>
+        <variable initial_value="100" name="R_infMesA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_infMesA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A7</ci>
+                        <ci>u_colonC</ci>
+                    </apply>
+                    <ci>R_infMesA</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Stomach-->
+        <variable name="v_stomachA" units="L_per_s"/>
+        <variable initial_value="100" name="R_stomachA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_stomachA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_celiacA</ci>
+                        <ci>u_stomachC</ci>
+                    </apply>
+                    <ci>R_stomachA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.105910755847991" name="q_stomachC" units="litre"/>
+        <variable initial_value="0.06" name="q_stomachC_us" units="litre"/>
+        <variable name="u_stomachC" units="kPa"/>
+        <variable initial_value="100" name="E_stomachC" units="kPa_per_L"/>
+        <variable initial_value="0.2" name="z_stomachC" units="meter"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_stomachC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_stomachA</ci>
+                    <ci>v_stomachV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_stomachC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_stomachC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_stomachC</ci>
+                        <ci>q_stomachC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_stomachV" units="L_per_s"/>
+        <variable initial_value="2400" name="R_stomachV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_stomachV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_stomachC</ci>
+                        <ci>u_portalV</ci>
+                    </apply>
+                    <ci>R_stomachV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Spleen-->
+        <variable name="v_spleenA" units="L_per_s"/>
+        <variable initial_value="100" name="R_spleenA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_spleenA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_celiacA</ci>
+                        <ci>u_spleenC</ci>
+                    </apply>
+                    <ci>R_spleenA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.105910034847806" name="q_spleenC" units="litre"/>
+        <variable initial_value="0.06" name="q_spleenC_us" units="litre"/>
+        <variable name="u_spleenC" units="kPa"/>
+        <variable initial_value="100" name="E_spleenC" units="kPa_per_L"/>
+        <variable initial_value="0.2" name="z_spleenC" units="meter"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_spleenC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_spleenA</ci>
+                    <ci>v_spleenV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_spleenC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_spleenC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_spleenC</ci>
+                        <ci>q_spleenC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_spleenV" units="L_per_s"/>
+        <variable initial_value="3000" name="R_spleenV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_spleenV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_spleenC</ci>
+                        <ci>u_portalV</ci>
+                    </apply>
+                    <ci>R_spleenV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Pancreas-->
+        <variable name="v_pancreas1A" units="L_per_s"/>
+        <variable name="v_pancreas2A" units="L_per_s"/>
+        <variable initial_value="100" name="R_pancreas1A" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_pancreas2A" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_pancreas1A</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_celiacA</ci>
+                        <ci>u_pancreasC</ci>
+                    </apply>
+                    <ci>R_pancreas1A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_pancreas2A</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_supMesA</ci>
+                        <ci>u_pancreasC</ci>
+                    </apply>
+                    <ci>R_pancreas2A</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.105787155209054" name="q_pancreasC" units="litre"/>
+        <variable initial_value="0.06" name="q_pancreasC_us" units="litre"/>
+        <variable name="u_pancreasC" units="kPa"/>
+        <variable initial_value="100" name="E_pancreasC" units="kPa_per_L"/>
+        <variable initial_value="0.2" name="z_pancreasC" units="meter"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_pancreasC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_pancreas1A</ci>
+                        <ci>v_pancreas2A</ci>
+                    </apply>
+                    <ci>v_pancreasV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_pancreasC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_pancreasC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_pancreasC</ci>
+                        <ci>q_pancreasC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_pancreasV" units="L_per_s"/>
+        <variable initial_value="4000" name="R_pancreasV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_pancreasV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_pancreasC</ci>
+                        <ci>u_portalV</ci>
+                    </apply>
+                    <ci>R_pancreasV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Intestine-->
+        <variable name="v_intestineA" units="L_per_s"/>
+        <variable initial_value="100" name="R_intestineA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_intestineA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_supMesA</ci>
+                        <ci>u_intestineC</ci>
+                    </apply>
+                    <ci>R_intestineA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.105459895332545" name="q_intestineC" units="litre"/>
+        <variable initial_value="0.06" name="q_intestineC_us" units="litre"/>
+        <variable name="u_intestineC" units="kPa"/>
+        <variable initial_value="100" name="E_intestineC" units="kPa_per_L"/>
+        <variable initial_value="0.2" name="z_" units="meter"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_intestineC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_intestineA</ci>
+                    <ci>v_intestineV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_intestineC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_intestineC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_intestineC</ci>
+                        <ci>q_intestineC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_intestineV" units="L_per_s"/>
+        <variable initial_value="1200" name="R_intestineV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_intestineV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_intestineC</ci>
+                        <ci>u_portalV</ci>
+                    </apply>
+                    <ci>R_intestineV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Colon-->
+        <variable name="v_colonA" units="L_per_s"/>
+        <variable initial_value="100" name="R_colonA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_colonA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_supMesA</ci>
+                        <ci>u_colonC</ci>
+                    </apply>
+                    <ci>R_colonA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.105317375726849" name="q_colonC" units="litre"/>
+        <variable initial_value="0.06" name="q_colonC_us" units="litre"/>
+        <variable name="u_colonC" units="kPa"/>
+        <variable initial_value="100" name="E_colonC" units="kPa_per_L"/>
+        <variable initial_value="0.2" name="z_colonC" units="meter"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_colonC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_colonA</ci>
+                        <ci>v_infMesA</ci>
+                    </apply>
+                    <ci>v_colonV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_colonC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_colonC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_colonC</ci>
+                        <ci>q_colonC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_colonV" units="L_per_s"/>
+        <variable initial_value="2000" name="R_colonV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_colonV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_colonC</ci>
+                        <ci>u_portalV</ci>
+                    </apply>
+                    <ci>R_colonV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Portal vein-->
+        <variable initial_value="0.152013945600315" name="q_portalV" units="litre"/>
+        <variable initial_value="0.06" name="q_portalV_us" units="litre"/>
+        <variable name="u_portalV" units="kPa"/>
+        <variable initial_value="50" name="E_portalV" units="kPa_per_L"/>
+        <variable initial_value="0.2" name="z_portalV" units="meter"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_portalV</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_stomachV</ci>
+                        <ci>v_spleenV</ci>
+                        <ci>v_pancreasV</ci>
+                        <ci>v_intestineV</ci>
+                        <ci>v_colonV</ci>
+                    </apply>
+                    <ci>v_portalV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_portalV</ci>
+                <apply>
+                    <times/>
+                    <ci>E_portalV</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_portalV</ci>
+                        <ci>q_portalV_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_portalV" units="L_per_s"/>
+        <variable initial_value="100" name="R_portalV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_portalV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_portalV</ci>
+                        <ci>u_liverC</ci>
+                    </apply>
+                    <ci>R_portalV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Liver-->
+        <variable name="v_liverA" units="L_per_s"/>
+        <variable initial_value="800" name="R_liverA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_liverA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_celiacA</ci>
+                        <ci>u_liverC</ci>
+                    </apply>
+                    <ci>R_liverA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.526188169704937" name="q_liverC" units="litre"/>
+        <variable initial_value="0.06" name="q_liverC_us" units="litre"/>
+        <variable name="u_liverC" units="kPa"/>
+        <variable initial_value="10" name="E_liverC" units="kPa_per_L"/>
+        <variable initial_value="-0.5" name="z_liverC" units="meter"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_liverC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_liverA</ci>
+                        <ci>v_portalV</ci>
+                    </apply>
+                    <ci>v_liverV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_liverC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_liverC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_liverC</ci>
+                        <ci>q_liverC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_liverV" units="L_per_s"/>
+        <variable initial_value="1" name="R_liverV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_liverV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_liverC</ci>
+                        <ci>u_V3</ci>
+                    </apply>
+                    <ci>R_liverV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Inferior vena cava-->
+        <variable initial_value="0.0732527312969717" name="q_V1" units="litre"/>
+        <variable initial_value="0.06" name="q_V1_us" units="litre"/>
+        <variable initial_value="0.0724355014489091" name="q_V2" units="litre"/>
+        <variable initial_value="0.06" name="q_V2_us" units="litre"/>
+        <variable initial_value="0.0716607456049039" name="q_V3" units="litre"/>
+        <variable initial_value="0.06" name="q_V3_us" units="litre"/>
+        <variable initial_value="0.071501504166401" name="q_V4" units="litre"/>
+        <variable initial_value="0.06" name="q_V4_us" units="litre"/>
+        <variable initial_value="0.0714111536200381" name="q_V5" units="litre"/>
+        <variable initial_value="0.06" name="q_V5_us" units="litre"/>
+        <variable initial_value="0.0713861207574313" name="q_V6" units="litre"/>
+        <variable initial_value="0.06" name="q_V6_us" units="litre"/>
+        <variable name="v_V1" units="L_per_s"/>
+        <variable name="v_V2" units="L_per_s"/>
+        <variable name="v_V3" units="L_per_s"/>
+        <variable name="v_V4" units="L_per_s"/>
+        <variable name="v_V5" units="L_per_s"/>
+        <variable name="v_V6" units="L_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_V1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_V2</ci>
+                        <ci>v_lInfPhrenicV</ci>
+                    </apply>
+                    <ci>v_V1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_V2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_V3</ci>
+                        <ci>v_rInfPhrenicV</ci>
+                    </apply>
+                    <ci>v_V2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_V3</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_V4</ci>
+                        <ci>v_liverV</ci>
+                    </apply>
+                    <ci>v_V3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_V4</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_V5</ci>
+                        <ci>v_lRenalV</ci>
+                    </apply>
+                    <ci>v_V4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_V5</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_V6</ci>
+                        <ci>v_rRenalV</ci>
+                    </apply>
+                    <ci>v_V5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_V6</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_lCommonIliacV</ci>
+                        <ci>v_rCommonIliacV</ci>
+                    </apply>
+                    <ci>v_V6</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="u_V1" units="kPa"/>
+        <variable name="u_V2" units="kPa"/>
+        <variable name="u_V3" units="kPa"/>
+        <variable name="u_V4" units="kPa"/>
+        <variable name="u_V5" units="kPa"/>
+        <variable name="u_V6" units="kPa"/>
+        <variable initial_value="400" name="E_V1" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_V2" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_V3" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_V4" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_V5" units="kPa_per_L"/>
+        <variable initial_value="400" name="E_V6" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>u_V1</ci>
+                <apply>
+                    <times/>
+                    <ci>E_V1</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_V1</ci>
+                        <ci>q_V1_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_V2</ci>
+                <apply>
+                    <times/>
+                    <ci>E_V2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_V2</ci>
+                        <ci>q_V2_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_V3</ci>
+                <apply>
+                    <times/>
+                    <ci>E_V3</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_V3</ci>
+                        <ci>q_V3_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_V4</ci>
+                <apply>
+                    <times/>
+                    <ci>E_V4</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_V4</ci>
+                        <ci>q_V4_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_V5</ci>
+                <apply>
+                    <times/>
+                    <ci>E_V5</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_V5</ci>
+                        <ci>q_V5_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_V6</ci>
+                <apply>
+                    <times/>
+                    <ci>E_V6</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_V6</ci>
+                        <ci>q_V6_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="100" name="R_V1" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_V2" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_V3" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_V4" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_V5" units="kPa_s_per_L"/>
+        <variable initial_value="100" name="R_V6" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_V1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_V1</ci>
+                        <ci>u_RA</ci>
+                    </apply>
+                    <ci>R_V1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_V2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_V2</ci>
+                        <ci>u_V1</ci>
+                    </apply>
+                    <ci>R_V2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_V3</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_V3</ci>
+                        <ci>u_V2</ci>
+                    </apply>
+                    <ci>R_V3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_V4</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_V4</ci>
+                        <ci>u_V3</ci>
+                    </apply>
+                    <ci>R_V4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_V5</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_V5</ci>
+                        <ci>u_V4</ci>
+                    </apply>
+                    <ci>R_V5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_V6</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_V6</ci>
+                        <ci>u_V5</ci>
+                    </apply>
+                    <ci>R_V6</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Left leg-->
+        <variable name="v_lCommonIliacA" units="L_per_s"/>
+        <variable initial_value="100" name="R_lCommonIliacA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lCommonIliacA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A8</ci>
+                        <ci>u_lLegC</ci>
+                    </apply>
+                    <ci>R_lCommonIliacA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.0898390162613648" name="q_lLegC" units="litre"/>
+        <variable initial_value="0.06" name="q_lLegC_us" units="litre"/>
+        <variable name="u_lLegC" units="kPa"/>
+        <variable initial_value="150" name="E_lLegC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_lLegC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_lCommonIliacA</ci>
+                    <ci>v_lCommonIliacV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_lLegC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_lLegC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_lLegC</ci>
+                        <ci>q_lLegC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_lCommonIliacV" units="L_per_s"/>
+        <variable initial_value="4000" name="R_lCommonIliacV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_lCommonIliacV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_lLegC</ci>
+                        <ci>u_V6</ci>
+                    </apply>
+                    <ci>R_lCommonIliacV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Right leg-->
+        <variable name="v_rCommonIliacA" units="L_per_s"/>
+        <variable initial_value="100" name="R_rCommonIliacA" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rCommonIliacA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_A8</ci>
+                        <ci>u_rLegC</ci>
+                    </apply>
+                    <ci>R_rCommonIliacA</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.0898390162613648" name="q_rLegC" units="litre"/>
+        <variable initial_value="0.06" name="q_rLegC_us" units="litre"/>
+        <variable name="u_rLegC" units="kPa"/>
+        <variable initial_value="150" name="E_rLegC" units="kPa_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_rLegC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_rCommonIliacA</ci>
+                    <ci>v_rCommonIliacV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_rLegC</ci>
+                <apply>
+                    <times/>
+                    <ci>E_rLegC</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_rLegC</ci>
+                        <ci>q_rLegC_us</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_rCommonIliacV" units="L_per_s"/>
+        <variable initial_value="4000" name="R_rCommonIliacV" units="kPa_s_per_L"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_rCommonIliacV</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>u_rLegC</ci>
+                        <ci>u_V6</ci>
+                    </apply>
+                    <ci>R_rCommonIliacV</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Total volumes of blood in regions-->
+        <variable name="q_TotHeart" units="litre"/>
+        <variable name="q_TotLung" units="litre"/>
+        <variable name="q_TotHead" units="litre"/>
+        <variable name="q_TotThoracic" units="litre"/>
+        <variable name="q_TotAorta" units="litre"/>
+        <variable name="q_TotRenal" units="litre"/>
+        <variable name="q_TotGut" units="litre"/>
+        <variable name="q_TotVenaCava" units="litre"/>
+        <variable name="q_TotLimbs" units="litre"/>
+        <variable name="q_TotBlood" units="litre"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q_TotHeart</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_RA</ci>
+                    <ci>q_RV</ci>
+                    <ci>q_LA</ci>
+                    <ci>q_LV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_TotLung</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_lungC</ci>
+                    <ci>q_pulmA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_TotHead</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_brachiocephalicA</ci>
+                    <ci>q_rSubclavianA</ci>
+                    <ci>q_lSubclavianA</ci>
+                    <ci>q_headC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_TotThoracic</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_lAdrenalGlandC</ci>
+                    <ci>q_lInfPhrenicV</ci>
+                    <ci>q_rAdrenalGlandC</ci>
+                    <ci>q_rInfPhrenicV</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_TotAorta</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_AA</ci>
+                    <ci>q_A1</ci>
+                    <ci>q_A2</ci>
+                    <ci>q_A3</ci>
+                    <ci>q_A4</ci>
+                    <ci>q_A5</ci>
+                    <ci>q_A6</ci>
+                    <ci>q_A7</ci>
+                    <ci>q_A8</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_TotRenal</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_lGlomerulusC</ci>
+                    <ci>q_lPeritubularC</ci>
+                    <ci>q_rGlomerulusC</ci>
+                    <ci>q_rPeritubularC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_TotGut</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_celiacA</ci>
+                    <ci>q_supMesA</ci>
+                    <ci>q_stomachC</ci>
+                    <ci>q_spleenC</ci>
+                    <ci>q_pancreasC</ci>
+                    <ci>q_intestineC</ci>
+                    <ci>q_colonC</ci>
+                    <ci>q_portalV</ci>
+                    <ci>q_liverC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_TotVenaCava</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_V1</ci>
+                    <ci>q_V2</ci>
+                    <ci>q_V3</ci>
+                    <ci>q_V4</ci>
+                    <ci>q_V5</ci>
+                    <ci>q_V6</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_TotLimbs</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_lArmC</ci>
+                    <ci>q_rArmC</ci>
+                    <ci>q_lLegC</ci>
+                    <ci>q_rLegC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_TotBlood</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_TotHeart</ci>
+                    <ci>q_TotLung</ci>
+                    <apply>
+                        <plus/>
+                        <ci>q_TotHead</ci>
+                    </apply>
+                    <ci>q_TotThoracic</ci>
+                    <ci>q_TotAorta</ci>
+                    <ci>q_TotRenal</ci>
+                    <ci>q_TotGut</ci>
+                    <ci>q_TotVenaCava</ci>
+                    <ci>q_TotLimbs</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

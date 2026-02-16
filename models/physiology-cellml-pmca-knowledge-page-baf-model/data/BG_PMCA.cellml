@@ -1,0 +1,375 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="pCa_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="per_mol" units_ref="per_mol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="mol_per_s" units_ref="mol_per_s"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="mA_per_mM" units_ref="mA_per_mM"/>
+    </import>
+    <component name="environment">
+        <variable name="t" public_interface="out" units="second"/>
+        <variable initial_value="153400" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="25.8" name="w_i" public_interface="out" units="pL"/>
+        <variable initial_value="3.52" name="w_o" public_interface="out" units="pL"/>
+        <variable initial_value="-8.5e4" name="q_mem" public_interface="out" units="fC"/>
+        <variable initial_value="8.31" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96500" name="F" public_interface="out" units="C_per_mol"/>
+        <variable name="v_pCa_R1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_pCa_R2" public_interface="in" units="fmol_per_sec"/>
+        <variable initial_value="9.3276" name="q_Ca_o" public_interface="out" units="fmol"/>
+        <variable initial_value="0.00456" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <variable initial_value="0.0032" name="q_pCa" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-9" name="q_pCa_Ca" public_interface="out" units="fmol"/>
+        <variable name="V_mem" units="J_per_C"/>
+        <variable name="I_mem_pCa" public_interface="in" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_pCa_R1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_o</ci>
+                </apply>
+                <ci>v_pCa_R2</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_pCa</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_pCa_R1</ci>
+                    </apply>
+                    <ci>v_pCa_R2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_pCa_Ca</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_pCa_R1</ci>
+                    <ci>v_pCa_R2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_mem</ci>
+                </apply>
+                <ci>I_mem_pCa</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- check conservations-->
+        <variable name="Ca_T" units="fmol"/>
+        <variable name="channel_T" units="fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Ca_T</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_Ca_i</ci>
+                    <ci>q_Ca_o</ci>
+                    <ci>q_pCa_Ca</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>channel_T</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_pCa</ci>
+                    <ci>q_pCa_Ca</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="pCa_parameters">
+        <variable initial_value="1451.43" name="kappa_pCa_R1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00014695" name="kappa_pCa_R2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="32.3484" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00010737" name="K_Ca_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0179984" name="K_pCa" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0100142" name="K_pCa_Ca" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2" name="zCa" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="pCa">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="zCa" public_interface="in" units="dimensionless"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="K_Ca_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_pCa" public_interface="in" units="per_fmol"/>
+        <variable name="K_pCa_Ca" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_pCa_R1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_pCa_R2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="q_Ca_i" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_o" public_interface="in" units="fmol"/>
+        <variable name="q_pCa" public_interface="in" units="fmol"/>
+        <variable name="q_pCa_Ca" public_interface="in" units="fmol"/>
+        <variable name="mu_Ca_i" units="J_per_mol"/>
+        <variable name="mu_Ca_o" units="J_per_mol"/>
+        <variable name="mu_pCa" units="J_per_mol"/>
+        <variable name="mu_pCa_Ca" units="J_per_mol"/>
+        <variable name="v_pCa_R1" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_pCa_R2" public_interface="out" units="fmol_per_sec"/>
+        <variable name="I_mem_pCa" public_interface="out" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_Ca_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_i</ci>
+                            <ci>q_Ca_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_o</ci>
+                            <ci>q_Ca_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_pCa</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_pCa</ci>
+                            <ci>q_pCa</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_pCa_Ca</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_pCa_Ca</ci>
+                            <ci>q_pCa_Ca</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_pCa_R1</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_pCa_R1</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Ca_i</ci>
+                                    <ci>mu_pCa</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_pCa_Ca</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_pCa_R2</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_pCa_R2</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_pCa_Ca</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Ca_o</ci>
+                                    <ci>mu_pCa</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_pCa</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>zCa</ci>
+                    </apply>
+                    <ci>F</ci>
+                    <ci>v_pCa_R2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="pCa"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+        <map_variables variable_1="v_pCa_R1" variable_2="v_pCa_R1"/>
+        <map_variables variable_1="v_pCa_R2" variable_2="v_pCa_R2"/>
+        <map_variables variable_1="I_mem_pCa" variable_2="I_mem_pCa"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_pCa" variable_2="q_pCa"/>
+        <map_variables variable_1="q_pCa_Ca" variable_2="q_pCa_Ca"/>
+    </connection>
+    <connection>
+        <map_components component_1="pCa" component_2="pCa_parameters"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="K_pCa" variable_2="K_pCa"/>
+        <map_variables variable_1="K_pCa_Ca" variable_2="K_pCa_Ca"/>
+        <map_variables variable_1="kappa_pCa_R1" variable_2="kappa_pCa_R1"/>
+        <map_variables variable_1="kappa_pCa_R2" variable_2="kappa_pCa_R2"/>
+        <map_variables variable_1="zCa" variable_2="zCa"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

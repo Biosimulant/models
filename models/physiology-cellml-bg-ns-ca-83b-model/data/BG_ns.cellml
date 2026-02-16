@@ -1,0 +1,787 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="cardiac_AP_ns_only" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+    </import>
+    <component name="environment">
+        <variable initial_value="0" name="t" public_interface="out" units="second"/>
+        <variable initial_value="8.314" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96485" name="F" public_interface="out" units="C_per_mol"/>
+        <variable initial_value="153400" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="9.3276" name="q_Ca_o" public_interface="out" units="fmol"/>
+        <variable initial_value="0.00456" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <variable name="v_ns_Ca" public_interface="in" units="fmol_per_sec"/>
+        <variable initial_value="725.48" name="q_Na_o" public_interface="out" units="fmol"/>
+        <variable initial_value="380" name="q_Na_i" public_interface="out" units="fmol"/>
+        <variable name="v_ns_Na" public_interface="in" units="fmol_per_sec"/>
+        <variable initial_value="27.9828" name="q_K_o" public_interface="out" units="fmol"/>
+        <variable initial_value="5510" name="q_K_i" public_interface="out" units="fmol"/>
+        <variable name="v_ns_K" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_o</ci>
+                </apply>
+                <ci>v_ns_Ca</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_ns_Ca</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Na_o</ci>
+                </apply>
+                <ci>v_ns_Na</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Na_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_ns_Na</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_K_o</ci>
+                </apply>
+                <ci>v_ns_K</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_K_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_ns_K</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="-13039" name="q_mem" public_interface="out" units="fC"/>
+        <variable name="I_mem_ns_Ca" public_interface="in" units="fA"/>
+        <variable name="I_mem_ns_Na" public_interface="in" units="fA"/>
+        <variable name="I_mem_ns_K" public_interface="in" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_mem</ci>
+                </apply>
+                <ci>I_mem_ns_Ca</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="ns_parameters">
+        <variable initial_value="0.0197099" name="kappa_ns_Ca" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00161376" name="kappa_ns_Na" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00186686" name="kappa_ns_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00408116" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0270922" name="K_Ca_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00116778" name="K_Na_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00775214" name="K_Na_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00125602" name="K_K_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00833794" name="K_K_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2" name="zCa" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1" name="zNa" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1" name="zK" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="ns">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="C_m" public_interface="in" units="fF"/>
+        <variable name="q_mem" public_interface="in" units="fC"/>
+        <variable name="V_mem" units="volt"/>
+        <variable name="K_Ca_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_i" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_ns_Ca" public_interface="in" units="fmol_per_sec"/>
+        <variable name="zCa" public_interface="in" units="dimensionless"/>
+        <variable name="q_Ca_o" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_i" public_interface="in" units="fmol"/>
+        <variable name="mu_Ca_o" units="J_per_mol"/>
+        <variable name="mu_Ca_i" units="J_per_mol"/>
+        <variable name="Am_ns_Ca" units="J_per_mol"/>
+        <variable name="Af_ns_Ca" units="J_per_mol"/>
+        <variable name="Ar_ns_Ca" units="J_per_mol"/>
+        <variable name="v_ns_Ca" public_interface="out" units="fmol_per_sec"/>
+        <variable name="I_mem_ns_Ca" public_interface="out" units="fA"/>
+        <variable name="K_Na_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_Na_i" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_ns_Na" public_interface="in" units="fmol_per_sec"/>
+        <variable name="zNa" public_interface="in" units="dimensionless"/>
+        <variable name="q_Na_o" public_interface="in" units="fmol"/>
+        <variable name="q_Na_i" public_interface="in" units="fmol"/>
+        <variable name="mu_Na_o" units="J_per_mol"/>
+        <variable name="mu_Na_i" units="J_per_mol"/>
+        <variable name="Am_ns_Na" units="J_per_mol"/>
+        <variable name="Af_ns_Na" units="J_per_mol"/>
+        <variable name="Ar_ns_Na" units="J_per_mol"/>
+        <variable name="v_ns_Na" public_interface="out" units="fmol_per_sec"/>
+        <variable name="I_mem_ns_Na" public_interface="out" units="fA"/>
+        <variable name="K_K_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_K_i" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_ns_K" public_interface="in" units="fmol_per_sec"/>
+        <variable name="zK" public_interface="in" units="dimensionless"/>
+        <variable name="q_K_o" public_interface="in" units="fmol"/>
+        <variable name="q_K_i" public_interface="in" units="fmol"/>
+        <variable name="mu_K_o" units="J_per_mol"/>
+        <variable name="mu_K_i" units="J_per_mol"/>
+        <variable name="Am_ns_K" units="J_per_mol"/>
+        <variable name="Af_ns_K" units="J_per_mol"/>
+        <variable name="Ar_ns_K" units="J_per_mol"/>
+        <variable name="v_ns_K" public_interface="out" units="fmol_per_sec"/>
+        <variable name="I_mem_ns_K" public_interface="out" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_o</ci>
+                            <ci>q_Ca_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_i</ci>
+                            <ci>q_Ca_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_ns_Ca</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_Ca_i</ci>
+                    <apply>
+                        <times/>
+                        <ci>zCa</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Am_ns_Ca</ci>
+                <apply>
+                    <times/>
+                    <ci>zCa</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_ns_Ca</ci>
+                <ci>mu_Ca_o</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_ns_Ca</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <apply>
+                        <minus/>
+                        <ci>zCa</ci>
+                    </apply>
+                    <ci>v_ns_Ca</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_ns_Ca</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>kappa_ns_Ca</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_ns_Ca</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_ns_Ca</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_ns_Ca</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>kappa_ns_Ca</ci>
+                                        <ci>Am_ns_Ca</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_ns_Ca</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_ns_Ca</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_ns_Ca</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Na_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Na_o</ci>
+                            <ci>q_Na_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Na_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Na_i</ci>
+                            <ci>q_Na_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_ns_Na</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_Na_i</ci>
+                    <apply>
+                        <times/>
+                        <ci>zNa</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Am_ns_Na</ci>
+                <apply>
+                    <times/>
+                    <ci>zNa</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_ns_Na</ci>
+                <ci>mu_Na_o</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_ns_Na</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <apply>
+                        <minus/>
+                        <ci>zNa</ci>
+                    </apply>
+                    <ci>v_ns_Na</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_ns_Na</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>kappa_ns_Na</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_ns_Na</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_ns_Na</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_ns_Na</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>kappa_ns_Na</ci>
+                                        <ci>Am_ns_Na</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_ns_Na</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_ns_Na</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_ns_Na</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_K_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K_o</ci>
+                            <ci>q_K_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_K_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K_i</ci>
+                            <ci>q_K_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_ns_K</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_K_i</ci>
+                    <apply>
+                        <times/>
+                        <ci>zK</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Am_ns_K</ci>
+                <apply>
+                    <times/>
+                    <ci>zK</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_ns_K</ci>
+                <ci>mu_K_o</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_ns_K</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <apply>
+                        <minus/>
+                        <ci>zK</ci>
+                    </apply>
+                    <ci>v_ns_K</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_ns_K</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>kappa_ns_K</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_ns_K</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_ns_K</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_ns_K</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>kappa_ns_K</ci>
+                                        <ci>Am_ns_K</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_ns_K</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_ns_K</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_ns_K</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="ns" component_2="ns_parameters"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="kappa_ns_Ca" variable_2="kappa_ns_Ca"/>
+        <map_variables variable_1="kappa_ns_Na" variable_2="kappa_ns_Na"/>
+        <map_variables variable_1="kappa_ns_K" variable_2="kappa_ns_K"/>
+        <map_variables variable_1="zCa" variable_2="zCa"/>
+        <map_variables variable_1="zNa" variable_2="zNa"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <connection>
+        <map_components component_1="ns" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="v_ns_Ca" variable_2="v_ns_Ca"/>
+        <map_variables variable_1="I_mem_ns_Ca" variable_2="I_mem_ns_Ca"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="v_ns_Na" variable_2="v_ns_Na"/>
+        <map_variables variable_1="I_mem_ns_Na" variable_2="I_mem_ns_Na"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="v_ns_K" variable_2="v_ns_K"/>
+        <map_variables variable_1="I_mem_ns_K" variable_2="I_mem_ns_K"/>
+    </connection>
+</model>

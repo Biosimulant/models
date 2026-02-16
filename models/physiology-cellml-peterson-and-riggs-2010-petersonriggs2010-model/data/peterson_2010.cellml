@@ -1,0 +1,3958 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="peterson_2010" name="peterson_2010">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>A physiologically based mathematical model of integrated calcium homeostasis and bone remodeling</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            
+          </para>
+
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: Bone biology is physiologically complex and intimately linked to calcium homeostasis. The literature provides a wealth of qualitative and/or quantitative descriptions of cellular mechanisms, bone dynamics, associated organ dynamics, related disease sequela, and results of therapeutic interventions. We present a physiologically based mathematical model of integrated calcium homeostasis and bone biology constructed from literature data. The model includes relevant cellular aspects with major controlling mechanisms for bone remodeling and calcium homeostasis and appropriately describes a broad range of clinical and therapeutic conditions. These include changes in plasma parathyroid hormone (PTH), calcitriol, calcium and phosphate (PO4), and bone-remodeling markers as manifested by hypoparathyroidism and hyperparathyroidism, renal insufficiency, daily PTH 1-34 administration, and receptor activator of NF-kappaB ligand (RANKL) inhibition. This model highlights the utility of systems approaches to physiologic modeling in the bone field. The presented bone and calcium homeostasis model provides an integrated mathematical construct to conduct hypothesis testing of influential system aspects, to visualize elements of this complex endocrine system, and to continue to build upon iteratively with the results of ongoing scientific research. Copyright (c) 2009 Elsevier Inc. All rights reserved.
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+A physiologically based mathematical model of integrated calcium homeostasis and bone remodeling, M.C. Peterson and M.M. Riggs, 2010,
+            <emphasis>Bone</emphasis>, 46, 49-63. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/19732857">PubMed ID: 19732857</ulink>   
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram">
+<mediaobject>
+  <imageobject>
+    <imagedata fileref="peterson_2010.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic representation of the physiologic system model describing calcium homeostasis and bone remodeling. Solid arrows represent fluxes and dashed arrows represent binding effects.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+
+  <units name="hour">
+    <unit units="second" multiplier="3600.0"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="hour" exponent="-1"/>
+  </units>
+  
+  <units name="millimole">
+    <unit units="mole" prefix="milli"/>
+  </units>
+  
+  <units name="millimole_per_hour">
+    <unit units="mole" prefix="milli"/>
+    <unit units="hour" exponent="-1"/>
+  </units>
+  
+  <units name="millimolar">
+    <unit units="mole" prefix="milli"/>
+	<unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="litre_per_hour">
+    <unit units="litre"/>
+    <unit units="hour" exponent="-1"/>
+  </units>
+  
+ 
+  <component name="environment">
+    <variable units="hour" public_interface="out" name="time"/>
+  </component>
+  
+  <!-- Gut -->
+  
+  <component name="A1" cmeta:id="A1">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A1">
+        <dc:title>A1</dc:title>
+        <dcterms:alternative>calcium concentration in the gut</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A1" initial_value="1.3"/>
+    <variable units="dimensionless" public_interface="out" name="v_1_4"/>
+	
+	<variable units="dimensionless" name="delta_2_1" initial_value="0.75"/>
+	<variable units="first_order_rate_constant" name="k_1_4" initial_value="0.0495"/>
+	<variable units="millimole" name="D1" initial_value="1.0"/>
+    
+    <variable units="dimensionless" public_interface="in" name="H_plus_2_1"/>
+	<variable units="dimensionless" public_interface="in" name="H_1_4"/>
+	<variable units="dimensionless" public_interface="in" name="A2"/>
+    <variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A1 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> D1 </ci>
+            <ci> H_plus_2_1 </ci>
+          </apply>
+          <ci> v_1_4 </ci>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> v_1_4 </ci>
+        <apply>
+          <times/>
+		  <apply>
+            <plus/>
+			<apply>
+              <times/>
+              <ci> H_1_4 </ci>
+			  <apply>
+                <divide/>
+				<apply>
+                  <divide/>
+                  <ci> A2 </ci>
+				  <cn cellml:units="dimensionless"> 0.5 </cn>
+				</apply>
+				<apply>
+                  <plus/>
+				  <ci> A1 </ci>
+                  <ci> delta_2_1 </ci>
+                </apply>
+			  </apply>
+			</apply>
+			<ci> k_1_4 </ci>
+	      </apply>
+	      <ci> A1 </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_plus_2_1">
+    <variable units="dimensionless" public_interface="out" name="H_plus_2_1"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value=""/>
+	<variable units="dimensionless" name="rho" initial_value="0.25"/>
+	<variable units="dimensionless" name="gamma" initial_value="4.0"/>
+	<variable units="dimensionless" name="delta" initial_value="0.75"/>
+  
+    <variable units="millimole" public_interface="in" name="A1"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_plus_2_1 </ci>
+        <apply>
+          <plus/>
+		  <ci> rho </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A1 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A1 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_1_4">
+    <variable units="dimensionless" public_interface="out" name="H_1_4"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="0.9"/>
+	<variable units="dimensionless" name="gamma" initial_value="1.0"/>
+	<variable units="dimensionless" name="delta" initial_value="1.0"/>
+  
+    <variable units="millimole" public_interface="in" name="A1"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_1_4 </ci>
+        <apply>
+          <times/>
+		  <ci> alpha </ci>
+		  <apply>
+            <divide/>
+			<apply>
+              <power/>
+              <ci> A1 </ci>
+			  <ci> gamma </ci>
+			</apply>
+		    <apply>
+              <plus/>
+		      <apply>
+                <power/>
+                <ci> delta </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <power/>
+                <ci> A1 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A2" cmeta:id="A2">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A2">
+        <dc:title>A2</dc:title>
+        <dcterms:alternative>calcitriol-dependent calcium absorption in the gut</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A2" initial_value="0.5"/>
+    
+	<variable units="dimensionless" public_interface="in" name="H_plus_6_2"/>
+	<variable units="dimensionless" public_interface="in" name="H_minus_6_2"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A2 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> H_plus_6_2 </ci>
+			<apply>
+              <minus/>
+			  <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci> A2 </ci>
+            </apply>
+          </apply>
+		  <apply>
+            <times/>
+            <ci> H_minus_6_2 </ci>
+			<ci> A2 </ci>
+          </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+	
+  <component name="H_plus_6_2">
+    <variable units="dimensionless" public_interface="out" name="H_plus_6_2"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="0.037"/>
+	<variable units="dimensionless" name="rho" initial_value="0.003"/>
+	<variable units="dimensionless" name="gamma" initial_value="1.0"/>
+	<variable units="dimensionless" name="delta" initial_value="90.0"/>
+  
+    <variable units="dimensionless" public_interface="in" name="A2"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_plus_6_2 </ci>
+        <apply>
+          <plus/>
+		  <ci> rho </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A2 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A2 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_minus_6_2">
+    <variable units="dimensionless" public_interface="out" name="H_minus_6_2"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="0.037"/>
+	<variable units="dimensionless" name="rho" initial_value="0.003"/>
+	<variable units="dimensionless" name="gamma" initial_value="1.0"/>
+	<variable units="dimensionless" name="delta" initial_value="90.0"/>
+  
+    <variable units="dimensionless" public_interface="in" name="A2"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_minus_6_2 </ci>
+        <apply>
+          <minus/>
+		  <ci> alpha </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A2 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A2 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A3" cmeta:id="A3">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A3">
+        <dc:title>A3</dc:title>
+        <dcterms:alternative>PO4 concentration in the gut</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A3" initial_value="0.839"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k_3_5" initial_value="0.365"/>
+	
+	<variable units="millimole" name="D3" initial_value="0.4"/>
+	<variable units="dimensionless" name="F3" initial_value="0.7"/>
+	
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A3 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> D3 </ci>
+			<ci> F3 </ci>
+          </apply>
+		  <apply>
+            <times/>
+            <ci> k_3_5 </ci>
+			<ci> A3 </ci>
+          </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <!-- Vasculature -->
+  
+  <component name="A4" cmeta:id="A4">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A4">
+        <dc:title>A4</dc:title>
+        <dcterms:alternative>calcium concentration in the vasculature</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A4" initial_value="32.9"/>
+    <variable units="millimole" public_interface="out" name="A4_0" initial_value="32.9"/>
+	<variable units="dimensionless" public_interface="out" name="v_12_4"/>
+	<variable units="dimensionless" public_interface="out" name="v_4_12"/>
+	
+	<variable units="dimensionless" name="v_4_u"/>
+	<variable units="dimensionless" name="phi_4_12" initial_value="0.1144"/>
+	<variable units="dimensionless" name="phi_12_4" initial_value="0.1078"/>
+	<variable units="dimensionless" name="gamma_24_12_4" initial_value="0.6038"/>
+	<variable units="millimole_per_hour" name="k_4_12" initial_value="3.667"/>
+	
+	<variable units="litre_per_hour" public_interface="in" name="GFR"/>
+    <variable units="dimensionless" public_interface="in" name="v_1_4"/>
+	<variable units="dimensionless" public_interface="in" name="H_18_12_4"/>
+	<variable units="dimensionless" public_interface="in" name="H_6_4"/>
+	<variable units="dimensionless" public_interface="in" name="H_4_u"/>
+	<variable units="dimensionless" public_interface="in" name="H_7_4_u"/>
+	<variable units="dimensionless" public_interface="in" name="A17"/>
+	<variable units="dimensionless" public_interface="in" name="A18"/>
+	<variable units="dimensionless" public_interface="in" name="A24"/>
+	<variable units="dimensionless" public_interface="in" name="A17_0"/>
+	<variable units="dimensionless" public_interface="in" name="A18_0"/>
+	<variable units="dimensionless" public_interface="in" name="A24_0"/>
+    <variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A4 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+			<ci> v_12_4 </ci>
+			<ci> v_1_4 </ci>
+		  </apply>
+		  <apply>
+            <plus/>
+            <ci> v_4_12 </ci>
+            <ci> v_4_u </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> v_12_4 </ci>
+        <apply>
+          <plus/>
+		  <apply>
+            <times/>
+			<ci> k_4_12 </ci>
+			<apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+			  <ci> phi_12_4</ci>
+			</apply>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> k_4_12 </ci>
+			<ci> phi_12_4</ci>
+			<ci> H_18_12_4 </ci>
+		    <apply>
+              <power/>
+			  <apply>
+                <divide/>
+			    <apply>
+                  <times/>
+				  <ci> A24 </ci>
+                  <ci> A18_0 </ci>
+                </apply>
+				<apply>
+                  <times/>
+				  <ci> A24_0 </ci>
+                  <ci> A18 </ci>
+                </apply>
+			  </apply>
+			  <ci> gamma_24_12_4 </ci>
+			</apply>
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> v_4_12 </ci>
+        <apply>
+          <plus/>
+		  <apply>
+            <times/>
+			<ci> k_4_12 </ci>
+			<apply>
+              <divide/>
+			  <ci> A4 </ci>
+              <ci> A4_0 </ci>
+            </apply>
+		    <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+			  <ci> phi_4_12 </ci>
+			</apply>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> phi_4_12 </ci>
+			<apply>
+              <divide/>
+			  <ci> A17 </ci>
+              <ci> A17_0 </ci>
+            </apply>
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> v_4_u </ci>
+        <apply>
+          <times/>
+		  <apply>
+            <minus/>
+			<cn cellml:units="dimensionless"> 2.0 </cn>
+			<ci> H_6_4 </ci>
+		  </apply>
+		  <apply>
+            <minus/>
+			<apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 0.3 </cn>
+			  <ci> GFR </ci>
+			  <ci> A4 </ci>
+			</apply>
+			<apply>
+              <times/>
+              <ci> H_4_u </ci>
+			  <ci> H_7_4_u </ci>
+			</apply>
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_18_12_4">
+    <variable units="dimensionless" public_interface="out" name="H_18_12_4"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value=""/>
+	<variable units="dimensionless" name="gamma" initial_value="1.0"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="millimole" public_interface="in" name="A4"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_18_12_4 </ci>
+        <apply>
+          <times/>
+		  <ci> alpha </ci>
+		  <apply>
+            <divide/>
+			<apply>
+              <power/>
+              <ci> A4 </ci>
+			  <ci> gamma </ci>
+			</apply>
+		    <apply>
+              <plus/>
+		      <apply>
+                <power/>
+                <ci> delta </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <power/>
+                <ci> A4 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_6_4">
+    <variable units="dimensionless" public_interface="out" name="H_6_4"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="2"/>
+	<variable units="dimensionless" name="gamma" initial_value="1"/>
+	<variable units="dimensionless" name="delta" initial_value="90"/>
+  
+    <variable units="millimole" public_interface="in" name="A4"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_6_4 </ci>
+        <apply>
+          <times/>
+		  <ci> alpha </ci>
+		  <apply>
+            <divide/>
+			<apply>
+              <power/>
+              <ci> A4 </ci>
+			  <ci> gamma </ci>
+			</apply>
+		    <apply>
+              <plus/>
+		      <apply>
+                <power/>
+                <ci> delta </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <power/>
+                <ci> A4 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_4_u">
+    <variable units="dimensionless" public_interface="out" name="H_4_u"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value=""/>
+	<variable units="dimensionless" name="gamma" initial_value="1"/>
+	<variable units="dimensionless" name="delta" initial_value="1.573"/>
+  
+    <variable units="millimole" public_interface="in" name="A4"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_4_u </ci>
+        <apply>
+          <times/>
+		  <ci> alpha </ci>
+		  <apply>
+            <divide/>
+			<apply>
+              <power/>
+              <ci> A4 </ci>
+			  <ci> gamma </ci>
+			</apply>
+		    <apply>
+              <plus/>
+		      <apply>
+                <power/>
+                <ci> delta </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <power/>
+                <ci> A4 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_7_4_u">
+    <variable units="dimensionless" public_interface="out" name="H_7_4_u"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="1.0615"/>
+	<variable units="dimensionless" name="gamma" initial_value="1"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="millimole" public_interface="in" name="A4"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_7_4_u </ci>
+        <apply>
+          <times/>
+		  <ci> alpha </ci>
+		  <apply>
+            <divide/>
+			<apply>
+              <power/>
+              <ci> A4 </ci>
+			  <ci> gamma </ci>
+			</apply>
+		    <apply>
+              <plus/>
+		      <apply>
+                <power/>
+                <ci> delta </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <power/>
+                <ci> A4 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A5" cmeta:id="A5">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A5">
+        <dc:title>A5</dc:title>
+        <dcterms:alternative>PO4 concentration in the vasculature</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A5" initial_value="16.8"/>
+	<variable units="millimole" public_interface="out" name="A5_0" initial_value="16.8"/>
+    <variable units="dimensionless" public_interface="out" name="v_5_8"/>
+	<variable units="dimensionless" public_interface="out" name="v_8_5"/>
+	<variable units="dimensionless" public_interface="out" name="v_5_14"/>
+	<variable units="dimensionless" public_interface="out" name="v_14_5"/>
+	
+	<variable units="dimensionless" name="v_5_u"/>
+	<variable units="dimensionless" name="v_3_5"/>
+	<variable units="dimensionless" name="phi_5_u" initial_value="1.142"/>
+	<variable units="first_order_rate_constant" name="k_5_8" initial_value="51.8"/>
+	<variable units="first_order_rate_constant" name="k_8_5" initial_value="0.01927"/>
+	
+	<variable units="dimensionless" public_interface="in" name="v_12_4"/>
+	<variable units="dimensionless" public_interface="in" name="v_4_12"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_3_5"/>
+	<variable units="litre_per_hour" public_interface="in" name="GFR"/>
+    <variable units="millimole" public_interface="in" name="A3"/>
+	<variable units="millimole" public_interface="in" name="A8"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A5 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+			<ci> v_5_14 </ci>
+			<ci> v_3_5 </ci>
+			<ci> v_8_5 </ci>
+		  </apply>
+		  <apply>
+            <plus/>
+            <ci> v_14_5 </ci>
+            <ci> v_5_u </ci>
+			<ci> v_5_8 </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> v_5_14 </ci>
+        <apply>
+          <times/>
+		  <cn cellml:units="dimensionless"> 0.464 </cn>
+		  <ci> v_4_12 </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> v_14_5 </ci>
+        <apply>
+          <times/>
+		  <cn cellml:units="dimensionless"> 0.464 </cn>
+		  <ci> v_12_4 </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> v_5_u </ci>
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+			<cn cellml:units="dimensionless"> 0.88 </cn>
+			<ci> GFR </ci>
+			<ci> A5 </ci>
+          </apply>
+		  <apply>
+            <times/>
+			<cn cellml:units="dimensionless"> 0.88 </cn>
+			<ci> GFR </ci>
+			<ci> phi_5_u </ci>
+          </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> v_3_5 </ci>
+        <apply>
+          <times/>
+		  <ci> k_3_5 </ci>
+		  <ci> A3 </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> v_5_8 </ci>
+        <apply>
+          <times/>
+		  <ci> k_5_8 </ci>
+		  <ci> A5 </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> v_8_5 </ci>
+        <apply>
+          <times/>
+		  <ci> k_8_5 </ci>
+		  <ci> A8 </ci>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A6" cmeta:id="A6">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A6">
+        <dc:title>A6</dc:title>
+        <dcterms:alternative>calcitriol concentration in the vasculature</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A6" initial_value="1260.0"/>
+    
+	<variable units="first_order_rate_constant" name="k_6D" initial_value="0.1"/>
+	
+	<variable units="millimole_per_hour" public_interface="in" name="A9"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A6 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci> A9 </ci>
+          <apply>
+            <times/>
+            <ci> k_6D </ci>
+			<ci> A6 </ci>
+          </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="A7" cmeta:id="A7">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A7">
+        <dc:title>A7</dc:title>
+        <dcterms:alternative>PTH concentration in the vasculature</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A7" initial_value="53.9"/>
+    
+	<variable units="first_order_rate_constant" name="k_7D" initial_value="7.143"/>
+	
+	<variable units="dimensionless" public_interface="in" name="H_minus_4_10_7"/>
+	<variable units="dimensionless" public_interface="in" name="A10"/>
+	<variable units="dimensionless" public_interface="in" name="A11"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A7 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> H_minus_4_10_7 </ci>
+			<apply>
+              <divide/>
+              <ci> A10 </ci>
+			  <cn cellml:units="dimensionless"> 0.5 </cn>
+            </apply>
+			<ci> A11 </ci>
+          </apply>
+		  <apply>
+            <times/>
+            <ci> k_7D </ci>
+			<ci> A7 </ci>
+          </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="H_minus_4_10_7">
+    <variable units="dimensionless" public_interface="out" name="H_minus_4_10_7"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="96.25"/>
+	<variable units="dimensionless" name="rho" initial_value="6249"/>
+	<variable units="dimensionless" name="gamma" initial_value="11.74"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="millimole" public_interface="in" name="A7"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_minus_4_10_7 </ci>
+        <apply>
+          <minus/>
+		  <ci> alpha </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A7 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A7 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <!-- Intracellular phosphate -->
+  
+  <component name="A8" cmeta:id="A8">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A8">
+        <dc:title>A8</dc:title>
+        <dcterms:alternative>intracellular PO4 concentration</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A8" initial_value="3226.0"/>
+	
+	<variable units="dimensionless" public_interface="in" name="v_5_8"/>
+	<variable units="dimensionless" public_interface="in" name="v_8_5"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A8 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci> v_5_8 </ci>
+		  <ci> v_8_5 </ci>
+		</apply>
+      </apply>
+    </math>
+  </component>
+	
+  <!-- Kidney -->
+  
+  <component name="A9" cmeta:id="A9">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A9">
+        <dc:title>A9</dc:title>
+        <dcterms:alternative>1-alpha-OH concentration in the kidney</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole_per_hour" public_interface="out" name="A9" initial_value="126"/>
+    
+	<variable units="first_order_rate_constant" name="k_9D" initial_value="0.05"/>
+	<variable units="first_order_rate_constant" name="k_9S" initial_value="6.3"/>
+	
+	<variable units="dimensionless" public_interface="in" name="H_minus_5_9"/>
+	<variable units="dimensionless" public_interface="in" name="H_7_9"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A9 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k_9S </ci>
+			<ci> H_7_9 </ci>
+			<ci> H_minus_5_9 </ci>
+		  </apply>
+		  <apply>
+            <times/>
+            <ci> k_9D </ci>
+			<ci> A9 </ci>
+          </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="H_minus_5_9">
+    <variable units="dimensionless" public_interface="out" name="H_minus_5_9"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="1.525"/>
+	<variable units="dimensionless" name="rho" initial_value=""/>
+	<variable units="dimensionless" name="gamma" initial_value="8.252"/>
+	<variable units="dimensionless" name="delta" initial_value="1.302"/>
+  
+    <variable units="millimole_per_hour" public_interface="in" name="A9"/>
+	<variable units="millimole" public_interface="in" name="A5"/>
+	<variable units="millimole" public_interface="in" name="A5_0"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_minus_5_9 </ci>
+        <piecewise>
+          <piece>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <lt/>
+              <ci> A5 </ci>
+			  <ci> A5_0 </ci>
+			</apply>
+	      </piece>
+          <otherwise>
+		    <apply>
+              <minus/>
+		      <ci> alpha </ci>
+		      <apply>
+                <times/>
+			    <apply>
+                  <minus/>
+                  <ci> alpha </ci>
+			      <ci> rho </ci>
+			    </apply>
+		        <apply>
+                  <divide/>
+		          <apply>
+                    <power/>
+                    <ci> A9 </ci>
+			        <ci> gamma </ci>
+			      </apply>
+                  <apply>
+                    <plus/>
+				    <apply>
+                      <power/>
+                      <ci> delta </ci>
+			          <ci> gamma </ci>
+			        </apply>
+				    <apply>
+                      <power/>
+                      <ci> A9 </ci>
+			          <ci> gamma </ci>
+				    </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			</apply>
+          </otherwise>
+		</piecewise>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_7_9">
+    <variable units="dimensionless" public_interface="out" name="H_7_9"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value=""/>
+	<variable units="dimensionless" name="gamma" initial_value="1.549"/>
+	<variable units="dimensionless" name="delta" initial_value="0.1112"/>
+  
+    <variable units="millimole_per_hour" public_interface="in" name="A9"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_7_9 </ci>
+        <apply>
+          <times/>
+		  <ci> alpha </ci>
+		  <apply>
+            <divide/>
+			<apply>
+              <power/>
+              <ci> A9 </ci>
+			  <ci> gamma </ci>
+			</apply>
+		    <apply>
+              <plus/>
+		      <apply>
+                <power/>
+                <ci> delta </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <power/>
+                <ci> A9 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <!-- Parathyroid gland -->
+  
+  <component name="A10" cmeta:id="A10">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A10">
+        <dc:title>A10</dc:title>
+        <dcterms:alternative>PT pool in the PT gland</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A10" initial_value="0.5"/>
+    
+	<variable units="dimensionless" name="alpha_10" initial_value="0.01"/>
+	<variable units="dimensionless" name="T_minus_6_4"/>
+	<variable units="dimensionless" name="T_plus_6_4"/>
+	<variable units="dimensionless" name="b_T6_4" initial_value="0.03"/>
+	<variable units="millimolar" name="delta_T6_4" initial_value="90.0"/>
+	<variable units="dimensionless" name="gamma_4_10" initial_value=""/>
+	
+	<variable units="litre" public_interface="in" name="V_vasc"/>
+	<variable units="millimole" public_interface="in" name="A4"/>
+	<variable units="millimole" public_interface="in" name="A4_0"/>
+	<variable units="millimole" public_interface="in" name="A6"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A10 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+			<apply>
+              <minus/>
+			  <cn cellml:units="dimensionless"> 1.0 </cn>
+			  <ci> A10 </ci>
+			</apply>
+		    <ci> alpha_10</ci>
+			<apply>
+              <plus/>
+			  <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 0.85 </cn>
+                <ci> T_minus_6_4 </ci>
+              </apply>
+			  <cn cellml:units="dimensionless"> 0.15 </cn>
+            </apply>
+          </apply>
+		  <apply>
+            <times/>
+			<ci> A10 </ci>
+			<ci> alpha_10</ci>
+			<apply>
+              <plus/>
+			  <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 0.85 </cn>
+                <ci> T_plus_6_4 </ci>
+              </apply>
+			  <cn cellml:units="dimensionless"> 0.15 </cn>
+            </apply>
+          </apply>
+		</apply>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> T_plus_6_4 </ci>
+        <apply>
+          <plus/>
+	      <cn cellml:units="dimensionless"> 1.0 </cn>
+		  <apply>
+            <divide/>
+			<apply>
+              <minus/>
+			  <apply>
+                <exp/>
+			    <apply>
+                  <times/>
+				  <ci> b_T6_4 </ci>
+				  <apply>
+                    <divide/>
+				    <ci> A6 </ci>
+			        <apply>
+                      <minus/>
+				      <ci> V_vasc </ci>
+				      <apply>
+                        <times/>
+				        <ci> delta_T6_4 </ci>
+					    <apply>
+                          <power/>
+					      <apply>
+                            <divide/>
+				            <ci> A4_0 </ci>
+						    <ci> A4 </ci>
+		                  </apply>
+					      <ci> gamma_4_10 </ci>
+		                </apply>
+		              </apply>
+				    </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			  <apply>
+                <exp/>
+			    <apply>
+                  <times/>
+				  <apply>
+                    <minus/>
+					<ci> b_T6_4 </ci>
+				  </apply>
+				  <apply>
+                    <divide/>
+				    <ci> A6 </ci>
+			        <apply>
+                      <minus/>
+				      <ci> V_vasc </ci>
+				      <apply>
+                        <times/>
+				        <ci> delta_T6_4 </ci>
+					    <apply>
+                          <power/>
+					      <apply>
+                            <divide/>
+				            <ci> A4_0 </ci>
+						    <ci> A4 </ci>
+		                  </apply>
+					      <ci> gamma_4_10 </ci>
+		                </apply>
+		              </apply>
+				    </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			</apply>
+			<apply>
+              <plus/>
+			  <apply>
+                <exp/>
+			    <apply>
+                  <times/>
+				  <ci> b_T6_4 </ci>
+				  <apply>
+                    <divide/>
+				    <ci> A6 </ci>
+			        <apply>
+                      <minus/>
+				      <ci> V_vasc </ci>
+				      <apply>
+                        <times/>
+				        <ci> delta_T6_4 </ci>
+					    <apply>
+                          <power/>
+					      <apply>
+                            <divide/>
+				            <ci> A4_0 </ci>
+						    <ci> A4 </ci>
+		                  </apply>
+					      <ci> gamma_4_10 </ci>
+		                </apply>
+		              </apply>
+				    </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			  <apply>
+                <exp/>
+			    <apply>
+                  <times/>
+				  <apply>
+                    <minus/>
+					<ci> b_T6_4 </ci>
+				  </apply>
+				  <apply>
+                    <divide/>
+				    <ci> A6 </ci>
+			        <apply>
+                      <minus/>
+				      <ci> V_vasc </ci>
+				      <apply>
+                        <times/>
+				        <ci> delta_T6_4 </ci>
+					    <apply>
+                          <power/>
+					      <apply>
+                            <divide/>
+				            <ci> A4_0 </ci>
+						    <ci> A4 </ci>
+		                  </apply>
+					      <ci> gamma_4_10 </ci>
+		                </apply>
+		              </apply>
+				    </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			</apply>
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+  
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> T_minus_6_4 </ci>
+        <apply>
+          <minus/>
+	      <cn cellml:units="dimensionless"> 1.0 </cn>
+		  <apply>
+            <divide/>
+			<apply>
+              <minus/>
+			  <apply>
+                <exp/>
+			    <apply>
+                  <times/>
+				  <ci> b_T6_4 </ci>
+				  <apply>
+                    <divide/>
+				    <ci> A6 </ci>
+			        <apply>
+                      <minus/>
+				      <ci> V_vasc </ci>
+				      <apply>
+                        <times/>
+				        <ci> delta_T6_4 </ci>
+					    <apply>
+                          <power/>
+					      <apply>
+                            <divide/>
+				            <ci> A4_0 </ci>
+						    <ci> A4 </ci>
+		                  </apply>
+					      <ci> gamma_4_10 </ci>
+		                </apply>
+		              </apply>
+				    </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			  <apply>
+                <exp/>
+			    <apply>
+                  <times/>
+				  <apply>
+                    <minus/>
+					<ci> b_T6_4 </ci>
+				  </apply>
+				  <apply>
+                    <divide/>
+				    <ci> A6 </ci>
+			        <apply>
+                      <minus/>
+				      <ci> V_vasc </ci>
+				      <apply>
+                        <times/>
+				        <ci> delta_T6_4 </ci>
+					    <apply>
+                          <power/>
+					      <apply>
+                            <divide/>
+				            <ci> A4_0 </ci>
+						    <ci> A4 </ci>
+		                  </apply>
+					      <ci> gamma_4_10 </ci>
+		                </apply>
+		              </apply>
+				    </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			</apply>
+			<apply>
+              <plus/>
+			  <apply>
+                <exp/>
+			    <apply>
+                  <times/>
+				  <ci> b_T6_4 </ci>
+				  <apply>
+                    <divide/>
+				    <ci> A6 </ci>
+			        <apply>
+                      <minus/>
+				      <ci> V_vasc </ci>
+				      <apply>
+                        <times/>
+				        <ci> delta_T6_4 </ci>
+					    <apply>
+                          <power/>
+					      <apply>
+                            <divide/>
+				            <ci> A4_0 </ci>
+						    <ci> A4 </ci>
+		                  </apply>
+					      <ci> gamma_4_10 </ci>
+		                </apply>
+		              </apply>
+				    </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			  <apply>
+                <exp/>
+			    <apply>
+                  <times/>
+				  <apply>
+                    <minus/>
+					<ci> b_T6_4 </ci>
+				  </apply>
+				  <apply>
+                    <divide/>
+				    <ci> A6 </ci>
+			        <apply>
+                      <minus/>
+				      <ci> V_vasc </ci>
+				      <apply>
+                        <times/>
+				        <ci> delta_T6_4 </ci>
+					    <apply>
+                          <power/>
+					      <apply>
+                            <divide/>
+				            <ci> A4_0 </ci>
+						    <ci> A4 </ci>
+		                  </apply>
+					      <ci> gamma_4_10 </ci>
+		                </apply>
+		              </apply>
+				    </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			</apply>
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A11" cmeta:id="A11">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A11">
+        <dc:title>A11</dc:title>
+        <dcterms:alternative>PT maximum capacity in the PT gland</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A11" initial_value="1.0"/>
+    
+	<variable units="first_order_rate_constant" name="k_11" initial_value="0.0001604"/>
+	
+	<variable units="dimensionless" public_interface="in" name="H_minus_6_11"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A11 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k_11 </ci>
+			<ci> H_minus_6_11 </ci>
+		  </apply>
+		  <apply>
+            <times/>
+            <ci> k_11 </ci>
+			<ci> A11 </ci>
+          </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="H_minus_6_11">
+    <variable units="dimensionless" public_interface="out" name="H_minus_6_11"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="4.103"/>
+	<variable units="dimensionless" name="rho" initial_value="0.9"/>
+	<variable units="dimensionless" name="gamma" initial_value="12.50"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="dimensionless" public_interface="in" name="A11"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_minus_6_11 </ci>
+        <apply>
+          <minus/>
+		  <ci> alpha </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A11 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A11 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+
+  <!-- Bone -->
+  
+  <component name="A12" cmeta:id="A12">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A12">
+        <dc:title>A12</dc:title>
+        <dcterms:alternative>immediately exchangable calcium concentration in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A12" initial_value="100.0"/>
+	
+	<variable units="dimensionless" public_interface="in" name="v_4_12"/>
+	<variable units="dimensionless" public_interface="in" name="v_12_4"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_13_12"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_12_13"/>
+	<variable units="millimole" public_interface="in" name="A13"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A12 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <ci> v_4_12 </ci>
+		    <apply>
+              <times/>
+			  <ci> k_13_12 </ci>
+			  <ci> A13 </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <plus/>
+            <ci> v_12_4 </ci>
+		    <apply>
+              <times/>
+			  <ci> k_12_13 </ci>
+			  <ci> A12 </ci>
+		    </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A13" cmeta:id="A13">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A13">
+        <dc:title>A13</dc:title>
+        <dcterms:alternative>non-immediately exchangeable calcium concentration in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A13" initial_value="24900.0"/>
+	
+	<variable units="first_order_rate_constant" public_interface="in" name="k_13_12"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_12_13"/>
+	<variable units="millimole" public_interface="in" name="A12"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A13 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+			<ci> k_12_13 </ci>
+		    <ci> A12 </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> k_13_12 </ci>
+			<ci> A13 </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A14" cmeta:id="A14">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A14">
+        <dc:title>A14</dc:title>
+        <dcterms:alternative>immediately exchangable PO4 concentration in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A14" initial_value="1.3"/>
+	
+	<variable units="dimensionless" public_interface="in" name="v_5_14"/>
+	<variable units="dimensionless" public_interface="in" name="v_14_5"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_15_14"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_14_15"/>
+	<variable units="millimole" public_interface="in" name="A15"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A14 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <ci> v_5_14 </ci>
+		    <apply>
+              <times/>
+			  <ci> k_15_14 </ci>
+			  <ci> A15 </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <plus/>
+            <ci> v_14_5 </ci>
+		    <apply>
+              <times/>
+			  <ci> k_14_15 </ci>
+			  <ci> A14 </ci>
+		    </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A15" cmeta:id="A15">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A15">
+        <dc:title>A15</dc:title>
+        <dcterms:alternative>non-immediately exchangable PO4 concentration in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimole" public_interface="out" name="A15" initial_value="1.3"/>
+	
+	<variable units="first_order_rate_constant" public_interface="in" name="k_14_15"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_15_14"/>
+	<variable units="millimole" public_interface="in" name="A14"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A15 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+			<ci> k_14_15 </ci>
+		    <ci> A14 </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> k_15_14 </ci>
+			<ci> A15 </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+
+  <component name="A16" cmeta:id="A16">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A16">
+        <dc:title>A16</dc:title>
+        <dcterms:alternative>responding osteoblast population in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A16" initial_value="0.00104122"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k_17D" initial_value="0.0006055"/>
+	<variable units="dimensionless" public_interface="out" name="A16_0" initial_value="0.00104122"/>
+	
+	<variable units="dimensionless" public_interface="in" name="H_plus_20_16"/>
+	<variable units="dimensionless" public_interface="in" name="H_plus_20_17"/>
+	<variable units="dimensionless" public_interface="in" name="A17_0"/>
+	<variable units="dimensionless" public_interface="in" name="pi_c_0"/>
+	<variable units="hour" public_interface="in" name="time"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A16 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <times/>
+			  <ci> k_17D </ci>
+			  <apply>
+                <divide/>
+                <ci> A17_0 </ci>
+			    <ci> pi_c_0 </ci>
+              </apply>
+			</apply>
+			<ci> H_plus_20_16 </ci>
+          </apply>
+		  <apply>
+            <times/>
+            <ci> k_17D </ci>
+			<ci> A17_0 </ci>
+			<apply>
+              <divide/>
+			  <ci> pi_c_0 </ci>
+			  <apply>
+                <times/>
+                <apply>
+                  <times/>
+			      <ci> A16_0 </ci>
+				  <ci> H_plus_20_17 </ci>
+                </apply>
+				<ci> A16 </ci>
+			  </apply>
+			</apply>
+          </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="H_plus_20_16">
+    <variable units="dimensionless" public_interface="out" name="H_plus_20_16"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="4.176"/>
+	<variable units="dimensionless" name="rho" initial_value="0.2016"/>
+	<variable units="dimensionless" name="gamma" initial_value="1.810"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="dimensionless" public_interface="in" name="A16"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_plus_20_16 </ci>
+        <apply>
+          <plus/>
+		  <ci> rho </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A16 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A16 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_plus_20_17">
+    <variable units="dimensionless" public_interface="out" name="H_plus_20_17"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="0.2517"/>
+	<variable units="dimensionless" name="rho" initial_value="5.585e-5"/>
+	<variable units="dimensionless" name="gamma" initial_value="0.1223"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="dimensionless" public_interface="in" name="A16"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_plus_20_17 </ci>
+        <apply>
+          <plus/>
+		  <ci> rho </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A16 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A16 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A17" cmeta:id="A17">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A17">
+        <dc:title>A17</dc:title>
+        <dcterms:alternative>Osteoblast population in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A17"/>
+    <variable units="dimensionless" public_interface="out" name="A17_0" initial_value="0.00501324"/>
+	
+	<variable units="dimensionless" name="A17a" initial_value=""/>
+	<variable units="dimensionless" name="A17b" initial_value=""/>
+	<variable units="first_order_rate_constant" name="k_17aD"/>
+	<variable units="first_order_rate_constant" name="k_17D_"/>
+	<variable units="dimensionless" name="A17a_0" initial_value=""/>
+	<variable units="dimensionless" name="phi_17a" initial_value="0.7976"/>
+	<variable units="dimensionless" name="phi_k17D" initial_value="0.3132"/>
+	<variable units="dimensionless" name="phi_28_k17D" initial_value="1.01"/>
+	
+	<variable units="first_order_rate_constant" public_interface="in" name="k_17D"/>
+	<variable units="dimensionless" public_interface="in" name="H_minus_20_17D"/>
+	<variable units="dimensionless" public_interface="in" name="H_28_17D"/>
+	<variable units="dimensionless" public_interface="in" name="H_plus_20_17"/>
+	<variable units="dimensionless" public_interface="in" name="A16"/>
+	<variable units="dimensionless" public_interface="in" name="A16_0"/>
+	<variable units="dimensionless" public_interface="in" name="pi_c_0"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> A17 </ci>
+        <apply>
+          <plus/>
+          <ci> A17a </ci>
+		  <ci> A17b </ci>
+        </apply>
+	  </apply>
+    </math>
+ 
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A17a </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+			  <ci> k_17D </ci>
+			  <ci> A17_0 </ci>
+			  <ci> pi_c_0 </ci>
+            </apply>
+			<apply>
+              <times/>
+			  <ci> A16_0 </ci>
+			  <ci> H_plus_20_17 </ci>
+			  <ci> A16 </ci>
+			  <ci> phi_17a </ci>
+              <apply>
+                <divide/>
+				<ci> k_17aD </ci>
+				<ci> k_17D_ </ci>
+              </apply>
+            </apply>
+		  </apply>
+		  <apply>
+            <times/>
+            <ci> k_17aD </ci>
+			<ci> A17a </ci>
+          </apply>
+        </apply>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> k_17aD </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <apply>
+              <plus/>
+			  <apply>
+                <times/>
+			    <ci> k_17D </ci>
+			    <ci> A17_0 </ci>
+			  </apply>
+			  <apply>
+                <times/>
+			    <ci> k_17D_ </ci>
+			    <ci> phi_k17D </ci>
+			    <ci> A17a_0 </ci>
+			    <ci> phi_17a </ci>
+			  </apply>
+			</apply>
+            <apply>
+              <times/>
+		      <ci> k_17D_ </ci>
+		      <ci> phi_k17D </ci>
+		      <ci> A17_0 </ci>
+            </apply>
+		  </apply>
+		  <ci> A17a_0 </ci>
+        </apply>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> k_17D_ </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+			  <ci> phi_28_k17D </ci>
+			  <ci> A17_0 </ci>
+			  <ci> H_minus_20_17D </ci>
+			</apply>
+			<ci> pi_c_0 </ci>
+          </apply>
+		  <ci> H_28_17D </ci>
+	    </apply>
+	  </apply>
+    </math>
+  
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A17b </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+			  <ci> k_17D </ci>
+			  <ci> A17_0 </ci>
+			  <ci> pi_c_0 </ci>
+            </apply>
+			<apply>
+              <times/>
+			  <ci> A16_0 </ci>
+			  <ci> H_plus_20_17 </ci>
+			  <ci> A16 </ci>
+			  <apply>
+                <minus/>
+	            <cn cellml:units="dimensionless"> 1.0 </cn>
+				<ci> phi_17a </ci>
+              </apply>
+			  <ci> phi_k17D </ci>
+            </apply>
+          </apply>
+		  <apply>
+            <times/>
+            <ci> k_17D_ </ci>
+			<ci> phi_k17D </ci>
+			<ci> A17b </ci>
+          </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="H_minus_20_17D">
+    <variable units="dimensionless" public_interface="out" name="H_minus_20_17D"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="0.7114"/>
+	<variable units="dimensionless" name="rho" initial_value="0.1743"/>
+	<variable units="dimensionless" name="gamma" initial_value="2.924"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="dimensionless" public_interface="in" name="A17"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_minus_20_17D </ci>
+        <apply>
+          <minus/>
+		  <ci> alpha </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A17 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A17 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_28_17D">
+    <variable units="dimensionless" public_interface="out" name="H_28_17D"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="0.001802"/>
+	<variable units="dimensionless" name="gamma" initial_value="1.0"/>
+	<variable units="dimensionless" name="delta" initial_value="3.816"/>
+  
+    <variable units="dimensionless" public_interface="in" name="A17"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_28_17D </ci>
+        <apply>
+          <times/>
+		  <ci> alpha </ci>
+		  <apply>
+            <divide/>
+			<apply>
+              <power/>
+              <ci> A17 </ci>
+			  <ci> gamma </ci>
+			</apply>
+		    <apply>
+              <plus/>
+		      <apply>
+                <power/>
+                <ci> delta </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <power/>
+                <ci> A17 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A18" cmeta:id="A18">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A18">
+        <dc:title>A18</dc:title>
+        <dcterms:alternative>osteoclast population in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A18" initial_value="0.001154"/>
+    <variable units="dimensionless" public_interface="out" name="A18_0" initial_value="0.001154"/>
+	
+	<variable units="first_order_rate_constant" name="k_18D" initial_value="0.02917"/>
+	
+	<variable units="dimensionless" public_interface="in" name="H_minus_22_18D"/>
+	<variable units="dimensionless" public_interface="in" name="H_plus_20_18D"/>
+	<variable units="dimensionless" public_interface="in" name="H_plus_24_18S"/>
+	<variable units="dimensionless" public_interface="in" name="pi_c_0"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A18 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+		    <ci> k_18D </ci>
+		    <ci> pi_c_0 </ci>
+            <ci> A18_0 </ci>
+		    <ci> H_plus_24_18S </ci>
+		  </apply>
+		  <apply>
+            <times/>
+            <ci> k_18D </ci>
+			<ci> H_plus_20_18D </ci>
+			<ci> H_minus_22_18D </ci>
+			<ci> A18 </ci>
+          </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="H_minus_22_18D">
+    <variable units="dimensionless" public_interface="out" name="H_minus_22_18D"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="3.803"/>
+	<variable units="dimensionless" name="rho" initial_value="0.4698"/>
+	<variable units="dimensionless" name="gamma" initial_value="3.092"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="dimensionless" public_interface="in" name="A18"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_minus_22_18D </ci>
+        <apply>
+          <minus/>
+		  <ci> alpha </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A18 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A18 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_plus_24_18S">
+    <variable units="dimensionless" public_interface="out" name="H_plus_24_18S"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="3.545"/>
+	<variable units="dimensionless" name="rho" initial_value="0.3883"/>
+	<variable units="dimensionless" name="gamma" initial_value="8.531"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="dimensionless" public_interface="in" name="A18"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_plus_24_18S </ci>
+        <apply>
+          <plus/>
+		  <ci> rho </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A18 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A18 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="H_plus_20_18D">
+    <variable units="dimensionless" public_interface="out" name="H_plus_20_18D"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="2.175"/>
+	<variable units="dimensionless" name="rho" initial_value="0.2004"/>
+	<variable units="dimensionless" name="gamma" initial_value="1.017"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="dimensionless" public_interface="in" name="A18"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_plus_20_18D </ci>
+        <apply>
+          <plus/>
+		  <ci> rho </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A18 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A18 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+
+  <component name="A19" cmeta:id="A19">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A19">
+        <dc:title>A19</dc:title>
+        <dcterms:alternative>latent TGF-beta concetration in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A19" initial_value="228.1"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k_19_20" initial_value="2.98e-5"/>
+	<variable units="dimensionless" public_interface="out" name="gamma_19_20" initial_value="0.9191"/>
+	<variable units="dimensionless" public_interface="out" name="gamma_17_19S" initial_value="0.01113"/>
+	<variable units="dimensionless" public_interface="out" name="gamma_18_19_20" initial_value="0.5939"/>
+	<variable units="dimensionless" public_interface="out" name="A19_0" initial_value="228.1"/>
+	
+	<variable units="dimensionless" public_interface="in" name="A17"/>
+	<variable units="dimensionless" public_interface="in" name="A17_0"/>
+	<variable units="dimensionless" public_interface="in" name="A18"/>
+	<variable units="dimensionless" public_interface="in" name="A18_0"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A19 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+		    <ci> k_19_20 </ci>
+		    <ci> A19_0 </ci>
+            <apply>
+              <power/>
+			  <apply>
+                <divide/>
+				<ci> A17 </ci>
+		        <ci> A17_0 </ci>
+		      </apply>
+			  <ci> gamma_17_19S </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <times/>
+		    <ci> k_19_20 </ci>
+		    <apply>
+              <power/>
+			  <apply>
+                <divide/>
+				<ci> A19 </ci>
+		        <ci> A19_0 </ci>
+		      </apply>
+			  <ci> gamma_19_20 </ci>
+		    </apply>
+            <apply>
+              <power/>
+			  <apply>
+                <divide/>
+				<ci> A18 </ci>
+		        <ci> A18_0 </ci>
+		      </apply>
+			  <ci> gamma_18_19_20 </ci>
+		    </apply>
+			<ci> A19 </ci>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="A20" cmeta:id="A20">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A20">
+        <dc:title>A20</dc:title>
+        <dcterms:alternative>active TGF-beta concentration in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A20" initial_value="0.2281"/>
+	<variable units="dimensionless" public_interface="out" name="A20_0" initial_value="0.2281"/>
+    
+	<variable units="dimensionless" public_interface="in" name="gamma_18_19_20"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_19_20"/>
+	<variable units="dimensionless" public_interface="in" name="gamma_19_20"/>
+	<variable units="dimensionless" public_interface="in" name="A19"/>
+	<variable units="dimensionless" public_interface="in" name="A19_0"/>
+	<variable units="dimensionless" public_interface="in" name="A18"/>
+	<variable units="dimensionless" public_interface="in" name="A18_0"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A20 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+		    <ci> k_19_20 </ci>
+		    <apply>
+              <power/>
+			  <apply>
+                <divide/>
+				<ci> A19 </ci>
+		        <ci> A19_0 </ci>
+		      </apply>
+			  <ci> gamma_19_20 </ci>
+		    </apply>
+			<apply>
+              <power/>
+			  <apply>
+                <divide/>
+				<ci> A18 </ci>
+		        <ci> A18_0 </ci>
+		      </apply>
+			  <ci> gamma_18_19_20 </ci>
+		    </apply>
+			<ci> A19 </ci>
+		  </apply>
+		  <apply>
+            <times/>
+		    <cn cellml:units="dimensionless"> 1000.0 </cn>
+			<ci> k_19_20 </ci>
+		    <ci> A20 </ci>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="A21" cmeta:id="A21">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A21">
+        <dc:title>A21</dc:title>
+        <dcterms:alternative>RANK concentration in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A21" initial_value="10.0"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k_21_24" initial_value="0.00000624"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k_24_21" initial_value="0.1120"/>
+	
+	<variable units="dimensionless" name="A21_0" initial_value="10.0"/>
+	<variable units="first_order_rate_constant" name="k_21D" initial_value="0.003237"/>
+	<variable units="dimensionless" name="gamma_20_21" initial_value="0.1518"/>
+	
+	<variable units="dimensionless" public_interface="in" name="A20"/>
+	<variable units="dimensionless" public_interface="in" name="A20_0"/>
+	<variable units="dimensionless" public_interface="in" name="A22"/>
+	<variable units="dimensionless" public_interface="in" name="A22_0"/>
+	<variable units="dimensionless" public_interface="in" name="A24"/>
+	<variable units="dimensionless" public_interface="in" name="A24_0"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A21 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+		    <apply>
+              <times/>
+		      <apply>
+                <minus/>
+			    <apply>
+                  <plus/>
+				  <apply>
+                    <times/>
+		            <ci> k_21D </ci>
+				    <ci> A21_0 </ci>
+		          </apply>
+				  <apply>
+                    <times/>
+		            <ci> k_21_24 </ci>
+				    <ci> A21_0 </ci>
+				    <ci> A22_0 </ci>
+		          </apply>
+			    </apply>
+			    <apply>
+                  <times/>
+				  <ci> k_24_21 </ci>
+		          <apply>
+                    <power/>
+			        <apply>
+                      <divide/>
+				      <ci> A24_0 </ci>
+		              <ci> A20_0 </ci>
+		            </apply>
+			        <ci> gamma_20_21 </ci>
+		          </apply>
+			    </apply>
+			  </apply>
+			  <apply>
+                <power/>
+			    <ci> A20 </ci>
+		        <ci> gamma_20_21 </ci>
+		      </apply>
+		    </apply>
+			<apply>
+              <times/>
+		      <ci> k_24_21 </ci>
+		      <ci> A24 </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <plus/>
+			<apply>
+              <times/>
+		      <ci> k_21D </ci>
+		      <ci> A21 </ci>
+		    </apply>
+			<apply>
+              <times/>
+		      <ci> k_21_24 </ci>
+		      <ci> A21 </ci>
+			  <ci> A22 </ci>
+		    </apply>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="A22" cmeta:id="A22">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A22">
+        <dc:title>A22</dc:title>
+        <dcterms:alternative>RANKL concetration in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A22" initial_value="0.4"/>
+	<variable units="dimensionless" public_interface="out" name="A22_0" initial_value="0.4"/>
+    
+	<variable units="first_order_rate_constant" name="k_22S"/>
+	<variable units="first_order_rate_constant" name="k_22D" initial_value="0.002933"/>
+	<variable units="dimensionless" name="gamma_17_22" initial_value=""/>
+	<variable units="dimensionless" name="alpha_17_22" initial_value="0.1738"/>
+	<variable units="dimensionless" name="delta_17_22" initial_value=""/>
+	
+	<variable units="litre" public_interface="in" name="V_vasc"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_21_24"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_24_21"/>
+	<variable units="millimole" public_interface="in" name="A7"/>
+	<variable units="dimensionless" public_interface="in" name="A17"/>
+	<variable units="dimensionless" public_interface="in" name="A17_0"/>
+	<variable units="dimensionless" public_interface="in" name="A21"/>
+	<variable units="dimensionless" public_interface="in" name="A23"/>
+	<variable units="dimensionless" public_interface="in" name="A24"/>
+	<variable units="dimensionless" public_interface="in" name="A25"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A22 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+		    <ci> k_22S </ci>
+			<apply>
+              <times/>
+			  <ci> k_24_21 </ci>
+			  <apply>
+                <plus/>
+		        <ci> A24 </ci>
+				<ci> A25 </ci>
+		      </apply>
+			</apply>
+		  </apply>
+		  <apply>
+            <plus/>
+			<apply>
+              <times/>
+			  <ci> k_22D </ci>
+			  <ci> A22 </ci>
+			</apply>
+			<apply>
+              <times/>
+			  <ci> k_21_24 </ci>
+			  <apply>
+                <plus/>
+			    <apply>
+                  <times/>
+		          <ci> A23 </ci>
+				  <ci> A22 </ci>
+		        </apply>
+			    <apply>
+                  <times/>
+		          <ci> A21 </ci>
+				  <ci> A22 </ci>
+				</apply>
+		      </apply>
+			</apply>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> k_22S </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+		    <ci> k_22D </ci>
+			<ci> A22_0 </ci>
+			<apply>
+              <power/>
+			  <apply>
+                <divide/>
+				<ci> A17 </ci>
+		        <ci> A17_0 </ci>
+		      </apply>
+			  <ci> gamma_17_22 </ci>
+		    </apply>
+			<ci> alpha_17_22 </ci>
+			<apply>
+              <divide/>
+			  <ci> A7 </ci>
+		      <ci> V_vasc </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <plus/>
+			<apply>
+              <times/>
+			  <ci> delta_17_22 </ci>
+			  <apply>
+                <power/>
+			    <apply>
+                  <divide/>
+				  <ci> A17 </ci>
+		          <ci> A17_0 </ci>
+		        </apply>
+			    <ci> gamma_17_22 </ci>
+		      </apply>
+			</apply>
+			<apply>
+              <divide/>
+			  <ci> A7 </ci>
+		      <ci> V_vasc </ci>
+		    </apply>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="A23" cmeta:id="A23">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A23">
+        <dc:title>A23</dc:title>
+        <dcterms:alternative>OPG concentration in the bone</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A23" initial_value="4.0"/>
+	<variable units="dimensionless" public_interface="out" name="A23_0" initial_value="4.0"/>
+    
+	<variable units="first_order_rate_constant" name="k_23D" initial_value="15.89"/>
+	<variable units="millimolar" name="delta_7_23" initial_value="3.85"/>
+	
+	<variable units="litre" public_interface="in" name="V_vasc"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_21_24"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_24_21"/>
+	<variable units="millimole" public_interface="in" name="A7"/>
+	<variable units="dimensionless" public_interface="in" name="A16"/>
+	<variable units="dimensionless" public_interface="in" name="A16_0"/>
+	<variable units="dimensionless" public_interface="in" name="A22"/>
+	<variable units="dimensionless" public_interface="in" name="A25"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A23 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+			<apply>
+              <times/>
+			  <ci> k_23D </ci>
+			  <ci> A23_0 </ci>
+			  <apply>
+                <divide/>
+		        <ci> A16 </ci>
+				<ci> A16_0 </ci>
+		      </apply>
+			  <apply>
+                <plus/>
+				<apply>
+                  <divide/>
+		          <ci> A7 </ci>
+				  <ci> V_vasc </ci>
+		        </apply>
+				<apply>
+                  <divide/>
+				  <apply>
+                    <times/>
+			        <ci> delta_7_23 </ci>
+					<apply>
+                      <divide/>
+		              <ci> A16 </ci>
+				      <ci> A16_0 </ci>
+		            </apply>
+			      </apply>
+				  <apply>
+                    <times/>
+			        <cn cellml:units="dimensionless"> 2.0 </cn>
+					<apply>
+                      <divide/>
+		              <ci> A7 </ci>
+				      <ci> V_vasc </ci>
+		            </apply>
+			      </apply>
+				</apply>
+			  </apply>
+			</apply>
+			<apply>
+              <times/>
+			  <ci> k_24_21 </ci>
+			  <ci> A25 </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <plus/>
+			<apply>
+              <times/>
+			  <ci> k_21_24 </ci>
+			  <ci> A23 </ci>
+			  <ci> A22 </ci>
+			</apply>
+			<apply>
+              <times/>
+			  <ci> k_23D </ci>
+			  <ci> A23 </ci>
+			</apply>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="A24" cmeta:id="A24">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A24">
+        <dc:title>A24</dc:title>
+        <dcterms:alternative>RANK-RANKL receptor-ligand complex</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A24" initial_value=""/>
+	<variable units="dimensionless" public_interface="out" name="A24_0" initial_value=""/>
+    
+	<variable units="first_order_rate_constant" public_interface="in" name="k_21_24"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_24_21"/>
+	<variable units="dimensionless" public_interface="in" name="A21"/>
+	<variable units="dimensionless" public_interface="in" name="A22"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A24 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+			<ci> k_21_24 </ci>
+			<ci> A21 </ci>
+			<ci> A22 </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> k_24_21 </ci>
+			<ci> A24 </ci>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="A25" cmeta:id="A25">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A25">
+        <dc:title>A25</dc:title>
+        <dcterms:alternative>OPG-RANKL receptor-ligand complex</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A25" initial_value=""/>
+	<variable units="dimensionless" public_interface="out" name="A25_0" initial_value=""/>
+    
+	<variable units="first_order_rate_constant" public_interface="in" name="k_21_24"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_24_21"/>
+	<variable units="dimensionless" public_interface="in" name="A23"/>
+	<variable units="dimensionless" public_interface="in" name="A22"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A25 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+			<ci> k_21_24 </ci>
+			<ci> A23 </ci>
+			<ci> A22 </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> k_24_21 </ci>
+			<ci> A25 </ci>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <!-- Osteoblast intracellular components -->
+  
+  <component name="A26" cmeta:id="A26">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A26">
+        <dc:title>A26</dc:title>
+        <dcterms:alternative>intracellular Runx2 concentration in the osteoblast</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A26" initial_value="10.0"/>
+	
+	<variable units="first_order_rate_constant" name="k_26S" initial_value="6.93"/>
+	
+	<variable units="dimensionless" public_interface="in" name="H_plus_7_26D"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A26 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci> k_26S </ci>
+		  <apply>
+            <times/>
+			<ci> H_plus_7_26D </ci>
+			<ci> A26 </ci>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="H_plus_7_26D">
+    <variable units="dimensionless" public_interface="out" name="H_plus_7_26D"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="5.125"/>
+	<variable units="dimensionless" name="rho" initial_value="0.125"/>
+	<variable units="dimensionless" name="gamma" initial_value="1.0"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="dimensionless" public_interface="in" name="A26"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_plus_7_26D </ci>
+        <apply>
+          <plus/>
+		  <ci> rho </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A26 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A26 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A27" cmeta:id="A27">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A27">
+        <dc:title>A27</dc:title>
+        <dcterms:alternative>intracellular CREB concetration in the osteoblast</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A27" initial_value="10.0"/>
+	
+	<variable units="first_order_rate_constant" name="k_27S" initial_value=""/>
+	<variable units="first_order_rate_constant" name="k_27D" initial_value="0.002795"/>
+	
+	<variable units="dimensionless" public_interface="in" name="H_plus_7_27S"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A27 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+			<ci> k_27S </ci>
+			<ci> H_plus_7_27S </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> k_27D </ci>
+			<ci> A27 </ci>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="H_plus_7_27S">
+    <variable units="dimensionless" public_interface="out" name="H_plus_7_27S"/>
+	
+	<variable units="dimensionless" name="alpha" initial_value="3.897"/>
+	<variable units="dimensionless" name="rho" initial_value="0.5"/>
+	<variable units="dimensionless" name="gamma" initial_value="1.0"/>
+	<variable units="dimensionless" name="delta" initial_value=""/>
+  
+    <variable units="dimensionless" public_interface="in" name="A27"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci> H_plus_7_27S </ci>
+        <apply>
+          <plus/>
+		  <ci> rho </ci>
+		  <apply>
+            <times/>
+			<apply>
+              <minus/>
+              <ci> alpha </ci>
+			  <ci> rho </ci>
+			</apply>
+		    <apply>
+              <divide/>
+		      <apply>
+                <power/>
+                <ci> A27 </ci>
+			    <ci> gamma </ci>
+			  </apply>
+              <apply>
+                <plus/>
+				<apply>
+                  <power/>
+                  <ci> delta </ci>
+			      <ci> gamma </ci>
+			    </apply>
+				<apply>
+                  <power/>
+                  <ci> A27 </ci>
+			      <ci> gamma </ci>
+			    </apply>
+			  </apply>
+            </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="A28" cmeta:id="A28">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#A28">
+        <dc:title>A28</dc:title>
+        <dcterms:alternative>intracellular Bcl-2 concentration in the osteoblast</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="A28" initial_value="100.0"/>
+	
+	<variable units="first_order_rate_constant" name="k_28D" initial_value="0.693"/>
+	
+	<variable units="dimensionless" public_interface="in" name="A26"/>
+	<variable units="dimensionless" public_interface="in" name="A27"/>
+	<variable units="hour" public_interface="in" name="time"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A28 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+			<ci> k_28D </ci>
+			<ci> A26 </ci>
+			<ci> A27 </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> k_28D </ci>
+			<ci> A28 </ci>
+		  </apply>
+        </apply>
+	  </apply>
+    </math>
+  </component>
+  
+  <component name="model_parameters">
+    <variable units="litre_per_hour" public_interface="out" name="GFR" initial_value="6.0"/>
+	<variable units="litre" public_interface="out" name="V_vasc" initial_value="14.0"/>
+	<variable units="dimensionless" public_interface="out" name="pi_c_0" initial_value="0.2281"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k_13_12" initial_value=""/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k_12_13" initial_value=""/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k_15_14" initial_value="2.444e-5"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k_14_15" initial_value=""/>
+	
+	<variable units="litre" name="V_ic" initial_value="32.3"/>
+	<variable units="litre" name="V_bone" initial_value="46.4"/>
+  </component>
+  
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="A1"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A2"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A3"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A4"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A5"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A6"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A7"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A8"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A9"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A10"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A11"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A12"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A13"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A14"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A15"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A16"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A17"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A18"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A19"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A20"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A21"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A22"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A23"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A24"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A25"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A26"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A27"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A28"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A1" component_1="A2"/>
+    <map_variables variable_2="A2" variable_1="A2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A1" component_1="H_plus_2_1"/>
+    <map_variables variable_2="A1" variable_1="A1"/>
+    <map_variables variable_2="H_plus_2_1" variable_1="H_plus_2_1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A1" component_1="H_1_4"/>
+    <map_variables variable_2="A1" variable_1="A1"/>
+    <map_variables variable_2="H_1_4" variable_1="H_1_4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A2" component_1="H_plus_6_2"/>
+    <map_variables variable_2="A2" variable_1="A2"/>
+    <map_variables variable_2="H_plus_6_2" variable_1="H_plus_6_2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A2" component_1="H_minus_6_2"/>
+    <map_variables variable_2="A2" variable_1="A2"/>
+    <map_variables variable_2="H_minus_6_2" variable_1="H_minus_6_2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A4" component_1="H_18_12_4"/>
+    <map_variables variable_2="A4" variable_1="A4"/>
+    <map_variables variable_2="H_18_12_4" variable_1="H_18_12_4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A4" component_1="H_6_4"/>
+    <map_variables variable_2="A4" variable_1="A4"/>
+    <map_variables variable_2="H_6_4" variable_1="H_6_4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A4" component_1="H_4_u"/>
+    <map_variables variable_2="A4" variable_1="A4"/>
+    <map_variables variable_2="H_4_u" variable_1="H_4_u"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A4" component_1="H_7_4_u"/>
+    <map_variables variable_2="A4" variable_1="A4"/>
+    <map_variables variable_2="H_7_4_u" variable_1="H_7_4_u"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A4" component_1="A1"/>
+    <map_variables variable_2="v_1_4" variable_1="v_1_4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A4" component_1="A17"/>
+    <map_variables variable_2="A17" variable_1="A17"/>
+    <map_variables variable_2="A17_0" variable_1="A17_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A4" component_1="A18"/>
+    <map_variables variable_2="A18" variable_1="A18"/>
+    <map_variables variable_2="A18_0" variable_1="A18_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A4" component_1="A24"/>
+    <map_variables variable_2="A24" variable_1="A24"/>
+    <map_variables variable_2="A24_0" variable_1="A24_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A4" component_1="model_parameters"/>
+    <map_variables variable_2="GFR" variable_1="GFR"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A5" component_1="A3"/>
+    <map_variables variable_2="A3" variable_1="A3"/>
+    <map_variables variable_2="k_3_5" variable_1="k_3_5"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A5" component_1="A4"/>
+    <map_variables variable_2="v_4_12" variable_1="v_4_12"/>
+	<map_variables variable_2="v_12_4" variable_1="v_12_4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A5" component_1="A8"/>
+    <map_variables variable_2="A8" variable_1="A8"/>
+    <map_variables variable_2="v_5_8" variable_1="v_5_8"/>
+	<map_variables variable_2="v_8_5" variable_1="v_8_5"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A5" component_1="model_parameters"/>
+    <map_variables variable_2="GFR" variable_1="GFR"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A6" component_1="A9"/>
+    <map_variables variable_2="A9" variable_1="A9"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A7" component_1="H_minus_4_10_7"/>
+    <map_variables variable_2="A7" variable_1="A7"/>
+    <map_variables variable_2="H_minus_4_10_7" variable_1="H_minus_4_10_7"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A7" component_1="A10"/>
+    <map_variables variable_2="A10" variable_1="A10"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A7" component_1="A11"/>
+    <map_variables variable_2="A11" variable_1="A11"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A9" component_1="H_minus_5_9"/>
+    <map_variables variable_2="A9" variable_1="A9"/>
+    <map_variables variable_2="H_minus_5_9" variable_1="H_minus_5_9"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A9" component_1="H_7_9"/>
+    <map_variables variable_2="A9" variable_1="A9"/>
+    <map_variables variable_2="H_7_9" variable_1="H_7_9"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="H_minus_5_9" component_1="A5"/>
+    <map_variables variable_2="A5" variable_1="A5"/>
+    <map_variables variable_2="A5_0" variable_1="A5_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A10" component_1="A4"/>
+    <map_variables variable_2="A4" variable_1="A4"/>
+    <map_variables variable_2="A4_0" variable_1="A4_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A10" component_1="A6"/>
+    <map_variables variable_2="A6" variable_1="A6"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A10" component_1="model_parameters"/>
+    <map_variables variable_2="V_vasc" variable_1="V_vasc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A11" component_1="H_minus_6_11"/>
+    <map_variables variable_2="A11" variable_1="A11"/>
+    <map_variables variable_2="H_minus_6_11" variable_1="H_minus_6_11"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A12" component_1="A4"/>
+    <map_variables variable_2="v_4_12" variable_1="v_4_12"/>
+	<map_variables variable_2="v_12_4" variable_1="v_12_4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A12" component_1="A13"/>
+    <map_variables variable_2="A12" variable_1="A12"/>
+	<map_variables variable_2="A13" variable_1="A13"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A12" component_1="model_parameters"/>
+    <map_variables variable_2="k_13_12" variable_1="k_13_12"/>
+	<map_variables variable_2="k_12_13" variable_1="k_12_13"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A13" component_1="model_parameters"/>
+    <map_variables variable_2="k_13_12" variable_1="k_13_12"/>
+	<map_variables variable_2="k_12_13" variable_1="k_12_13"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A14" component_1="A5"/>
+    <map_variables variable_2="v_5_14" variable_1="v_5_14"/>
+	<map_variables variable_2="v_14_5" variable_1="v_14_5"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A14" component_1="model_parameters"/>
+    <map_variables variable_2="k_15_14" variable_1="k_15_14"/>
+	<map_variables variable_2="k_14_15" variable_1="k_14_15"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A14" component_1="A15"/>
+    <map_variables variable_2="A14" variable_1="A14"/>
+	<map_variables variable_2="A15" variable_1="A15"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A15" component_1="model_parameters"/>
+    <map_variables variable_2="k_15_14" variable_1="k_15_14"/>
+	<map_variables variable_2="k_14_15" variable_1="k_14_15"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A16" component_1="H_plus_20_16"/>
+    <map_variables variable_2="A16" variable_1="A16"/>
+    <map_variables variable_2="H_plus_20_16" variable_1="H_plus_20_16"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A16" component_1="H_plus_20_17"/>
+    <map_variables variable_2="A16" variable_1="A16"/>
+    <map_variables variable_2="H_plus_20_17" variable_1="H_plus_20_17"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A16" component_1="A17"/>
+    <map_variables variable_2="A16" variable_1="A16"/>
+	<map_variables variable_2="A16_0" variable_1="A16_0"/>
+    <map_variables variable_2="A17_0" variable_1="A17_0"/>
+	<map_variables variable_2="k_17D" variable_1="k_17D"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A16" component_1="model_parameters"/>
+    <map_variables variable_2="pi_c_0" variable_1="pi_c_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A17" component_1="H_plus_20_17"/>
+    <map_variables variable_2="H_plus_20_17" variable_1="H_plus_20_17"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A17" component_1="H_minus_20_17D"/>
+    <map_variables variable_2="A17" variable_1="A17"/>
+    <map_variables variable_2="H_minus_20_17D" variable_1="H_minus_20_17D"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A17" component_1="H_28_17D"/>
+    <map_variables variable_2="A17" variable_1="A17"/>
+    <map_variables variable_2="H_28_17D" variable_1="H_28_17D"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A17" component_1="model_parameters"/>
+    <map_variables variable_2="pi_c_0" variable_1="pi_c_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A18" component_1="H_minus_22_18D"/>
+    <map_variables variable_2="A18" variable_1="A18"/>
+    <map_variables variable_2="H_minus_22_18D" variable_1="H_minus_22_18D"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A18" component_1="H_plus_20_18D"/>
+    <map_variables variable_2="A18" variable_1="A18"/>
+    <map_variables variable_2="H_plus_20_18D" variable_1="H_plus_20_18D"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A18" component_1="H_plus_24_18S"/>
+    <map_variables variable_2="A18" variable_1="A18"/>
+    <map_variables variable_2="H_plus_24_18S" variable_1="H_plus_24_18S"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A18" component_1="model_parameters"/>
+    <map_variables variable_2="pi_c_0" variable_1="pi_c_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A19" component_1="A17"/>
+    <map_variables variable_2="A17" variable_1="A17"/>
+    <map_variables variable_2="A17_0" variable_1="A17_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A19" component_1="A18"/>
+    <map_variables variable_2="A18" variable_1="A18"/>
+    <map_variables variable_2="A18_0" variable_1="A18_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A20" component_1="A18"/>
+    <map_variables variable_2="A18" variable_1="A18"/>
+    <map_variables variable_2="A18_0" variable_1="A18_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A20" component_1="A19"/>
+    <map_variables variable_2="gamma_18_19_20" variable_1="gamma_18_19_20"/>
+    <map_variables variable_2="gamma_19_20" variable_1="gamma_19_20"/>
+	<map_variables variable_2="k_19_20" variable_1="k_19_20"/>
+	<map_variables variable_2="A19" variable_1="A19"/>
+    <map_variables variable_2="A19_0" variable_1="A19_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A21" component_1="A20"/>
+    <map_variables variable_2="A20" variable_1="A20"/>
+    <map_variables variable_2="A20_0" variable_1="A20_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A21" component_1="A22"/>
+    <map_variables variable_2="A22" variable_1="A22"/>
+	<map_variables variable_2="A22_0" variable_1="A22_0"/>
+	<map_variables variable_2="k_21_24" variable_1="k_21_24"/>
+	<map_variables variable_2="k_24_21" variable_1="k_24_21"/>
+	<map_variables variable_2="A21" variable_1="A21"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A21" component_1="A24"/>
+    <map_variables variable_2="A24" variable_1="A24"/>
+	<map_variables variable_2="A24_0" variable_1="A24_0"/>
+	<map_variables variable_2="k_21_24" variable_1="k_21_24"/>
+	<map_variables variable_2="k_24_21" variable_1="k_24_21"/>
+	<map_variables variable_2="A21" variable_1="A21"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A22" component_1="A23"/>
+    <map_variables variable_2="A22" variable_1="A22"/>
+	<map_variables variable_2="A23" variable_1="A23"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A22" component_1="A24"/>
+    <map_variables variable_2="A22" variable_1="A22"/>
+	<map_variables variable_2="A24" variable_1="A24"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A22" component_1="A25"/>
+    <map_variables variable_2="A22" variable_1="A22"/>
+	<map_variables variable_2="A25" variable_1="A25"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A22" component_1="A17"/>
+    <map_variables variable_2="A17" variable_1="A17"/>
+    <map_variables variable_2="A17_0" variable_1="A17_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A22" component_1="A7"/>
+    <map_variables variable_2="A7" variable_1="A7"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A22" component_1="model_parameters"/>
+    <map_variables variable_2="V_vasc" variable_1="V_vasc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A23" component_1="A21"/>
+    <map_variables variable_2="k_21_24" variable_1="k_21_24"/>
+	<map_variables variable_2="k_24_21" variable_1="k_24_21"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A23" component_1="A25"/>
+    <map_variables variable_2="A23" variable_1="A23"/>
+	<map_variables variable_2="A25" variable_1="A25"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A23" component_1="A16"/>
+    <map_variables variable_2="A16" variable_1="A16"/>
+    <map_variables variable_2="A16_0" variable_1="A16_0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A23" component_1="A7"/>
+    <map_variables variable_2="A7" variable_1="A7"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A23" component_1="model_parameters"/>
+    <map_variables variable_2="V_vasc" variable_1="V_vasc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A25" component_1="A21"/>
+    <map_variables variable_2="k_21_24" variable_1="k_21_24"/>
+	<map_variables variable_2="k_24_21" variable_1="k_24_21"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A26" component_1="H_plus_7_26D"/>
+    <map_variables variable_2="A26" variable_1="A26"/>
+    <map_variables variable_2="H_plus_7_26D" variable_1="H_plus_7_26D"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A27" component_1="H_plus_7_27S"/>
+    <map_variables variable_2="A27" variable_1="A27"/>
+    <map_variables variable_2="H_plus_7_27S" variable_1="H_plus_7_27S"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A28" component_1="A26"/>
+    <map_variables variable_2="A26" variable_1="A26"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="A28" component_1="A27"/>
+    <map_variables variable_2="A27" variable_1="A27"/>
+  </connection>
+
+  
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+	<rdf:Description rdf:about="">
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Lloyd</vCard:Family>
+          <vCard:Given>Catherine</vCard:Given>
+		  <vCard:Other>May</vCard:Other>
+        </vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+  
+      <dcterms:created rdf:parseType="Resource">
+        <dcterms:W3CDTF>2010-06-22</dcterms:W3CDTF>
+      </dcterms:created>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#peterson_2010">
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>endocrine</rdf:li>
+			  <rdf:li>bone</rdf:li>
+			  <rdf:li>parathyroid hormone</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>19732857</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Peterson</vCard:Family>
+                    <vCard:Given>M</vCard:Given>
+					<vCard:Other>C</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Riggs</vCard:Family>
+                    <vCard:Given>M</vCard:Given>
+					<vCard:Other>M</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			</rdf:Seq>
+          </dc:creator>
+          <dc:title>
+            A physiologically based mathematical model of integrated calcium homeostasis and bone remodeling
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>2010-01</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Bone</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>46</bqs:volume>
+          <bqs:first_page>49</bqs:first_page>
+          <bqs:last_page>63</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

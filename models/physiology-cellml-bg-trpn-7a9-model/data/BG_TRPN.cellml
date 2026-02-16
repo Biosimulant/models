@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="individual_TRPN" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="millivolt" units_ref="millivolt"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <!-- initial values-->
+        <variable initial_value="6.82e-1" name="q_Cai_init" units="fmol"/>
+        <variable initial_value="2.57" name="q_TRPN_init" units="fmol"/>
+        <variable initial_value="1e-16" name="q_Ca_TRPN_init" units="fmol"/>
+        <!-- Global value-->
+        <variable name="q_Cai" public_interface="out" units="fmol"/>
+        <variable name="q_TRPN" public_interface="out" units="fmol"/>
+        <variable name="q_Ca_TRPN" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="q_Cai_mTRPN" public_interface="in" units="fmol"/>
+        <variable name="q_TRPN_mTRPN" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_TRPN_mTRPN" public_interface="in" units="fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q_Cai</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_Cai_mTRPN</ci>
+                    <ci>q_Cai_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_TRPN</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_TRPN_mTRPN</ci>
+                    <ci>q_TRPN_init</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_Ca_TRPN</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_Ca_TRPN_mTRPN</ci>
+                    <ci>q_Ca_TRPN_init</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="TRPN_parameters">
+        <variable initial_value="83.2553" name="kappa_R_TRPNCa" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.00748" name="K_Cai" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.00748" name="K_TRPN" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0698328" name="K_Ca_TRPN" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="TRPN">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- parameters-->
+        <variable name="kappa_R_TRPNCa" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_Cai" public_interface="in" units="per_fmol"/>
+        <variable name="K_TRPN" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_TRPN" public_interface="in" units="per_fmol"/>
+        <!-- Input from global environment-->
+        <variable name="q_Cai_global" public_interface="in" units="fmol"/>
+        <variable name="q_TRPN_global" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_TRPN_global" public_interface="in" units="fmol"/>
+        <!-- Output to global environment-->
+        <variable initial_value="1e-16" name="q_Cai" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_TRPN" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-16" name="q_Ca_TRPN" public_interface="out" units="fmol"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_Cai" units="J_per_mol"/>
+        <variable name="mu_TRPN" units="J_per_mol"/>
+        <variable name="mu_Ca_TRPN" units="J_per_mol"/>
+        <variable name="v_R_TRPNCa" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_Cai</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Cai</ci>
+                            <ci>q_Cai_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_TRPN</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_TRPN</ci>
+                            <ci>q_TRPN_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_TRPN</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_TRPN</ci>
+                            <ci>q_Ca_TRPN_global</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R_TRPNCa</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R_TRPNCa</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Cai</ci>
+                                    <ci>mu_TRPN</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ca_TRPN</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Cai</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_TRPNCa</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_TRPN</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_TRPNCa</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_TRPN</ci>
+                </apply>
+                <ci>v_R_TRPNCa</ci>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="TRPN"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_Cai_mTRPN" variable_2="q_Cai"/>
+        <map_variables variable_1="q_Cai" variable_2="q_Cai_global"/>
+        <map_variables variable_1="q_TRPN_mTRPN" variable_2="q_TRPN"/>
+        <map_variables variable_1="q_TRPN" variable_2="q_TRPN_global"/>
+        <map_variables variable_1="q_Ca_TRPN_mTRPN" variable_2="q_Ca_TRPN"/>
+        <map_variables variable_1="q_Ca_TRPN" variable_2="q_Ca_TRPN_global"/>
+    </connection>
+    <connection>
+        <map_components component_1="TRPN" component_2="TRPN_parameters"/>
+        <map_variables variable_1="kappa_R_TRPNCa" variable_2="kappa_R_TRPNCa"/>
+        <map_variables variable_1="K_Cai" variable_2="K_Cai"/>
+        <map_variables variable_1="K_TRPN" variable_2="K_TRPN"/>
+        <map_variables variable_1="K_Ca_TRPN" variable_2="K_Ca_TRPN"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="TRPN"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

@@ -1,0 +1,98 @@
+<?xml version='1.0'?>
+<model name="CFTR_BG" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="Units.cellml">
+        <units name="per_mol" units_ref="per_mol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="J_per_mol_K" units_ref="J_per_mol_K"/>
+        <units name="mol_per_s" units_ref="mol_per_s"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+    </import>
+    <component name="CFTR">
+        <variable name="t" units="second"/>
+        <!-- Parameters-->
+        <variable initial_value="8.324" name="R" units="J_per_mol_K"/>
+        <variable initial_value="300" name="T" units="kelvin"/>
+        <variable initial_value="96485" name="F" units="C_per_mol"/>
+        <variable initial_value="100" name="g_CFTR" units="siemens"/>
+        <variable name="R_1" units="J_per_mol"/>
+        <!-- State variables-->
+        <variable initial_value="1.0" name="q_Cl_i" units="mole"/>
+        <variable initial_value="0.1" name="q_Cl_o" units="mole"/>
+        <variable name="upsilon_1" units="mol_per_s"/>
+        <variable initial_value="-0.065" name="mu_E" units="J_per_mol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>R_1</ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <power/>
+                            <ci>F</ci>
+                            <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <ci>g_CFTR</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <!-- Conservation laws-->
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Cl_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>upsilon_1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Cl_o</ci>
+                </apply>
+                <ci>upsilon_1</ci>
+            </apply>
+            <!-- Constitutive relations-->
+            <apply>
+                <eq/>
+                <ci>upsilon_1</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>R_1</ci>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <ci>mu_E</ci>
+                        <apply>
+                            <times/>
+                            <ci>R</ci>
+                            <ci>T</ci>
+                            <apply>
+                                <ln/>
+                                <apply>
+                                    <divide/>
+                                    <ci>q_Cl_i</ci>
+                                    <ci>q_Cl_o</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

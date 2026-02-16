@@ -1,0 +1,332 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="individual_SOC" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_s"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="millivolt" units_ref="millivolt"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="-381" name="q_mem" public_interface="out" units="fC"/>
+        <variable initial_value="7070" name="C_m" public_interface="out" units="fF"/>
+        <!-- initial values-->
+        <variable initial_value="5.32E+01" name="q_Ca_o" public_interface="out" units="fmol"/>
+        <variable initial_value="1.64E-02" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <variable initial_value="0.0242" name="q_Ca_ER" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="v_Rx_SOC" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Rx_SOC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <ci>v_Rx_SOC</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_ER</ci>
+                </apply>
+                <cn cellml:units="fmol_per_sec">0</cn>
+            </apply>
+        </math>
+    </component>
+    <component name="SOC_parameters">
+        <variable initial_value="0.956036" name="kappa_Rx_SOC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.046034" name="K_Ca_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00693454" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0346475" name="K_Ca_ER" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="SOC">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="V_mem" units="J_per_C"/>
+        <!-- parameters-->
+        <variable name="kappa_Rx_SOC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_Ca_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_ER" public_interface="in" units="per_fmol"/>
+        <!-- Input from global environment-->
+        <variable name="q_Ca_o" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_i" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_ER" public_interface="in" units="fmol"/>
+        <variable name="q_mem" public_interface="in" units="fC"/>
+        <variable name="C_m" public_interface="in" units="fF"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_Ca_o" units="J_per_mol"/>
+        <variable name="mu_Ca_i" units="J_per_mol"/>
+        <variable name="mu_Ca_ER" units="J_per_mol"/>
+        <variable initial_value="8" name="n" units="dimensionless"/>
+        <variable name="v_Rx_SOC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="Am_Rx_SOC" units="J_per_mol"/>
+        <variable name="Af_Rx_SOC" units="J_per_mol"/>
+        <variable name="Ar_Rx_SOC" units="J_per_mol"/>
+        <variable initial_value="2" name="zCa" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_o</ci>
+                            <ci>q_Ca_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_i</ci>
+                            <ci>q_Ca_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_ER</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_ER</ci>
+                            <ci>q_Ca_ER</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Am_Rx_SOC</ci>
+                <apply>
+                    <times/>
+                    <ci>zCa</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_Rx_SOC</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_Ca_o</ci>
+                    <ci>Am_Rx_SOC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_Rx_SOC</ci>
+                <ci>mu_Ca_i</ci>
+            </apply>
+            <!-- v_Rx_SOC = kappa_Rx_SOC*(exp((mu_Ca_o+n*mu_Ca_ER)/(R*T))-exp((mu_Ca_i+n*mu_Ca_ER)/(R*T)));-->
+            <apply>
+                <eq/>
+                <ci>v_Rx_SOC</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>kappa_Rx_SOC</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_Rx_SOC</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_Rx_SOC</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_Rx_SOC</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>kappa_Rx_SOC</ci>
+                                        <ci>Am_Rx_SOC</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_Rx_SOC</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_Rx_SOC</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_Rx_SOC</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="SOC"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_ER" variable_2="q_Ca_ER"/>
+        <map_variables variable_1="v_Rx_SOC" variable_2="v_Rx_SOC"/>
+    </connection>
+    <connection>
+        <map_components component_1="SOC" component_2="SOC_parameters"/>
+        <map_variables variable_1="kappa_Rx_SOC" variable_2="kappa_Rx_SOC"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_ER" variable_2="K_Ca_ER"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="SOC"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+</model>

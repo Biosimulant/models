@@ -1,0 +1,1428 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="my_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <!-- Simple model of epithelial cell with sodium, glucose and water transport-->
+    <units name="dim">
+        <unit units="dimensionless"/>
+    </units>
+    <units name="per_s">
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="L_per_s">
+        <unit units="litre"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="kPa">
+        <unit units="joule"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="kPa_s_per_L">
+        <unit units="kPa"/>
+        <unit units="second"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="kPa_per_L">
+        <unit units="kPa"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="L_per_s_per_kPa">
+        <unit units="L_per_s"/>
+        <unit exponent="-1" units="kPa"/>
+    </units>
+    <units name="per_mol">
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="mM">
+        <unit prefix="milli" units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="mM2">
+        <unit exponent="2" units="mM"/>
+    </units>
+    <units name="per_mM">
+        <unit exponent="-1" units="mM"/>
+    </units>
+    <units name="millimols_per_mol">
+        <unit prefix="milli" units="mole"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="mM_per_mol">
+        <unit units="mM"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="mol_per_s">
+        <unit units="mole"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="mol_per_L">
+        <unit units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="L_per_mol">
+        <unit units="litre"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="J_per_mol">
+        <unit units="joule"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="J_per_C">
+        <unit units="joule"/>
+        <unit exponent="-1" units="coulomb"/>
+    </units>
+    <units name="C_per_mol">
+        <unit units="coulomb"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="C_per_J_per_s">
+        <unit units="coulomb"/>
+        <unit exponent="-1" units="joule"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="C2_per_J">
+        <unit exponent="2" units="coulomb"/>
+        <unit exponent="-1" units="joule"/>
+    </units>
+    <units name="per_s_per_V">
+        <unit units="per_s"/>
+        <unit exponent="-1" units="volt"/>
+    </units>
+    <component name="main">
+        <variable name="t" units="second"/>
+        <variable initial_value="2.5e3" name="RT" units="J_per_mol"/>
+        <variable initial_value="0.965e5" name="F" units="C_per_mol"/>
+        <!-- ODEs for water storage -->
+        <variable initial_value="1" name="q_w_gut" units="litre"/>
+        <variable initial_value="1" name="q_w_epi" units="litre"/>
+        <variable initial_value="1" name="q_w_cap" units="litre"/>
+        <!--        ode(q_w_gut, t) = -v_w_epiApex;
+        ode(q_w_epi, t) =  v_w_epiApex-v_w_epiBase;
+        ode(q_w_cap, t) =  v_w_epiBase;-->
+        <variable name="q_w_tot" units="litre"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q_w_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_w_gut</ci>
+                    <ci>q_w_epi</ci>
+                    <ci>q_w_cap</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Sodium ion transport -->
+        <variable initial_value="0.1" name="q_Na_gut" units="mole"/>
+        <variable initial_value="0.001" name="q_Na_epi" units="mole"/>
+        <variable initial_value="0.140" name="q_Na_cap" units="mole"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Na_gut</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dim">2</cn>
+                    </apply>
+                    <ci>v_SGLT1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Na_epi</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dim">2</cn>
+                            <ci>v_SGLT1</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dim">3</cn>
+                            <ci>v_NKE</ci>
+                        </apply>
+                    </apply>
+                    <ci>v_NKCC1</ci>
+                    <ci>v_Na</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--      ode(q_Na_cap, t) =  3{dim}*v_NKE;-->
+        <variable name="c_Na_gut" units="mM"/>
+        <variable name="c_Na_epi" units="mM"/>
+        <variable name="c_Na_cap" units="mM"/>
+        <variable initial_value="1.e3" name="K_mm" units="millimols_per_mol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>c_Na_gut</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_Na_gut</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_gut</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>c_Na_epi</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_Na_epi</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_epi</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>c_Na_cap</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_Na_cap</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_cap</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="q_Na_tot" units="mole"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q_Na_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_Na_gut</ci>
+                    <ci>q_Na_epi</ci>
+                    <ci>q_Na_cap</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Potassium ion transport-->
+        <variable initial_value="0.130" name="q_K_epi" units="mole"/>
+        <variable initial_value="0.004" name="q_K_cap" units="mole"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_K_epi</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dim">2</cn>
+                                <ci>v_NKE</ci>
+                            </apply>
+                            <ci>v_K</ci>
+                        </apply>
+                        <ci>v_NKCC1</ci>
+                    </apply>
+                    <ci>v_KCC1</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="c_K_epi" units="mM"/>
+        <variable name="c_K_cap" units="mM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>c_K_epi</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_K_epi</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_epi</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>c_K_cap</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_K_cap</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_cap</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Chloride ion transport-->
+        <variable initial_value="0.001" name="q_Cl_epi" units="mole"/>
+        <variable initial_value="0.100" name="q_Cl_cap" units="mole"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Cl_epi</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dim">2</cn>
+                        <ci>v_NKCC1</ci>
+                    </apply>
+                    <ci>v_KCC1</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="c_Cl_epi" units="mM"/>
+        <variable name="c_Cl_cap" units="mM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>c_Cl_epi</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_Cl_epi</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_epi</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>c_Cl_cap</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_Cl_cap</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_cap</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Charge balance-->
+        <variable initial_value="1e-5" name="q_e" units="coulomb"/>
+        <variable initial_value="-0.08" name="u_ee" units="J_per_C"/>
+        <variable name="u_e" units="J_per_C"/>
+        <variable initial_value="5e4" name="C_m" units="C2_per_J"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_e</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="dim">2</cn>
+                                    <ci>v_SGLT1</ci>
+                                </apply>
+                                <ci>v_NKE</ci>
+                            </apply>
+                            <ci>v_K</ci>
+                        </apply>
+                        <ci>v_Na</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_e</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_e</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Glucose transport (assume glucose is immediately converted to ATP) -->
+        <variable initial_value="0.01" name="q_Glc_gut" units="mole"/>
+        <variable initial_value="0.001" name="q_Glc_epi" units="mole"/>
+        <variable initial_value="0.01" name="q_Glc_cap" units="mole"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Glc_epi</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_SGLT1</ci>
+                        <ci>v_GLUT2</ci>
+                    </apply>
+                    <ci>v_AM</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="c_Glc_gut" units="mM"/>
+        <variable name="c_Glc_epi" units="mM"/>
+        <variable name="c_Glc_cap" units="mM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>c_Glc_gut</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_Glc_gut</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_gut</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>c_Glc_epi</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_Glc_epi</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_epi</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>c_Glc_cap</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_Glc_cap</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_cap</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Hydraulic pressures (J/L)-->
+        <variable initial_value="1" name="u_w_gut" units="kPa"/>
+        <variable name="u_w_epi" units="kPa"/>
+        <variable initial_value="1" name="u_w_cap" units="kPa"/>
+        <variable initial_value="1" name="E_w_epi" units="joule"/>
+        <variable initial_value="0.5" name="U_w_epi" units="litre"/>
+        <variable initial_value="5" name="L_w_epi" units="litre"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>u_w_epi</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>E_w_epi</ci>
+                        <apply>
+                            <minus/>
+                            <ci>q_w_epi</ci>
+                            <ci>U_w_epi</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <minus/>
+                            <ci>L_w_epi</ci>
+                            <ci>q_w_epi</ci>
+                        </apply>
+                        <cn cellml:units="dimensionless">2</cn>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Water fluxes (L/s)-->
+        <variable name="v_w_epiApex" units="L_per_s"/>
+        <variable name="v_w_epiBase" units="L_per_s"/>
+        <variable initial_value="1e-4" name="k_w_m" units="L_per_s_per_kPa"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_w_epiApex</ci>
+                <apply>
+                    <times/>
+                    <ci>k_w_m</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <ci>u_w_gut</ci>
+                            <ci>u_w_epi</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <ci>RT</ci>
+                                <ci>K_mm</ci>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <ci>c_Na_gut</ci>
+                                <ci>c_Na_epi</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_w_epiBase</ci>
+                <apply>
+                    <times/>
+                    <ci>k_w_m</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <ci>u_w_epi</ci>
+                            <ci>u_w_cap</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <ci>RT</ci>
+                                <ci>K_mm</ci>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <ci>c_Na_epi</ci>
+                                <ci>c_Na_cap</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- O2, CO2 & bicarbonate-->
+        <variable initial_value="9.25" name="c_O2" units="mM"/>
+        <variable initial_value="1.20" name="c_CO2" units="mM"/>
+        <variable initial_value="25.0" name="c_HCO3" units="mM"/>
+        <!-- ATP, ADP, Pi including flux from aerobic metabolism (conversion of 32 ADP & 32 Pi to 32 ATP for each mole of imported glucose)-->
+        <variable initial_value="0.003" name="q_ATP" units="mole"/>
+        <variable initial_value="0.0025" name="q_ADP" units="mole"/>
+        <variable initial_value="0.003" name="q_Pi" units="mole"/>
+        <variable initial_value="1e-7" name="q_H" units="mole"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_ATP</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_NKE</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dim">32</cn>
+                        <ci>v_AM</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_ADP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_NKE</ci>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dim">32</cn>
+                        <ci>v_AM</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Pi</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_NKE</ci>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dim">32</cn>
+                        <ci>v_AM</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="q_adenosine" units="mole"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q_adenosine</ci>
+                <apply>
+                    <plus/>
+                    <ci>q_ATP</ci>
+                    <ci>q_ADP</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="c_ATP" units="mM"/>
+        <variable name="c_ADP" units="mM"/>
+        <variable name="c_Pi" units="mM"/>
+        <variable name="c_H" units="mM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>c_ATP</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_ATP</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_epi</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>c_ADP</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_ADP</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_epi</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>c_Pi</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_Pi</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_epi</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>c_H</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>q_H</ci>
+                        <ci>K_mm</ci>
+                    </apply>
+                    <ci>q_w_epi</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- SGLT1 flux (mol/s)-->
+        <variable initial_value="1e-2" name="kappa_SGLT1" units="mol_per_s"/>
+        <variable name="v_SGLT1" units="mol_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_SGLT1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>kappa_SGLT1</ci>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>c_Na_gut</ci>
+                                            <ci>c_Na_epi</ci>
+                                        </apply>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <ci>c_Glc_gut</ci>
+                                </apply>
+                                <ci>c_Glc_epi</ci>
+                            </apply>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <cn cellml:units="dim">2</cn>
+                                        <ci>F</ci>
+                                        <ci>u_e</ci>
+                                    </apply>
+                                    <ci>RT</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_Na_gut</ci>
+                                    <cn cellml:units="mM">20</cn>
+                                </apply>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_Na_epi</ci>
+                                    <cn cellml:units="mM">100</cn>
+                                </apply>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- GLUT2 flux (mol/s)-->
+        <variable initial_value="1e1" name="kappa_GLUT2" units="mol_per_s"/>
+        <variable name="v_GLUT2" units="mol_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_GLUT2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>kappa_GLUT2</ci>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <divide/>
+                                <ci>c_Glc_epi</ci>
+                                <ci>c_Glc_cap</ci>
+                            </apply>
+                            <cn cellml:units="dim">1</cn>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dim">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>c_Glc_epi</ci>
+                            <cn cellml:units="mM">5</cn>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <ci>c_Glc_cap</ci>
+                            <cn cellml:units="mM">10</cn>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>c_Glc_epi</ci>
+                                <ci>c_Glc_cap</ci>
+                            </apply>
+                            <cn cellml:units="mM2">100</cn>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- NKE flux (mol/s)-->
+        <variable initial_value="2e4" name="k_ATP_eq" units="mM2"/>
+        <variable initial_value="1e2" name="kappa_NKE" units="mol_per_s"/>
+        <variable name="v_NKE" units="mol_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_NKE</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>kappa_NKE</ci>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <power/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>c_Na_epi</ci>
+                                            <ci>c_Na_cap</ci>
+                                        </apply>
+                                        <cn cellml:units="dim">3</cn>
+                                    </apply>
+                                    <ci>c_ATP</ci>
+                                    <ci>k_ATP_eq</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>c_ADP</ci>
+                                    <ci>c_Pi</ci>
+                                    <ci>c_H</ci>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <power/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>c_K_epi</ci>
+                                        <ci>c_K_cap</ci>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <apply>
+                                            <times/>
+                                            <ci>F</ci>
+                                            <ci>u_e</ci>
+                                        </apply>
+                                        <ci>RT</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_Na_epi</ci>
+                                    <cn cellml:units="mM">1</cn>
+                                </apply>
+                                <cn cellml:units="dim">3</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_Na_cap</ci>
+                                    <cn cellml:units="mM">100</cn>
+                                </apply>
+                                <cn cellml:units="dim">3</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- NKCC1 cotransporter flux (mol/s)-->
+        <variable initial_value="1e-1" name="kappa_NKCC1" units="mol_per_s"/>
+        <variable name="v_NKCC1" units="mol_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_NKCC1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>kappa_NKCC1</ci>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>c_Na_cap</ci>
+                                            <ci>c_Na_epi</ci>
+                                        </apply>
+                                        <ci>c_K_cap</ci>
+                                    </apply>
+                                    <ci>c_K_epi</ci>
+                                </apply>
+                                <apply>
+                                    <power/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>c_Cl_cap</ci>
+                                        <ci>c_Cl_epi</ci>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                </apply>
+                            </apply>
+                            <cn cellml:units="dim">1</cn>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <divide/>
+                                <ci>c_Na_cap</ci>
+                                <cn cellml:units="mM">70</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <divide/>
+                                <ci>c_Na_epi</ci>
+                                <cn cellml:units="mM">5</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <divide/>
+                                <ci>c_K_cap</ci>
+                                <cn cellml:units="mM">2</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <divide/>
+                                <ci>c_K_epi</ci>
+                                <cn cellml:units="mM">60</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_Cl_cap</ci>
+                                    <cn cellml:units="mM">50</cn>
+                                </apply>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_Cl_epi</ci>
+                                    <cn cellml:units="mM">10</cn>
+                                </apply>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--        v_NKCC1 = 0{mol_per_s};-->
+        <!-- KCC1 cotransporter flux (mol/s)-->
+        <variable initial_value="1e-1" name="kappa_KCC1" units="mol_per_s"/>
+        <variable name="v_KCC1" units="mol_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_KCC1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>kappa_KCC1</ci>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>c_K_epi</ci>
+                                        <ci>c_K_cap</ci>
+                                    </apply>
+                                    <ci>c_Cl_epi</ci>
+                                </apply>
+                                <ci>c_Cl_cap</ci>
+                            </apply>
+                            <cn cellml:units="dim">1</cn>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <divide/>
+                                <ci>c_Cl_cap</ci>
+                                <cn cellml:units="mM">50</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <divide/>
+                                <ci>c_K_cap</ci>
+                                <cn cellml:units="mM">2</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <divide/>
+                                <ci>c_Cl_epi</ci>
+                                <cn cellml:units="mM">10</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dim">1</cn>
+                            <apply>
+                                <divide/>
+                                <ci>c_K_epi</ci>
+                                <cn cellml:units="mM">60</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--        v_KCC1 = 0 {mol_per_s};-->
+        <!-- Time-independent K channel flux (mol/s) using GHK-->
+        <variable initial_value="2e3" name="kappa_K" units="C_per_J_per_s"/>
+        <variable name="v_K" units="mol_per_s"/>
+        <variable name="GHKterm" units="J_per_C"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>GHKterm</ci>
+                <apply>
+                    <divide/>
+                    <ci>u_e</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <ci>F</ci>
+                                    <ci>u_e</ci>
+                                </apply>
+                                <ci>RT</ci>
+                            </apply>
+                        </apply>
+                        <cn cellml:units="dim">1</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_K</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_K</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>q_K_epi</ci>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>F</ci>
+                                        <ci>u_e</ci>
+                                    </apply>
+                                    <ci>RT</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <ci>q_K_cap</ci>
+                    </apply>
+                    <ci>GHKterm</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--        v_K     = 0 {mol_per_s};-->
+        <!-- Sodium leakage current flux (mol/s)       -->
+        <variable initial_value="0" name="kappa_Na" units="per_s_per_V"/>
+        <variable name="v_Na" units="mol_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_Na</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_Na</ci>
+                    <apply>
+                        <minus/>
+                        <ci>q_Na_cap</ci>
+                        <apply>
+                            <times/>
+                            <ci>q_Na_epi</ci>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>F</ci>
+                                        <ci>u_e</ci>
+                                    </apply>
+                                    <ci>RT</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <ci>GHKterm</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--        v_Na = 0 {mol_per_s};-->
+        <!-- AM (aerobic metabolism) flux (mol/s)-->
+        <variable initial_value="1e0" name="k_AM_eq" units="per_mM"/>
+        <variable initial_value="1e1" name="kappa_AM" units="mol_per_s"/>
+        <variable name="v_AM" units="mol_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_AM</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_AM</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>k_AM_eq</ci>
+                                <ci>c_Glc_epi</ci>
+                                <ci>c_ADP</ci>
+                            </apply>
+                            <ci>c_ATP</ci>
+                        </apply>
+                        <cn cellml:units="dim">1</cn>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Reversal potential for SGLT1-->
+        <variable name="u_SGLT1_reversal" units="J_per_C"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>u_SGLT1_reversal</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>RT</ci>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dim">2</cn>
+                            <ci>F</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <power/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>c_Na_gut</ci>
+                                        <ci>c_Na_epi</ci>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                </apply>
+                                <ci>c_Glc_gut</ci>
+                            </apply>
+                            <ci>c_Glc_epi</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Reversal potential for K channel-->
+        <variable name="u_K_reversal" units="J_per_C"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>u_K_reversal</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>RT</ci>
+                        <ci>F</ci>
+                    </apply>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <divide/>
+                            <ci>c_K_cap</ci>
+                            <ci>c_K_epi</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Reversal potential for Na channel-->
+        <variable name="u_Na_reversal" units="J_per_C"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>u_Na_reversal</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>RT</ci>
+                        <ci>F</ci>
+                    </apply>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <divide/>
+                            <ci>c_Na_cap</ci>
+                            <ci>c_Na_epi</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Threshold for gut sodium at which SGLT1 flux is zero-->
+        <variable name="c_Na_gutThreshold" units="mM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>c_Na_gutThreshold</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Na_epi</ci>
+                    <apply>
+                        <root/>
+                        <apply>
+                            <divide/>
+                            <ci>c_Glc_epi</ci>
+                            <ci>c_Glc_gut</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>F</ci>
+                                <ci>u_e</ci>
+                            </apply>
+                            <ci>RT</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Equilbrium value for epithelial sodium at which NKE flux is zero-->
+        <variable name="c_Na_epiEquilibrium" units="mM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>c_Na_epiEquilibrium</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Na_cap</ci>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_ADP</ci>
+                                    <ci>c_ATP</ci>
+                                </apply>
+                                <ci>c_Pi</ci>
+                                <ci>c_H</ci>
+                            </apply>
+                            <ci>k_ATP_eq</ci>
+                        </apply>
+                        <cn cellml:units="dim">0.33334</cn>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <ci>c_K_epi</ci>
+                            <ci>c_K_cap</ci>
+                        </apply>
+                        <cn cellml:units="dim">0.66667</cn>
+                    </apply>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>F</ci>
+                                <ci>u_e</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dim">3</cn>
+                                <ci>RT</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- Equilibrium value for epithelial chloride at which NKCC1 flux is zero -->
+        <variable name="c_Cl_epiEquilibrium" units="mM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>c_Cl_epiEquilibrium</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Cl_cap</ci>
+                    <apply>
+                        <root/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_Na_cap</ci>
+                                    <ci>c_Na_epi</ci>
+                                </apply>
+                                <ci>c_K_cap</ci>
+                            </apply>
+                            <ci>c_K_epi</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

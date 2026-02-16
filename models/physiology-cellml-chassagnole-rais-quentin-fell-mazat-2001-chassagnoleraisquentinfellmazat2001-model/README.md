@@ -1,0 +1,26 @@
+# Chassagnole, Rais, Quentin, Fell, Mazat, 2001
+
+**Source**: [physiome](https://models.physiomeproject.org/workspace/chassagnole_rais_quentin_fell_mazat_2001)
+**Standard**: cellml
+**Authors**: physiome
+
+## Description
+
+Faithful wrapper of upstream CELLML model.
+
+
+## Usage
+
+This model was auto-generated from the physiome repository.
+
+```yaml
+# In a space.yaml wiring file:
+models:
+  - repo: Biosimulant/models
+    alias: model
+    manifest_path: models/physiology-cellml-chassagnole-rais-quentin-fell-mazat-2001-chassagnoleraisquentinfellmazat2001-model/model.yaml
+```
+
+## Tags
+
+physiology, cellml, physiome, auto-generated

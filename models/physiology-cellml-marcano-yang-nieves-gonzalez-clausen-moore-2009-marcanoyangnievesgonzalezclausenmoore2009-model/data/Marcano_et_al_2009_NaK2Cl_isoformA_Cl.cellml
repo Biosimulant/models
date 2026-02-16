@@ -1,0 +1,948 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This CellML file was generated on 24/08/2009 at 4:05:34 at p.m. using:
+
+COR (0.9.31.1265)
+Copyright 2002-2009 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+-->
+<model name="Marcano_et_al_2009" cmeta:id="Marcano_et_al_2009" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_second">
+      <unit units="second" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="mM">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_mM_per_second">
+      <unit units="mM" exponent="-1"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="mM_per_second">
+      <unit units="mM"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="environment">
+      <variable name="time" units="second" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="parameters">
+      <variable name="k_on" units="per_mM_per_second" initial_value="100000" public_interface="out"/>
+      <variable name="k_1" units="per_second" initial_value="100000" public_interface="out"/>
+      <variable name="k_2" units="per_second" initial_value="134625740.4" public_interface="out"/>
+      <variable name="k_3o" units="per_second" initial_value="112070" public_interface="out"/>
+      <variable name="k_3i" units="per_second" initial_value="217960" public_interface="out"/>
+      <variable name="k_4" units="per_second" initial_value="2140869.2" public_interface="out"/>
+      <variable name="k_fe" units="per_second" initial_value="18781" public_interface="out"/>
+      <variable name="k_be" units="per_second" public_interface="out"/>
+      <variable name="k_ff" units="per_second" initial_value="1824" public_interface="out"/>
+      <variable name="k_bf" units="per_second" initial_value="2724" public_interface="out"/>
+      <variable name="E_T" units="dimensionless" initial_value="1" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>k_be</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k_ff</ci>
+                  <ci>k_3i</ci>
+                  <ci>k_fe</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_bf</ci>
+                  <ci>k_3o</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="ion_concentrations">
+      <variable name="Ce_Na" units="mM" initial_value="97" public_interface="out"/>
+      <variable name="Ce_K" units="mM" initial_value="10" public_interface="out"/>
+      <variable name="Ce_Cl" units="mM" initial_value="0" public_interface="out"/>
+      <variable name="Ci_Na" units="mM" initial_value="7" public_interface="out"/>
+      <variable name="Ci_K" units="mM" initial_value="124" public_interface="out"/>
+      <variable name="Ci_Cl" units="mM" initial_value="9" public_interface="out"/>
+      <variable name="time" units="second" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ce_Cl</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <cn cellml:units="mM_per_second">110</cn>
+               <cn cellml:units="mM_per_second">0</cn>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="kinetic_equations">
+      <variable name="time" units="second" public_interface="in"/>
+      <variable name="E_0" units="dimensionless" initial_value="0.3156" public_interface="out"/>
+      <variable name="E_1" units="dimensionless" initial_value="0.00093" public_interface="out"/>
+      <variable name="E_2" units="dimensionless" initial_value="7.66944e-5" public_interface="out"/>
+      <variable name="E_3" units="dimensionless" initial_value="0.0015143" public_interface="out"/>
+      <variable name="E_4" units="dimensionless" initial_value="0.0078243" public_interface="out"/>
+      <variable name="E_5" units="dimensionless" initial_value="0.0393869" public_interface="out"/>
+      <variable name="E_6" units="dimensionless" initial_value="0.00575958" public_interface="out"/>
+      <variable name="E_7" units="dimensionless" initial_value="0.86165" public_interface="out"/>
+      <variable name="E_8" units="dimensionless" initial_value="0.015153" public_interface="out"/>
+      <variable name="E_9_temp" units="dimensionless" initial_value="0.0361485" public_interface="out"/>
+      <variable name="E_9" units="dimensionless" public_interface="out"/>
+      <variable name="E_T" units="dimensionless" public_interface="in"/>
+      <variable name="k_on" units="per_mM_per_second" public_interface="in"/>
+      <variable name="k_1" units="per_second" public_interface="in"/>
+      <variable name="k_2" units="per_second" public_interface="in"/>
+      <variable name="k_3o" units="per_second" public_interface="in"/>
+      <variable name="k_3i" units="per_second" public_interface="in"/>
+      <variable name="k_4" units="per_second" public_interface="in"/>
+      <variable name="k_fe" units="per_second" public_interface="in"/>
+      <variable name="k_be" units="per_second" public_interface="in"/>
+      <variable name="k_ff" units="per_second" public_interface="in"/>
+      <variable name="k_bf" units="per_second" public_interface="in"/>
+      <variable name="Ce_Na" units="mM" public_interface="in"/>
+      <variable name="Ce_K" units="mM" public_interface="in"/>
+      <variable name="Ce_Cl" units="mM" public_interface="in"/>
+      <variable name="Ci_Na" units="mM" public_interface="in"/>
+      <variable name="Ci_K" units="mM" public_interface="in"/>
+      <variable name="Ci_Cl" units="mM" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E_0</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>k_on</ci>
+                        </apply>
+                        <ci>Ce_Na</ci>
+                        <ci>E_0</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_1</ci>
+                        <ci>E_1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_be</ci>
+                     <ci>E_0</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_fe</ci>
+                  <ci>E_9</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E_1</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>k_on</ci>
+                        </apply>
+                        <ci>Ce_Cl</ci>
+                        <ci>E_1</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_2</ci>
+                        <ci>E_2</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_1</ci>
+                     <ci>E_1</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_on</ci>
+                  <ci>Ce_Na</ci>
+                  <ci>E_0</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E_2</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>k_on</ci>
+                        </apply>
+                        <ci>Ce_K</ci>
+                        <ci>E_2</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_3o</ci>
+                        <ci>E_3</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_2</ci>
+                     <ci>E_2</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_on</ci>
+                  <ci>Ce_Cl</ci>
+                  <ci>E_1</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E_3</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>k_on</ci>
+                        </apply>
+                        <ci>Ce_Cl</ci>
+                        <ci>E_3</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_4</ci>
+                        <ci>E_4</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_3o</ci>
+                     <ci>E_3</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_on</ci>
+                  <ci>Ce_K</ci>
+                  <ci>E_2</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E_4</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>k_on</ci>
+                        <ci>Ce_Cl</ci>
+                        <ci>E_3</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_4</ci>
+                        <ci>E_4</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_bf</ci>
+                     <ci>E_5</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_ff</ci>
+                  <ci>E_4</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E_5</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>k_on</ci>
+                        <ci>Ci_Na</ci>
+                        <ci>E_6</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_1</ci>
+                        <ci>E_5</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_bf</ci>
+                     <ci>E_5</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_ff</ci>
+                  <ci>E_4</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E_6</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>k_on</ci>
+                     </apply>
+                     <ci>Ci_Na</ci>
+                     <ci>E_6</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_2</ci>
+                     <ci>E_6</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_1</ci>
+                  <ci>E_5</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_on</ci>
+                  <ci>Ci_Cl</ci>
+                  <ci>E_7</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E_7</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>k_on</ci>
+                        </apply>
+                        <ci>Ci_Cl</ci>
+                        <ci>E_7</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_2</ci>
+                        <ci>E_6</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_3i</ci>
+                     <ci>E_7</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_on</ci>
+                  <ci>Ci_K</ci>
+                  <ci>E_8</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E_8</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>k_on</ci>
+                        </apply>
+                        <ci>Ci_K</ci>
+                        <ci>E_8</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_3i</ci>
+                        <ci>E_7</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_4</ci>
+                     <ci>E_8</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_on</ci>
+                  <ci>Ci_Cl</ci>
+                  <ci>E_9</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E_9_temp</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>k_on</ci>
+                        </apply>
+                        <ci>Ci_Cl</ci>
+                        <ci>E_9</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_4</ci>
+                        <ci>E_8</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_fe</ci>
+                     <ci>E_9</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_be</ci>
+                  <ci>E_0</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>E_9</ci>
+            <apply>
+               <minus/>
+               <ci>E_T</ci>
+               <apply>
+                  <plus/>
+                  <ci>E_0</ci>
+                  <ci>E_1</ci>
+                  <ci>E_2</ci>
+                  <ci>E_3</ci>
+                  <ci>E_4</ci>
+                  <ci>E_5</ci>
+                  <ci>E_6</ci>
+                  <ci>E_7</ci>
+                  <ci>E_8</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="flux_equations">
+      <variable name="E_0" units="dimensionless" public_interface="in"/>
+      <variable name="E_1" units="dimensionless" public_interface="in"/>
+      <variable name="E_2" units="dimensionless" public_interface="in"/>
+      <variable name="E_3" units="dimensionless" public_interface="in"/>
+      <variable name="E_4" units="dimensionless" public_interface="in"/>
+      <variable name="E_5" units="dimensionless" public_interface="in"/>
+      <variable name="E_6" units="dimensionless" public_interface="in"/>
+      <variable name="E_7" units="dimensionless" public_interface="in"/>
+      <variable name="E_8" units="dimensionless" public_interface="in"/>
+      <variable name="E_9" units="dimensionless" public_interface="in"/>
+      <variable name="k_on" units="per_mM_per_second" public_interface="in"/>
+      <variable name="k_1" units="per_second" public_interface="in"/>
+      <variable name="k_2" units="per_second" public_interface="in"/>
+      <variable name="k_3o" units="per_second" public_interface="in"/>
+      <variable name="k_3i" units="per_second" public_interface="in"/>
+      <variable name="k_4" units="per_second" public_interface="in"/>
+      <variable name="k_ff" units="per_second" public_interface="in"/>
+      <variable name="k_bf" units="per_second" public_interface="in"/>
+      <variable name="Ce_Na" units="mM" public_interface="in"/>
+      <variable name="Ce_K" units="mM" public_interface="in"/>
+      <variable name="Ce_Cl" units="mM" public_interface="in"/>
+      <variable name="Ci_Na" units="mM" public_interface="in"/>
+      <variable name="Ci_K" units="mM" public_interface="in"/>
+      <variable name="Ci_Cl" units="mM" public_interface="in"/>
+      <variable name="J_23" units="per_second" public_interface="out"/>
+      <variable name="J_32" units="per_second" public_interface="out"/>
+      <variable name="J_34" units="per_second" public_interface="out"/>
+      <variable name="J_43" units="per_second" public_interface="out"/>
+      <variable name="J_45" units="per_second" public_interface="out"/>
+      <variable name="J_54" units="per_second" public_interface="out"/>
+      <variable name="J_56" units="per_second" public_interface="out"/>
+      <variable name="J_65" units="per_second" public_interface="out"/>
+      <variable name="J_67" units="per_second" public_interface="out"/>
+      <variable name="J_76" units="per_second" public_interface="out"/>
+      <variable name="J_78" units="per_second" public_interface="out"/>
+      <variable name="J_24" units="per_second" public_interface="out"/>
+      <variable name="J_42" units="per_second" public_interface="out"/>
+      <variable name="J_25" units="per_second" public_interface="out"/>
+      <variable name="J_52" units="per_second" public_interface="out"/>
+      <variable name="J_26" units="per_second" public_interface="out"/>
+      <variable name="J_62" units="per_second" public_interface="out"/>
+      <variable name="J_27" units="per_second" public_interface="out"/>
+      <variable name="J_72" units="per_second" public_interface="out"/>
+      <variable name="J_28" units="per_second" public_interface="out"/>
+      <variable name="J_Rb_norm" units="dimensionless" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_23</ci>
+            <apply>
+               <times/>
+               <ci>k_on</ci>
+               <ci>Ce_K</ci>
+               <ci>E_2</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_32</ci>
+            <apply>
+               <times/>
+               <ci>k_3o</ci>
+               <ci>E_3</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_34</ci>
+            <apply>
+               <times/>
+               <ci>k_on</ci>
+               <ci>Ce_Cl</ci>
+               <ci>E_3</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_43</ci>
+            <apply>
+               <times/>
+               <ci>k_4</ci>
+               <ci>E_4</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_45</ci>
+            <apply>
+               <times/>
+               <ci>k_ff</ci>
+               <ci>E_4</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_54</ci>
+            <apply>
+               <times/>
+               <ci>k_bf</ci>
+               <ci>E_5</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_56</ci>
+            <apply>
+               <times/>
+               <ci>k_1</ci>
+               <ci>E_5</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_65</ci>
+            <apply>
+               <times/>
+               <ci>k_on</ci>
+               <ci>Ci_Na</ci>
+               <ci>E_6</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_67</ci>
+            <apply>
+               <times/>
+               <ci>k_2</ci>
+               <ci>E_6</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_76</ci>
+            <apply>
+               <times/>
+               <ci>k_on</ci>
+               <ci>Ci_Cl</ci>
+               <ci>E_7</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_78</ci>
+            <apply>
+               <times/>
+               <ci>k_3i</ci>
+               <ci>E_7</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_24</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>J_23</ci>
+                  <ci>J_34</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J_34</ci>
+                  <ci>J_32</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_42</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>J_32</ci>
+                  <ci>J_43</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J_34</ci>
+                  <ci>J_32</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_25</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>J_24</ci>
+                  <ci>J_45</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J_45</ci>
+                  <ci>J_42</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_52</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>J_42</ci>
+                  <ci>J_54</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J_45</ci>
+                  <ci>J_42</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_26</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>J_25</ci>
+                  <ci>J_56</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J_56</ci>
+                  <ci>J_52</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_62</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>J_52</ci>
+                  <ci>J_65</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J_56</ci>
+                  <ci>J_52</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_27</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>J_26</ci>
+                  <ci>J_67</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J_67</ci>
+                  <ci>J_62</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_72</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>J_62</ci>
+                  <ci>J_76</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J_67</ci>
+                  <ci>J_62</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_28</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>J_27</ci>
+                  <ci>J_78</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J_78</ci>
+                  <ci>J_72</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_Rb_norm</ci>
+            <apply>
+               <divide/>
+               <ci>J_28</ci>
+               <cn cellml:units="per_second">500</cn>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="parameters" component_2="kinetic_equations"/>
+      <map_variables variable_1="k_on" variable_2="k_on"/>
+      <map_variables variable_1="k_1" variable_2="k_1"/>
+      <map_variables variable_1="k_2" variable_2="k_2"/>
+      <map_variables variable_1="k_3o" variable_2="k_3o"/>
+      <map_variables variable_1="k_3i" variable_2="k_3i"/>
+      <map_variables variable_1="k_4" variable_2="k_4"/>
+      <map_variables variable_1="k_fe" variable_2="k_fe"/>
+      <map_variables variable_1="k_be" variable_2="k_be"/>
+      <map_variables variable_1="k_ff" variable_2="k_ff"/>
+      <map_variables variable_1="k_bf" variable_2="k_bf"/>
+      <map_variables variable_1="E_T" variable_2="E_T"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ion_concentrations" component_2="kinetic_equations"/>
+      <map_variables variable_1="Ce_Na" variable_2="Ce_Na"/>
+      <map_variables variable_1="Ce_K" variable_2="Ce_K"/>
+      <map_variables variable_1="Ce_Cl" variable_2="Ce_Cl"/>
+      <map_variables variable_1="Ci_Na" variable_2="Ci_Na"/>
+      <map_variables variable_1="Ci_K" variable_2="Ci_K"/>
+      <map_variables variable_1="Ci_Cl" variable_2="Ci_Cl"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="kinetic_equations"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="ion_concentrations"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="kinetic_equations" component_2="flux_equations"/>
+      <map_variables variable_1="E_0" variable_2="E_0"/>
+      <map_variables variable_1="E_1" variable_2="E_1"/>
+      <map_variables variable_1="E_2" variable_2="E_2"/>
+      <map_variables variable_1="E_3" variable_2="E_3"/>
+      <map_variables variable_1="E_4" variable_2="E_4"/>
+      <map_variables variable_1="E_5" variable_2="E_5"/>
+      <map_variables variable_1="E_6" variable_2="E_6"/>
+      <map_variables variable_1="E_7" variable_2="E_7"/>
+      <map_variables variable_1="E_8" variable_2="E_8"/>
+      <map_variables variable_1="E_9" variable_2="E_9"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="parameters" component_2="flux_equations"/>
+      <map_variables variable_1="k_on" variable_2="k_on"/>
+      <map_variables variable_1="k_1" variable_2="k_1"/>
+      <map_variables variable_1="k_2" variable_2="k_2"/>
+      <map_variables variable_1="k_3o" variable_2="k_3o"/>
+      <map_variables variable_1="k_3i" variable_2="k_3i"/>
+      <map_variables variable_1="k_4" variable_2="k_4"/>
+      <map_variables variable_1="k_ff" variable_2="k_ff"/>
+      <map_variables variable_1="k_bf" variable_2="k_bf"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ion_concentrations" component_2="flux_equations"/>
+      <map_variables variable_1="Ce_Na" variable_2="Ce_Na"/>
+      <map_variables variable_1="Ce_K" variable_2="Ce_K"/>
+      <map_variables variable_1="Ce_Cl" variable_2="Ce_Cl"/>
+      <map_variables variable_1="Ci_Na" variable_2="Ci_Na"/>
+      <map_variables variable_1="Ci_K" variable_2="Ci_K"/>
+      <map_variables variable_1="Ci_Cl" variable_2="Ci_Cl"/>
+   </connection>
+</model>

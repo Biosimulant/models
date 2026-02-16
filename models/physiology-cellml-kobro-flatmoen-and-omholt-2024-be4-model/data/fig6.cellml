@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="my_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- (4 eqn model for Alzheimer calculation) -->
+    <units name="molecules">
+        <unit units="dimensionless"/>
+    </units>
+    <units name="hour">
+        <unit multiplier="3600" units="second"/>
+    </units>
+    <units name="per_hour">
+        <unit exponent="-1" units="hour"/>
+    </units>
+    <units name="molecules_per_hour">
+        <unit units="molecules"/>
+        <unit units="per_hour"/>
+    </units>
+    <units name="per_molecules_per_hour">
+        <unit exponent="-1" units="molecules"/>
+        <unit units="per_hour"/>
+    </units>
+    <units name="per_hour2">
+        <unit exponent="-2" units="hour"/>
+    </units>
+    <units name="per_hour4">
+        <unit exponent="-4" units="hour"/>
+    </units>
+    <units name="micrometer">
+        <unit prefix="micro" units="meter"/>
+    </units>
+    <units name="micrometer_cubed">
+        <unit exponent="3" units="micrometer"/>
+    </units>
+    <units name="nM">
+        <unit exponent="-1" units="micrometer_cubed"/>
+    </units>
+    <!-- Figure 6c-->
+    <import xlink:href="model.cellml">
+        <component component_ref="steadystate_model" name="x2m"/>
+    </import>
+    <import xlink:href="model.cellml">
+        <component component_ref="steadystate_model" name="x2p57m"/>
+    </import>
+    <import xlink:href="model.cellml">
+        <component component_ref="steadystate_model" name="x3m"/>
+    </import>
+    <import xlink:href="model.cellml">
+        <component component_ref="steadystate_model" name="x4m"/>
+    </import>
+    <component name="alpha">
+        <variable initial_value="7020" name="alpha_baseline" public_interface="out" units="molecules_per_hour"/>
+        <variable name="x2" public_interface="out" units="molecules_per_hour"/>
+        <variable name="x2p57" public_interface="out" units="molecules_per_hour"/>
+        <variable name="x3" public_interface="out" units="molecules_per_hour"/>
+        <variable name="x4" public_interface="out" units="molecules_per_hour"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>x2</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimenionless">2</cn>
+                    <ci>alpha_baseline</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>x2p57</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimenionless">2.57</cn>
+                    <ci>alpha_baseline</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>x3</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimenionless">3</cn>
+                    <ci>alpha_baseline</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>x4</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimenionless">4</cn>
+                    <ci>alpha_baseline</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="alpha" component_2="x2m"/>
+        <map_variables variable_1="x2" variable_2="alpha_baseline"/>
+    </connection>
+    <connection>
+        <map_components component_1="alpha" component_2="x2p57m"/>
+        <map_variables variable_1="x2p57" variable_2="alpha_baseline"/>
+    </connection>
+    <connection>
+        <map_components component_1="alpha" component_2="x3m"/>
+        <map_variables variable_1="x3" variable_2="alpha_baseline"/>
+    </connection>
+    <connection>
+        <map_components component_1="alpha" component_2="x4m"/>
+        <map_variables variable_1="x4" variable_2="alpha_baseline"/>
+    </connection>
+    <connection>
+        <map_components component_1="main" component_2="x2m"/>
+        <map_variables variable_1="reelin_copy_number_x2" variable_2="reelin_copy_number"/>
+        <map_variables variable_1="AB_copy_number_x2" variable_2="AB_copy_number"/>
+        <map_variables variable_1="tau" variable_2="tau"/>
+    </connection>
+    <connection>
+        <map_components component_1="main" component_2="x2p57m"/>
+        <map_variables variable_1="reelin_copy_number_x2p57" variable_2="reelin_copy_number"/>
+        <map_variables variable_1="AB_copy_number_x2p57" variable_2="AB_copy_number"/>
+        <map_variables variable_1="tau" variable_2="tau"/>
+    </connection>
+    <connection>
+        <map_components component_1="main" component_2="x3m"/>
+        <map_variables variable_1="reelin_copy_number_x3" variable_2="reelin_copy_number"/>
+        <map_variables variable_1="AB_copy_number_x3" variable_2="AB_copy_number"/>
+        <map_variables variable_1="tau" variable_2="tau"/>
+    </connection>
+    <connection>
+        <map_components component_1="main" component_2="x4m"/>
+        <map_variables variable_1="reelin_copy_number_x4" variable_2="reelin_copy_number"/>
+        <map_variables variable_1="AB_copy_number_x4" variable_2="AB_copy_number"/>
+        <map_variables variable_1="tau" variable_2="tau"/>
+    </connection>
+    <component name="main">
+        <variable initial_value="0" name="t" units="hour"/>
+        <variable initial_value="79000" name="tau_wildtype" units="molecules_per_hour"/>
+        <variable initial_value="0.05" name="tau_fraction" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>tau_fraction</ci>
+                </apply>
+                <cn cellml:units="dimensionless">1</cn>
+            </apply>
+        </math>
+        <variable name="tau" units="molecules_per_hour"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>tau</ci>
+                <apply>
+                    <times/>
+                    <ci>tau_wildtype</ci>
+                    <ci>tau_fraction</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="reelin_copy_number_x2" public_interface="in" units="molecules"/>
+        <variable name="reelin_copy_number_x2p57" public_interface="in" units="molecules"/>
+        <variable name="reelin_copy_number_x3" public_interface="in" units="molecules"/>
+        <variable name="reelin_copy_number_x4" public_interface="in" units="molecules"/>
+        <variable name="AB_copy_number_x2" public_interface="in" units="molecules"/>
+        <variable name="AB_copy_number_x2p57" public_interface="in" units="molecules"/>
+        <variable name="AB_copy_number_x3" public_interface="in" units="molecules"/>
+        <variable name="AB_copy_number_x4" public_interface="in" units="molecules"/>
+    </component>
+</model>

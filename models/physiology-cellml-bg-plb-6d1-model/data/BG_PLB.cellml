@@ -1,0 +1,607 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- PLB module, 
+ 5 Aug 21 - not containing Inhib1 reactions (this is a separate module)
+            Use [Ip] where [Ip] = [Ip] + [Ip_S2]
+            Use [PKACI] where [PKACI] = [PKACI] + [PKACI_S2]-->
+<model name="BG_PLB" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="mM" units_ref="mM"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="4.028E+00" name="q_PLB" public_interface="out" units="fmol"/>
+        <variable initial_value="1.117E-03" name="q_PKACI" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-13" name="q_PLB_PKACI" public_interface="out" units="fmol"/>
+        <variable initial_value="3.382E-02" name="q_PP1" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-13" name="q_PLBp_PP1" public_interface="out" units="fmol"/>
+        <variable initial_value="1.560E-01" name="q_PLBp" public_interface="out" units="fmol"/>
+        <variable initial_value="9.994E-04" name="q_Ip" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-13" name="q_Ip_PP1" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="v_PLBph1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_PLBph2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_PLBd1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_PLBd2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Inh" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PLB</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBd2</ci>
+                    <ci>v_PLBph1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PKACI</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBph2</ci>
+                    <ci>v_PLBph1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PLB_PKACI</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBph1</ci>
+                    <ci>v_PLBph2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PP1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_PLBd2</ci>
+                        <ci>v_PLBd1</ci>
+                    </apply>
+                    <ci>v_Inh</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PLBp_PP1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBd1</ci>
+                    <ci>v_PLBd2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PLBp</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBph2</ci>
+                    <ci>v_PLBd1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ip</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Inh</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ip_PP1</ci>
+                </apply>
+                <ci>v_Inh</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="PLB_parameters">
+        <variable initial_value="45.5263" name="kappa_PLBph1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6.55904" name="kappa_PLBph2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.386674" name="kappa_PLBd1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.21269" name="kappa_PLBd2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="431.435" name="kappa_Inh" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00235741" name="K_PLB" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.395191" name="K_PKACI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.638527" name="K_PLB_PKACI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.361989" name="K_PP1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.203757" name="K_PLBp_PP1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.326014" name="K_PLBp" public_interface="out" units="per_fmol"/>
+        <variable initial_value="5.41093" name="K_Ip" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0673793" name="K_Ip_PP1" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="PLB">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- PLB parameters-->
+        <variable name="kappa_PLBph1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_PLBph2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_PLBd1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_PLBd2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_Inh" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_PLB" public_interface="in" units="per_fmol"/>
+        <variable name="K_PKACI" public_interface="in" units="per_fmol"/>
+        <variable name="K_PLB_PKACI" public_interface="in" units="per_fmol"/>
+        <variable name="K_PP1" public_interface="in" units="per_fmol"/>
+        <variable name="K_PLBp_PP1" public_interface="in" units="per_fmol"/>
+        <variable name="K_PLBp" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ip" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ip_PP1" public_interface="in" units="per_fmol"/>
+        <variable name="v_PLBph1" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_PLBph2" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_PLBd1" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_PLBd2" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_Inh" public_interface="out" units="fmol_per_sec"/>
+        <variable name="mu_PLB" units="J_per_mol"/>
+        <variable name="mu_PKACI" units="J_per_mol"/>
+        <variable name="mu_PLB_PKACI" units="J_per_mol"/>
+        <variable name="mu_PP1" units="J_per_mol"/>
+        <variable name="mu_PLBp_PP1" units="J_per_mol"/>
+        <variable name="mu_PLBp" units="J_per_mol"/>
+        <variable name="mu_Ip" units="J_per_mol"/>
+        <variable name="mu_Ip_PP1" units="J_per_mol"/>
+        <!-- Input from global environment-->
+        <variable name="q_PLB" public_interface="in" units="fmol"/>
+        <variable name="q_PKACI" public_interface="in" units="fmol"/>
+        <variable name="q_PLB_PKACI" public_interface="in" units="fmol"/>
+        <variable name="q_PP1" public_interface="in" units="fmol"/>
+        <variable name="q_PLBp_PP1" public_interface="in" units="fmol"/>
+        <variable name="q_PLBp" public_interface="in" units="fmol"/>
+        <variable name="q_Ip" public_interface="in" units="fmol"/>
+        <variable name="q_Ip_PP1" public_interface="in" units="fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_PLB</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PLB</ci>
+                            <ci>q_PLB</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PKACI</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PKACI</ci>
+                            <ci>q_PKACI</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PLB_PKACI</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PLB_PKACI</ci>
+                            <ci>q_PLB_PKACI</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PP1</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PP1</ci>
+                            <ci>q_PP1</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PLBp_PP1</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PLBp_PP1</ci>
+                            <ci>q_PLBp_PP1</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PLBp</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PLBp</ci>
+                            <ci>q_PLBp</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ip</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ip</ci>
+                            <ci>q_Ip</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ip_PP1</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ip_PP1</ci>
+                            <ci>q_Ip_PP1</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_PLBph1</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_PLBph1</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PLB</ci>
+                                    <ci>mu_PKACI</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_PLB_PKACI</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_PLBph2</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_PLBph2</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_PLB_PKACI</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PLBp</ci>
+                                    <ci>mu_PKACI</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_PLBd1</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_PLBd1</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PLBp</ci>
+                                    <ci>mu_PP1</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_PLBp_PP1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_PLBd2</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_PLBd2</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_PLBp_PP1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PLB</ci>
+                                    <ci>mu_PP1</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Inh</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_Inh</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PP1</ci>
+                                    <ci>mu_Ip</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ip_PP1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="PLB"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_PLB" variable_2="q_PLB"/>
+        <map_variables variable_1="q_PKACI" variable_2="q_PKACI"/>
+        <map_variables variable_1="q_PLB_PKACI" variable_2="q_PLB_PKACI"/>
+        <map_variables variable_1="q_PP1" variable_2="q_PP1"/>
+        <map_variables variable_1="q_PLBp_PP1" variable_2="q_PLBp_PP1"/>
+        <map_variables variable_1="q_PLBp" variable_2="q_PLBp"/>
+        <map_variables variable_1="q_Ip" variable_2="q_Ip"/>
+        <map_variables variable_1="q_Ip_PP1" variable_2="q_Ip_PP1"/>
+        <map_variables variable_1="v_PLBph1" variable_2="v_PLBph1"/>
+        <map_variables variable_1="v_PLBph2" variable_2="v_PLBph2"/>
+        <map_variables variable_1="v_PLBd1" variable_2="v_PLBd1"/>
+        <map_variables variable_1="v_PLBd2" variable_2="v_PLBd2"/>
+        <map_variables variable_1="v_Inh" variable_2="v_Inh"/>
+    </connection>
+    <connection>
+        <map_components component_1="PLB_parameters" component_2="PLB"/>
+        <map_variables variable_1="kappa_PLBph1" variable_2="kappa_PLBph1"/>
+        <map_variables variable_1="kappa_PLBph2" variable_2="kappa_PLBph2"/>
+        <map_variables variable_1="kappa_PLBd1" variable_2="kappa_PLBd1"/>
+        <map_variables variable_1="kappa_PLBd2" variable_2="kappa_PLBd2"/>
+        <map_variables variable_1="kappa_Inh" variable_2="kappa_Inh"/>
+        <map_variables variable_1="K_PLB" variable_2="K_PLB"/>
+        <map_variables variable_1="K_PKACI" variable_2="K_PKACI"/>
+        <map_variables variable_1="K_PLB_PKACI" variable_2="K_PLB_PKACI"/>
+        <map_variables variable_1="K_PP1" variable_2="K_PP1"/>
+        <map_variables variable_1="K_PLBp_PP1" variable_2="K_PLBp_PP1"/>
+        <map_variables variable_1="K_PLBp" variable_2="K_PLBp"/>
+        <map_variables variable_1="K_Ip" variable_2="K_Ip"/>
+        <map_variables variable_1="K_Ip_PP1" variable_2="K_Ip_PP1"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="PLB"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

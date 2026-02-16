@@ -1,0 +1,542 @@
+<?xml version='1.0'?>
+<model name="cardiac_AP_K1_only" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable initial_value="0" name="t" public_interface="out" units="second"/>
+        <variable initial_value="27.9828" name="q_K_o" public_interface="out" units="fmol"/>
+        <variable initial_value="5510" name="q_K_i" public_interface="out" units="fmol"/>
+        <variable initial_value="5.6606e-06" name="q_C_K1" public_interface="out" units="fmol"/>
+        <variable initial_value="1.4151e-06" name="q_O_K1" public_interface="out" units="fmol"/>
+        <variable name="v_K1" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_K_o</ci>
+                </apply>
+                <ci>v_K1</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_K_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_K1</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="-13039" name="q_mem" public_interface="out" units="fC"/>
+        <variable name="I_mem_K1" public_interface="in" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_mem</ci>
+                </apply>
+                <ci>I_mem_K1</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="K1_parameters">
+        <variable initial_value="1.329" name="K_C_K1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.059344" name="K_K_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0080926" name="K_K_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="15967.3543" name="K_O_K1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="25.0154" name="kappa_K1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="848.2812" name="kappa_gK1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.5" name="nK" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1" name="zK" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.033569" name="z_fK1" public_interface="out" units="dimensionless"/>
+        <variable initial_value="3.1153" name="z_rK1" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="K1_MichaelParameters">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="C_m" public_interface="in" units="fF"/>
+        <variable name="K_C_K1" public_interface="in" units="per_fmol"/>
+        <variable name="K_K_o" public_interface="in" units="per_fmol"/>
+        <variable name="K_K_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_O_K1" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_K1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_gK1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="nK" public_interface="in" units="dimensionless"/>
+        <variable name="zK" public_interface="in" units="dimensionless"/>
+        <variable name="z_fK1" public_interface="in" units="dimensionless"/>
+        <variable name="z_rK1" public_interface="in" units="dimensionless"/>
+        <variable name="q_K_o" public_interface="in" units="fmol"/>
+        <variable name="q_K_i" public_interface="in" units="fmol"/>
+        <variable name="q_C_K1" public_interface="in" units="fmol"/>
+        <variable name="q_O_K1" public_interface="in" units="fmol"/>
+        <variable name="q_mem" public_interface="in" units="fC"/>
+        <variable name="mu_K_o" units="J_per_mol"/>
+        <variable name="mu_K_i" units="J_per_mol"/>
+        <variable name="mu_C_K1" units="J_per_mol"/>
+        <variable name="mu_O_K1" units="J_per_mol"/>
+        <variable name="v_C_K1" units="fmol_per_sec"/>
+        <variable name="v_O_K1" units="fmol_per_sec"/>
+        <variable name="Am_K1" units="J_per_mol"/>
+        <variable name="Af_K1" units="J_per_mol"/>
+        <variable name="Ar_K1" units="J_per_mol"/>
+        <variable name="v_K1" public_interface="out" units="fmol_per_sec"/>
+        <variable name="Af_gK1" units="J_per_mol"/>
+        <variable name="Ar_gK1" units="J_per_mol"/>
+        <variable name="v_gK1" units="fmol_per_sec"/>
+        <variable name="V_mem" units="volt"/>
+        <variable name="I_mem_K1" public_interface="out" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_C_K1</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_C_K1</ci>
+                            <ci>q_C_K1</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_K_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K_o</ci>
+                            <ci>q_K_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_K_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K_i</ci>
+                            <ci>q_K_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_O_K1</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_O_K1</ci>
+                            <ci>q_O_K1</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_gK1</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_gK1</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_gK1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_gK1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_K1</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_K_i</ci>
+                    <apply>
+                        <times/>
+                        <ci>zK</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                    <ci>mu_O_K1</ci>
+                    <apply>
+                        <times/>
+                        <ci>nK</ci>
+                        <ci>mu_K_o</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_gK1</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>R</ci>
+                        <ci>T</ci>
+                        <apply>
+                            <ln/>
+                            <apply>
+                                <times/>
+                                <ci>K_C_K1</ci>
+                                <ci>q_C_K1</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>z_fK1</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Am_K1</ci>
+                <apply>
+                    <times/>
+                    <ci>zK</ci>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_K1</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_K_o</ci>
+                    <ci>mu_O_K1</ci>
+                    <apply>
+                        <times/>
+                        <ci>nK</ci>
+                        <ci>mu_K_o</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_gK1</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>R</ci>
+                        <ci>T</ci>
+                        <apply>
+                            <ln/>
+                            <apply>
+                                <times/>
+                                <ci>K_O_K1</ci>
+                                <ci>q_O_K1</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>z_rK1</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_K1</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <minus/>
+                                    <ci>zK</ci>
+                                </apply>
+                                <ci>v_K1</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>z_rK1</ci>
+                                <ci>v_gK1</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>z_fK1</ci>
+                            <ci>v_gK1</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_C_K1</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_gK1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_O_K1</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_gK1</ci>
+                    <apply>
+                        <minus/>
+                        <ci>v_K1</ci>
+                        <ci>v_K1</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_C_K1</ci>
+                </apply>
+                <ci>v_C_K1</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_O_K1</ci>
+                </apply>
+                <ci>v_O_K1</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_K1</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>kappa_K1</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_K1</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_K1</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_K1</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>kappa_K1</ci>
+                                        <ci>Am_K1</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_K1</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_K1</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_K1</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="K1_MichaelParameters" component_2="K1_parameters"/>
+        <map_variables variable_1="K_C_K1" variable_2="K_C_K1"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="K_O_K1" variable_2="K_O_K1"/>
+        <map_variables variable_1="kappa_K1" variable_2="kappa_K1"/>
+        <map_variables variable_1="kappa_gK1" variable_2="kappa_gK1"/>
+        <map_variables variable_1="nK" variable_2="nK"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+        <map_variables variable_1="z_fK1" variable_2="z_fK1"/>
+        <map_variables variable_1="z_rK1" variable_2="z_rK1"/>
+    </connection>
+    <connection>
+        <map_components component_1="K1_MichaelParameters" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_C_K1" variable_2="q_C_K1"/>
+        <map_variables variable_1="q_O_K1" variable_2="q_O_K1"/>
+        <map_variables variable_1="v_K1" variable_2="v_K1"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_K1" variable_2="I_mem_K1"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="K1_MichaelParameters"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+    </connection>
+</model>

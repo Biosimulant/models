@@ -1,0 +1,2390 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="Calvo_Gallego_2022" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+  Units
+&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;- -->
+    <units name="day">
+        <unit multiplier="86400.0" units="second"/>
+    </units>
+    <units name="pM">
+        <unit prefix="pico" units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="flux">
+        <unit units="pM"/>
+        <unit exponent="-1" units="day"/>
+    </units>
+    <units name="first_order_rate_constant">
+        <unit exponent="-1" units="day"/>
+    </units>
+    <units name="second_order_rate_constant">
+        <unit exponent="-1" units="pM"/>
+        <unit exponent="-1" units="day"/>
+    </units>
+    <units name="MPa">
+        <unit prefix="mega" units="pascal"/>
+    </units>
+    <units name="per_MPa">
+        <unit exponent="-1" prefix="mega" units="pascal"/>
+    </units>
+    <units name="g_per_cm3">
+        <unit units="gram"/>
+        <unit exponent="-3" prefix="centi" units="metre"/>
+    </units>
+    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+  Components
+&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+ Environment-->
+    <component name="environment">
+        <variable name="time" public_interface="out" units="day"/>
+    </component>
+    <!-- OBp-->
+    <component name="OBp">
+        <variable initial_value="1.0993792851e-03" name="OBp" public_interface="out" units="pM"/>
+        <variable initial_value="1.0993792851e-03" name="OBp_t0" public_interface="out" units="pM"/>
+        <variable name="time" public_interface="in" units="day"/>
+        <variable name="OBp_in" units="flux"/>
+        <variable name="OBp_out" public_interface="out" units="flux"/>
+        <variable name="OBu_t0" public_interface="in" units="pM"/>
+        <variable name="DifferOBpNormal" units="first_order_rate_constant"/>
+        <variable name="D_OBp_t0" public_interface="in" units="first_order_rate_constant"/>
+        <variable initial_value="0.0001" name="TGFbNormal" units="pM"/>
+        <variable name="KD_TGF_beta_repress" public_interface="in" units="pM"/>
+        <variable name="ProlifOBpNormal" units="first_order_rate_constant"/>
+        <variable initial_value="0.5" name="frac_prolifOBp_vs_differOBu" units="dimensionless"/>
+        <variable initial_value="0.001" name="OBpNormal" units="pM"/>
+        <variable initial_value="0.005" name="OBp_sat" units="pM"/>
+        <variable name="DifferOBu" units="first_order_rate_constant"/>
+        <variable name="ProlifOBp" units="first_order_rate_constant"/>
+        <variable name="D_OBu_t0" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="pd_OBp_t0" public_interface="in" units="flux"/>
+        <variable name="Pi_TGFbeta_OBu_act_t0" public_interface="in" units="dimensionless"/>
+        <variable name="Pi_TGFbeta_OBp_rep" public_interface="in" units="dimensionless"/>
+        <variable name="Pi_WNT" public_interface="in" units="dimensionless"/>
+        <variable name="Pi_WNT_0" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>DifferOBpNormal</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>D_OBp_t0</ci>
+                        <cn cellml:units="dimensionless">1</cn>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>TGFbNormal</ci>
+                            <ci>KD_TGF_beta_repress</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>ProlifOBpNormal</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>frac_prolifOBp_vs_differOBu</ci>
+                        <ci>DifferOBpNormal</ci>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>OBpNormal</ci>
+                            <ci>OBp_sat</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>DifferOBu</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>frac_prolifOBp_vs_differOBu</ci>
+                    </apply>
+                    <ci>D_OBu_t0</ci>
+                    <ci>Pi_TGFbeta_OBu_act_t0</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>ProlifOBp</ci>
+                <apply>
+                    <times/>
+                    <ci>ProlifOBpNormal</ci>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>OBp</ci>
+                            <ci>OBp_sat</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>OBp_in</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>DifferOBu</ci>
+                        <ci>OBu_t0</ci>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>ProlifOBp</ci>
+                            <ci>OBp</ci>
+                            <ci>Pi_WNT</ci>
+                        </apply>
+                        <ci>Pi_WNT_0</ci>
+                    </apply>
+                    <ci>pd_OBp_t0</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>OBp_out</ci>
+                <apply>
+                    <times/>
+                    <ci>D_OBp_t0</ci>
+                    <ci>Pi_TGFbeta_OBp_rep</ci>
+                    <ci>OBp</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>OBp</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>OBp_in</ci>
+                    <ci>OBp_out</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- OBa-->
+    <component name="OBa">
+        <variable initial_value="8.7256220470e-04" name="OBa" public_interface="out" units="pM"/>
+        <variable name="time" public_interface="in" units="day"/>
+        <variable name="OBa_in" units="flux"/>
+        <variable name="OBa_out" units="flux"/>
+        <variable name="OBp_out" public_interface="in" units="flux"/>
+        <variable name="pd_OBa_t0" public_interface="in" units="flux"/>
+        <variable name="D_OBa_t0" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="A_OBa_t0" public_interface="in" units="first_order_rate_constant"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>OBa_in</ci>
+                <apply>
+                    <plus/>
+                    <ci>OBp_out</ci>
+                    <ci>pd_OBa_t0</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>OBa_out</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <plus/>
+                        <ci>D_OBa_t0</ci>
+                        <ci>A_OBa_t0</ci>
+                    </apply>
+                    <ci>OBa</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>OBa</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>OBa_in</ci>
+                    <ci>OBa_out</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- OCp-->
+    <component name="OCp">
+        <variable initial_value="1.3327554974e-03" name="OCp" public_interface="out" units="pM"/>
+        <variable name="time" public_interface="in" units="day"/>
+        <variable name="OCp_in" units="flux"/>
+        <variable name="OCp_out" public_interface="out" units="flux"/>
+        <variable name="OCu_t0" public_interface="in" units="pM"/>
+        <variable name="Pi_RANKL_act_OCp" public_interface="in" units="dimensionless"/>
+        <variable name="Pi_RANKL_act_OCu" public_interface="in" units="dimensionless"/>
+        <variable name="D_OCu_t0" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="pd_OCp_t0" public_interface="in" units="flux"/>
+        <variable name="D_OCp_t0" public_interface="in" units="first_order_rate_constant"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>OCp_in</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>D_OCu_t0</ci>
+                        <ci>OCu_t0</ci>
+                        <ci>Pi_RANKL_act_OCu</ci>
+                    </apply>
+                    <ci>pd_OCp_t0</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>OCp_out</ci>
+                <apply>
+                    <times/>
+                    <ci>D_OCp_t0</ci>
+                    <ci>Pi_RANKL_act_OCp</ci>
+                    <ci>OCp</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>OCp</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>OCp_in</ci>
+                    <ci>OCp_out</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- OCa-->
+    <component name="OCa">
+        <variable initial_value="1.7451244094e-05" name="OCa" public_interface="out" units="pM"/>
+        <variable name="time" public_interface="in" units="day"/>
+        <variable name="OCa_in" units="flux"/>
+        <variable name="OCa_out" units="flux"/>
+        <variable name="OCp_out" public_interface="in" units="flux"/>
+        <variable name="pd_OCa_t0" public_interface="in" units="flux"/>
+        <variable name="A_OCa_t0" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="Pi_TGFbeta_OCa_act" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>OCa_in</ci>
+                <apply>
+                    <plus/>
+                    <ci>OCp_out</ci>
+                    <ci>pd_OCa_t0</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>OCa_out</ci>
+                <apply>
+                    <times/>
+                    <ci>A_OCa_t0</ci>
+                    <ci>Pi_TGFbeta_OCa_act</ci>
+                    <ci>OCa</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>OCa</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>OCa_in</ci>
+                    <ci>OCa_out</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- Bone marix fraction in [%]-->
+    <component name="fbm">
+        <variable initial_value="25" name="fbm" public_interface="out" units="dimensionless"/>
+        <variable name="time" public_interface="in" units="day"/>
+        <variable name="OBa" public_interface="in" units="pM"/>
+        <variable name="OCa" public_interface="in" units="pM"/>
+        <variable name="K_form" public_interface="in" units="second_order_rate_constant"/>
+        <variable name="K_res" public_interface="in" units="second_order_rate_constant"/>
+        <variable name="dfbmdt" public_interface="out" units="first_order_rate_constant"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>dfbmdt</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>K_form</ci>
+                        <ci>OBa</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>K_res</ci>
+                        <ci>OCa</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>fbm</ci>
+                </apply>
+                <ci>dfbmdt</ci>
+            </apply>
+        </math>
+    </component>
+    <!-- Osteocytes-->
+    <component name="OCY">
+        <variable initial_value="1.2093400628e-02" name="OCY" public_interface="out" units="pM"/>
+        <variable name="OCY_act" public_interface="out" units="pM"/>
+        <variable name="OCY_act_0" public_interface="out" units="pM"/>
+        <variable name="fbm" public_interface="in" units="dimensionless"/>
+        <variable name="time" public_interface="in" units="day"/>
+        <variable name="fact_0" public_interface="in" units="pM"/>
+        <variable name="dfbmdt" public_interface="in" units="first_order_rate_constant"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>OCY_act</ci>
+                <apply>
+                    <times/>
+                    <ci>fact_0</ci>
+                    <ci>fbm</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>OCY_act_0</ci>
+                <apply>
+                    <times/>
+                    <ci>fact_0</ci>
+                    <cn cellml:units="dimensionless">20</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>OCY</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>fact_0</ci>
+                    <ci>dfbmdt</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- Mineralization-->
+    <component name="vm">
+        <variable initial_value="4.1302790850e-01" name="vm" public_interface="out" units="dimensionless"/>
+        <variable name="time" public_interface="in" units="day"/>
+        <variable name="OBa" public_interface="in" units="pM"/>
+        <variable name="fbm" public_interface="in" units="dimensionless"/>
+        <variable name="XKAPPA" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="vmmax" public_interface="in" units="dimensionless"/>
+        <variable name="K_form" public_interface="in" units="second_order_rate_constant"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>vm</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>XKAPPA</ci>
+                        <apply>
+                            <minus/>
+                            <ci>vmmax</ci>
+                            <ci>vm</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>vm</ci>
+                            <ci>K_form</ci>
+                            <ci>OBa</ci>
+                        </apply>
+                        <ci>fbm</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- PTH-->
+    <component name="PTH">
+        <variable name="PTH_tot" units="pM"/>
+        <variable name="Pi_PTH_act" units="dimensionless"/>
+        <variable name="Pi_PTH_rep" public_interface="out" units="dimensionless"/>
+        <variable name="Beta_PTH" public_interface="in" units="flux"/>
+        <variable name="P_PTH_d" public_interface="in" units="flux"/>
+        <variable name="Deg_PTH" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="KD_PTH_act" public_interface="in" units="pM"/>
+        <variable name="KD_PTH_rep" public_interface="in" units="pM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>PTH_tot</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <ci>Beta_PTH</ci>
+                        <ci>P_PTH_d</ci>
+                    </apply>
+                    <ci>Deg_PTH</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_PTH_act</ci>
+                <apply>
+                    <divide/>
+                    <ci>PTH_tot</ci>
+                    <apply>
+                        <plus/>
+                        <ci>PTH_tot</ci>
+                        <ci>KD_PTH_act</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_PTH_rep</ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>PTH_tot</ci>
+                            <ci>KD_PTH_rep</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- RANK-RANKL-OPG-->
+    <component name="RANK_RANKL_OPG">
+        <variable name="RANK" units="pM"/>
+        <variable name="RANKL" units="pM"/>
+        <variable name="OPG" units="pM"/>
+        <variable name="RANKL_tot" units="pM"/>
+        <variable name="RANKL_max" units="pM"/>
+        <variable name="P_RANKL1" units="flux"/>
+        <variable name="P_RANKL2" units="flux"/>
+        <variable name="P_RANKL" units="flux"/>
+        <variable name="P_RANKL_d" public_interface="in" units="flux"/>
+        <variable name="Pi_RANKL_act_OCp" public_interface="out" units="dimensionless"/>
+        <variable name="Pi_RANKL_act_OCu" public_interface="out" units="dimensionless"/>
+        <variable name="OBp" public_interface="in" units="pM"/>
+        <variable name="OBp_t0" public_interface="in" units="pM"/>
+        <variable name="OBa" public_interface="in" units="pM"/>
+        <variable name="OCp" public_interface="in" units="pM"/>
+        <variable name="OCY_act" public_interface="in" units="pM"/>
+        <variable name="Pi_PTH_rep" public_interface="in" units="dimensionless"/>
+        <variable name="Pi_NO_PTH_act_rep" public_interface="in" units="dimensionless"/>
+        <variable name="N_RANK_OCp" public_interface="in" units="dimensionless"/>
+        <variable name="N_RANKL_OBp_max" public_interface="in" units="dimensionless"/>
+        <variable name="K_RANK_RANKL" public_interface="in" units="pM"/>
+        <variable name="Beta_OPG" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="OPG_max" public_interface="in" units="pM"/>
+        <variable name="Deg_OPG" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="Deg_OPG_RANKL" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="K_OPG_RANKL" public_interface="in" units="pM"/>
+        <variable name="Beta_RANKL_OCY" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="Beta_RANKL_OBp" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="Deg_RANKL" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="Deg_RANK_RANKL" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="KD_RANKL_act_OCp" public_interface="in" units="pM"/>
+        <variable name="KD_RANKL_act_OCu" public_interface="in" units="pM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>RANK</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>N_RANK_OCp</ci>
+                        <ci>OCp</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <cn cellml:units="dimensionless">1</cn>
+                                <ci>K_RANK_RANKL</ci>
+                            </apply>
+                            <ci>RANKL</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>OPG</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Beta_OPG</ci>
+                        <ci>Pi_PTH_rep</ci>
+                        <ci>OBa</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>Beta_OPG</ci>
+                                <ci>Pi_PTH_rep</ci>
+                                <ci>OBa</ci>
+                            </apply>
+                            <ci>OPG_max</ci>
+                        </apply>
+                        <ci>Deg_OPG</ci>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <ci>Deg_OPG_RANKL</ci>
+                                <ci>K_OPG_RANKL</ci>
+                            </apply>
+                            <ci>RANKL</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>RANKL_tot</ci>
+                <apply>
+                    <times/>
+                    <ci>RANKL</ci>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>RANK</ci>
+                            <ci>K_RANK_RANKL</ci>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <ci>OPG</ci>
+                            <ci>K_OPG_RANKL</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>RANKL_max</ci>
+                <apply>
+                    <times/>
+                    <ci>N_RANKL_OBp_max</ci>
+                    <ci>OBp_t0</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_RANKL1</ci>
+                <apply>
+                    <times/>
+                    <ci>Beta_RANKL_OCY</ci>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>RANKL_tot</ci>
+                            <ci>RANKL_max</ci>
+                        </apply>
+                    </apply>
+                    <ci>OCY_act</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_RANKL2</ci>
+                <apply>
+                    <times/>
+                    <ci>Beta_RANKL_OBp</ci>
+                    <ci>Pi_NO_PTH_act_rep</ci>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>RANKL_tot</ci>
+                            <ci>RANKL_max</ci>
+                        </apply>
+                    </apply>
+                    <ci>OBp</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_RANKL</ci>
+                <apply>
+                    <plus/>
+                    <ci>P_RANKL1</ci>
+                    <ci>P_RANKL2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>RANKL</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <ci>P_RANKL</ci>
+                        <ci>P_RANKL_d</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>Deg_RANKL</ci>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <ci>Deg_RANK_RANKL</ci>
+                                <ci>K_RANK_RANKL</ci>
+                            </apply>
+                            <ci>RANK</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <ci>Deg_OPG_RANKL</ci>
+                                <ci>K_OPG_RANKL</ci>
+                            </apply>
+                            <ci>OPG</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_RANKL_act_OCp</ci>
+                <apply>
+                    <divide/>
+                    <ci>RANKL</ci>
+                    <apply>
+                        <plus/>
+                        <ci>KD_RANKL_act_OCp</ci>
+                        <ci>RANKL</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_RANKL_act_OCu</ci>
+                <apply>
+                    <divide/>
+                    <ci>RANKL</ci>
+                    <apply>
+                        <plus/>
+                        <ci>KD_RANKL_act_OCu</ci>
+                        <ci>RANKL</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- TGF-beta-->
+    <component name="TGF_beta">
+        <variable name="TGF_beta" units="pM"/>
+        <variable name="TGF_beta_t0" units="pM"/>
+        <variable name="OCa" public_interface="in" units="pM"/>
+        <variable initial_value="0.0001" name="OCa_t0" units="pM"/>
+        <variable name="Alpha" public_interface="in" units="dimensionless"/>
+        <variable name="Pi_TGFbeta_OBu_act_t0" public_interface="out" units="dimensionless"/>
+        <variable name="KD_TGF_beta_activate" public_interface="in" units="pM"/>
+        <variable name="KD_TGF_beta_repress" public_interface="in" units="pM"/>
+        <variable name="Pi_TGFbeta_OBu_act" units="dimensionless"/>
+        <variable name="Pi_TGFbeta_OCa_act" public_interface="out" units="dimensionless"/>
+        <variable name="Pi_TGFbeta_OBp_rep" public_interface="out" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>TGF_beta_t0</ci>
+                <apply>
+                    <times/>
+                    <ci>Alpha</ci>
+                    <ci>OCa_t0</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_TGFbeta_OBu_act_t0</ci>
+                <apply>
+                    <divide/>
+                    <ci>TGF_beta_t0</ci>
+                    <apply>
+                        <plus/>
+                        <ci>KD_TGF_beta_activate</ci>
+                        <ci>TGF_beta_t0</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>TGF_beta</ci>
+                <apply>
+                    <times/>
+                    <ci>Alpha</ci>
+                    <ci>OCa</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_TGFbeta_OBu_act</ci>
+                <apply>
+                    <divide/>
+                    <ci>TGF_beta</ci>
+                    <apply>
+                        <plus/>
+                        <ci>KD_TGF_beta_activate</ci>
+                        <ci>TGF_beta</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_TGFbeta_OCa_act</ci>
+                <apply>
+                    <divide/>
+                    <ci>TGF_beta</ci>
+                    <apply>
+                        <plus/>
+                        <ci>KD_TGF_beta_activate</ci>
+                        <ci>TGF_beta</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_TGFbeta_OBp_rep</ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>TGF_beta</ci>
+                            <ci>KD_TGF_beta_repress</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- Scl-->
+    <component name="Scl">
+        <variable name="Scl" public_interface="out" units="pM"/>
+        <variable name="Scl_0" public_interface="out" units="pM"/>
+        <variable name="P_Scl_b" units="flux"/>
+        <variable name="P_Scl_b_0" units="flux"/>
+        <variable name="A" units="second_order_rate_constant"/>
+        <variable name="A_0" units="second_order_rate_constant"/>
+        <variable name="B" units="first_order_rate_constant"/>
+        <variable name="B_0" units="first_order_rate_constant"/>
+        <variable name="C" units="flux"/>
+        <variable name="C_0" units="flux"/>
+        <variable name="OCYprod" units="flux"/>
+        <variable name="OCYprod_0" units="flux"/>
+        <variable name="OBp" public_interface="in" units="pM"/>
+        <variable name="OBp_t0" public_interface="in" units="pM"/>
+        <variable name="Wnt" public_interface="in" units="pM"/>
+        <variable name="Wnt_0" public_interface="in" units="pM"/>
+        <variable name="OCY_act" public_interface="in" units="pM"/>
+        <variable name="OCY_act_0" public_interface="in" units="pM"/>
+        <variable name="Pi_eps_rep" public_interface="in" units="dimensionless"/>
+        <variable name="Pi_eps_rep_stst" public_interface="in" units="dimensionless"/>
+        <variable name="Beta_Scl" units="first_order_rate_constant"/>
+        <variable name="Beta_Scl_0" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="KD_SclLRP5" public_interface="in" units="pM"/>
+        <variable name="Deg_Scl" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="Scl_max" public_interface="in" units="pM"/>
+        <variable name="KD_WntLRP5" public_interface="in" units="pM"/>
+        <variable name="Deg_SclLRP5" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="LRP5perCell" public_interface="in" units="dimensionless"/>
+        <variable name="LRP5tot" units="pM"/>
+        <variable name="LRP5tot_0" units="pM"/>
+        <variable name="P_Scl_d" public_interface="in" units="flux"/>
+        <!-- Scl-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Beta_Scl</ci>
+                <ci>Beta_Scl_0</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>OCYprod</ci>
+                <apply>
+                    <times/>
+                    <ci>Beta_Scl</ci>
+                    <ci>OCY_act</ci>
+                    <ci>Pi_eps_rep</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_Scl_b</ci>
+                <apply>
+                    <times/>
+                    <ci>OCYprod</ci>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>Scl</ci>
+                            <ci>Scl_max</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>LRP5tot</ci>
+                <apply>
+                    <times/>
+                    <ci>LRP5perCell</ci>
+                    <ci>OBp</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>A</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>KD_SclLRP5</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>Deg_Scl</ci>
+                        <apply>
+                            <divide/>
+                            <ci>OCYprod</ci>
+                            <ci>Scl_max</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>B</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>A</ci>
+                            <ci>KD_SclLRP5</ci>
+                            <apply>
+                                <plus/>
+                                <cn cellml:units="dimensionless">1</cn>
+                                <apply>
+                                    <divide/>
+                                    <ci>Wnt</ci>
+                                    <ci>KD_WntLRP5</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>Deg_SclLRP5</ci>
+                                <ci>LRP5tot</ci>
+                            </apply>
+                            <ci>KD_SclLRP5</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <plus/>
+                            <ci>P_Scl_d</ci>
+                            <ci>OCYprod</ci>
+                        </apply>
+                        <ci>KD_SclLRP5</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <ci>P_Scl_d</ci>
+                            <ci>OCYprod</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>Wnt</ci>
+                            <ci>KD_WntLRP5</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Scl</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>B</ci>
+                        </apply>
+                        <apply>
+                            <root/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <power/>
+                                    <ci>B</ci>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="dimensionless">4</cn>
+                                    <ci>A</ci>
+                                    <ci>C</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">2</cn>
+                        <ci>A</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>OCYprod_0</ci>
+                <apply>
+                    <times/>
+                    <ci>Beta_Scl_0</ci>
+                    <ci>OCY_act_0</ci>
+                    <ci>Pi_eps_rep_stst</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_Scl_b_0</ci>
+                <apply>
+                    <times/>
+                    <ci>OCYprod_0</ci>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>Scl_0</ci>
+                            <ci>Scl_max</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>LRP5tot_0</ci>
+                <apply>
+                    <times/>
+                    <ci>LRP5perCell</ci>
+                    <ci>OBp_t0</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>A_0</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>KD_SclLRP5</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>Deg_Scl</ci>
+                        <apply>
+                            <divide/>
+                            <ci>OCYprod_0</ci>
+                            <ci>Scl_max</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>B_0</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>A_0</ci>
+                            <ci>KD_SclLRP5</ci>
+                            <apply>
+                                <plus/>
+                                <cn cellml:units="dimensionless">1</cn>
+                                <apply>
+                                    <divide/>
+                                    <ci>Wnt_0</ci>
+                                    <ci>KD_WntLRP5</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>Deg_SclLRP5</ci>
+                                <ci>LRP5tot_0</ci>
+                            </apply>
+                            <ci>KD_SclLRP5</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <plus/>
+                            <ci>P_Scl_d</ci>
+                            <ci>OCYprod_0</ci>
+                        </apply>
+                        <ci>KD_SclLRP5</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C_0</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <ci>P_Scl_d</ci>
+                            <ci>OCYprod_0</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>Wnt_0</ci>
+                            <ci>KD_WntLRP5</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Scl_0</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>B_0</ci>
+                        </apply>
+                        <apply>
+                            <root/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <power/>
+                                    <ci>B_0</ci>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="dimensionless">4</cn>
+                                    <ci>A_0</ci>
+                                    <ci>C_0</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">2</cn>
+                        <ci>A_0</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- Wnt-->
+    <component name="Wnt">
+        <variable name="Wnt" public_interface="out" units="pM"/>
+        <variable name="Wnt_0" public_interface="in" units="pM"/>
+        <variable name="Scl" public_interface="in" units="pM"/>
+        <variable name="Scl_0" public_interface="in" units="pM"/>
+        <variable name="Pi_WNT" public_interface="out" units="dimensionless"/>
+        <variable name="Pi_WNT_0" public_interface="out" units="dimensionless"/>
+        <variable name="KD_WntLRP5" public_interface="in" units="pM"/>
+        <variable name="KD_SclLRP5" public_interface="in" units="pM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Wnt</ci>
+                <ci>Wnt_0</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_WNT</ci>
+                <apply>
+                    <divide/>
+                    <ci>Wnt</ci>
+                    <apply>
+                        <times/>
+                        <ci>KD_WntLRP5</ci>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <apply>
+                                <divide/>
+                                <ci>Wnt</ci>
+                                <ci>KD_WntLRP5</ci>
+                            </apply>
+                            <apply>
+                                <divide/>
+                                <ci>Scl</ci>
+                                <ci>KD_SclLRP5</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_WNT_0</ci>
+                <apply>
+                    <divide/>
+                    <ci>Wnt_0</ci>
+                    <apply>
+                        <times/>
+                        <ci>KD_WntLRP5</ci>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <apply>
+                                <divide/>
+                                <ci>Wnt_0</ci>
+                                <ci>KD_WntLRP5</ci>
+                            </apply>
+                            <apply>
+                                <divide/>
+                                <ci>Scl_0</ci>
+                                <ci>KD_SclLRP5</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- NO and PTH-->
+    <component name="NO_PTH">
+        <variable name="Pi_NO_PTH_act_rep" public_interface="out" units="dimensionless"/>
+        <variable name="PTH_tot" units="pM"/>
+        <variable name="Beta_PTH" public_interface="in" units="flux"/>
+        <variable name="P_PTH_d" public_interface="in" units="flux"/>
+        <variable name="Deg_PTH" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="NO_tot" units="pM"/>
+        <variable name="NO_eq" units="pM"/>
+        <variable name="Beta_NO" units="first_order_rate_constant"/>
+        <variable name="Beta_NO_0" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="P_NO_d" public_interface="in" units="flux"/>
+        <variable name="Deg_NO" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="Pi_eps_act" public_interface="in" units="dimensionless"/>
+        <variable name="Pi_eps_act_stst" public_interface="in" units="dimensionless"/>
+        <variable name="OCY_act" public_interface="in" units="pM"/>
+        <variable name="OCY_act_0" public_interface="in" units="pM"/>
+        <variable name="NO_max" public_interface="in" units="pM"/>
+        <variable name="KD_rep_NO" units="pM"/>
+        <variable initial_value="2" name="aa" units="dimensionless"/>
+        <variable name="Pi_PTH_act" units="dimensionless"/>
+        <variable name="KD_PTH_act" public_interface="in" units="pM"/>
+        <variable name="Pi_NO_rep" units="dimensionless"/>
+        <variable name="lambda_s" public_interface="in" units="dimensionless"/>
+        <variable name="lambda_c" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>PTH_tot</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <ci>Beta_PTH</ci>
+                        <ci>P_PTH_d</ci>
+                    </apply>
+                    <ci>Deg_PTH</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Beta_NO</ci>
+                <ci>Beta_NO_0</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>NO_tot</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Beta_NO</ci>
+                            <ci>Pi_eps_act</ci>
+                            <ci>OCY_act</ci>
+                        </apply>
+                        <ci>P_NO_d</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>Deg_NO</ci>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>Beta_NO</ci>
+                                <ci>Pi_eps_act</ci>
+                                <ci>OCY_act</ci>
+                            </apply>
+                            <ci>NO_max</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>NO_eq</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Beta_NO_0</ci>
+                        <ci>Pi_eps_act_stst</ci>
+                        <ci>OCY_act_0</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>Deg_NO</ci>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>Beta_NO_0</ci>
+                                <ci>Pi_eps_act_stst</ci>
+                                <ci>OCY_act_0</ci>
+                            </apply>
+                            <ci>NO_max</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>KD_rep_NO</ci>
+                <apply>
+                    <divide/>
+                    <ci>NO_eq</ci>
+                    <ci>aa</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_PTH_act</ci>
+                <apply>
+                    <divide/>
+                    <ci>PTH_tot</ci>
+                    <apply>
+                        <plus/>
+                        <ci>PTH_tot</ci>
+                        <ci>KD_PTH_act</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_NO_rep</ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                            <divide/>
+                            <ci>NO_tot</ci>
+                            <ci>KD_rep_NO</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_NO_PTH_act_rep</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>lambda_s</ci>
+                        <apply>
+                            <plus/>
+                            <ci>Pi_PTH_act</ci>
+                            <ci>Pi_NO_rep</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>lambda_c</ci>
+                        <ci>Pi_PTH_act</ci>
+                        <ci>Pi_NO_rep</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- Strain energy density-->
+    <component name="SED">
+        <variable name="SED" units="MPa"/>
+        <variable name="SED_bm" units="MPa"/>
+        <variable name="Pi_eps_act" public_interface="out" units="dimensionless"/>
+        <variable name="Pi_eps_rep" public_interface="out" units="dimensionless"/>
+        <variable name="Pi_eps_act_stst" public_interface="out" units="dimensionless"/>
+        <variable name="Pi_eps_rep_stst" public_interface="out" units="dimensionless"/>
+        <variable name="sig_macro_t0" public_interface="in" units="MPa"/>
+        <variable name="de_sig_macro" public_interface="in" units="MPa"/>
+        <variable name="sig_macro" units="MPa"/>
+        <variable name="sig_1" units="MPa"/>
+        <variable name="sig_2" units="MPa"/>
+        <variable name="sig_3" units="MPa"/>
+        <variable name="sig_4" units="MPa"/>
+        <variable name="sig_5" units="MPa"/>
+        <variable name="sig_6" units="MPa"/>
+        <variable name="eps_1" units="dimensionless"/>
+        <variable name="eps_2" units="dimensionless"/>
+        <variable name="eps_3" units="dimensionless"/>
+        <variable name="eps_4" units="dimensionless"/>
+        <variable name="eps_5" units="dimensionless"/>
+        <variable name="eps_6" units="dimensionless"/>
+        <variable name="dens_tis" units="g_per_cm3"/>
+        <variable name="vm" public_interface="in" units="dimensionless"/>
+        <variable name="vo" public_interface="in" units="dimensionless"/>
+        <variable name="rho_m" public_interface="in" units="g_per_cm3"/>
+        <variable name="rho_o" public_interface="in" units="g_per_cm3"/>
+        <variable name="fbm" public_interface="in" units="dimensionless"/>
+        <variable name="fvas" units="dimensionless"/>
+        <variable name="dens" units="g_per_cm3"/>
+        <variable name="dens_1" units="dimensionless"/>
+        <variable name="E_mod" units="MPa"/>
+        <variable name="nu" public_interface="in" units="dimensionless"/>
+        <variable name="S_11" units="per_MPa"/>
+        <variable name="S_12" units="per_MPa"/>
+        <variable name="S_44" units="per_MPa"/>
+        <variable name="omega" public_interface="in" units="dimensionless"/>
+        <variable name="valeq" units="dimensionless"/>
+        <variable name="taueq" public_interface="in" units="MPa"/>
+        <variable name="alphaAct" public_interface="in" units="dimensionless"/>
+        <variable name="alphaRep" public_interface="in" units="dimensionless"/>
+        <variable name="gammaAct" public_interface="in" units="dimensionless"/>
+        <variable name="gammaRep" public_interface="in" units="dimensionless"/>
+        <variable name="rhoAct" public_interface="in" units="dimensionless"/>
+        <variable name="rhoRep" public_interface="in" units="dimensionless"/>
+        <variable name="deltaAct" units="MPa"/>
+        <variable name="deltaRep" units="MPa"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>sig_1</ci>
+                <cn cellml:units="MPa">0.0</cn>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>sig_2</ci>
+                <cn cellml:units="MPa">0.0</cn>
+            </apply>
+            <!--sig_3 = 0.0{MPa};-->
+            <apply>
+                <eq/>
+                <ci>sig_4</ci>
+                <cn cellml:units="MPa">0.0</cn>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>sig_5</ci>
+                <cn cellml:units="MPa">0.0</cn>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>sig_6</ci>
+                <cn cellml:units="MPa">0.0</cn>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>sig_macro</ci>
+                <apply>
+                    <plus/>
+                    <ci>sig_macro_t0</ci>
+                    <ci>de_sig_macro</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>sig_3</ci>
+                <ci>sig_macro</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>dens_tis</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="g_per_cm3">1</cn>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+                            <ci>rho_m</ci>
+                            <cn cellml:units="g_per_cm3">1</cn>
+                        </apply>
+                        <ci>vm</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+                            <ci>rho_o</ci>
+                            <cn cellml:units="g_per_cm3">1</cn>
+                        </apply>
+                        <ci>vo</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>fvas</ci>
+                <apply>
+                    <minus/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <divide/>
+                        <ci>fbm</ci>
+                        <cn cellml:units="dimensionless">100</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>dens</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>dens_tis</ci>
+                        <ci>fbm</ci>
+                    </apply>
+                    <cn cellml:units="dimensionless">100</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>dens_1</ci>
+                <apply>
+                    <divide/>
+                    <ci>dens</ci>
+                    <cn cellml:units="g_per_cm3">1</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>E_mod</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="MPa">2014</cn>
+                            <apply>
+                                <power/>
+                                <ci>dens_1</ci>
+                                <cn cellml:units="dimensionless">2.5</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <lt/>
+                            <ci>dens_1</ci>
+                            <cn cellml:units="dimensionless">1.2</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="MPa">1763</cn>
+                            <apply>
+                                <power/>
+                                <ci>dens_1</ci>
+                                <cn cellml:units="dimensionless">3.2</cn>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <!-- Compute the components of complaince tensor
+ ! Bone is assumed as an isotropic material, so zero elements are ignored here,
+ and only the independent components are calculated-->
+            <apply>
+                <eq/>
+                <ci>S_11</ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <ci>E_mod</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>S_12</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>nu</ci>
+                    </apply>
+                    <ci>E_mod</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>S_44</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">2</cn>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">2</cn>
+                            <ci>nu</ci>
+                        </apply>
+                    </apply>
+                    <ci>E_mod</ci>
+                </apply>
+            </apply>
+            <!-- Calculate macroscopic strain using Hooke's law-->
+            <apply>
+                <eq/>
+                <ci>eps_1</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>S_11</ci>
+                        <ci>sig_1</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>S_12</ci>
+                        <ci>sig_2</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>S_12</ci>
+                        <ci>sig_3</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>eps_2</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>S_12</ci>
+                        <ci>sig_1</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>S_11</ci>
+                        <ci>sig_2</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>S_12</ci>
+                        <ci>sig_3</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>eps_3</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>S_12</ci>
+                        <ci>sig_1</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>S_12</ci>
+                        <ci>sig_2</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>S_11</ci>
+                        <ci>sig_3</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>eps_4</ci>
+                <apply>
+                    <times/>
+                    <ci>S_44</ci>
+                    <ci>sig_4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>eps_5</ci>
+                <apply>
+                    <times/>
+                    <ci>S_44</ci>
+                    <ci>sig_5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>eps_6</ci>
+                <apply>
+                    <times/>
+                    <ci>S_44</ci>
+                    <ci>sig_6</ci>
+                </apply>
+            </apply>
+            <!-- Calculate strain energy density at the continuum level-->
+            <apply>
+                <eq/>
+                <ci>SED</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">0.5</cn>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>sig_1</ci>
+                            <ci>eps_1</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>sig_2</ci>
+                            <ci>eps_2</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>sig_3</ci>
+                            <ci>eps_3</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>sig_4</ci>
+                            <ci>eps_4</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>sig_5</ci>
+                            <ci>eps_5</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>sig_6</ci>
+                            <ci>eps_6</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <!-- Calculate strain energy density in bone matrix, at the tissue level-->
+            <apply>
+                <eq/>
+                <ci>SED_bm</ci>
+                <apply>
+                    <divide/>
+                    <ci>SED</ci>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>fvas</ci>
+                        </apply>
+                        <cn cellml:units="dimensionless">2</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <!-- Mechancial feedback activator function that accounts for the production of NO by osteocytes-->
+            <apply>
+                <eq/>
+                <ci>valeq</ci>
+                <ci>omega</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>deltaAct</ci>
+                <apply>
+                    <times/>
+                    <ci>taueq</ci>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <ci>alphaAct</ci>
+                                <ci>valeq</ci>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <ci>valeq</ci>
+                                <ci>rhoAct</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>gammaAct</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_eps_act</ci>
+                <apply>
+                    <plus/>
+                    <ci>rhoAct</ci>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>alphaAct</ci>
+                                <ci>rhoAct</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>SED_bm</ci>
+                                <ci>gammaAct</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <power/>
+                                <ci>deltaAct</ci>
+                                <ci>gammaAct</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>SED_bm</ci>
+                                <ci>gammaAct</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_eps_act_stst</ci>
+                <apply>
+                    <plus/>
+                    <ci>rhoAct</ci>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>alphaAct</ci>
+                                <ci>rhoAct</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>taueq</ci>
+                                <ci>gammaAct</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <power/>
+                                <ci>deltaAct</ci>
+                                <ci>gammaAct</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>taueq</ci>
+                                <ci>gammaAct</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>deltaRep</ci>
+                <apply>
+                    <times/>
+                    <ci>taueq</ci>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <minus/>
+                                <ci>valeq</ci>
+                                <ci>rhoRep</ci>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <ci>alphaRep</ci>
+                                <ci>valeq</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>gammaRep</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_eps_rep</ci>
+                <apply>
+                    <minus/>
+                    <ci>alphaRep</ci>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>alphaRep</ci>
+                                <ci>rhoRep</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>SED_bm</ci>
+                                <ci>gammaRep</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <power/>
+                                <ci>deltaRep</ci>
+                                <ci>gammaRep</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>SED_bm</ci>
+                                <ci>gammaRep</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Pi_eps_rep_stst</ci>
+                <apply>
+                    <minus/>
+                    <ci>alphaRep</ci>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>alphaRep</ci>
+                                <ci>rhoRep</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>taueq</ci>
+                                <ci>gammaRep</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <power/>
+                                <ci>deltaRep</ci>
+                                <ci>gammaRep</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>taueq</ci>
+                                <ci>gammaRep</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+  Model Parameters
+&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;- -->
+    <component name="model_parameters">
+        <!-- Cell-->
+        <variable initial_value="0.01" name="OBu_t0" public_interface="out" units="pM"/>
+        <variable initial_value="0.01" name="OCu_t0" public_interface="out" units="pM"/>
+        <!-- OBp-->
+        <variable initial_value="0.185" name="D_OBp_t0" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="0.166" name="D_OBu_t0" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="0" name="pd_OBp_t0" public_interface="out" units="flux"/>
+        <!--OBa-->
+        <variable initial_value="0" name="pd_OBa_t0" public_interface="out" units="flux"/>
+        <variable initial_value="0.0212" name="D_OBa_t0" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="0.1908" name="A_OBa_t0" public_interface="out" units="first_order_rate_constant"/>
+        <!-- OCp-->
+        <variable initial_value="0.0219" name="D_OCu_t0" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="0" name="pd_OCp_t0" public_interface="out" units="flux"/>
+        <variable initial_value="0.01958" name="D_OCp_t0" public_interface="out" units="first_order_rate_constant"/>
+        <!-- OCa-->
+        <variable initial_value="0" name="pd_OCa_t0" public_interface="out" units="flux"/>
+        <variable initial_value="10" name="A_OCa_t0" public_interface="out" units="first_order_rate_constant"/>
+        <!-- Bone matrix fraction-->
+        <variable initial_value="50" name="K_form" public_interface="out" units="second_order_rate_constant"/>
+        <variable initial_value="2500" name="K_res" public_interface="out" units="second_order_rate_constant"/>
+        <!-- Osteocytes-->
+        <variable initial_value="0.000414138" name="fact_0" public_interface="out" units="pM"/>
+        <!-- Mineralization-->
+        <variable initial_value="0.007" name="XKAPPA" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="0.516" name="vmmax" public_interface="out" units="dimensionless"/>
+        <!-- PTH-->
+        <variable initial_value="250" name="Beta_PTH" public_interface="out" units="flux"/>
+        <variable initial_value="0" name="P_PTH_d" public_interface="out" units="flux"/>
+        <variable initial_value="86" name="Deg_PTH" public_interface="out" units="first_order_rate_constant"/>
+        <!--var KD_PTH_act: pM {init: 0.899382, pub: out};-->
+        <variable initial_value="0.65" name="KD_PTH_act" public_interface="out" units="pM"/>
+        <variable initial_value="0.222581427709954" name="KD_PTH_rep" public_interface="out" units="pM"/>
+        <!-- NO_PTH -->
+        <variable initial_value="3440" name="Beta_NO_0" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="0" name="P_NO_d" public_interface="out" units="flux"/>
+        <variable initial_value="0.0021" name="Deg_NO" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="200000000" name="NO_max" public_interface="out" units="pM"/>
+        <variable initial_value="0.450454" name="lambda_s" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.900909" name="lambda_c" public_interface="out" units="dimensionless"/>
+        <!-- RANK-RANKL-OPG-->
+        <variable initial_value="2703476" name="N_RANKL_OBp_max" public_interface="out" units="dimensionless"/>
+        <variable initial_value="4160" name="N_RANK_OCp" public_interface="out" units="dimensionless"/>
+        <variable initial_value="10" name="K_RANK_RANKL" public_interface="out" units="pM"/>
+        <variable initial_value="162490033.783568" name="Beta_OPG" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="131.428571428571" name="OPG_max" public_interface="out" units="pM"/>
+        <variable initial_value="532608.695652174" name="Deg_OPG" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="10.132471014805" name="Deg_OPG_RANKL" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="0.0151142857142857" name="K_OPG_RANKL" public_interface="out" units="pM"/>
+        <variable initial_value="5660" name="Beta_RANKL_OCY" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="23600" name="Beta_RANKL_OBp" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="10.132471014805" name="Deg_RANKL" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="10.132471014805" name="Deg_RANK_RANKL" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="3.34" name="KD_RANKL_act_OCp" public_interface="out" units="pM"/>
+        <variable initial_value="16.7" name="KD_RANKL_act_OCu" public_interface="out" units="pM"/>
+        <variable initial_value="0" name="P_RANKL_d" public_interface="out" units="flux"/>
+        <!-- TGF-beta-->
+        <variable initial_value="1" name="Alpha" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.000563278809675429" name="KD_TGF_beta_activate" public_interface="out" units="pM"/>
+        <variable initial_value="0.000175426051821094" name="KD_TGF_beta_repress" public_interface="out" units="pM"/>
+        <!-- Scl-->
+        <variable initial_value="24000" name="Beta_Scl_0" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="10" name="KD_SclLRP5" public_interface="out" units="pM"/>
+        <variable initial_value="1" name="Deg_Scl" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="70" name="Scl_max" public_interface="out" units="pM"/>
+        <variable initial_value="1000" name="KD_WntLRP5" public_interface="out" units="pM"/>
+        <variable initial_value="50" name="Deg_SclLRP5" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="5" name="LRP5perCell" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="P_Scl_d" public_interface="out" units="flux"/>
+        <!-- Wnt-->
+        <variable initial_value="170" name="Wnt_0" public_interface="out" units="pM"/>
+        <!-- Strain energy density-->
+        <variable initial_value="0.50365" name="sig_macro_t0" public_interface="out" units="MPa"/>
+        <variable initial_value="0" name="de_sig_macro" public_interface="out" units="MPa"/>
+        <variable initial_value="0.428571428571428" name="vo" public_interface="out" units="dimensionless"/>
+        <variable initial_value="3.2" name="rho_m" public_interface="out" units="g_per_cm3"/>
+        <variable initial_value="1.41" name="rho_o" public_interface="out" units="g_per_cm3"/>
+        <variable initial_value="0.3" name="nu" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.95" name="omega" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.006652" name="taueq" public_interface="out" units="MPa"/>
+        <variable initial_value="1" name="alphaAct" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1" name="alphaRep" public_interface="out" units="dimensionless"/>
+        <variable initial_value="7" name="gammaAct" public_interface="out" units="dimensionless"/>
+        <variable initial_value="8.01559" name="gammaRep" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="rhoAct" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="rhoRep" public_interface="out" units="dimensionless"/>
+    </component>
+    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+  Mappings between components for variables that are shared
+&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;- -->
+    <connection>
+        <map_components component_1="OBp" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBp" component_2="model_parameters"/>
+        <map_variables variable_1="OBu_t0" variable_2="OBu_t0"/>
+        <map_variables variable_1="D_OBp_t0" variable_2="D_OBp_t0"/>
+        <map_variables variable_1="D_OBu_t0" variable_2="D_OBu_t0"/>
+        <map_variables variable_1="pd_OBp_t0" variable_2="pd_OBp_t0"/>
+        <map_variables variable_1="KD_TGF_beta_repress" variable_2="KD_TGF_beta_repress"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBp" component_2="OBa"/>
+        <map_variables variable_1="OBp_out" variable_2="OBp_out"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBp" component_2="RANK_RANKL_OPG"/>
+        <map_variables variable_1="OBp" variable_2="OBp"/>
+        <map_variables variable_1="OBp_t0" variable_2="OBp_t0"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBp" component_2="TGF_beta"/>
+        <map_variables variable_1="Pi_TGFbeta_OBu_act_t0" variable_2="Pi_TGFbeta_OBu_act_t0"/>
+        <map_variables variable_1="Pi_TGFbeta_OBp_rep" variable_2="Pi_TGFbeta_OBp_rep"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBp" component_2="Wnt"/>
+        <map_variables variable_1="Pi_WNT" variable_2="Pi_WNT"/>
+        <map_variables variable_1="Pi_WNT_0" variable_2="Pi_WNT_0"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBp" component_2="Scl"/>
+        <map_variables variable_1="OBp" variable_2="OBp"/>
+        <map_variables variable_1="OBp_t0" variable_2="OBp_t0"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBa" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBa" component_2="model_parameters"/>
+        <map_variables variable_1="pd_OBa_t0" variable_2="pd_OBa_t0"/>
+        <map_variables variable_1="D_OBa_t0" variable_2="D_OBa_t0"/>
+        <map_variables variable_1="A_OBa_t0" variable_2="A_OBa_t0"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBa" component_2="fbm"/>
+        <map_variables variable_1="OBa" variable_2="OBa"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBa" component_2="vm"/>
+        <map_variables variable_1="OBa" variable_2="OBa"/>
+    </connection>
+    <connection>
+        <map_components component_1="OBa" component_2="RANK_RANKL_OPG"/>
+        <map_variables variable_1="OBa" variable_2="OBa"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCp" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCp" component_2="model_parameters"/>
+        <map_variables variable_1="OCu_t0" variable_2="OCu_t0"/>
+        <map_variables variable_1="D_OCu_t0" variable_2="D_OCu_t0"/>
+        <map_variables variable_1="pd_OCp_t0" variable_2="pd_OCp_t0"/>
+        <map_variables variable_1="D_OCp_t0" variable_2="D_OCp_t0"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCp" component_2="OCa"/>
+        <map_variables variable_1="OCp_out" variable_2="OCp_out"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCp" component_2="RANK_RANKL_OPG"/>
+        <map_variables variable_1="OCp" variable_2="OCp"/>
+        <map_variables variable_1="Pi_RANKL_act_OCp" variable_2="Pi_RANKL_act_OCp"/>
+        <map_variables variable_1="Pi_RANKL_act_OCu" variable_2="Pi_RANKL_act_OCu"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCa" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCa" component_2="model_parameters"/>
+        <map_variables variable_1="pd_OCa_t0" variable_2="pd_OCa_t0"/>
+        <map_variables variable_1="A_OCa_t0" variable_2="A_OCa_t0"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCa" component_2="fbm"/>
+        <map_variables variable_1="OCa" variable_2="OCa"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCa" component_2="TGF_beta"/>
+        <map_variables variable_1="OCa" variable_2="OCa"/>
+        <map_variables variable_1="Pi_TGFbeta_OCa_act" variable_2="Pi_TGFbeta_OCa_act"/>
+    </connection>
+    <connection>
+        <map_components component_1="fbm" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="fbm" component_2="model_parameters"/>
+        <map_variables variable_1="K_form" variable_2="K_form"/>
+        <map_variables variable_1="K_res" variable_2="K_res"/>
+    </connection>
+    <connection>
+        <map_components component_1="fbm" component_2="OCY"/>
+        <map_variables variable_1="fbm" variable_2="fbm"/>
+        <map_variables variable_1="dfbmdt" variable_2="dfbmdt"/>
+    </connection>
+    <connection>
+        <map_components component_1="fbm" component_2="vm"/>
+        <map_variables variable_1="fbm" variable_2="fbm"/>
+    </connection>
+    <connection>
+        <map_components component_1="fbm" component_2="SED"/>
+        <map_variables variable_1="fbm" variable_2="fbm"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCY" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCY" component_2="model_parameters"/>
+        <map_variables variable_1="fact_0" variable_2="fact_0"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCY" component_2="NO_PTH"/>
+        <map_variables variable_1="OCY_act" variable_2="OCY_act"/>
+        <map_variables variable_1="OCY_act_0" variable_2="OCY_act_0"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCY" component_2="RANK_RANKL_OPG"/>
+        <map_variables variable_1="OCY_act" variable_2="OCY_act"/>
+    </connection>
+    <connection>
+        <map_components component_1="OCY" component_2="Scl"/>
+        <map_variables variable_1="OCY_act" variable_2="OCY_act"/>
+        <map_variables variable_1="OCY_act_0" variable_2="OCY_act_0"/>
+    </connection>
+    <connection>
+        <map_components component_1="vm" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="vm" component_2="model_parameters"/>
+        <map_variables variable_1="XKAPPA" variable_2="XKAPPA"/>
+        <map_variables variable_1="vmmax" variable_2="vmmax"/>
+        <map_variables variable_1="K_form" variable_2="K_form"/>
+    </connection>
+    <connection>
+        <map_components component_1="vm" component_2="SED"/>
+        <map_variables variable_1="vm" variable_2="vm"/>
+    </connection>
+    <connection>
+        <map_components component_1="PTH" component_2="model_parameters"/>
+        <map_variables variable_1="Beta_PTH" variable_2="Beta_PTH"/>
+        <map_variables variable_1="P_PTH_d" variable_2="P_PTH_d"/>
+        <map_variables variable_1="Deg_PTH" variable_2="Deg_PTH"/>
+        <map_variables variable_1="KD_PTH_act" variable_2="KD_PTH_act"/>
+        <map_variables variable_1="KD_PTH_rep" variable_2="KD_PTH_rep"/>
+    </connection>
+    <connection>
+        <map_components component_1="PTH" component_2="RANK_RANKL_OPG"/>
+        <map_variables variable_1="Pi_PTH_rep" variable_2="Pi_PTH_rep"/>
+    </connection>
+    <connection>
+        <map_components component_1="NO_PTH" component_2="SED"/>
+        <map_variables variable_1="Pi_eps_act" variable_2="Pi_eps_act"/>
+        <map_variables variable_1="Pi_eps_act_stst" variable_2="Pi_eps_act_stst"/>
+    </connection>
+    <connection>
+        <map_components component_1="RANK_RANKL_OPG" component_2="model_parameters"/>
+        <map_variables variable_1="N_RANKL_OBp_max" variable_2="N_RANKL_OBp_max"/>
+        <map_variables variable_1="N_RANK_OCp" variable_2="N_RANK_OCp"/>
+        <map_variables variable_1="K_RANK_RANKL" variable_2="K_RANK_RANKL"/>
+        <map_variables variable_1="Beta_OPG" variable_2="Beta_OPG"/>
+        <map_variables variable_1="OPG_max" variable_2="OPG_max"/>
+        <map_variables variable_1="Deg_OPG" variable_2="Deg_OPG"/>
+        <map_variables variable_1="Deg_OPG_RANKL" variable_2="Deg_OPG_RANKL"/>
+        <map_variables variable_1="K_OPG_RANKL" variable_2="K_OPG_RANKL"/>
+        <map_variables variable_1="Beta_RANKL_OCY" variable_2="Beta_RANKL_OCY"/>
+        <map_variables variable_1="Beta_RANKL_OBp" variable_2="Beta_RANKL_OBp"/>
+        <map_variables variable_1="Deg_RANKL" variable_2="Deg_RANKL"/>
+        <map_variables variable_1="Deg_RANK_RANKL" variable_2="Deg_RANK_RANKL"/>
+        <map_variables variable_1="KD_RANKL_act_OCp" variable_2="KD_RANKL_act_OCp"/>
+        <map_variables variable_1="KD_RANKL_act_OCu" variable_2="KD_RANKL_act_OCu"/>
+        <map_variables variable_1="P_RANKL_d" variable_2="P_RANKL_d"/>
+    </connection>
+    <connection>
+        <map_components component_1="RANK_RANKL_OPG" component_2="NO_PTH"/>
+        <map_variables variable_1="Pi_NO_PTH_act_rep" variable_2="Pi_NO_PTH_act_rep"/>
+    </connection>
+    <connection>
+        <map_components component_1="TGF_beta" component_2="model_parameters"/>
+        <map_variables variable_1="Alpha" variable_2="Alpha"/>
+        <map_variables variable_1="KD_TGF_beta_activate" variable_2="KD_TGF_beta_activate"/>
+        <map_variables variable_1="KD_TGF_beta_repress" variable_2="KD_TGF_beta_repress"/>
+    </connection>
+    <connection>
+        <map_components component_1="Scl" component_2="model_parameters"/>
+        <map_variables variable_1="Beta_Scl_0" variable_2="Beta_Scl_0"/>
+        <map_variables variable_1="KD_SclLRP5" variable_2="KD_SclLRP5"/>
+        <map_variables variable_1="Deg_Scl" variable_2="Deg_Scl"/>
+        <map_variables variable_1="Scl_max" variable_2="Scl_max"/>
+        <map_variables variable_1="KD_WntLRP5" variable_2="KD_WntLRP5"/>
+        <map_variables variable_1="Deg_SclLRP5" variable_2="Deg_SclLRP5"/>
+        <map_variables variable_1="LRP5perCell" variable_2="LRP5perCell"/>
+        <map_variables variable_1="P_Scl_d" variable_2="P_Scl_d"/>
+        <map_variables variable_1="Wnt_0" variable_2="Wnt_0"/>
+    </connection>
+    <connection>
+        <map_components component_1="Scl" component_2="Wnt"/>
+        <map_variables variable_1="Wnt" variable_2="Wnt"/>
+        <map_variables variable_1="Scl" variable_2="Scl"/>
+        <map_variables variable_1="Scl_0" variable_2="Scl_0"/>
+    </connection>
+    <connection>
+        <map_components component_1="Scl" component_2="SED"/>
+        <map_variables variable_1="Pi_eps_rep" variable_2="Pi_eps_rep"/>
+        <map_variables variable_1="Pi_eps_rep_stst" variable_2="Pi_eps_rep_stst"/>
+    </connection>
+    <connection>
+        <map_components component_1="Wnt" component_2="model_parameters"/>
+        <map_variables variable_1="Wnt_0" variable_2="Wnt_0"/>
+        <map_variables variable_1="KD_WntLRP5" variable_2="KD_WntLRP5"/>
+        <map_variables variable_1="KD_SclLRP5" variable_2="KD_SclLRP5"/>
+    </connection>
+    <connection>
+        <map_components component_1="NO_PTH" component_2="model_parameters"/>
+        <map_variables variable_1="Beta_PTH" variable_2="Beta_PTH"/>
+        <map_variables variable_1="Beta_NO_0" variable_2="Beta_NO_0"/>
+        <map_variables variable_1="P_PTH_d" variable_2="P_PTH_d"/>
+        <map_variables variable_1="Deg_PTH" variable_2="Deg_PTH"/>
+        <map_variables variable_1="P_NO_d" variable_2="P_NO_d"/>
+        <map_variables variable_1="Deg_NO" variable_2="Deg_NO"/>
+        <map_variables variable_1="NO_max" variable_2="NO_max"/>
+        <map_variables variable_1="KD_PTH_act" variable_2="KD_PTH_act"/>
+        <map_variables variable_1="lambda_s" variable_2="lambda_s"/>
+        <map_variables variable_1="lambda_c" variable_2="lambda_c"/>
+    </connection>
+    <connection>
+        <map_components component_1="SED" component_2="model_parameters"/>
+        <map_variables variable_1="sig_macro_t0" variable_2="sig_macro_t0"/>
+        <map_variables variable_1="de_sig_macro" variable_2="de_sig_macro"/>
+        <map_variables variable_1="vo" variable_2="vo"/>
+        <map_variables variable_1="rho_m" variable_2="rho_m"/>
+        <map_variables variable_1="rho_o" variable_2="rho_o"/>
+        <map_variables variable_1="nu" variable_2="nu"/>
+        <map_variables variable_1="omega" variable_2="omega"/>
+        <map_variables variable_1="taueq" variable_2="taueq"/>
+        <map_variables variable_1="alphaAct" variable_2="alphaAct"/>
+        <map_variables variable_1="alphaRep" variable_2="alphaRep"/>
+        <map_variables variable_1="gammaAct" variable_2="gammaAct"/>
+        <map_variables variable_1="gammaRep" variable_2="gammaRep"/>
+        <map_variables variable_1="rhoAct" variable_2="rhoAct"/>
+        <map_variables variable_1="rhoRep" variable_2="rhoRep"/>
+    </connection>
+</model>

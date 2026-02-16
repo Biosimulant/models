@@ -1,0 +1,633 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Ryanodine receptor: controls release of Ca from SR into cytosol of myocyte (AKA J_rel). 
+ It does not sit on the sarcolemma. I am unsure of charge on the SR membrane, so neglecting this.-->
+<model name="individual_RyR" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="millivolt" units_ref="millivolt"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <import xlink:href="units_and_constants/ion_valency.cellml">
+        <component component_ref="ion_valences" name="ion_valences"/>
+    </import>
+    <component name="environment">
+        <variable name="t" public_interface="out" units="second"/>
+        <variable initial_value="1.381e5" name="C_m" units="fF"/>
+        <variable name="v_RyR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <!-- initial values-->
+        <variable initial_value="6.41e-1" name="q_Ca_SR" public_interface="out" units="fmol"/>
+        <variable initial_value="3.68876E-07" name="q_Ca_D" public_interface="out" units="fmol"/>
+        <variable initial_value="2.9682830E-06" name="q_C_RyR" public_interface="out" units="fmol"/>
+        <variable initial_value="2.9682830E-06" name="q_CI_RyR" public_interface="out" units="fmol"/>
+        <variable initial_value="2.9682830E-06" name="q_I_RyR" public_interface="out" units="fmol"/>
+        <variable initial_value="2.9682830E-06" name="q_O_RyR" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="v_RyRgate_Ca_D" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_SR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_RyR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_D</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>v_RyR</ci>
+                    <ci>v_RyRgate_Ca_D</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="RyR_parameters">
+        <variable initial_value="498020" name="kappa_RyR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.01701" name="kappa_OC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6.61466" name="kappa_CCI" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.43605" name="kappa_CII" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.453004" name="kappa_IO" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="102.047" name="K_Ca_SR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="66.2643" name="K_Ca_D" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.819033" name="K_C_RyR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.755897" name="K_CI_RyR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="11.0374" name="K_I_RyR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="11.9593" name="K_O_RyR" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="RyR">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable initial_value="1" name="nCa_1" public_interface="out" units="dimensionless"/>
+        <variable initial_value="2" name="nCa_2" public_interface="out" units="dimensionless"/>
+        <!-- parameters-->
+        <variable name="kappa_RyR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_Ca_SR" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_D" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_OC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_CCI" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_CII" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_IO" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_C_RyR" public_interface="in" units="per_fmol"/>
+        <variable name="K_CI_RyR" public_interface="in" units="per_fmol"/>
+        <variable name="K_I_RyR" public_interface="in" units="per_fmol"/>
+        <variable name="K_O_RyR" public_interface="in" units="per_fmol"/>
+        <!-- Input from global environment-->
+        <variable name="q_Ca_SR" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_D" public_interface="in" units="fmol"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_Ca_SR" units="J_per_mol"/>
+        <variable name="mu_Ca_D" public_interface="out" units="J_per_mol"/>
+        <variable name="v_RyR" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_RyRgate_Ca_D" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_Ca_SR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_SR</ci>
+                            <ci>q_Ca_SR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_D</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_D</ci>
+                            <ci>q_Ca_D</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_RyR</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_RyR</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <divide/>
+                            <ci>mu_O_RyR</ci>
+                            <apply>
+                                <times/>
+                                <ci>R</ci>
+                                <ci>T</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ca_SR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ca_D</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_RyRgate_Ca_D</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <times/>
+                                <ci>nCa_2</ci>
+                                <ci>v_OC</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>nCa_1</ci>
+                                <ci>v_CCI</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>nCa_2</ci>
+                            <ci>v_CII</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>nCa_1</ci>
+                        <ci>v_IO</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- gate-->
+        <variable name="q_C_RyR" public_interface="in" units="fmol"/>
+        <variable name="q_CI_RyR" public_interface="in" units="fmol"/>
+        <variable name="q_I_RyR" public_interface="in" units="fmol"/>
+        <variable name="q_O_RyR" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_gate_complexes" public_interface="out" units="fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q_Ca_gate_complexes</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>nCa_2</ci>
+                        <ci>q_O_RyR</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>nCa_1</ci>
+                        <ci>q_CI_RyR</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>nCa_1</ci>
+                            <ci>nCa_2</ci>
+                        </apply>
+                        <ci>q_I_RyR</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="mu_C_RyR" units="J_per_mol"/>
+        <variable name="mu_CI_RyR" units="J_per_mol"/>
+        <variable name="mu_I_RyR" units="J_per_mol"/>
+        <variable name="mu_O_RyR" units="J_per_mol"/>
+        <variable name="v_OC" units="fmol_per_sec"/>
+        <variable name="v_CCI" units="fmol_per_sec"/>
+        <variable name="v_CII" units="fmol_per_sec"/>
+        <variable name="v_IO" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_C_RyR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_C_RyR</ci>
+                            <ci>q_C_RyR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_CI_RyR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_CI_RyR</ci>
+                            <ci>q_CI_RyR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_I_RyR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_I_RyR</ci>
+                            <ci>q_I_RyR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_O_RyR</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_O_RyR</ci>
+                            <ci>q_O_RyR</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_OC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_OC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_O_RyR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_C_RyR</ci>
+                                    <apply>
+                                        <times/>
+                                        <ci>nCa_2</ci>
+                                        <ci>mu_Ca_D</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_CCI</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_CCI</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_C_RyR</ci>
+                                    <apply>
+                                        <times/>
+                                        <ci>nCa_1</ci>
+                                        <ci>mu_Ca_D</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_CI_RyR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_CII</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_CII</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_CI_RyR</ci>
+                                    <apply>
+                                        <times/>
+                                        <ci>nCa_2</ci>
+                                        <ci>mu_Ca_D</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_I_RyR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_IO</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_IO</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_I_RyR</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_O_RyR</ci>
+                                    <apply>
+                                        <times/>
+                                        <ci>nCa_1</ci>
+                                        <ci>mu_Ca_D</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_O_RyR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_IO</ci>
+                    <ci>v_OC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_C_RyR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_OC</ci>
+                    <ci>v_CCI</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_CI_RyR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_CCI</ci>
+                    <ci>v_CII</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_I_RyR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_CII</ci>
+                    <ci>v_IO</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="RyR"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="v_RyR" variable_2="v_RyR"/>
+        <map_variables variable_1="v_RyRgate_Ca_D" variable_2="v_RyRgate_Ca_D"/>
+        <map_variables variable_1="q_Ca_SR" variable_2="q_Ca_SR"/>
+        <map_variables variable_1="q_Ca_D" variable_2="q_Ca_D"/>
+        <map_variables variable_1="q_C_RyR" variable_2="q_C_RyR"/>
+        <map_variables variable_1="q_O_RyR" variable_2="q_O_RyR"/>
+        <map_variables variable_1="q_CI_RyR" variable_2="q_CI_RyR"/>
+        <map_variables variable_1="q_I_RyR" variable_2="q_I_RyR"/>
+    </connection>
+    <connection>
+        <map_components component_1="RyR" component_2="RyR_parameters"/>
+        <map_variables variable_1="kappa_RyR" variable_2="kappa_RyR"/>
+        <map_variables variable_1="K_Ca_SR" variable_2="K_Ca_SR"/>
+        <map_variables variable_1="K_Ca_D" variable_2="K_Ca_D"/>
+        <map_variables variable_1="kappa_OC" variable_2="kappa_OC"/>
+        <map_variables variable_1="kappa_CCI" variable_2="kappa_CCI"/>
+        <map_variables variable_1="kappa_CII" variable_2="kappa_CII"/>
+        <map_variables variable_1="kappa_IO" variable_2="kappa_IO"/>
+        <map_variables variable_1="K_C_RyR" variable_2="K_C_RyR"/>
+        <map_variables variable_1="K_CI_RyR" variable_2="K_CI_RyR"/>
+        <map_variables variable_1="K_I_RyR" variable_2="K_I_RyR"/>
+        <map_variables variable_1="K_O_RyR" variable_2="K_O_RyR"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="environment"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="RyR"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

@@ -1,0 +1,655 @@
+<?xml version='1.0'?>
+<model cmeta:id="prentice_model_2020" name="prentice_model_2020" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+    <units name="millimolar">
+        <unit prefix="milli" units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="minute">
+        <unit multiplier="60.0" units="second"/>
+    </units>
+    <units name="flux">
+        <unit units="millimolar"/>
+        <unit exponent="-1" units="minute"/>
+    </units>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="minute"/>
+    </component>
+    <component name="GLC">
+        <variable initial_value="10" name="GLC" public_interface="out" units="millimolar"/>
+        <variable name="v_GK" public_interface="in" units="flux"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>GLC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_GK</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="G6P">
+        <variable initial_value="0" name="G6P" public_interface="out" units="millimolar"/>
+        <variable name="v_GK" public_interface="in" units="flux"/>
+        <variable name="v_PGI" public_interface="in" units="flux"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>G6P</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_GK</ci>
+                    <ci>v_PGI</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="F6P">
+        <variable initial_value="0" name="F6P" public_interface="out" units="millimolar"/>
+        <variable name="v_PGI" public_interface="in" units="flux"/>
+        <variable name="v_PFK" public_interface="in" units="flux"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>F6P</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PGI</ci>
+                    <ci>v_PFK</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="FBP">
+        <variable initial_value="0" name="FBP" public_interface="out" units="millimolar"/>
+        <variable name="v_PFK" public_interface="in" units="flux"/>
+        <variable name="v_FBPA" public_interface="in" units="flux"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>FBP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PFK</ci>
+                    <ci>v_FBPA</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="TRIO">
+        <variable initial_value="0" name="TRIO" public_interface="out" units="millimolar"/>
+        <variable name="v_FBPA" public_interface="in" units="flux"/>
+        <variable name="v_GAPD" public_interface="in" units="flux"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>TRIO</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">2.0</cn>
+                        <ci>v_FBPA</ci>
+                    </apply>
+                    <ci>v_GAPD</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="BPG">
+        <variable initial_value="0" name="BPG" public_interface="out" units="millimolar"/>
+        <variable name="v_GAPD" public_interface="in" units="flux"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>BPG</ci>
+                </apply>
+                <ci>v_GAPD</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="P">
+        <variable initial_value="100" name="P" public_interface="out" units="millimolar"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <variable name="v_GAPD" public_interface="in" units="flux"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>P</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_GAPD</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="NADH">
+        <variable initial_value="0" name="NADH" public_interface="out" units="millimolar"/>
+        <variable name="v_GAPD" public_interface="in" units="flux"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>NADH</ci>
+                </apply>
+                <ci>v_GAPD</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="NAD">
+        <variable initial_value="10" name="NAD" public_interface="out" units="millimolar"/>
+        <variable name="v_GAPD" public_interface="in" units="flux"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>NAD</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_GAPD</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="DHAP">
+        <variable name="DHAP" public_interface="out" units="millimolar"/>
+        <variable initial_value="0.045" name="Keq_TPI" public_interface="out" units="dimensionless"/>
+        <variable name="TRIO" public_interface="in" units="millimolar"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>DHAP</ci>
+                <apply>
+                    <divide/>
+                    <ci>TRIO</ci>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <ci>Keq_TPI</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="GAP">
+        <variable name="GAP" public_interface="out" units="millimolar"/>
+        <variable name="Keq_TPI" public_interface="in" units="dimensionless"/>
+        <variable name="TRIO" public_interface="in" units="millimolar"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>GAP</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>TRIO</ci>
+                        <ci>Keq_TPI</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <ci>Keq_TPI</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="ADP">
+        <variable initial_value="0" name="ADP" public_interface="out" units="millimolar"/>
+        <variable name="v_GK" public_interface="in" units="flux"/>
+        <variable name="v_PFK" public_interface="in" units="flux"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>ADP</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>v_GK</ci>
+                    <ci>v_PFK</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="ATP">
+        <variable initial_value="7" name="ATP" public_interface="out" units="millimolar"/>
+        <variable name="v_GK" public_interface="in" units="flux"/>
+        <variable name="v_PFK" public_interface="in" units="flux"/>
+        <variable name="time" public_interface="in" units="minute"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>ATP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_GK</ci>
+                        <ci>v_PFK</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- define enzyme rates -->
+    <component name="v_PGI">
+        <variable name="v_PGI" public_interface="out" units="flux"/>
+        <variable initial_value="1.4" name="K_m_G6P" units="millimolar"/>
+        <variable initial_value="50" name="V_max" units="flux"/>
+        <variable name="G6P" public_interface="in" units="millimolar"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_PGI</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>V_max</ci>
+                        <ci>G6P</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>K_m_G6P</ci>
+                        <ci>G6P</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="v_GK">
+        <variable name="v_GK" public_interface="out" units="flux"/>
+        <variable initial_value="0.11" name="Km_GLC" units="millimolar"/>
+        <variable initial_value="1.7" name="K_hlf_ATP" units="millimolar"/>
+        <variable initial_value="1.2" name="h_ATP" units="dimensionless"/>
+        <variable initial_value="0.28" name="v_max" units="flux"/>
+        <variable name="GLC" public_interface="in" units="millimolar"/>
+        <variable name="ATP" public_interface="in" units="millimolar"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_GK</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>v_max</ci>
+                        <apply>
+                            <power/>
+                            <ci>ATP</ci>
+                            <ci>h_ATP</ci>
+                        </apply>
+                        <ci>GLC</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <power/>
+                                <ci>K_hlf_ATP</ci>
+                                <ci>h_ATP</ci>
+                            </apply>
+                            <ci>Km_GLC</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <power/>
+                                <ci>ATP</ci>
+                                <ci>h_ATP</ci>
+                            </apply>
+                            <ci>GLC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="v_GAPD">
+        <variable name="v_GAPD" public_interface="out" units="flux"/>
+        <variable initial_value="1.3" name="V_max" units="flux"/>
+        <variable initial_value="2.4" name="Km_GAP" units="millimolar"/>
+        <!--taken from "KM" for FBP - real KM must be equal to. or lower than this. -->
+        <variable initial_value="0.9" name="Km_NAD" units="millimolar"/>
+        <variable initial_value="13" name="Km_P" units="millimolar"/>
+        <variable name="GAP" public_interface="in" units="millimolar"/>
+        <variable name="NAD" public_interface="in" units="millimolar"/>
+        <variable name="P" public_interface="in" units="millimolar"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_GAPD</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>V_max</ci>
+                        <ci>GAP</ci>
+                        <ci>NAD</ci>
+                        <ci>P</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Km_GAP</ci>
+                            <ci>Km_NAD</ci>
+                            <ci>Km_P</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>GAP</ci>
+                            <ci>NAD</ci>
+                            <ci>P</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="v_FBPA">
+        <variable name="v_FBPA" public_interface="out" units="flux"/>
+        <variable initial_value="4.4" name="KM_FBP" units="millimolar"/>
+        <variable initial_value="0.39" name="v_max" units="flux"/>
+        <variable initial_value="10" name="K_i_FBP" units="millimolar"/>
+        <variable name="FBP" public_interface="in" units="millimolar"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_FBPA</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>v_max</ci>
+                        <ci>FBP</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>KM_FBP</ci>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>FBP</ci>
+                                <apply>
+                                    <plus/>
+                                    <cn cellml:units="dimensionless">1.0</cn>
+                                    <ci>FBP</ci>
+                                </apply>
+                            </apply>
+                            <ci>K_i_FBP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="v_PFK">
+        <variable name="v_PFK" public_interface="out" units="flux"/>
+        <variable initial_value="0.035" name="v_max" units="flux"/>
+        <variable initial_value="0.74" name="K_hlf_F6P" units="millimolar"/>
+        <variable initial_value="1.7" name="h_F6P" units="dimensionless"/>
+        <variable initial_value="1.1" name="Km_ATP" units="millimolar"/>
+        <variable name="F6P" public_interface="in" units="millimolar"/>
+        <variable name="ATP" public_interface="in" units="millimolar"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_PFK</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>v_max</ci>
+                        <apply>
+                            <power/>
+                            <ci>F6P</ci>
+                            <ci>h_F6P</ci>
+                        </apply>
+                        <ci>ATP</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <power/>
+                                <ci>K_hlf_F6P</ci>
+                                <ci>h_F6P</ci>
+                            </apply>
+                            <ci>Km_ATP</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <power/>
+                                <ci>F6P</ci>
+                                <ci>h_F6P</ci>
+                            </apply>
+                            <ci>ATP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- Connections -->
+    <connection>
+        <map_components component_1="GLC" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="G6P" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="F6P" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="FBP" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="TRIO" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="BPG" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="P" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="NADH" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="NAD" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="ATP" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="ADP" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="GLC" component_2="v_GK"/>
+        <map_variables variable_1="GLC" variable_2="GLC"/>
+        <map_variables variable_1="v_GK" variable_2="v_GK"/>
+    </connection>
+    <connection>
+        <map_components component_1="G6P" component_2="v_GK"/>
+        <map_variables variable_1="v_GK" variable_2="v_GK"/>
+    </connection>
+    <connection>
+        <map_components component_1="G6P" component_2="v_PGI"/>
+        <map_variables variable_1="G6P" variable_2="G6P"/>
+        <map_variables variable_1="v_PGI" variable_2="v_PGI"/>
+    </connection>
+    <connection>
+        <map_components component_1="F6P" component_2="v_PGI"/>
+        <map_variables variable_1="v_PGI" variable_2="v_PGI"/>
+    </connection>
+    <connection>
+        <map_components component_1="F6P" component_2="v_PFK"/>
+        <map_variables variable_1="F6P" variable_2="F6P"/>
+        <map_variables variable_1="v_PFK" variable_2="v_PFK"/>
+    </connection>
+    <connection>
+        <map_components component_1="FBP" component_2="v_PFK"/>
+        <map_variables variable_1="v_PFK" variable_2="v_PFK"/>
+    </connection>
+    <connection>
+        <map_components component_1="FBP" component_2="v_FBPA"/>
+        <map_variables variable_1="FBP" variable_2="FBP"/>
+        <map_variables variable_1="v_FBPA" variable_2="v_FBPA"/>
+    </connection>
+    <connection>
+        <map_components component_1="TRIO" component_2="v_FBPA"/>
+        <map_variables variable_1="v_FBPA" variable_2="v_FBPA"/>
+    </connection>
+    <connection>
+        <map_components component_1="TRIO" component_2="v_GAPD"/>
+        <map_variables variable_1="v_GAPD" variable_2="v_GAPD"/>
+    </connection>
+    <connection>
+        <map_components component_1="BPG" component_2="v_GAPD"/>
+        <map_variables variable_1="v_GAPD" variable_2="v_GAPD"/>
+    </connection>
+    <connection>
+        <map_components component_1="ATP" component_2="v_GK"/>
+        <map_variables variable_1="ATP" variable_2="ATP"/>
+        <map_variables variable_1="v_GK" variable_2="v_GK"/>
+    </connection>
+    <connection>
+        <map_components component_1="ATP" component_2="v_PFK"/>
+        <map_variables variable_1="ATP" variable_2="ATP"/>
+        <map_variables variable_1="v_PFK" variable_2="v_PFK"/>
+    </connection>
+    <connection>
+        <map_components component_1="NADH" component_2="v_GAPD"/>
+        <map_variables variable_1="v_GAPD" variable_2="v_GAPD"/>
+    </connection>
+    <connection>
+        <map_components component_1="NAD" component_2="v_GAPD"/>
+        <map_variables variable_1="NAD" variable_2="NAD"/>
+        <map_variables variable_1="v_GAPD" variable_2="v_GAPD"/>
+    </connection>
+    <connection>
+        <map_components component_1="DHAP" component_2="TRIO"/>
+        <map_variables variable_1="TRIO" variable_2="TRIO"/>
+    </connection>
+    <connection>
+        <map_components component_1="GAP" component_2="TRIO"/>
+        <map_variables variable_1="TRIO" variable_2="TRIO"/>
+    </connection>
+    <connection>
+        <map_components component_1="DHAP" component_2="GAP"/>
+        <map_variables variable_1="Keq_TPI" variable_2="Keq_TPI"/>
+    </connection>
+    <connection>
+        <map_components component_1="P" component_2="v_GAPD"/>
+        <map_variables variable_1="P" variable_2="P"/>
+    </connection>
+    <connection>
+        <map_components component_1="GAP" component_2="v_GAPD"/>
+        <map_variables variable_1="GAP" variable_2="GAP"/>
+    </connection>
+    <connection>
+        <map_components component_1="ADP" component_2="v_GK"/>
+        <map_variables variable_1="v_GK" variable_2="v_GK"/>
+    </connection>
+    <connection>
+        <map_components component_1="ADP" component_2="v_PFK"/>
+        <map_variables variable_1="v_PFK" variable_2="v_PFK"/>
+    </connection>
+    <connection>
+        <map_components component_1="P" component_2="v_GAPD"/>
+        <map_variables variable_1="v_GAPD" variable_2="v_GAPD"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#GLCo">
+            <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">GLCo</dc:title>
+            <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">extracellular glucose</dcterms:alternative>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

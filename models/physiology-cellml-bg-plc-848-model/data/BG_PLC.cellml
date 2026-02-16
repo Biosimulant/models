@@ -1,0 +1,1241 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Bond graph script of PLC metabolism network, based on Bhalla and Iyengar 1999-->
+<model name="BG_PLC_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="pL" units_ref="pL"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="38" name="vol_myo" units="pL"/>
+        <variable initial_value="0" name="q_DAG" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_PC" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_IP3" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_Ino" public_interface="out" units="fmol"/>
+        <variable initial_value="30.4" name="q_PLC" public_interface="out" units="fmol"/>
+        <variable initial_value="38" name="q_Gq" public_interface="out" units="fmol"/>
+        <variable initial_value="38" name="q_Ca" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_Gq_PLC" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_Ca_PLC" public_interface="out" units="fmol"/>
+        <variable initial_value="38" name="q_Ca_Gq_PLC" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_G_GDP" public_interface="out" units="fmol"/>
+        <variable initial_value="380" name="q_PIP2" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_CaPLC_PIP2" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_CaGqPLC_PIP2" public_interface="out" units="fmol"/>
+        <variable name="v_R0_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R1_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R2a_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R2b_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R3a_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R3b_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R4_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R5_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R6_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R7_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R8_PLC" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_DAG</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_R2b_PLC</ci>
+                        <ci>v_R3b_PLC</ci>
+                    </apply>
+                    <ci>v_R0_PLC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PC</ci>
+                </apply>
+                <ci>v_R0_PLC</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_IP3</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>v_R2b_PLC</ci>
+                        <ci>v_R3b_PLC</ci>
+                    </apply>
+                    <ci>v_R1_PLC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ino</ci>
+                </apply>
+                <ci>v_R1_PLC</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PLC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R4_PLC</ci>
+                    </apply>
+                    <ci>v_R5_PLC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Gq</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R5_PLC</ci>
+                    </apply>
+                    <ci>v_R7_PLC</ci>
+                    <ci>Gq_stim</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R4_PLC</ci>
+                    </apply>
+                    <ci>v_R6_PLC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Gq_PLC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R5_PLC</ci>
+                    <ci>v_R6_PLC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_PLC</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R2a_PLC</ci>
+                    </apply>
+                    <ci>v_R2b_PLC</ci>
+                    <ci>v_R4_PLC</ci>
+                    <ci>v_R7_PLC</ci>
+                    <ci>v_R8_PLC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_Gq_PLC</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <minus/>
+                                <ci>v_R3a_PLC</ci>
+                            </apply>
+                            <ci>v_R3b_PLC</ci>
+                            <ci>v_R6_PLC</ci>
+                        </apply>
+                        <ci>v_R7_PLC</ci>
+                    </apply>
+                    <ci>v_R8_PLC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_G_GDP</ci>
+                </apply>
+                <ci>v_R8_PLC</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PIP2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R2a_PLC</ci>
+                    </apply>
+                    <ci>v_R3a_PLC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_CaPLC_PIP2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R2a_PLC</ci>
+                    <ci>v_R2b_PLC</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_CaGqPLC_PIP2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R3a_PLC</ci>
+                    <ci>v_R3b_PLC</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- Gq stim-->
+        <variable name="Gq_stim" units="fmol_per_sec"/>
+        <variable initial_value="1" name="stimPeriod" units="second"/>
+        <variable initial_value="0.01" name="stimDuration" units="second"/>
+        <variable name="tPeriod" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>tPeriod</ci>
+                <apply>
+                    <minus/>
+                    <ci>time</ci>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <floor/>
+                            <apply>
+                                <divide/>
+                                <ci>time</ci>
+                                <ci>stimPeriod</ci>
+                            </apply>
+                        </apply>
+                        <ci>stimPeriod</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Gq_stim</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">0</cn>
+                            <cn cellml:units="fmol_per_sec">100</cn>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <geq/>
+                                <ci>tPeriod</ci>
+                                <cn cellml:units="second">0.3</cn>
+                            </apply>
+                            <apply>
+                                <leq/>
+                                <ci>tPeriod</ci>
+                                <apply>
+                                    <plus/>
+                                    <cn cellml:units="second">0.3</cn>
+                                    <ci>stimDuration</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="fmol_per_sec">0.0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <!-- conversion to mM-->
+        <variable name="cGq" units="mM"/>
+        <variable name="cCa" units="mM"/>
+        <variable name="cDAG" units="mM"/>
+        <variable name="cIP3" units="mM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>cGq</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_Gq</ci>
+                    <ci>vol_myo</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>cCa</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_Ca</ci>
+                    <ci>vol_myo</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>cDAG</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_DAG</ci>
+                    <ci>vol_myo</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>cIP3</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_IP3</ci>
+                    <ci>vol_myo</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="PLC_parameters">
+        <!--        var kappa_R0_PLC: fmol_per_sec {init: 0.0475807, pub: out};
+        var kappa_R1_PLC: fmol_per_sec {init: 0.121538, pub: out};
+        var kappa_R2a_PLC: fmol_per_sec {init: 70395.1, pub: out};
+        var kappa_R2b_PLC: fmol_per_sec {init: 2.70328, pub: out};
+        var kappa_R3a_PLC: fmol_per_sec {init: 10988.5, pub: out};
+        var kappa_R3b_PLC: fmol_per_sec {init: 0.00553812, pub: out};
+        var kappa_R4_PLC: fmol_per_sec {init: 4.56488, pub: out};
+        var kappa_R5_PLC: fmol_per_sec {init: 3.86201, pub: out};
+        var kappa_R6_PLC: fmol_per_sec {init: 0.71257, pub: out};
+        var kappa_R7_PLC: fmol_per_sec {init: 2.99279e-05, pub: out};
+        var kappa_R8_PLC: fmol_per_sec {init: 0.00947718, pub: out};
+        var K_DAG: per_fmol {init: 0.849741, pub: out};
+        var K_PC: per_fmol {init: 0.00566494, pub: out};
+        var K_IP3: per_fmol {init: 5.54437, pub: out};
+        var K_Ino: per_fmol {init: 0.00221775, pub: out};
+        var K_PLC: per_fmol {init: 0.00108946, pub: out};
+        var K_Gq: per_fmol {init: 7.25233e-05, pub: out};
+        var K_Ca: per_fmol {init: 7.30437e-05, pub: out};
+        var K_Gq_PLC: per_fmol {init: 0.0697931, pub: out};
+        var K_Ca_PLC: per_fmol {init: 0.0590468, pub: out};
+        var K_Ca_Gq_PLC: per_fmol {init: 0.378267, pub: out};
+        var K_G_GDP: per_fmol {init: 7.25233e-05, pub: out};
+        var K_PIP2: per_fmol {init: 17.4789, pub: out};
+        var K_CaPLC_PIP2: per_fmol {init: 19.1442, pub: out};
+        var K_CaGqPLC_PIP2: per_fmol {init: 486.703, pub: out};-->
+        <variable initial_value="0.0700317" name="kappa_R0_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.178887" name="kappa_R1_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="71285.5" name="kappa_R2a_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.73747" name="kappa_R2b_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5697.81" name="kappa_R3a_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00287164" name="kappa_R3b_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.13383" name="kappa_R4_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.28508" name="kappa_R5_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.170556" name="kappa_R6_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.170556" name="kappa_R7_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00226839" name="kappa_R8_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.577328" name="K_DAG" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00384885" name="K_PC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="3.76694" name="K_IP3" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00150678" name="K_Ino" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000942826" name="K_PLC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000141635" name="K_Gq" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000180564" name="K_Ca" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.117957" name="K_Gq_PLC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.126318" name="K_Ca_PLC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.58037" name="K_Ca_Gq_PLC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000141635" name="K_G_GDP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="8.06835" name="K_PIP2" public_interface="out" units="per_fmol"/>
+        <variable initial_value="18.9051" name="K_CaPLC_PIP2" public_interface="out" units="per_fmol"/>
+        <variable initial_value="938.634" name="K_CaGqPLC_PIP2" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="PLC">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- Parameters-->
+        <variable name="kappa_R0_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R1_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R2a_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R2b_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R3a_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R3b_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R4_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R5_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R6_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R7_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R8_PLC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_DAG" public_interface="in" units="per_fmol"/>
+        <variable name="K_PC" public_interface="in" units="per_fmol"/>
+        <variable name="K_IP3" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ino" public_interface="in" units="per_fmol"/>
+        <variable name="K_PLC" public_interface="in" units="per_fmol"/>
+        <variable name="K_Gq" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca" public_interface="in" units="per_fmol"/>
+        <variable name="K_Gq_PLC" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_PLC" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_Gq_PLC" public_interface="in" units="per_fmol"/>
+        <variable name="K_G_GDP" public_interface="in" units="per_fmol"/>
+        <variable name="K_PIP2" public_interface="in" units="per_fmol"/>
+        <variable name="K_CaPLC_PIP2" public_interface="in" units="per_fmol"/>
+        <variable name="K_CaGqPLC_PIP2" public_interface="in" units="per_fmol"/>
+        <!-- state variables-->
+        <variable name="q_DAG" public_interface="in" units="fmol"/>
+        <variable name="q_PC" public_interface="in" units="fmol"/>
+        <variable name="q_IP3" public_interface="in" units="fmol"/>
+        <variable name="q_Ino" public_interface="in" units="fmol"/>
+        <variable name="q_PLC" public_interface="in" units="fmol"/>
+        <variable name="q_Gq" public_interface="in" units="fmol"/>
+        <variable name="q_Ca" public_interface="in" units="fmol"/>
+        <variable name="q_Gq_PLC" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_PLC" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_Gq_PLC" public_interface="in" units="fmol"/>
+        <variable name="q_G_GDP" public_interface="in" units="fmol"/>
+        <variable name="q_PIP2" public_interface="in" units="fmol"/>
+        <variable name="q_CaPLC_PIP2" public_interface="in" units="fmol"/>
+        <variable name="q_CaGqPLC_PIP2" public_interface="in" units="fmol"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_DAG" units="J_per_mol"/>
+        <variable name="mu_PC" units="J_per_mol"/>
+        <variable name="mu_IP3" units="J_per_mol"/>
+        <variable name="mu_Ino" units="J_per_mol"/>
+        <variable name="mu_PLC" units="J_per_mol"/>
+        <variable name="mu_Gq" units="J_per_mol"/>
+        <variable name="mu_Ca" units="J_per_mol"/>
+        <variable name="mu_Gq_PLC" units="J_per_mol"/>
+        <variable name="mu_Ca_PLC" units="J_per_mol"/>
+        <variable name="mu_Ca_Gq_PLC" units="J_per_mol"/>
+        <variable name="mu_G_GDP" units="J_per_mol"/>
+        <variable name="mu_PIP2" units="J_per_mol"/>
+        <variable name="mu_CaPLC_PIP2" units="J_per_mol"/>
+        <variable name="mu_CaGqPLC_PIP2" units="J_per_mol"/>
+        <variable name="v_R0_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R1_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R2a_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R2b_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R3a_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R3b_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R4_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R5_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R6_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R7_PLC" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R8_PLC" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_DAG</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_DAG</ci>
+                            <ci>q_DAG</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PC</ci>
+                            <ci>q_PC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_IP3</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_IP3</ci>
+                            <ci>q_IP3</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ino</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ino</ci>
+                            <ci>q_Ino</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PLC</ci>
+                            <ci>q_PLC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Gq</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Gq</ci>
+                            <ci>q_Gq</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca</ci>
+                            <ci>q_Ca</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Gq_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Gq_PLC</ci>
+                            <ci>q_Gq_PLC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_PLC</ci>
+                            <ci>q_Ca_PLC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_Gq_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_Gq_PLC</ci>
+                            <ci>q_Ca_Gq_PLC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_G_GDP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_G_GDP</ci>
+                            <ci>q_G_GDP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PIP2</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PIP2</ci>
+                            <ci>q_PIP2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_CaPLC_PIP2</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_CaPLC_PIP2</ci>
+                            <ci>q_CaPLC_PIP2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_CaGqPLC_PIP2</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_CaGqPLC_PIP2</ci>
+                            <ci>q_CaGqPLC_PIP2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R0_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R0_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_DAG</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_PC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R1_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R1_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_IP3</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ino</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R2a_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R2a_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PIP2</ci>
+                                    <ci>mu_Ca_PLC</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_CaPLC_PIP2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R2b_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R2b_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_CaPLC_PIP2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_DAG</ci>
+                                    <ci>mu_IP3</ci>
+                                    <ci>mu_Ca_PLC</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R3a_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R3a_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PIP2</ci>
+                                    <ci>mu_Ca_Gq_PLC</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_CaGqPLC_PIP2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R3b_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R3b_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_CaGqPLC_PIP2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_DAG</ci>
+                                    <ci>mu_IP3</ci>
+                                    <ci>mu_Ca_Gq_PLC</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R4_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R4_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PLC</ci>
+                                    <ci>mu_Ca</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ca_PLC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R5_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R5_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_PLC</ci>
+                                    <ci>mu_Gq</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Gq_PLC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R6_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R6_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Gq_PLC</ci>
+                                    <ci>mu_Ca</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ca_Gq_PLC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R7_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R7_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ca_Gq_PLC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_Gq</ci>
+                                    <ci>mu_Ca_PLC</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R8_PLC</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R8_PLC</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_Ca_Gq_PLC</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_G_GDP</ci>
+                                    <ci>mu_Ca_PLC</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="PLC"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_DAG" variable_2="q_DAG"/>
+        <map_variables variable_1="q_PC" variable_2="q_PC"/>
+        <map_variables variable_1="q_IP3" variable_2="q_IP3"/>
+        <map_variables variable_1="q_Ino" variable_2="q_Ino"/>
+        <map_variables variable_1="q_PLC" variable_2="q_PLC"/>
+        <map_variables variable_1="q_Gq" variable_2="q_Gq"/>
+        <map_variables variable_1="q_Ca" variable_2="q_Ca"/>
+        <map_variables variable_1="q_Gq_PLC" variable_2="q_Gq_PLC"/>
+        <map_variables variable_1="q_Ca_PLC" variable_2="q_Ca_PLC"/>
+        <map_variables variable_1="q_Ca_Gq_PLC" variable_2="q_Ca_Gq_PLC"/>
+        <map_variables variable_1="q_G_GDP" variable_2="q_G_GDP"/>
+        <map_variables variable_1="q_PIP2" variable_2="q_PIP2"/>
+        <map_variables variable_1="q_CaPLC_PIP2" variable_2="q_CaPLC_PIP2"/>
+        <map_variables variable_1="q_CaGqPLC_PIP2" variable_2="q_CaGqPLC_PIP2"/>
+        <map_variables variable_1="v_R0_PLC" variable_2="v_R0_PLC"/>
+        <map_variables variable_1="v_R1_PLC" variable_2="v_R1_PLC"/>
+        <map_variables variable_1="v_R2a_PLC" variable_2="v_R2a_PLC"/>
+        <map_variables variable_1="v_R2b_PLC" variable_2="v_R2b_PLC"/>
+        <map_variables variable_1="v_R3a_PLC" variable_2="v_R3a_PLC"/>
+        <map_variables variable_1="v_R3b_PLC" variable_2="v_R3b_PLC"/>
+        <map_variables variable_1="v_R4_PLC" variable_2="v_R4_PLC"/>
+        <map_variables variable_1="v_R5_PLC" variable_2="v_R5_PLC"/>
+        <map_variables variable_1="v_R6_PLC" variable_2="v_R6_PLC"/>
+        <map_variables variable_1="v_R7_PLC" variable_2="v_R7_PLC"/>
+        <map_variables variable_1="v_R8_PLC" variable_2="v_R8_PLC"/>
+    </connection>
+    <connection>
+        <map_components component_1="PLC" component_2="PLC_parameters"/>
+        <map_variables variable_1="kappa_R0_PLC" variable_2="kappa_R0_PLC"/>
+        <map_variables variable_1="kappa_R1_PLC" variable_2="kappa_R1_PLC"/>
+        <map_variables variable_1="kappa_R2a_PLC" variable_2="kappa_R2a_PLC"/>
+        <map_variables variable_1="kappa_R2b_PLC" variable_2="kappa_R2b_PLC"/>
+        <map_variables variable_1="kappa_R3a_PLC" variable_2="kappa_R3a_PLC"/>
+        <map_variables variable_1="kappa_R3b_PLC" variable_2="kappa_R3b_PLC"/>
+        <map_variables variable_1="kappa_R4_PLC" variable_2="kappa_R4_PLC"/>
+        <map_variables variable_1="kappa_R5_PLC" variable_2="kappa_R5_PLC"/>
+        <map_variables variable_1="kappa_R6_PLC" variable_2="kappa_R6_PLC"/>
+        <map_variables variable_1="kappa_R7_PLC" variable_2="kappa_R7_PLC"/>
+        <map_variables variable_1="kappa_R8_PLC" variable_2="kappa_R8_PLC"/>
+        <map_variables variable_1="K_DAG" variable_2="K_DAG"/>
+        <map_variables variable_1="K_PC" variable_2="K_PC"/>
+        <map_variables variable_1="K_IP3" variable_2="K_IP3"/>
+        <map_variables variable_1="K_Ino" variable_2="K_Ino"/>
+        <map_variables variable_1="K_PLC" variable_2="K_PLC"/>
+        <map_variables variable_1="K_Gq" variable_2="K_Gq"/>
+        <map_variables variable_1="K_Ca" variable_2="K_Ca"/>
+        <map_variables variable_1="K_Gq_PLC" variable_2="K_Gq_PLC"/>
+        <map_variables variable_1="K_Ca_PLC" variable_2="K_Ca_PLC"/>
+        <map_variables variable_1="K_Ca_Gq_PLC" variable_2="K_Ca_Gq_PLC"/>
+        <map_variables variable_1="K_G_GDP" variable_2="K_G_GDP"/>
+        <map_variables variable_1="K_PIP2" variable_2="K_PIP2"/>
+        <map_variables variable_1="K_CaPLC_PIP2" variable_2="K_CaPLC_PIP2"/>
+        <map_variables variable_1="K_CaGqPLC_PIP2" variable_2="K_CaGqPLC_PIP2"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="PLC"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+</model>

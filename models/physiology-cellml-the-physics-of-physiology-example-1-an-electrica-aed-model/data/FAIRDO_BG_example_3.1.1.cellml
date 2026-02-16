@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="BG1" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <!-- Bond graph model of electrical circuit -->
+    <units name="dim">
+        <unit units="dimensionless"/>
+    </units>
+    <units name="J_per_C">
+        <unit units="joule"/>
+        <unit exponent="-1" units="coulomb"/>
+    </units>
+    <units name="C_per_s">
+        <unit units="coulomb"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="C_per_s2">
+        <unit units="coulomb"/>
+        <unit exponent="-2" units="second"/>
+    </units>
+    <units name="C2_per_J">
+        <unit exponent="2" units="coulomb"/>
+        <unit exponent="-1" units="joule"/>
+    </units>
+    <units name="Js_per_C2">
+        <unit units="joule"/>
+        <unit units="second"/>
+        <unit exponent="-2" units="coulomb"/>
+    </units>
+    <units name="Js2_per_C2">
+        <unit units="joule"/>
+        <unit exponent="2" units="second"/>
+        <unit exponent="-2" units="coulomb"/>
+    </units>
+    <component name="main">
+        <variable initial_value="0" name="t" units="second"/>
+        <variable initial_value="1" name="q_C" units="coulomb"/>
+        <variable name="v_C" units="C_per_s"/>
+        <variable name="v_R" units="C_per_s"/>
+        <variable initial_value="0" name="v_L" units="C_per_s"/>
+        <variable name="a_L" units="C_per_s2"/>
+        <variable name="u_C" units="J_per_C"/>
+        <variable name="u_R" units="J_per_C"/>
+        <variable name="u_L" units="J_per_C"/>
+        <variable initial_value="20" name="C" units="C2_per_J"/>
+        <variable initial_value="2" name="R" units="Js_per_C2"/>
+        <variable initial_value="10" name="L" units="Js2_per_C2"/>
+        <variable name="P_C" units="watt"/>
+        <variable name="P_R" units="watt"/>
+        <variable name="P_L" units="watt"/>
+        <variable name="P_tot" units="watt"/>
+        <variable name="E_C" units="joule"/>
+        <variable initial_value="0" name="E_R" units="joule"/>
+        <variable name="E_L" units="joule"/>
+        <variable name="E_tot" units="joule"/>
+        <!-- Conservation laws-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>v_L</ci>
+                </apply>
+                <ci>a_L</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_C</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_R</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R</ci>
+                <ci>v_L</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_C</ci>
+                </apply>
+                <ci>v_C</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_C</ci>
+                <apply>
+                    <plus/>
+                    <ci>u_R</ci>
+                    <ci>u_L</ci>
+                </apply>
+            </apply>
+            <!-- Constitutive relations-->
+            <apply>
+                <eq/>
+                <ci>u_C</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_C</ci>
+                    <ci>C</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_R</ci>
+                <apply>
+                    <times/>
+                    <ci>v_R</ci>
+                    <ci>R</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_L</ci>
+                <apply>
+                    <times/>
+                    <ci>a_L</ci>
+                    <ci>L</ci>
+                </apply>
+            </apply>
+            <!-- Energy calculations-->
+            <apply>
+                <eq/>
+                <ci>P_C</ci>
+                <apply>
+                    <times/>
+                    <ci>u_C</ci>
+                    <ci>v_C</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_R</ci>
+                <apply>
+                    <times/>
+                    <ci>u_R</ci>
+                    <ci>v_R</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_L</ci>
+                <apply>
+                    <times/>
+                    <ci>u_L</ci>
+                    <ci>v_L</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>P_C</ci>
+                    <ci>P_R</ci>
+                    <ci>P_L</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>E_R</ci>
+                </apply>
+                <ci>P_R</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>E_C</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dim">0.5</cn>
+                            <cn cellml:units="dim">1</cn>
+                        </apply>
+                        <ci>C</ci>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <ci>q_C</ci>
+                        <cn cellml:units="dimensionless">2</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>E_L</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dim">0.5</cn>
+                    <ci>L</ci>
+                    <apply>
+                        <power/>
+                        <ci>v_L</ci>
+                        <cn cellml:units="dimensionless">2</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>E_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>E_C</ci>
+                    <ci>E_L</ci>
+                    <ci>E_R</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

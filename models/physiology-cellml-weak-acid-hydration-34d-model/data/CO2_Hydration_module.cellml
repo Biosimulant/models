@@ -1,0 +1,124 @@
+<?xml version='1.0'?>
+<model name="Acid_BG" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="Units.cellml">
+        <units name="mol_per_m3" units_ref="mol_per_m3"/>
+        <units name="mol_per_m3_s" units_ref="mol_per_m3_s"/>
+        <units name="m3_per_mol" units_ref="m3_per_mol"/>
+    </import>
+    <component name="Acid">
+        <variable initial_value="1.2" name="q_CO2" public_interface="out" units="mol_per_m3"/>
+        <variable initial_value="24" name="q_HCO3" public_interface="out" units="mol_per_m3"/>
+        <variable initial_value="0.0000396948" name="q_H" public_interface="out" units="mol_per_m3"/>
+        <variable initial_value="0.00000926" name="K_CO2" public_interface="out" units="m3_per_mol"/>
+        <variable initial_value="0.108" name="K_HCO3" public_interface="out" units="m3_per_mol"/>
+        <variable initial_value="0.108" name="K_H" public_interface="out" units="m3_per_mol"/>
+        <variable initial_value="4050" name="K_Re" public_interface="out" units="mol_per_m3_s"/>
+        <variable name="v_Re" public_interface="in" units="mol_per_m3_s"/>
+        <variable initial_value="0.01" name="J_H" units="mol_per_m3_s"/>
+        <variable name="pH" units="dimensionless"/>
+        <variable name="t" public_interface="out" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_CO2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_HCO3</ci>
+                </apply>
+                <ci>v_Re</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_H</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>v_Re</ci>
+                    <ci>J_H</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>pH</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <log/>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless" type="e-notation">1<sep/>-3</cn>
+                            <ci>q_H</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="module">
+        <variable name="q_acid_weak" public_interface="in" units="mol_per_m3"/>
+        <variable name="q_base_conj" public_interface="in" units="mol_per_m3"/>
+        <variable name="q_H" public_interface="in" units="mol_per_m3"/>
+        <variable name="K_acid_weak" public_interface="in" units="m3_per_mol"/>
+        <variable name="K_base_conj" public_interface="in" units="m3_per_mol"/>
+        <variable name="K_H" public_interface="in" units="m3_per_mol"/>
+        <variable name="K_Re" public_interface="in" units="mol_per_m3_s"/>
+        <variable name="v_Re" public_interface="out" units="mol_per_m3_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_Re</ci>
+                <apply>
+                    <times/>
+                    <ci>K_Re</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>K_acid_weak</ci>
+                            <ci>q_acid_weak</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>K_base_conj</ci>
+                            <ci>q_base_conj</ci>
+                            <ci>K_H</ci>
+                            <ci>q_H</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="module" component_2="Acid"/>
+        <map_variables variable_1="q_acid_weak" variable_2="q_CO2"/>
+        <map_variables variable_1="q_base_conj" variable_2="q_HCO3"/>
+        <map_variables variable_1="q_H" variable_2="q_H"/>
+        <map_variables variable_1="K_acid_weak" variable_2="K_CO2"/>
+        <map_variables variable_1="K_base_conj" variable_2="K_HCO3"/>
+        <map_variables variable_1="K_H" variable_2="K_H"/>
+        <map_variables variable_1="K_Re" variable_2="K_Re"/>
+        <map_variables variable_1="v_Re" variable_2="v_Re"/>
+    </connection>
+</model>

@@ -1,0 +1,720 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="Hai" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="SMC_Units.cellml">
+        <units name="per_uM_per_sec" units_ref="per_uM_per_sec"/>
+        <units name="mV" units_ref="mV"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="nS_per_uM" units_ref="nS_per_uM"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="per_uM" units_ref="per_uM"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="mJ_per_K_per_mol" units_ref="mJ_per_K_per_mol"/>
+        <units name="uA_per_cmsq" units_ref="uA_per_cmsq"/>
+        <units name="umetre2" units_ref="umetre2"/>
+        <units name="umetre" units_ref="umetre"/>
+        <units name="umetre_per_sec" units_ref="umetre_per_sec"/>
+        <units name="uN" units_ref="uN"/>
+        <units name="uN_per_umetre" units_ref="uN_per_umetre"/>
+        <units name="uN_sec_per_umetre" units_ref="uN_sec_per_umetre"/>
+        <units name="first_order_rate_constant" units_ref="first_order_rate_constant"/>
+        <units name="uP" units_ref="uP"/>
+        <units name="uN_umetre2" units_ref="uN_umetre2"/>
+    </import>
+    <import xlink:href="SMC_Wang_2010.cellml">
+        <component component_ref="asm_ca" name="asm_ca"/>
+        <component component_ref="ca_parameters" name="ca_parameters"/>
+        <component component_ref="calcium" name="calcium"/>
+    </import>
+    <import xlink:href="SMC_Yang_2005.cellml">
+        <component component_ref="sGC" name="sGC"/>
+    </import>
+    <component name="Environment">
+        <variable name="time" public_interface="out" units="second"/>
+    </component>
+    <component name="NO_sGC">
+        <variable name="Eb" public_interface="in" units="dimensionless"/>
+        <variable name="E6c" public_interface="in" units="dimensionless"/>
+        <variable name="E5c" public_interface="in" units="dimensionless"/>
+        <variable name="NO" public_interface="in" units="uM"/>
+        <variable name="cGMP" public_interface="in" units="uM"/>
+        <variable name="vd" public_interface="in" units="uM_per_sec"/>
+        <variable name="vp" public_interface="in" units="uM_per_sec"/>
+        <variable name="vdvp" units="uM_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>vdvp</ci>
+                <apply>
+                    <minus/>
+                    <ci>vd</ci>
+                    <ci>vp</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="kay2">
+        <variable name="k2y" public_interface="in" units="per_sec"/>
+        <variable name="k2h" public_interface="in" units="per_sec"/>
+        <variable name="k2" public_interface="out" units="per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>k2</ci>
+                <apply>
+                    <plus/>
+                    <ci>k2y</ci>
+                    <ci>k2h</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="M">
+        <variable initial_value="1" name="M" public_interface="out" units="dimensionless"/>
+        <variable name="AM" public_interface="in" units="dimensionless"/>
+        <variable name="Mp" public_interface="in" units="dimensionless"/>
+        <variable name="k1" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k2" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k7" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>M</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+                            <ci>k1</ci>
+                        </apply>
+                        <ci>M</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k2</ci>
+                        <ci>Mp</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k7</ci>
+                        <ci>AM</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="Mp">
+        <variable initial_value="0" name="Mp" public_interface="out" units="dimensionless"/>
+        <variable name="AMp" public_interface="in" units="dimensionless"/>
+        <variable name="M" public_interface="in" units="dimensionless"/>
+        <variable name="k1" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k2" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k3" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k4" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>Mp</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>k4</ci>
+                            <ci>AMp</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k1</ci>
+                            <ci>M</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>k2</ci>
+                            <ci>k3</ci>
+                        </apply>
+                        <ci>Mp</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="AMp">
+        <variable initial_value="0" name="AMp" public_interface="out" units="dimensionless"/>
+        <variable name="Mp" public_interface="in" units="dimensionless"/>
+        <variable name="AM" public_interface="in" units="dimensionless"/>
+        <variable name="k5" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k6" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k3" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k4" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>AMp</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>k3</ci>
+                            <ci>Mp</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k6</ci>
+                            <ci>AM</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>k5</ci>
+                            <ci>k4</ci>
+                        </apply>
+                        <ci>AMp</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="AM">
+        <variable initial_value="0" name="AM" public_interface="out" units="dimensionless"/>
+        <variable name="AMp" public_interface="in" units="dimensionless"/>
+        <variable name="k5" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k6" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k7" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>AM</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k5</ci>
+                        <ci>AMp</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>k6</ci>
+                            <ci>k7</ci>
+                        </apply>
+                        <ci>AM</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="phosphorylation">
+        <variable name="phosphorylation" units="dimensionless"/>
+        <variable name="AMp" public_interface="in" units="dimensionless"/>
+        <variable name="Mp" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>phosphorylation</ci>
+                <apply>
+                    <plus/>
+                    <ci>AMp</ci>
+                    <ci>Mp</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="stress">
+        <variable name="stress" public_interface="out" units="dimensionless"/>
+        <variable name="AMp" public_interface="in" units="dimensionless"/>
+        <variable name="AM" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>stress</ci>
+                <apply>
+                    <plus/>
+                    <ci>AMp</ci>
+                    <ci>AM</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="Ca_ag">
+        <variable name="Ca_in" public_interface="in" units="uM"/>
+        <variable name="Ca_SR" public_interface="in" units="uM"/>
+        <variable name="Ca_t" public_interface="in" units="uM"/>
+        <variable name="p_agonist" public_interface="in" units="uM"/>
+        <variable name="J_release" public_interface="in" units="uM_per_sec"/>
+        <variable name="J_serca" public_interface="in" units="uM_per_sec"/>
+        <variable name="J_in" public_interface="in" units="uM_per_sec"/>
+        <variable name="J_pm" public_interface="in" units="uM_per_sec"/>
+        <variable name="J_in_KCL" public_interface="in" units="uM_per_sec"/>
+        <variable name="Ca_in_KCL" public_interface="in" units="uM"/>
+    </component>
+    <component name="model_parameters1">
+        <variable name="k1" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k2" public_interface="in" units="first_order_rate_constant"/>
+        <variable name="k5" public_interface="out" units="first_order_rate_constant"/>
+        <variable name="k6" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="0.88" name="k3" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="0.22" name="k4" public_interface="out" units="first_order_rate_constant"/>
+        <variable initial_value="0.12" name="k7" public_interface="out" units="first_order_rate_constant"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>k6</ci>
+                <ci>k1</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k5</ci>
+                <ci>k2</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="active_passive_elasticity_and_viscoelastic_forces">
+        <variable name="r_i" units="umetre"/>
+        <variable name="r_o" units="umetre"/>
+        <variable initial_value="7.5" name="beta" units="dimensionless"/>
+        <variable initial_value="23.35" name="la" units="umetre"/>
+        <variable initial_value="150" name="lopt" units="umetre"/>
+        <variable initial_value="12.5" name="kx1" units="uN_per_umetre"/>
+        <variable initial_value="8.8" name="kx2" units="uN_per_umetre"/>
+        <variable name="AM" public_interface="in" units="dimensionless"/>
+        <variable name="AMp" public_interface="in" units="dimensionless"/>
+        <variable initial_value="37.05" name="ls" units="umetre"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <variable initial_value="0.1" name="k_pp" units="uN"/>
+        <variable name="A" units="umetre2"/>
+        <variable initial_value="5000" name="N" units="dimensionless"/>
+        <variable initial_value="6" name="n" units="dimensionless"/>
+        <variable initial_value="0.2" name="alpha_pp" units="dimensionless"/>
+        <variable initial_value="10000" name="L" units="umetre"/>
+        <variable initial_value="15" name="h" units="umetre"/>
+        <variable initial_value="2100" name="p_i" units="pascal"/>
+        <variable initial_value="40" name="l0" units="umetre"/>
+        <variable name="sigma_a" units="uN_umetre2"/>
+        <variable name="sigma_p" units="uN_umetre2"/>
+        <variable name="sigma" units="uN_umetre2"/>
+        <variable name="Fx" units="uN"/>
+        <variable name="Fa" units="uN"/>
+        <variable name="Fs" units="uN"/>
+        <variable initial_value="0.2" name="ks" units="uN"/>
+        <variable initial_value="30" name="ls0" units="umetre"/>
+        <variable initial_value="1e-05" name="mu_s" units="uN_sec_per_umetre"/>
+        <variable initial_value="4.5" name="alpha_s" units="dimensionless"/>
+        <variable initial_value="5000" name="vx" units="umetre_per_sec"/>
+        <variable initial_value="0.0013" name="fAMp" units="uN_sec_per_umetre"/>
+        <variable initial_value="0.0855" name="fAM" units="uN_sec_per_umetre"/>
+        <variable name="lc" units="umetre"/>
+        <variable name="lx" units="umetre"/>
+        <variable initial_value="0" name="zero" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>A</ci>
+                <apply>
+                    <times/>
+                    <ci>L</ci>
+                    <ci>h</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Fa</ci>
+                <ci>Fx</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Fs</ci>
+                <ci>Fx</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Fx</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>kx1</ci>
+                            <ci>AMp</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>kx2</ci>
+                            <ci>AM</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <ci>lc</ci>
+                            <ci>la</ci>
+                        </apply>
+                        <ci>ls</ci>
+                    </apply>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>beta</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <minus/>
+                                        <ci>la</ci>
+                                        <ci>lopt</ci>
+                                    </apply>
+                                    <ci>lopt</ci>
+                                </apply>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <!--      ode(ls, time) = (Fx-ks*(exp(alpha_s*(ls-ls0)/ls0)-1{dimensionless}))/mu_s;
+      ode(la, time) = (Fx*exp(beta*sqr((la-lopt)/lopt))-fAMp*(AMp)*vx)/(fAM*AM+fAMp*AMp+epsilon);-->
+            <apply>
+                <eq/>
+                <ci>sigma_a</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>N</ci>
+                        <ci>A</ci>
+                    </apply>
+                    <ci>Fx</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>sigma_p</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>N</ci>
+                            <ci>k_pp</ci>
+                        </apply>
+                        <ci>A</ci>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <ci>alpha_pp</ci>
+                                    <apply>
+                                        <minus/>
+                                        <ci>lc</ci>
+                                        <ci>l0</ci>
+                                    </apply>
+                                </apply>
+                                <ci>l0</ci>
+                            </apply>
+                        </apply>
+                        <cn cellml:units="dimensionless">1</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <!--    zero = N/A*(kx1*AMp+kx2*AM)*(lc-la-ls)*exp(-beta*sqr((la-lopt)/lopt))+N*k_pp/A*(exp(alpha_pp*(lc-l0)/l0)-1{dimensionless})-p_i/2{dimensionless}*(n*lc/(pi*h)-1{dimensionless});-->
+            <apply>
+                <eq/>
+                <ci>zero</ci>
+                <apply>
+                    <minus/>
+                    <ci>sigma</ci>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>p_i</ci>
+                                <cn cellml:units="dimensionless">0.000001</cn>
+                            </apply>
+                            <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <ci>n</ci>
+                                    <ci>lc</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <pi/>
+                                    <ci>h</ci>
+                                </apply>
+                            </apply>
+                            <cn cellml:units="dimensionless">1</cn>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>lx</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>lc</ci>
+                        <ci>ls</ci>
+                    </apply>
+                    <ci>la</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>sigma</ci>
+                <apply>
+                    <plus/>
+                    <ci>sigma_a</ci>
+                    <ci>sigma_p</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>r_i</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>n</ci>
+                                <ci>lc</ci>
+                            </apply>
+                            <pi/>
+                        </apply>
+                        <ci>h</ci>
+                    </apply>
+                    <cn cellml:units="dimensionless">2</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>r_o</ci>
+                <apply>
+                    <plus/>
+                    <ci>h</ci>
+                    <ci>r_i</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="sGC" component_2="NO_sGC"/>
+        <map_variables variable_1="Eb" variable_2="Eb"/>
+        <map_variables variable_1="E5c" variable_2="E5c"/>
+        <map_variables variable_1="E6c" variable_2="E6c"/>
+        <map_variables variable_1="NO" variable_2="NO"/>
+        <map_variables variable_1="cGMP" variable_2="cGMP"/>
+        <map_variables variable_1="vd" variable_2="vd"/>
+        <map_variables variable_1="vp" variable_2="vp"/>
+    </connection>
+    <connection>
+        <map_components component_1="calcium" component_2="asm_ca"/>
+        <map_variables variable_1="Ca_in" variable_2="Ca_in"/>
+        <map_variables variable_1="p_agonist" variable_2="p_agonist"/>
+        <map_variables variable_1="Ca_in_KCL" variable_2="Ca_in_KCL"/>
+    </connection>
+    <connection>
+        <map_components component_1="asm_ca" component_2="Ca_ag"/>
+        <map_variables variable_1="Ca_in" variable_2="Ca_in"/>
+        <map_variables variable_1="Ca_SR" variable_2="Ca_SR"/>
+        <map_variables variable_1="Ca_t" variable_2="Ca_t"/>
+        <map_variables variable_1="p_agonist" variable_2="p_agonist"/>
+        <map_variables variable_1="J_release" variable_2="J_release"/>
+        <map_variables variable_1="J_serca" variable_2="J_serca"/>
+        <map_variables variable_1="J_in" variable_2="J_in"/>
+        <map_variables variable_1="J_pm" variable_2="J_pm"/>
+        <map_variables variable_1="J_in_KCL" variable_2="J_in_KCL"/>
+        <map_variables variable_1="Ca_in_KCL" variable_2="Ca_in_KCL"/>
+    </connection>
+    <connection>
+        <map_components component_1="calcium" component_2="model_parameters1"/>
+        <map_variables variable_1="k1" variable_2="k1"/>
+    </connection>
+    <connection>
+        <map_components component_1="kay2" component_2="model_parameters1"/>
+        <map_variables variable_1="k2" variable_2="k2"/>
+    </connection>
+    <connection>
+        <map_components component_1="sGC" component_2="kay2"/>
+        <map_variables variable_1="k2y" variable_2="k2y"/>
+    </connection>
+    <connection>
+        <map_components component_1="calcium" component_2="kay2"/>
+        <map_variables variable_1="k2h" variable_2="k2h"/>
+    </connection>
+    <connection>
+        <map_components component_1="M" component_2="Environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="Mp" component_2="Environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="AMp" component_2="Environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="AM" component_2="Environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="calcium"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="asm_ca"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="sGC"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="active_passive_elasticity_and_viscoelastic_forces"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="M" component_2="model_parameters1"/>
+        <map_variables variable_1="k7" variable_2="k7"/>
+    </connection>
+    <connection>
+        <map_components component_1="M" component_2="calcium"/>
+        <map_variables variable_1="k1" variable_2="k1"/>
+    </connection>
+    <connection>
+        <map_components component_1="M" component_2="kay2"/>
+        <map_variables variable_1="k2" variable_2="k2"/>
+    </connection>
+    <connection>
+        <map_components component_1="Mp" component_2="model_parameters1"/>
+        <map_variables variable_1="k4" variable_2="k4"/>
+        <map_variables variable_1="k3" variable_2="k3"/>
+    </connection>
+    <connection>
+        <map_components component_1="Mp" component_2="calcium"/>
+        <map_variables variable_1="k1" variable_2="k1"/>
+    </connection>
+    <connection>
+        <map_components component_1="Mp" component_2="kay2"/>
+        <map_variables variable_1="k2" variable_2="k2"/>
+    </connection>
+    <connection>
+        <map_components component_1="AMp" component_2="model_parameters1"/>
+        <map_variables variable_1="k5" variable_2="k5"/>
+        <map_variables variable_1="k6" variable_2="k6"/>
+        <map_variables variable_1="k4" variable_2="k4"/>
+        <map_variables variable_1="k3" variable_2="k3"/>
+    </connection>
+    <connection>
+        <map_components component_1="AM" component_2="model_parameters1"/>
+        <map_variables variable_1="k5" variable_2="k5"/>
+        <map_variables variable_1="k6" variable_2="k6"/>
+        <map_variables variable_1="k7" variable_2="k7"/>
+    </connection>
+    <connection>
+        <map_components component_1="AM" component_2="M"/>
+        <map_variables variable_1="AM" variable_2="AM"/>
+    </connection>
+    <connection>
+        <map_components component_1="AM" component_2="AMp"/>
+        <map_variables variable_1="AMp" variable_2="AMp"/>
+        <map_variables variable_1="AM" variable_2="AM"/>
+    </connection>
+    <connection>
+        <map_components component_1="M" component_2="Mp"/>
+        <map_variables variable_1="M" variable_2="M"/>
+        <map_variables variable_1="Mp" variable_2="Mp"/>
+    </connection>
+    <connection>
+        <map_components component_1="Mp" component_2="AMp"/>
+        <map_variables variable_1="Mp" variable_2="Mp"/>
+        <map_variables variable_1="AMp" variable_2="AMp"/>
+    </connection>
+    <connection>
+        <map_components component_1="phosphorylation" component_2="AMp"/>
+        <map_variables variable_1="AMp" variable_2="AMp"/>
+    </connection>
+    <connection>
+        <map_components component_1="phosphorylation" component_2="Mp"/>
+        <map_variables variable_1="Mp" variable_2="Mp"/>
+    </connection>
+    <connection>
+        <map_components component_1="stress" component_2="AMp"/>
+        <map_variables variable_1="AMp" variable_2="AMp"/>
+    </connection>
+    <connection>
+        <map_components component_1="stress" component_2="AM"/>
+        <map_variables variable_1="AM" variable_2="AM"/>
+    </connection>
+    <connection>
+        <map_components component_1="AM" component_2="active_passive_elasticity_and_viscoelastic_forces"/>
+        <map_variables variable_1="AM" variable_2="AM"/>
+    </connection>
+    <connection>
+        <map_components component_1="AMp" component_2="active_passive_elasticity_and_viscoelastic_forces"/>
+        <map_variables variable_1="AMp" variable_2="AMp"/>
+    </connection>
+</model>

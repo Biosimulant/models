@@ -1,0 +1,1550 @@
+<?xml version='1.0'?>
+<model cmeta:id="acid_base" name="acid_base" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="Units/Units.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="mM_per_s" units_ref="mM_per_s"/>
+        <units name="mV" units_ref="mV"/>
+        <units name="mmHg" units_ref="mmHg"/>
+        <units name="mM_per_mmHg" units_ref="mM_per_mmHg"/>
+        <units name="mS_per_cm2" units_ref="mS_per_cm2"/>
+        <units name="mA_per_cm2" units_ref="mA_per_cm2"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="cm_per_s" units_ref="cm_per_s"/>
+        <units name="mJ_per_mol_per_kelvin" units_ref="mJ_per_mol_per_kelvin"/>
+        <units name="umol_per_s_per_cm2" units_ref="umol_per_s_per_cm2"/>
+    </import>
+    <import xlink:href="NHE3/Weinstein_1995_NHE3.cellml">
+        <component component_ref="NHE3" name="NHE3"/>
+    </import>
+    <import xlink:href="HATPase/Weinstein_2000_HATPase.cellml">
+        <component component_ref="H_ATPase" name="H_ATPase"/>
+    </import>
+    <import xlink:href="NaK/Strieter_1992_NaK.cellml">
+        <component component_ref="NaK" name="NaK"/>
+    </import>
+    <import xlink:href="NBC/Ostby_2009_NBC.cellml">
+        <component component_ref="NBC" name="NBC"/>
+    </import>
+    <import xlink:href="Diffusion/Diffusion.cellml">
+        <component component_ref="Diffusion" name="Na_diffusion"/>
+    </import>
+    <import xlink:href="Diffusion/Diffusion.cellml">
+        <component component_ref="Diffusion" name="HCO3_diffusion"/>
+    </import>
+    <import xlink:href="Diffusion/Diffusion.cellml">
+        <component component_ref="Diffusion" name="K_diffusion"/>
+    </import>
+    <import xlink:href="Diffusion/Diffusion.cellml">
+        <component component_ref="Diffusion" name="NH3_diffusion"/>
+    </import>
+    <import xlink:href="Diffusion/Diffusion.cellml">
+        <component component_ref="Diffusion" name="CO2_diffusion_apical"/>
+    </import>
+    <import xlink:href="Diffusion/Diffusion.cellml">
+        <component component_ref="Diffusion" name="CO2_diffusion_basal"/>
+    </import>
+    <import xlink:href="Diffusion/Diffusion.cellml">
+        <component component_ref="Diffusion" name="CO2_diffusion_vessel"/>
+    </import>
+    <import xlink:href="CO2/CO2.cellml">
+        <component component_ref="Hydration" name="CO2_hydration_pt"/>
+    </import>
+    <import xlink:href="CO2/CO2.cellml">
+        <component component_ref="Hydration" name="CO2_hydration_ec"/>
+    </import>
+    <import xlink:href="CO2/CO2.cellml">
+        <component component_ref="Hydration" name="CO2_hydration_if"/>
+    </import>
+    <import xlink:href="CO2/CO2.cellml">
+        <component component_ref="Hydration" name="CO2_hydration_cb"/>
+    </import>
+    <import xlink:href="Ammonia/Ammonia.cellml">
+        <component component_ref="Hydration" name="NH3_hydration_pt"/>
+    </import>
+    <import xlink:href="Ammonia/Ammonia.cellml">
+        <component component_ref="Hydration" name="NH3_hydration_ec"/>
+    </import>
+    <import xlink:href="Ammonia/Ammonia.cellml">
+        <component component_ref="Hydration" name="HPO4_hydration_pt"/>
+    </import>
+    <component name="parameters">
+        <variable initial_value="0" name="theta_NHE3" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_Vtype" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_NaK" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_NBC" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_NH4" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_hyd_pt" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_hyd_ec" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_hyd_if" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_hyd_cb" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_amn_pt" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_amn_ec" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_phs_pt" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_diff_Na" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_diff_HCO3" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_diff_K" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_diff_NH3" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_diff_CO2_apical" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_diff_CO2_basal" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="theta_diff_CO2_vessel" public_interface="out" units="dimensionless"/>
+        <variable initial_value="96485" name="F" public_interface="out" units="C_per_mol"/>
+        <variable initial_value="6.1" name="pK_HCO3" public_interface="out" units="dimensionless"/>
+        <variable initial_value="6.8" name="pK_HPO4" public_interface="out" units="dimensionless"/>
+        <variable initial_value="9.15" name="pK_NH3" public_interface="out" units="dimensionless"/>
+        <!--      Krahn, T. A., & Weinstein, A. M. (1996). Acid/base transport in a model of the proximal tubule brush border: impact of carbonic anhydrase. American Journal of Physiology-Renal Physiology, 270(2), F344-F355.
+      Weinstein, A. M. (1994). Ammonia transport in a mathematical model of rat proximal tubule. American Journal of Physiology-Renal Physiology, 267(2), F237-F248.-->
+        <variable initial_value="0.58" name="D_Na" public_interface="out" units="cm_per_s"/>
+        <variable initial_value="0.5e-6" name="D_K" public_interface="out" units="cm_per_s"/>
+        <variable initial_value="9.1e-5" name="D_Cl" public_interface="out" units="cm_per_s"/>
+        <variable initial_value="0.2e-7" name="D_HCO3" public_interface="out" units="cm_per_s"/>
+        <variable initial_value="0.1" name="D_H2CO2" public_interface="out" units="cm_per_s"/>
+        <variable initial_value="1.28e-3" name="D_H2CO3" public_interface="out" units="cm_per_s"/>
+        <variable initial_value="0.15" name="D_CO2" public_interface="out" units="cm_per_s"/>
+        <variable initial_value="6.2e-2" name="D_NH3" public_interface="out" units="cm_per_s"/>
+        <variable initial_value="0.03" name="s_CO2" public_interface="out" units="mM_per_mmHg"/>
+        <variable initial_value="50" name="p_CO2" public_interface="out" units="mmHg"/>
+        <variable initial_value="0.0" name="J_pt_H" public_interface="out" units="umol_per_s_per_cm2"/>
+        <variable initial_value="0.0" name="J_pt_HCO3" public_interface="out" units="umol_per_s_per_cm2"/>
+        <variable initial_value="0.0" name="J_pt_Na" public_interface="out" units="umol_per_s_per_cm2"/>
+        <variable initial_value="0e-6" name="J_ec_NH4" public_interface="out" units="umol_per_s_per_cm2"/>
+        <variable initial_value="0.0" name="J_cb_K" public_interface="out" units="umol_per_s_per_cm2"/>
+        <variable initial_value="0.0" name="J_cb_Na" public_interface="out" units="umol_per_s_per_cm2"/>
+        <variable initial_value="0.0" name="J_cb_H" public_interface="out" units="umol_per_s_per_cm2"/>
+        <variable initial_value="0.0" name="J_cb_HCO3" public_interface="out" units="umol_per_s_per_cm2"/>
+    </component>
+    <component name="renal_proximal_tubule">
+        <variable initial_value="7.306" name="pH_pt" private_interface="out" units="dimensionless"/>
+        <variable initial_value="140.0" name="Na_pt" private_interface="out" units="mM"/>
+        <variable initial_value="4.9" name="K_pt" private_interface="out" units="mM"/>
+        <variable initial_value="113.2" name="Cl_pt" private_interface="out" units="mM"/>
+        <variable initial_value="24.0" name="HCO3_pt" private_interface="out" units="mM"/>
+        <variable initial_value="4.41e-3" name="H2CO3_pt" private_interface="out" units="mM"/>
+        <variable initial_value="1.5" name="CO2_pt" private_interface="out" units="mM"/>
+        <variable initial_value="2.97" name="HPO4_pt" private_interface="out" units="mM"/>
+        <variable initial_value="0.93" name="H2PO4_pt" private_interface="out" units="mM"/>
+        <variable initial_value="5.0" name="urea_pt" private_interface="out" units="mM"/>
+        <variable initial_value="2.82e-3" name="NH3_pt" private_interface="out" units="mM"/>
+        <variable initial_value="0.2" name="NH4_pt" private_interface="out" units="mM"/>
+        <variable name="H_pt" private_interface="out" units="mM"/>
+        <variable initial_value="1.0" name="HCO2_pt" private_interface="out" units="mM"/>
+        <variable initial_value="2.85e-4" name="H2CO2_pt" private_interface="out" units="mM"/>
+        <variable initial_value="5.0" name="glucose_pt" private_interface="out" units="mM"/>
+        <variable name="J_NHE3_H" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_NHE3_Na" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_NHE3_NH4" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_Vtype_H" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_CO2_apical" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_NH3" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_hyd_pt" private_interface="in" units="mM_per_s"/>
+        <variable name="J_amn_pt" private_interface="in" units="mM_per_s"/>
+        <variable name="J_phs_pt" private_interface="in" units="mM_per_s"/>
+        <variable name="pK_HCO3" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="pK_NH3" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="pK_HPO4" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="s_CO2" public_interface="in" units="mM_per_mmHg"/>
+        <variable name="p_CO2" public_interface="in" units="mmHg"/>
+        <variable name="D_CO2" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="D_NH3" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="theta_NHE3" public_interface="in" units="dimensionless"/>
+        <variable name="theta_Vtype" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_NH3" public_interface="in" units="dimensionless"/>
+        <variable name="theta_hyd_pt" public_interface="in" units="dimensionless"/>
+        <variable name="theta_amn_pt" public_interface="in" units="dimensionless"/>
+        <variable name="theta_phs_pt" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_CO2_apical" public_interface="in" units="dimensionless"/>
+        <variable name="J_pt_H" public_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_pt_HCO3" public_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_pt_Na" public_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="beta_CO2" units="mM"/>
+        <variable name="alpha_NH3" units="dimensionless"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply id="pt_H_concentration">
+                <eq/>
+                <ci>H_pt</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="mM" type="e-notation">1<sep/>3</cn>
+                        <apply>
+                            <lt/>
+                            <ci>pH_pt</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="mM" type="e-notation">1<sep/>3</cn>
+                            <apply>
+                                <power/>
+                                <cn cellml:units="dimensionless">10</cn>
+                                <apply>
+                                    <minus/>
+                                    <ci>pH_pt</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>pH_pt</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                </piecewise>
+            </apply>
+            <apply id="pt_Na_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>Na_pt</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>J_pt_Na</ci>
+                    <apply>
+                        <times/>
+                        <ci>theta_NHE3</ci>
+                        <ci>J_NHE3_Na</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="pt_HPO4_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>HPO4_pt</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>theta_phs_pt</ci>
+                    <ci>J_phs_pt</ci>
+                </apply>
+            </apply>
+            <apply id="pt_H2PO4_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>H2PO4_pt</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>theta_phs_pt</ci>
+                    </apply>
+                    <ci>J_phs_pt</ci>
+                </apply>
+            </apply>
+            <apply id="pt_NH4_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>NH4_pt</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>theta_NHE3</ci>
+                        <ci>J_NHE3_NH4</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_amn_pt</ci>
+                        <ci>J_amn_pt</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="pt_NH3_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>NH3_pt</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+                            <ci>theta_diff_NH3</ci>
+                        </apply>
+                        <ci>J_diff_NH3</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_amn_pt</ci>
+                        <ci>J_amn_pt</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>alpha_NH3</ci>
+                <apply>
+                    <divide/>
+                    <ci>H_pt</ci>
+                    <apply>
+                        <plus/>
+                        <ci>H_pt</ci>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="mM" type="e-notation">1<sep/>3</cn>
+                            <apply>
+                                <power/>
+                                <cn cellml:units="dimensionless">10</cn>
+                                <apply>
+                                    <minus/>
+                                    <ci>pK_NH3</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="CO2_buffering_power">
+                <eq/>
+                <ci>beta_CO2</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <ln/>
+                        <cn cellml:units="dimensionless">10</cn>
+                    </apply>
+                    <ci>HCO3_pt</ci>
+                </apply>
+            </apply>
+            <apply id="pt_CO2_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>CO2_pt</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>theta_diff_CO2_apical</ci>
+                        <ci>J_diff_CO2_apical</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_hyd_pt</ci>
+                        <ci>J_hyd_pt</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="pt_HCO3_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>HCO3_pt</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>J_pt_HCO3</ci>
+                    <apply>
+                        <times/>
+                        <ci>theta_hyd_pt</ci>
+                        <ci>J_hyd_pt</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="pt_pH_regulation">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>pH_pt</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <ci>J_pt_H</ci>
+                            <apply>
+                                <times/>
+                                <ci>theta_NHE3</ci>
+                                <ci>J_NHE3_H</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>theta_Vtype</ci>
+                                <ci>J_Vtype_H</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>theta_hyd_pt</ci>
+                                <ci>J_hyd_pt</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>theta_amn_pt</ci>
+                                <ci>J_amn_pt</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>theta_phs_pt</ci>
+                                <ci>J_phs_pt</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <ci>beta_CO2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="renal_epithelial_cell">
+        <variable initial_value="7.329" name="pH_ec" private_interface="out" units="dimensionless"/>
+        <variable initial_value="19.6" name="Na_ec" private_interface="out" units="mM"/>
+        <variable initial_value="138.1" name="K_ec" private_interface="out" units="mM"/>
+        <variable initial_value="16.3" name="Cl_ec" private_interface="out" units="mM"/>
+        <variable initial_value="25.0" name="HCO3_ec" private_interface="out" units="mM"/>
+        <variable initial_value="4.36e-3" name="H2CO3_ec" private_interface="out" units="mM"/>
+        <variable initial_value="1.49" name="CO2_ec" private_interface="out" units="mM"/>
+        <variable initial_value="8.5" name="HPO4_ec" private_interface="out" units="mM"/>
+        <variable initial_value="2.52" name="H2PO4_ec" private_interface="out" units="mM"/>
+        <variable initial_value="4.96" name="urea_ec" private_interface="out" units="mM"/>
+        <variable initial_value="3.48e-3" name="NH3_ec" private_interface="out" units="mM"/>
+        <variable initial_value="0.23" name="NH4_ec" private_interface="out" units="mM"/>
+        <variable name="H_ec" private_interface="out" units="mM"/>
+        <variable initial_value="0.52" name="HCO2_ec" private_interface="out" units="mM"/>
+        <variable initial_value="0.91e-4" name="H2CO2_ec" private_interface="out" units="mM"/>
+        <variable initial_value="15.1" name="glucose_ec" private_interface="out" units="mM"/>
+        <variable initial_value="0.0108" name="J_NaK_max" private_interface="out" units="umol_per_s_per_cm2"/>
+        <variable name="V_m" private_interface="out" units="mV"/>
+        <variable name="pK_HCO3" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="pK_HPO4" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="pK_NH3" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="s_CO2" public_interface="in" units="mM_per_mmHg"/>
+        <variable name="p_CO2" public_interface="in" units="mmHg"/>
+        <variable name="F" public_interface="in" units="C_per_mol"/>
+        <variable name="J_NHE3_H" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_NHE3_Na" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_NHE3_NH4" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_Vtype_H" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_NaK_Na" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_NaK_K" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="I_NaK" private_interface="in" units="mA_per_cm2"/>
+        <variable name="J_NBC_Na" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_NBC_HCO3" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_NH3" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_CO2_apical" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_CO2_basal" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_hyd_ec" private_interface="in" units="mM_per_s"/>
+        <variable name="J_amn_ec" private_interface="in" units="mM_per_s"/>
+        <variable name="theta_NHE3" public_interface="in" units="dimensionless"/>
+        <variable name="theta_Vtype" public_interface="in" units="dimensionless"/>
+        <variable name="theta_NaK" public_interface="in" units="dimensionless"/>
+        <variable name="theta_NBC" public_interface="in" units="dimensionless"/>
+        <variable name="theta_NH4" public_interface="in" units="dimensionless"/>
+        <variable name="theta_hyd_ec" public_interface="in" units="dimensionless"/>
+        <variable name="theta_amn_ec" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_NH3" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_CO2_apical" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_CO2_basal" public_interface="in" units="dimensionless"/>
+        <variable name="J_ec_NH4" public_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="g_NBC" private_interface="in" units="mS_per_cm2"/>
+        <variable initial_value="100" name="g_Na" units="mS_per_cm2"/>
+        <variable initial_value="100" name="g_K" units="mS_per_cm2"/>
+        <variable name="D_CO2" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="D_NH3" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="E_NBC" private_interface="in" units="mV"/>
+        <variable name="beta_CO2" units="mM"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply id="ec_H_concentration">
+                <eq/>
+                <ci>H_ec</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="mM" type="e-notation">1<sep/>3</cn>
+                        <apply>
+                            <lt/>
+                            <ci>pH_ec</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="mM" type="e-notation">1<sep/>3</cn>
+                            <apply>
+                                <power/>
+                                <cn cellml:units="dimensionless">10</cn>
+                                <apply>
+                                    <minus/>
+                                    <ci>pH_ec</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>pH_ec</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                </piecewise>
+            </apply>
+            <apply id="CO2_buffering_power">
+                <eq/>
+                <ci>beta_CO2</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <ln/>
+                        <cn cellml:units="dimensionless">10</cn>
+                    </apply>
+                    <ci>HCO3_ec</ci>
+                </apply>
+            </apply>
+            <apply id="ec_potential_eq">
+                <eq/>
+                <ci>V_m</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>theta_NBC</ci>
+                            <ci>g_NBC</ci>
+                            <ci>E_NBC</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>theta_NaK</ci>
+                            <ci>I_NaK</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>g_Na</ci>
+                        <ci>g_K</ci>
+                        <apply>
+                            <times/>
+                            <ci>theta_NBC</ci>
+                            <ci>g_NBC</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="ec_Na_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>Na_ec</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>theta_NHE3</ci>
+                            </apply>
+                            <ci>J_NHE3_Na</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>theta_NaK</ci>
+                            <cn cellml:units="dimensionless">3</cn>
+                            <ci>J_NaK_Na</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_NBC</ci>
+                        <ci>J_NBC_Na</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="ec_NH3_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>NH3_ec</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>theta_diff_NH3</ci>
+                        <ci>J_diff_NH3</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_amn_ec</ci>
+                        <ci>J_amn_ec</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="ec_NH4_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>NH4_ec</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>theta_NHE3</ci>
+                            </apply>
+                            <ci>J_NHE3_NH4</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>theta_amn_ec</ci>
+                            <ci>J_amn_ec</ci>
+                        </apply>
+                    </apply>
+                    <ci>J_ec_NH4</ci>
+                </apply>
+            </apply>
+            <apply id="ec_K_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>K_ec</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>theta_NaK</ci>
+                    <cn cellml:units="dimensionless">2</cn>
+                    <ci>J_NaK_K</ci>
+                </apply>
+            </apply>
+            <apply id="ec_CO2_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>CO2_ec</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>theta_diff_CO2_apical</ci>
+                        <ci>J_diff_CO2_apical</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_diff_CO2_basal</ci>
+                        <ci>J_diff_CO2_basal</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="ec_HCO3_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>HCO3_ec</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>theta_hyd_ec</ci>
+                    <ci>J_hyd_ec</ci>
+                </apply>
+            </apply>
+            <apply id="ec_pH_regulation">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>pH_ec</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <ci>theta_NHE3</ci>
+                                    <ci>J_NHE3_H</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>theta_Vtype</ci>
+                                    <ci>J_Vtype_H</ci>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>theta_NBC</ci>
+                                <ci>J_NBC_HCO3</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>theta_amn_ec</ci>
+                            <ci>J_amn_ec</ci>
+                        </apply>
+                    </apply>
+                    <ci>beta_CO2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="renal_interstitial_fluid">
+        <variable initial_value="7.339" name="pH_if" private_interface="out" units="dimensionless"/>
+        <variable initial_value="140.3" name="Na_if" private_interface="out" units="mM"/>
+        <variable initial_value="4.66" name="K_if" private_interface="out" units="mM"/>
+        <variable initial_value="112.0" name="Cl_if" private_interface="out" units="mM"/>
+        <variable initial_value="25.6" name="HCO3_if" private_interface="out" units="mM"/>
+        <variable initial_value="4.36e-3" name="H2CO3_if" private_interface="out" units="mM"/>
+        <variable initial_value="1.49" name="CO2_if" private_interface="out" units="mM"/>
+        <variable initial_value="2.98" name="HPO4_if" private_interface="out" units="mM"/>
+        <variable initial_value="0.86" name="H2PO4_if" private_interface="out" units="mM"/>
+        <variable initial_value="4.91" name="urea_if" private_interface="out" units="mM"/>
+        <variable initial_value="2.7e-3" name="NH3_if" private_interface="out" units="mM"/>
+        <variable initial_value="0.18" name="NH4_if" private_interface="out" units="mM"/>
+        <variable name="H_if" private_interface="out" units="mM"/>
+        <variable initial_value="0.77" name="HCO2_if" private_interface="out" units="mM"/>
+        <variable initial_value="2.04e-4" name="H2CO2_if" private_interface="out" units="mM"/>
+        <variable initial_value="7.79" name="glucose_if" private_interface="out" units="mM"/>
+        <variable name="pK_HCO3" public_interface="in" units="dimensionless"/>
+        <variable name="pK_HPO4" public_interface="in" units="dimensionless"/>
+        <variable name="pK_NH3" public_interface="in" units="dimensionless"/>
+        <variable name="s_CO2" public_interface="in" units="mM_per_mmHg"/>
+        <variable name="p_CO2" public_interface="in" units="mmHg"/>
+        <variable name="J_NaK_Na" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_NaK_K" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_NBC_Na" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_NBC_HCO3" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_HCO3" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_Na" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_K" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_CO2_basal" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_CO2_vessel" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_hyd_if" private_interface="in" units="mM_per_s"/>
+        <variable name="theta_NaK" public_interface="in" units="dimensionless"/>
+        <variable name="theta_NBC" public_interface="in" units="dimensionless"/>
+        <variable name="theta_hyd_if" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_HCO3" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_Na" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_K" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_CO2_basal" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_CO2_vessel" public_interface="in" units="dimensionless"/>
+        <variable name="D_HCO3" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="D_NH3" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="D_CO2" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="beta_CO2" units="mM"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply id="if_H_concentration">
+                <eq/>
+                <ci>H_if</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="mM" type="e-notation">1<sep/>3</cn>
+                        <apply>
+                            <lt/>
+                            <ci>pH_if</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="mM" type="e-notation">1<sep/>3</cn>
+                            <apply>
+                                <power/>
+                                <cn cellml:units="dimensionless">10</cn>
+                                <apply>
+                                    <minus/>
+                                    <ci>pH_if</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>pH_if</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                </piecewise>
+            </apply>
+            <apply id="CO2_buffering_power">
+                <eq/>
+                <ci>beta_CO2</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <ln/>
+                        <cn cellml:units="dimensionless">10</cn>
+                    </apply>
+                    <ci>HCO3_if</ci>
+                </apply>
+            </apply>
+            <apply id="if_Na_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>Na_if</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>theta_NBC</ci>
+                        <ci>J_NBC_Na</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_NaK</ci>
+                        <cn cellml:units="dimensionless">3</cn>
+                        <ci>J_NaK_Na</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_diff_Na</ci>
+                        <ci>J_diff_Na</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="if_K_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>K_if</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>theta_diff_K</ci>
+                        <ci>J_diff_K</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_NaK</ci>
+                        <cn cellml:units="dimensionless">2</cn>
+                        <ci>J_NaK_K</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="if_CO2_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>CO2_if</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+                            <ci>theta_diff_CO2_basal</ci>
+                        </apply>
+                        <ci>J_diff_CO2_basal</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_diff_CO2_vessel</ci>
+                        <ci>J_diff_CO2_vessel</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="if_HCO3_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>HCO3_if</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>theta_hyd_if</ci>
+                    <ci>J_hyd_if</ci>
+                </apply>
+            </apply>
+            <apply id="if_pH_regulation">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>pH_if</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>theta_NBC</ci>
+                            <ci>J_NBC_HCO3</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>theta_diff_HCO3</ci>
+                            <ci>J_diff_HCO3</ci>
+                        </apply>
+                    </apply>
+                    <ci>beta_CO2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="peritubular_capillary_blood">
+        <variable initial_value="7.306" name="pH_cb" private_interface="out" units="dimensionless"/>
+        <variable initial_value="140.0" name="Na_cb" private_interface="out" units="mM"/>
+        <variable initial_value="4.9" name="K_cb" private_interface="out" units="mM"/>
+        <variable initial_value="113.2" name="Cl_cb" private_interface="out" units="mM"/>
+        <variable initial_value="24.0" name="HCO3_cb" private_interface="out" units="mM"/>
+        <variable initial_value="4.41e-3" name="H2CO3_cb" private_interface="out" units="mM"/>
+        <variable initial_value="1.5" name="CO2_cb" private_interface="out" units="mM"/>
+        <variable initial_value="2.97" name="HPO4_cb" private_interface="out" units="mM"/>
+        <variable initial_value="0.93" name="H2PO4_cb" private_interface="out" units="mM"/>
+        <variable initial_value="5.0" name="urea_cb" private_interface="out" units="mM"/>
+        <variable initial_value="2.82e-3" name="NH3_cb" private_interface="out" units="mM"/>
+        <variable initial_value="0.2" name="NH4_cb" private_interface="out" units="mM"/>
+        <variable name="H_cb" private_interface="out" units="mM"/>
+        <variable initial_value="1.0" name="HCO2_cb" private_interface="out" units="mM"/>
+        <variable initial_value="2.85e-4" name="H2CO2_cb" private_interface="out" units="mM"/>
+        <variable initial_value="5.0" name="glucose_cb" private_interface="out" units="mM"/>
+        <variable name="pK_HCO3" public_interface="in" units="dimensionless"/>
+        <variable name="pK_HPO4" public_interface="in" units="dimensionless"/>
+        <variable name="pK_NH3" public_interface="in" units="dimensionless"/>
+        <variable name="s_CO2" public_interface="in" units="mM_per_mmHg"/>
+        <variable name="p_CO2" public_interface="in" units="mmHg"/>
+        <variable name="J_diff_HCO3" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_Na" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_K" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_diff_CO2_vessel" private_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_hyd_cb" private_interface="in" units="mM_per_s"/>
+        <variable name="D_HCO3" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="D_Na" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="D_K" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="D_NH3" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="D_CO2" private_interface="out" public_interface="in" units="cm_per_s"/>
+        <variable name="theta_hyd_cb" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_HCO3" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_Na" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_K" public_interface="in" units="dimensionless"/>
+        <variable name="theta_diff_CO2_vessel" public_interface="in" units="dimensionless"/>
+        <variable name="J_cb_K" public_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_cb_Na" public_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_cb_H" public_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="J_cb_HCO3" public_interface="in" units="umol_per_s_per_cm2"/>
+        <variable name="beta_CO2" units="mM"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply id="cb_H_concentration">
+                <eq/>
+                <ci>H_cb</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="mM" type="e-notation">1<sep/>3</cn>
+                        <apply>
+                            <lt/>
+                            <ci>pH_cb</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="mM" type="e-notation">1<sep/>3</cn>
+                            <apply>
+                                <power/>
+                                <cn cellml:units="dimensionless">10</cn>
+                                <apply>
+                                    <minus/>
+                                    <ci>pH_cb</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>pH_cb</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                </piecewise>
+            </apply>
+            <apply id="CO2_buffering_power">
+                <eq/>
+                <ci>beta_CO2</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <ln/>
+                        <cn cellml:units="dimensionless">10</cn>
+                    </apply>
+                    <ci>HCO3_cb</ci>
+                </apply>
+            </apply>
+            <apply id="cb_Na_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>Na_cb</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>J_cb_Na</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_diff_Na</ci>
+                        <ci>J_diff_Na</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="cb_K_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>K_cb</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>J_cb_K</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>theta_diff_K</ci>
+                        <ci>J_diff_K</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply id="cb_CO2_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>CO2_cb</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>theta_diff_CO2_vessel</ci>
+                    </apply>
+                    <ci>J_diff_CO2_vessel</ci>
+                </apply>
+            </apply>
+            <apply id="cb_HCO3_diff_eq">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>HCO3_cb</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>theta_hyd_cb</ci>
+                    <ci>J_hyd_cb</ci>
+                </apply>
+            </apply>
+            <apply id="cb_pH_regulation">
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>pH_cb</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <ci>J_cb_H</ci>
+                            <ci>J_cb_HCO3</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>theta_diff_HCO3</ci>
+                            <ci>J_diff_HCO3</ci>
+                        </apply>
+                    </apply>
+                    <ci>beta_CO2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <group>
+        <relationship_ref relationship="encapsulation"/>
+        <component_ref component="renal_proximal_tubule">
+            <component_ref component="NHE3"/>
+            <component_ref component="H_ATPase"/>
+            <component_ref component="NH3_diffusion"/>
+            <component_ref component="CO2_diffusion_apical"/>
+            <component_ref component="CO2_hydration_pt"/>
+            <component_ref component="NH3_hydration_pt"/>
+            <component_ref component="HPO4_hydration_pt"/>
+        </component_ref>
+        <component_ref component="renal_epithelial_cell">
+            <component_ref component="NHE3"/>
+            <component_ref component="H_ATPase"/>
+            <component_ref component="NaK"/>
+            <component_ref component="NBC"/>
+            <component_ref component="NH3_diffusion"/>
+            <component_ref component="CO2_diffusion_apical"/>
+            <component_ref component="CO2_diffusion_basal"/>
+            <component_ref component="CO2_hydration_ec"/>
+            <component_ref component="NH3_hydration_ec"/>
+        </component_ref>
+        <component_ref component="renal_interstitial_fluid">
+            <component_ref component="NaK"/>
+            <component_ref component="NBC"/>
+            <component_ref component="HCO3_diffusion"/>
+            <component_ref component="Na_diffusion"/>
+            <component_ref component="K_diffusion"/>
+            <component_ref component="CO2_diffusion_basal"/>
+            <component_ref component="CO2_diffusion_vessel"/>
+            <component_ref component="CO2_hydration_if"/>
+        </component_ref>
+        <component_ref component="peritubular_capillary_blood">
+            <component_ref component="HCO3_diffusion"/>
+            <component_ref component="Na_diffusion"/>
+            <component_ref component="K_diffusion"/>
+            <component_ref component="CO2_diffusion_vessel"/>
+            <component_ref component="CO2_hydration_cb"/>
+        </component_ref>
+    </group>
+    <connection>
+        <map_components component_1="renal_proximal_tubule" component_2="parameters"/>
+        <map_variables variable_1="theta_NHE3" variable_2="theta_NHE3"/>
+        <map_variables variable_1="theta_Vtype" variable_2="theta_Vtype"/>
+        <map_variables variable_1="theta_hyd_pt" variable_2="theta_hyd_pt"/>
+        <map_variables variable_1="theta_amn_pt" variable_2="theta_amn_pt"/>
+        <map_variables variable_1="theta_phs_pt" variable_2="theta_phs_pt"/>
+        <map_variables variable_1="theta_diff_CO2_apical" variable_2="theta_diff_CO2_apical"/>
+        <map_variables variable_1="theta_diff_NH3" variable_2="theta_diff_NH3"/>
+        <map_variables variable_1="J_pt_H" variable_2="J_pt_H"/>
+        <map_variables variable_1="J_pt_HCO3" variable_2="J_pt_HCO3"/>
+        <map_variables variable_1="J_pt_Na" variable_2="J_pt_Na"/>
+        <map_variables variable_1="p_CO2" variable_2="p_CO2"/>
+        <map_variables variable_1="s_CO2" variable_2="s_CO2"/>
+        <map_variables variable_1="pK_HCO3" variable_2="pK_HCO3"/>
+        <map_variables variable_1="pK_HPO4" variable_2="pK_HPO4"/>
+        <map_variables variable_1="pK_NH3" variable_2="pK_NH3"/>
+        <map_variables variable_1="D_CO2" variable_2="D_CO2"/>
+        <map_variables variable_1="D_NH3" variable_2="D_NH3"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_proximal_tubule" component_2="NHE3"/>
+        <map_variables variable_1="H_pt" variable_2="H_ext"/>
+        <map_variables variable_1="Na_pt" variable_2="Na_ext"/>
+        <map_variables variable_1="NH4_pt" variable_2="NH4_ext"/>
+        <map_variables variable_1="J_NHE3_H" variable_2="J_NHE3_H"/>
+        <map_variables variable_1="J_NHE3_Na" variable_2="J_NHE3_Na"/>
+        <map_variables variable_1="J_NHE3_NH4" variable_2="J_NHE3_NH4"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_proximal_tubule" component_2="H_ATPase"/>
+        <map_variables variable_1="H_pt" variable_2="H_ext"/>
+        <map_variables variable_1="J_Vtype_H" variable_2="J_Vtype_H"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_proximal_tubule" component_2="NH3_diffusion"/>
+        <map_variables variable_1="NH3_pt" variable_2="C_ext"/>
+        <map_variables variable_1="J_diff_NH3" variable_2="J_diff"/>
+        <map_variables variable_1="D_NH3" variable_2="D"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_proximal_tubule" component_2="CO2_diffusion_apical"/>
+        <map_variables variable_1="CO2_pt" variable_2="C_ext"/>
+        <map_variables variable_1="J_diff_CO2_apical" variable_2="J_diff"/>
+        <map_variables variable_1="D_CO2" variable_2="D"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_proximal_tubule" component_2="CO2_hydration_pt"/>
+        <map_variables variable_1="pH_pt" variable_2="pH"/>
+        <map_variables variable_1="CO2_pt" variable_2="CO2"/>
+        <map_variables variable_1="HCO3_pt" variable_2="HCO3"/>
+        <map_variables variable_1="J_hyd_pt" variable_2="J"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_proximal_tubule" component_2="NH3_hydration_pt"/>
+        <map_variables variable_1="pH_pt" variable_2="pH"/>
+        <map_variables variable_1="pK_NH3" variable_2="pK"/>
+        <map_variables variable_1="NH3_pt" variable_2="C_n"/>
+        <map_variables variable_1="NH4_pt" variable_2="C_e"/>
+        <map_variables variable_1="J_amn_pt" variable_2="J_hyd"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_proximal_tubule" component_2="HPO4_hydration_pt"/>
+        <map_variables variable_1="pH_pt" variable_2="pH"/>
+        <map_variables variable_1="pK_HPO4" variable_2="pK"/>
+        <map_variables variable_1="HPO4_pt" variable_2="C_n"/>
+        <map_variables variable_1="H2PO4_pt" variable_2="C_e"/>
+        <map_variables variable_1="J_phs_pt" variable_2="J_hyd"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_epithelial_cell" component_2="parameters"/>
+        <map_variables variable_1="theta_NHE3" variable_2="theta_NHE3"/>
+        <map_variables variable_1="theta_Vtype" variable_2="theta_Vtype"/>
+        <map_variables variable_1="theta_NaK" variable_2="theta_NaK"/>
+        <map_variables variable_1="theta_NBC" variable_2="theta_NBC"/>
+        <map_variables variable_1="theta_NH4" variable_2="theta_NH4"/>
+        <map_variables variable_1="theta_hyd_ec" variable_2="theta_hyd_ec"/>
+        <map_variables variable_1="theta_amn_ec" variable_2="theta_amn_ec"/>
+        <map_variables variable_1="theta_diff_NH3" variable_2="theta_diff_NH3"/>
+        <map_variables variable_1="theta_diff_CO2_apical" variable_2="theta_diff_CO2_apical"/>
+        <map_variables variable_1="theta_diff_CO2_basal" variable_2="theta_diff_CO2_basal"/>
+        <map_variables variable_1="J_ec_NH4" variable_2="J_ec_NH4"/>
+        <map_variables variable_1="p_CO2" variable_2="p_CO2"/>
+        <map_variables variable_1="s_CO2" variable_2="s_CO2"/>
+        <map_variables variable_1="pK_HCO3" variable_2="pK_HCO3"/>
+        <map_variables variable_1="pK_HPO4" variable_2="pK_HPO4"/>
+        <map_variables variable_1="pK_NH3" variable_2="pK_NH3"/>
+        <map_variables variable_1="D_CO2" variable_2="D_CO2"/>
+        <map_variables variable_1="D_NH3" variable_2="D_NH3"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_epithelial_cell" component_2="NHE3"/>
+        <map_variables variable_1="H_ec" variable_2="H_int"/>
+        <map_variables variable_1="Na_ec" variable_2="Na_int"/>
+        <map_variables variable_1="NH4_ec" variable_2="NH4_int"/>
+        <map_variables variable_1="J_NHE3_H" variable_2="J_NHE3_H"/>
+        <map_variables variable_1="J_NHE3_Na" variable_2="J_NHE3_Na"/>
+        <map_variables variable_1="J_NHE3_NH4" variable_2="J_NHE3_NH4"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_epithelial_cell" component_2="NBC"/>
+        <map_variables variable_1="Na_ec" variable_2="Na_int"/>
+        <map_variables variable_1="HCO3_ec" variable_2="HCO3_int"/>
+        <map_variables variable_1="J_NBC_Na" variable_2="J_NBC_Na"/>
+        <map_variables variable_1="J_NBC_HCO3" variable_2="J_NBC_HCO3"/>
+        <map_variables variable_1="V_m" variable_2="V_m"/>
+        <map_variables variable_1="E_NBC" variable_2="E_NBC"/>
+        <map_variables variable_1="g_NBC" variable_2="g_NBC"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_epithelial_cell" component_2="NaK"/>
+        <map_variables variable_1="Na_ec" variable_2="Na_int"/>
+        <map_variables variable_1="K_ec" variable_2="K_int"/>
+        <map_variables variable_1="J_NaK_Na" variable_2="J_NaK"/>
+        <map_variables variable_1="J_NaK_K" variable_2="J_NaK"/>
+        <map_variables variable_1="J_NaK_max" variable_2="J_NaK_max"/>
+        <map_variables variable_1="I_NaK" variable_2="I_NaK"/>
+        <map_variables variable_1="V_m" variable_2="V"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_epithelial_cell" component_2="H_ATPase"/>
+        <map_variables variable_1="H_ec" variable_2="H_int"/>
+        <map_variables variable_1="J_Vtype_H" variable_2="J_Vtype_H"/>
+        <map_variables variable_1="V_m" variable_2="psi"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_epithelial_cell" component_2="NH3_diffusion"/>
+        <map_variables variable_1="NH3_ec" variable_2="C_int"/>
+        <map_variables variable_1="J_diff_NH3" variable_2="J_diff"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_epithelial_cell" component_2="CO2_diffusion_apical"/>
+        <map_variables variable_1="CO2_ec" variable_2="C_int"/>
+        <map_variables variable_1="J_diff_CO2_apical" variable_2="J_diff"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_epithelial_cell" component_2="CO2_diffusion_basal"/>
+        <map_variables variable_1="CO2_ec" variable_2="C_int"/>
+        <map_variables variable_1="J_diff_CO2_basal" variable_2="J_diff"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_epithelial_cell" component_2="CO2_hydration_ec"/>
+        <map_variables variable_1="pH_ec" variable_2="pH"/>
+        <map_variables variable_1="CO2_ec" variable_2="CO2"/>
+        <map_variables variable_1="HCO3_ec" variable_2="HCO3"/>
+        <map_variables variable_1="J_hyd_ec" variable_2="J"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_epithelial_cell" component_2="NH3_hydration_ec"/>
+        <map_variables variable_1="pH_ec" variable_2="pH"/>
+        <map_variables variable_1="pK_NH3" variable_2="pK"/>
+        <map_variables variable_1="NH3_ec" variable_2="C_n"/>
+        <map_variables variable_1="NH4_ec" variable_2="C_e"/>
+        <map_variables variable_1="J_amn_ec" variable_2="J_hyd"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_interstitial_fluid" component_2="parameters"/>
+        <map_variables variable_1="theta_NaK" variable_2="theta_NaK"/>
+        <map_variables variable_1="theta_NBC" variable_2="theta_NBC"/>
+        <map_variables variable_1="theta_hyd_if" variable_2="theta_hyd_if"/>
+        <map_variables variable_1="theta_diff_Na" variable_2="theta_diff_Na"/>
+        <map_variables variable_1="theta_diff_HCO3" variable_2="theta_diff_HCO3"/>
+        <map_variables variable_1="theta_diff_K" variable_2="theta_diff_K"/>
+        <map_variables variable_1="theta_diff_CO2_basal" variable_2="theta_diff_CO2_basal"/>
+        <map_variables variable_1="theta_diff_CO2_vessel" variable_2="theta_diff_CO2_vessel"/>
+        <map_variables variable_1="p_CO2" variable_2="p_CO2"/>
+        <map_variables variable_1="s_CO2" variable_2="s_CO2"/>
+        <map_variables variable_1="pK_HCO3" variable_2="pK_HCO3"/>
+        <map_variables variable_1="pK_HPO4" variable_2="pK_HPO4"/>
+        <map_variables variable_1="pK_NH3" variable_2="pK_NH3"/>
+        <map_variables variable_1="D_CO2" variable_2="D_CO2"/>
+        <map_variables variable_1="D_NH3" variable_2="D_NH3"/>
+        <map_variables variable_1="D_HCO3" variable_2="D_HCO3"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_interstitial_fluid" component_2="NaK"/>
+        <map_variables variable_1="Na_if" variable_2="Na_ext"/>
+        <map_variables variable_1="K_if" variable_2="K_ext"/>
+        <map_variables variable_1="J_NaK_Na" variable_2="J_NaK"/>
+        <map_variables variable_1="J_NaK_K" variable_2="J_NaK"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_interstitial_fluid" component_2="NBC"/>
+        <map_variables variable_1="HCO3_if" variable_2="HCO3_ext"/>
+        <map_variables variable_1="Na_if" variable_2="Na_ext"/>
+        <map_variables variable_1="J_NBC_Na" variable_2="J_NBC_Na"/>
+        <map_variables variable_1="J_NBC_HCO3" variable_2="J_NBC_HCO3"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_interstitial_fluid" component_2="Na_diffusion"/>
+        <map_variables variable_1="Na_if" variable_2="C_int"/>
+        <map_variables variable_1="J_diff_Na" variable_2="J_diff"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_interstitial_fluid" component_2="HCO3_diffusion"/>
+        <map_variables variable_1="HCO3_if" variable_2="C_int"/>
+        <map_variables variable_1="J_diff_HCO3" variable_2="J_diff"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_interstitial_fluid" component_2="K_diffusion"/>
+        <map_variables variable_1="K_if" variable_2="C_int"/>
+        <map_variables variable_1="J_diff_K" variable_2="J_diff"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_interstitial_fluid" component_2="CO2_diffusion_basal"/>
+        <map_variables variable_1="CO2_if" variable_2="C_ext"/>
+        <map_variables variable_1="J_diff_CO2_basal" variable_2="J_diff"/>
+        <map_variables variable_1="D_CO2" variable_2="D"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_interstitial_fluid" component_2="CO2_diffusion_vessel"/>
+        <map_variables variable_1="CO2_if" variable_2="C_int"/>
+        <map_variables variable_1="J_diff_CO2_vessel" variable_2="J_diff"/>
+    </connection>
+    <connection>
+        <map_components component_1="renal_interstitial_fluid" component_2="CO2_hydration_if"/>
+        <map_variables variable_1="pH_if" variable_2="pH"/>
+        <map_variables variable_1="CO2_if" variable_2="CO2"/>
+        <map_variables variable_1="HCO3_if" variable_2="HCO3"/>
+        <map_variables variable_1="J_hyd_if" variable_2="J"/>
+    </connection>
+    <connection>
+        <map_components component_1="peritubular_capillary_blood" component_2="parameters"/>
+        <map_variables variable_1="theta_hyd_cb" variable_2="theta_hyd_cb"/>
+        <map_variables variable_1="theta_diff_HCO3" variable_2="theta_diff_HCO3"/>
+        <map_variables variable_1="theta_diff_Na" variable_2="theta_diff_Na"/>
+        <map_variables variable_1="theta_diff_K" variable_2="theta_diff_K"/>
+        <map_variables variable_1="theta_diff_CO2_vessel" variable_2="theta_diff_CO2_vessel"/>
+        <map_variables variable_1="J_cb_K" variable_2="J_cb_K"/>
+        <map_variables variable_1="J_cb_Na" variable_2="J_cb_Na"/>
+        <map_variables variable_1="J_cb_H" variable_2="J_cb_H"/>
+        <map_variables variable_1="J_cb_HCO3" variable_2="J_cb_HCO3"/>
+        <map_variables variable_1="p_CO2" variable_2="p_CO2"/>
+        <map_variables variable_1="s_CO2" variable_2="s_CO2"/>
+        <map_variables variable_1="pK_HCO3" variable_2="pK_HCO3"/>
+        <map_variables variable_1="pK_HPO4" variable_2="pK_HPO4"/>
+        <map_variables variable_1="pK_NH3" variable_2="pK_NH3"/>
+        <map_variables variable_1="D_CO2" variable_2="D_CO2"/>
+        <map_variables variable_1="D_NH3" variable_2="D_NH3"/>
+        <map_variables variable_1="D_HCO3" variable_2="D_HCO3"/>
+        <map_variables variable_1="D_K" variable_2="D_K"/>
+        <map_variables variable_1="D_Na" variable_2="D_Na"/>
+    </connection>
+    <connection>
+        <map_components component_1="peritubular_capillary_blood" component_2="Na_diffusion"/>
+        <map_variables variable_1="Na_cb" variable_2="C_ext"/>
+        <map_variables variable_1="J_diff_Na" variable_2="J_diff"/>
+        <map_variables variable_1="D_Na" variable_2="D"/>
+    </connection>
+    <connection>
+        <map_components component_1="peritubular_capillary_blood" component_2="HCO3_diffusion"/>
+        <map_variables variable_1="HCO3_cb" variable_2="C_ext"/>
+        <map_variables variable_1="J_diff_HCO3" variable_2="J_diff"/>
+        <map_variables variable_1="D_HCO3" variable_2="D"/>
+    </connection>
+    <connection>
+        <map_components component_1="peritubular_capillary_blood" component_2="K_diffusion"/>
+        <map_variables variable_1="K_cb" variable_2="C_ext"/>
+        <map_variables variable_1="J_diff_K" variable_2="J_diff"/>
+        <map_variables variable_1="D_K" variable_2="D"/>
+    </connection>
+    <connection>
+        <map_components component_1="peritubular_capillary_blood" component_2="CO2_diffusion_vessel"/>
+        <map_variables variable_1="CO2_cb" variable_2="C_ext"/>
+        <map_variables variable_1="J_diff_CO2_vessel" variable_2="J_diff"/>
+        <map_variables variable_1="D_CO2" variable_2="D"/>
+    </connection>
+    <connection>
+        <map_components component_1="peritubular_capillary_blood" component_2="CO2_hydration_cb"/>
+        <map_variables variable_1="pH_cb" variable_2="pH"/>
+        <map_variables variable_1="CO2_cb" variable_2="CO2"/>
+        <map_variables variable_1="HCO3_cb" variable_2="HCO3"/>
+        <map_variables variable_1="J_hyd_cb" variable_2="J"/>
+    </connection>
+    <component name="environment">
+        <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="renal_proximal_tubule"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="renal_epithelial_cell"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="renal_interstitial_fluid"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="peritubular_capillary_blood"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="">
+            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Terkildsen</vCard:Family>
+                    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jonna</vCard:Given>
+                </vCard:N>
+                <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">j.terkildsen@auckland.ac.nz</rdf:value>
+                    <rdf:type xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://imc.org/vCard/3.0#internet"/>
+                </vCard:EMAIL>
+                <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgname>
+                </vCard:ORG>
+            </dc:creator>
+            <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2009-05-27</dcterms:W3CDTF>
+            </dcterms:created>
+        </rdf:Description>
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#weinstein_1995">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">Na/H antiporter</rdf:li>
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">ion transport</rdf:li>
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">kidney</rdf:li>
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">proximal tubule</rdf:li>
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">renal</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">7658195</bqs:Pubmed_id>
+                <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">
+                        <rdf:Seq xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:parseType="Resource">
+                                <bqs:Person xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                                    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                                        <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Weinstein</vCard:Family>
+                                        <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">A</vCard:Given>
+                                        <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">M</vCard:Other>
+                                    </vCard:N>
+                                </bqs:Person>
+                            </rdf:li>
+                        </rdf:Seq>
+                    </dc:creator>
+                    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">&#xd;
+           A kinetically defined Na+/H+ antiporter within a mathematical model of the rat proximal tubule&#xd;
+          </dc:title>
+                    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">The Journal of General Physiology</dc:title>
+                    </bqs:Journal>
+                    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">105</bqs:volume>
+                    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">617</bqs:first_page>
+                    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">641</bqs:last_page>
+                </bqs:JournalArticle>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

@@ -1,0 +1,765 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="FCU_deYoung" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="millivolt" units_ref="millivolt"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <import xlink:href="Ca_leak/BG_Ca_leak.cellml">
+        <component component_ref="Ca_leak" name="Ca_leak"/>
+    </import>
+    <import xlink:href="IPR/BG_IPR.cellml">
+        <component component_ref="IPR" name="IPR"/>
+    </import>
+    <import xlink:href="pCa/BG_pCa.cellml">
+        <component component_ref="pCa" name="pCa"/>
+    </import>
+    <import xlink:href="SERCA/BG_SERCA.cellml">
+        <component component_ref="SERCA" name="SERCA"/>
+    </import>
+    <component name="BG_parameters">
+        <variable initial_value="3.07502e-09" name="kappa_leak" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.9078e+08" name="kappa_R_IPR_main" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0125066" name="kappa_R1_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="16.6342" name="kappa_R2_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.291916" name="kappa_R3_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.25066" name="kappa_R4_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.31398e-05" name="kappa_R5_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00973583" name="kappa_R6_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.18239" name="kappa_R7_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="4829.13" name="kappa_R8_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0955807" name="kappa_R9_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00718894" name="kappa_R10_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.23094" name="kappa_R11_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="152486" name="kappa_R12_a_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0125066" name="kappa_R1_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="16.6342" name="kappa_R2_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.291916" name="kappa_R3_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.25066" name="kappa_R4_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.31398e-05" name="kappa_R5_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00973583" name="kappa_R6_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.18239" name="kappa_R7_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="4829.13" name="kappa_R8_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0955807" name="kappa_R9_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00718894" name="kappa_R10_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.23094" name="kappa_R11_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="152486" name="kappa_R12_b_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0125066" name="kappa_R1_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="16.6342" name="kappa_R2_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.291916" name="kappa_R3_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.25066" name="kappa_R4_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.31398e-05" name="kappa_R5_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00973583" name="kappa_R6_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.18239" name="kappa_R7_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="4829.13" name="kappa_R8_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0955807" name="kappa_R9_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00718894" name="kappa_R10_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.23094" name="kappa_R11_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="152486" name="kappa_R12_c_IPR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1654.75" name="kappa_pCa_R1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00021208" name="kappa_pCa_R2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.90729e-06" name="kappa_SERCA_R1_2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.166593" name="kappa_SERCA_R2_4" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="40567.4" name="kappa_SERCA_R2_2a" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.166593" name="kappa_SERCA_R4_5" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.41262" name="kappa_SERCA_R5_6" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="3.47304" name="kappa_SERCA_R6_8" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="12551.8" name="kappa_SERCA_R8_9" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="12551.8" name="kappa_SERCA_R9_10" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6.07543e-05" name="kappa_SERCA_R10_1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="391.219" name="K_Ca_SR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="20.1363" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="70087.3" name="K_IP3" public_interface="out" units="per_fmol"/>
+        <variable initial_value="30.734" name="K_Sa_000_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.31077" name="K_Sa_001_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.31674" name="K_Sa_010_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0990011" name="K_Sa_011_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="7233.34" name="K_Sa_100_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="3948.08" name="K_Sa_101_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000341014" name="K_Sa_110_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="169.148" name="K_Sa_111_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="30.734" name="K_Sb_000_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.31077" name="K_Sb_001_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.31674" name="K_Sb_010_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0990011" name="K_Sb_011_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="7233.34" name="K_Sb_100_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="3948.08" name="K_Sb_101_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000341014" name="K_Sb_110_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="169.148" name="K_Sb_111_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="30.734" name="K_Sc_000_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.31077" name="K_Sc_001_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.31674" name="K_Sc_010_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0990011" name="K_Sc_011_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="7233.34" name="K_Sc_100_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="3948.08" name="K_Sc_101_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000341014" name="K_Sc_110_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="169.148" name="K_Sc_111_IPR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="5.02046e-05" name="K_Ca_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0449472" name="K_pCa" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0116935" name="K_pCa_Ca" public_interface="out" units="per_fmol"/>
+        <variable initial_value="10.9783" name="K_P1_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.170651" name="K_P2_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.157113" name="K_P2a_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="38259" name="K_P4_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00151486" name="K_P5_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="9208.24" name="K_P6_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00677857" name="K_P8_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.50779" name="K_P9_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0830361" name="K_P10_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="3108.77" name="K_H" public_interface="out" units="per_fmol"/>
+        <variable initial_value="7.72815" name="K_MgATP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.68438e-07" name="K_MgADP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00212752" name="K_Pi" public_interface="out" units="per_fmol"/>
+        <variable initial_value="78.0122" name="K_PLBp" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2" name="zCa" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="34.4" name="vol_myo" public_interface="out" units="pL"/>
+        <variable initial_value="500" name="freq" units="dimensionless"/>
+        <variable initial_value="0.007540192" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <variable initial_value="0.763997897" name="q_Ca_SR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-3" name="q_IP3" public_interface="out" units="fmol"/>
+        <variable initial_value="9.3276" name="q_Ca_o" public_interface="out" units="fmol"/>
+        <variable initial_value="0.0032" name="q_pCa" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-9" name="q_pCa_Ca" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_000_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_001_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_010_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_011_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_100_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_101_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_110_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sa_111_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_000_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_001_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_010_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_011_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_100_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_101_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_110_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sb_111_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_000_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_001_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_010_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_011_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_100_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_101_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_110_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="5e-6" name="q_Sc_111_IPR" public_interface="out" units="fmol"/>
+        <variable initial_value="0.004028" name="q_H" public_interface="out" units="fmol"/>
+        <variable initial_value="570" name="q_Pi" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3794" name="q_MgADP" public_interface="out" units="fmol"/>
+        <variable initial_value="3.8" name="q_MgATP" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P1_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P2_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P2a_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P4_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P5_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P6_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P8_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P9_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P10_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_PLBp" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_PLBp_baseline" public_interface="out" units="fmol"/>
+        <!-- Ca_leak imports-->
+        <variable name="v_leak" public_interface="in" units="fmol_per_sec"/>
+        <!-- IPR imports-->
+        <variable name="v_R_IPR_main" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R1_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R2_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R3_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R4_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R5_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R6_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R7_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R8_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R9_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R10_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R11_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_a_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R1_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R2_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R3_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R4_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R5_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R6_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R7_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R8_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R9_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R10_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R11_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_b_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R1_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R2_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R3_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R4_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R5_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R6_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R7_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R8_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R9_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R10_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R11_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R12_c_IPR" public_interface="in" units="fmol_per_sec"/>
+        <!-- pCa imports-->
+        <variable name="v_pCa_R1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_pCa_R2" public_interface="in" units="fmol_per_sec"/>
+        <!-- SERCA imports-->
+        <variable name="v_Ca_i_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Ca_SR_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_H_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_MgADP_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_MgATP_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Pi_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <!-- Ca source (from extracellular space)-->
+        <variable initial_value="1e-5" name="Ca_influx" units="fmol_per_sec"/>
+        <variable initial_value="1e-5" name="Ca_influx_IP3" units="per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <minus/>
+                                        <apply>
+                                            <plus/>
+                                            <apply>
+                                                <minus/>
+                                                <apply>
+                                                    <minus/>
+                                                    <apply>
+                                                        <plus/>
+                                                        <apply>
+                                                            <minus/>
+                                                            <apply>
+                                                                <minus/>
+                                                                <apply>
+                                                                    <plus/>
+                                                                    <apply>
+                                                                        <minus/>
+                                                                        <apply>
+                                                                            <minus/>
+                                                                            <apply>
+                                                                                <plus/>
+                                                                                <apply>
+                                                                                    <minus/>
+                                                                                    <apply>
+                                                                                        <minus/>
+                                                                                        <apply>
+                                                                                            <plus/>
+                                                                                            <apply>
+                                                                                                <minus/>
+                                                                                                <apply>
+                                                                                                    <plus/>
+                                                                                                    <ci>v_leak</ci>
+                                                                                                    <ci>v_Ca_i_SERCA</ci>
+                                                                                                </apply>
+                                                                                                <ci>v_pCa_R1</ci>
+                                                                                            </apply>
+                                                                                            <ci>v_R_IPR_main</ci>
+                                                                                            <apply>
+                                                                                                <times/>
+                                                                                                <ci>q_IP3</ci>
+                                                                                                <ci>Ca_influx_IP3</ci>
+                                                                                            </apply>
+                                                                                        </apply>
+                                                                                        <ci>v_R1_a_IPR</ci>
+                                                                                    </apply>
+                                                                                    <ci>v_R2_a_IPR</ci>
+                                                                                </apply>
+                                                                                <ci>v_R3_a_IPR</ci>
+                                                                                <ci>v_R4_a_IPR</ci>
+                                                                            </apply>
+                                                                            <ci>v_R5_a_IPR</ci>
+                                                                        </apply>
+                                                                        <ci>v_R6_a_IPR</ci>
+                                                                    </apply>
+                                                                    <ci>v_R7_a_IPR</ci>
+                                                                    <ci>v_R8_a_IPR</ci>
+                                                                </apply>
+                                                                <ci>v_R1_b_IPR</ci>
+                                                            </apply>
+                                                            <ci>v_R2_b_IPR</ci>
+                                                        </apply>
+                                                        <ci>v_R3_b_IPR</ci>
+                                                        <ci>v_R4_b_IPR</ci>
+                                                    </apply>
+                                                    <ci>v_R5_b_IPR</ci>
+                                                </apply>
+                                                <ci>v_R6_b_IPR</ci>
+                                            </apply>
+                                            <ci>v_R7_b_IPR</ci>
+                                            <ci>v_R8_b_IPR</ci>
+                                        </apply>
+                                        <ci>v_R1_c_IPR</ci>
+                                    </apply>
+                                    <ci>v_R2_c_IPR</ci>
+                                </apply>
+                                <ci>v_R3_c_IPR</ci>
+                                <ci>v_R4_c_IPR</ci>
+                            </apply>
+                            <ci>v_R5_c_IPR</ci>
+                        </apply>
+                        <ci>v_R6_c_IPR</ci>
+                    </apply>
+                    <ci>v_R7_c_IPR</ci>
+                    <ci>v_R8_c_IPR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_o</ci>
+                </apply>
+                <ci>v_pCa_R2</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_pCa</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_pCa_R1</ci>
+                    </apply>
+                    <ci>v_pCa_R2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_pCa_Ca</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_pCa_R1</ci>
+                    <ci>v_pCa_R2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_SR</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <ci>v_leak</ci>
+                        </apply>
+                        <ci>v_R_IPR_main</ci>
+                    </apply>
+                    <ci>v_Ca_SR_SERCA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_IP3</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <plus/>
+                                    <apply>
+                                        <minus/>
+                                        <apply>
+                                            <plus/>
+                                            <apply>
+                                                <minus/>
+                                                <apply>
+                                                    <plus/>
+                                                    <apply>
+                                                        <minus/>
+                                                        <apply>
+                                                            <plus/>
+                                                            <apply>
+                                                                <minus/>
+                                                                <ci>v_R9_a_IPR</ci>
+                                                            </apply>
+                                                            <ci>v_R10_a_IPR</ci>
+                                                        </apply>
+                                                        <ci>v_R11_a_IPR</ci>
+                                                    </apply>
+                                                    <ci>v_R12_a_IPR</ci>
+                                                </apply>
+                                                <ci>v_R9_b_IPR</ci>
+                                            </apply>
+                                            <ci>v_R10_b_IPR</ci>
+                                        </apply>
+                                        <ci>v_R11_b_IPR</ci>
+                                    </apply>
+                                    <ci>v_R12_b_IPR</ci>
+                                </apply>
+                                <ci>v_R9_c_IPR</ci>
+                            </apply>
+                            <ci>v_R10_c_IPR</ci>
+                        </apply>
+                        <ci>v_R11_c_IPR</ci>
+                    </apply>
+                    <ci>v_R12_c_IPR</ci>
+                </apply>
+            </apply>
+            <!--+IP3_stim;-->
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_H</ci>
+                </apply>
+                <ci>v_H_SERCA</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_MgADP</ci>
+                </apply>
+                <ci>v_MgADP_SERCA</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_MgATP</ci>
+                </apply>
+                <ci>v_MgATP_SERCA</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Pi</ci>
+                </apply>
+                <ci>v_Pi_SERCA</ci>
+            </apply>
+        </math>
+        <!--        ode(q_PLBp, time) = +v_mSERCA;-->
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="Ca_leak"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_Ca_SR" variable_2="q_Ca_SR"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="v_leak" variable_2="v_leak"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="IPR"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_SR" variable_2="q_Ca_SR"/>
+        <map_variables variable_1="q_IP3" variable_2="q_IP3"/>
+        <map_variables variable_1="q_Sa_000_IPR" variable_2="q_Sa_000_IPR"/>
+        <map_variables variable_1="q_Sa_001_IPR" variable_2="q_Sa_001_IPR"/>
+        <map_variables variable_1="q_Sa_010_IPR" variable_2="q_Sa_010_IPR"/>
+        <map_variables variable_1="q_Sa_011_IPR" variable_2="q_Sa_011_IPR"/>
+        <map_variables variable_1="q_Sa_100_IPR" variable_2="q_Sa_100_IPR"/>
+        <map_variables variable_1="q_Sa_101_IPR" variable_2="q_Sa_101_IPR"/>
+        <map_variables variable_1="q_Sa_110_IPR" variable_2="q_Sa_110_IPR"/>
+        <map_variables variable_1="q_Sa_111_IPR" variable_2="q_Sa_111_IPR"/>
+        <map_variables variable_1="q_Sb_000_IPR" variable_2="q_Sb_000_IPR"/>
+        <map_variables variable_1="q_Sb_001_IPR" variable_2="q_Sb_001_IPR"/>
+        <map_variables variable_1="q_Sb_010_IPR" variable_2="q_Sb_010_IPR"/>
+        <map_variables variable_1="q_Sb_011_IPR" variable_2="q_Sb_011_IPR"/>
+        <map_variables variable_1="q_Sb_100_IPR" variable_2="q_Sb_100_IPR"/>
+        <map_variables variable_1="q_Sb_101_IPR" variable_2="q_Sb_101_IPR"/>
+        <map_variables variable_1="q_Sb_110_IPR" variable_2="q_Sb_110_IPR"/>
+        <map_variables variable_1="q_Sb_111_IPR" variable_2="q_Sb_111_IPR"/>
+        <map_variables variable_1="q_Sc_000_IPR" variable_2="q_Sc_000_IPR"/>
+        <map_variables variable_1="q_Sc_001_IPR" variable_2="q_Sc_001_IPR"/>
+        <map_variables variable_1="q_Sc_010_IPR" variable_2="q_Sc_010_IPR"/>
+        <map_variables variable_1="q_Sc_011_IPR" variable_2="q_Sc_011_IPR"/>
+        <map_variables variable_1="q_Sc_100_IPR" variable_2="q_Sc_100_IPR"/>
+        <map_variables variable_1="q_Sc_101_IPR" variable_2="q_Sc_101_IPR"/>
+        <map_variables variable_1="q_Sc_110_IPR" variable_2="q_Sc_110_IPR"/>
+        <map_variables variable_1="q_Sc_111_IPR" variable_2="q_Sc_111_IPR"/>
+        <map_variables variable_1="v_R_IPR_main" variable_2="v_R_IPR_main"/>
+        <map_variables variable_1="v_R1_a_IPR" variable_2="v_R1_a_IPR"/>
+        <map_variables variable_1="v_R2_a_IPR" variable_2="v_R2_a_IPR"/>
+        <map_variables variable_1="v_R3_a_IPR" variable_2="v_R3_a_IPR"/>
+        <map_variables variable_1="v_R4_a_IPR" variable_2="v_R4_a_IPR"/>
+        <map_variables variable_1="v_R5_a_IPR" variable_2="v_R5_a_IPR"/>
+        <map_variables variable_1="v_R6_a_IPR" variable_2="v_R6_a_IPR"/>
+        <map_variables variable_1="v_R7_a_IPR" variable_2="v_R7_a_IPR"/>
+        <map_variables variable_1="v_R8_a_IPR" variable_2="v_R8_a_IPR"/>
+        <map_variables variable_1="v_R9_a_IPR" variable_2="v_R9_a_IPR"/>
+        <map_variables variable_1="v_R10_a_IPR" variable_2="v_R10_a_IPR"/>
+        <map_variables variable_1="v_R11_a_IPR" variable_2="v_R11_a_IPR"/>
+        <map_variables variable_1="v_R12_a_IPR" variable_2="v_R12_a_IPR"/>
+        <map_variables variable_1="v_R1_b_IPR" variable_2="v_R1_b_IPR"/>
+        <map_variables variable_1="v_R2_b_IPR" variable_2="v_R2_b_IPR"/>
+        <map_variables variable_1="v_R3_b_IPR" variable_2="v_R3_b_IPR"/>
+        <map_variables variable_1="v_R4_b_IPR" variable_2="v_R4_b_IPR"/>
+        <map_variables variable_1="v_R5_b_IPR" variable_2="v_R5_b_IPR"/>
+        <map_variables variable_1="v_R6_b_IPR" variable_2="v_R6_b_IPR"/>
+        <map_variables variable_1="v_R7_b_IPR" variable_2="v_R7_b_IPR"/>
+        <map_variables variable_1="v_R8_b_IPR" variable_2="v_R8_b_IPR"/>
+        <map_variables variable_1="v_R9_b_IPR" variable_2="v_R9_b_IPR"/>
+        <map_variables variable_1="v_R10_b_IPR" variable_2="v_R10_b_IPR"/>
+        <map_variables variable_1="v_R11_b_IPR" variable_2="v_R11_b_IPR"/>
+        <map_variables variable_1="v_R12_b_IPR" variable_2="v_R12_b_IPR"/>
+        <map_variables variable_1="v_R1_c_IPR" variable_2="v_R1_c_IPR"/>
+        <map_variables variable_1="v_R2_c_IPR" variable_2="v_R2_c_IPR"/>
+        <map_variables variable_1="v_R3_c_IPR" variable_2="v_R3_c_IPR"/>
+        <map_variables variable_1="v_R4_c_IPR" variable_2="v_R4_c_IPR"/>
+        <map_variables variable_1="v_R5_c_IPR" variable_2="v_R5_c_IPR"/>
+        <map_variables variable_1="v_R6_c_IPR" variable_2="v_R6_c_IPR"/>
+        <map_variables variable_1="v_R7_c_IPR" variable_2="v_R7_c_IPR"/>
+        <map_variables variable_1="v_R8_c_IPR" variable_2="v_R8_c_IPR"/>
+        <map_variables variable_1="v_R9_c_IPR" variable_2="v_R9_c_IPR"/>
+        <map_variables variable_1="v_R10_c_IPR" variable_2="v_R10_c_IPR"/>
+        <map_variables variable_1="v_R11_c_IPR" variable_2="v_R11_c_IPR"/>
+        <map_variables variable_1="v_R12_c_IPR" variable_2="v_R12_c_IPR"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="pCa"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_pCa" variable_2="q_pCa"/>
+        <map_variables variable_1="q_pCa_Ca" variable_2="q_pCa_Ca"/>
+        <map_variables variable_1="v_pCa_R1" variable_2="v_pCa_R1"/>
+        <map_variables variable_1="v_pCa_R2" variable_2="v_pCa_R2"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="SERCA"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_P1_SERCA" variable_2="q_P1_SERCA"/>
+        <map_variables variable_1="q_P2_SERCA" variable_2="q_P2_SERCA"/>
+        <map_variables variable_1="q_P2a_SERCA" variable_2="q_P2a_SERCA"/>
+        <map_variables variable_1="q_P4_SERCA" variable_2="q_P4_SERCA"/>
+        <map_variables variable_1="q_P5_SERCA" variable_2="q_P5_SERCA"/>
+        <map_variables variable_1="q_P6_SERCA" variable_2="q_P6_SERCA"/>
+        <map_variables variable_1="q_P8_SERCA" variable_2="q_P8_SERCA"/>
+        <map_variables variable_1="q_P9_SERCA" variable_2="q_P9_SERCA"/>
+        <map_variables variable_1="q_P10_SERCA" variable_2="q_P10_SERCA"/>
+        <map_variables variable_1="q_H" variable_2="q_H"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_SR" variable_2="q_Ca_SR"/>
+        <map_variables variable_1="q_MgATP" variable_2="q_MgATP"/>
+        <map_variables variable_1="q_MgADP" variable_2="q_MgADP"/>
+        <map_variables variable_1="q_Pi" variable_2="q_Pi"/>
+        <map_variables variable_1="q_PLBp" variable_2="q_PLBp"/>
+        <map_variables variable_1="q_PLBp_baseline" variable_2="q_PLBp_baseline"/>
+        <map_variables variable_1="v_Ca_i_SERCA" variable_2="v_Ca_i_SERCA"/>
+        <map_variables variable_1="v_Ca_SR_SERCA" variable_2="v_Ca_SR_SERCA"/>
+        <map_variables variable_1="v_H_SERCA" variable_2="v_H_SERCA"/>
+        <map_variables variable_1="v_MgADP_SERCA" variable_2="v_MgADP_SERCA"/>
+        <map_variables variable_1="v_MgATP_SERCA" variable_2="v_MgATP_SERCA"/>
+        <map_variables variable_1="v_Pi_SERCA" variable_2="v_Pi_SERCA"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="Ca_leak"/>
+        <map_variables variable_1="kappa_leak" variable_2="kappa_leak"/>
+        <map_variables variable_1="K_Ca_SR" variable_2="K_Ca_SR"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="IPR"/>
+        <map_variables variable_1="kappa_R_IPR_main" variable_2="kappa_R_IPR_main"/>
+        <map_variables variable_1="kappa_R1_a_IPR" variable_2="kappa_R1_a_IPR"/>
+        <map_variables variable_1="kappa_R2_a_IPR" variable_2="kappa_R2_a_IPR"/>
+        <map_variables variable_1="kappa_R3_a_IPR" variable_2="kappa_R3_a_IPR"/>
+        <map_variables variable_1="kappa_R4_a_IPR" variable_2="kappa_R4_a_IPR"/>
+        <map_variables variable_1="kappa_R5_a_IPR" variable_2="kappa_R5_a_IPR"/>
+        <map_variables variable_1="kappa_R6_a_IPR" variable_2="kappa_R6_a_IPR"/>
+        <map_variables variable_1="kappa_R7_a_IPR" variable_2="kappa_R7_a_IPR"/>
+        <map_variables variable_1="kappa_R8_a_IPR" variable_2="kappa_R8_a_IPR"/>
+        <map_variables variable_1="kappa_R9_a_IPR" variable_2="kappa_R9_a_IPR"/>
+        <map_variables variable_1="kappa_R10_a_IPR" variable_2="kappa_R10_a_IPR"/>
+        <map_variables variable_1="kappa_R11_a_IPR" variable_2="kappa_R11_a_IPR"/>
+        <map_variables variable_1="kappa_R12_a_IPR" variable_2="kappa_R12_a_IPR"/>
+        <map_variables variable_1="kappa_R1_b_IPR" variable_2="kappa_R1_b_IPR"/>
+        <map_variables variable_1="kappa_R2_b_IPR" variable_2="kappa_R2_b_IPR"/>
+        <map_variables variable_1="kappa_R3_b_IPR" variable_2="kappa_R3_b_IPR"/>
+        <map_variables variable_1="kappa_R4_b_IPR" variable_2="kappa_R4_b_IPR"/>
+        <map_variables variable_1="kappa_R5_b_IPR" variable_2="kappa_R5_b_IPR"/>
+        <map_variables variable_1="kappa_R6_b_IPR" variable_2="kappa_R6_b_IPR"/>
+        <map_variables variable_1="kappa_R7_b_IPR" variable_2="kappa_R7_b_IPR"/>
+        <map_variables variable_1="kappa_R8_b_IPR" variable_2="kappa_R8_b_IPR"/>
+        <map_variables variable_1="kappa_R9_b_IPR" variable_2="kappa_R9_b_IPR"/>
+        <map_variables variable_1="kappa_R10_b_IPR" variable_2="kappa_R10_b_IPR"/>
+        <map_variables variable_1="kappa_R11_b_IPR" variable_2="kappa_R11_b_IPR"/>
+        <map_variables variable_1="kappa_R12_b_IPR" variable_2="kappa_R12_b_IPR"/>
+        <map_variables variable_1="kappa_R1_c_IPR" variable_2="kappa_R1_c_IPR"/>
+        <map_variables variable_1="kappa_R2_c_IPR" variable_2="kappa_R2_c_IPR"/>
+        <map_variables variable_1="kappa_R3_c_IPR" variable_2="kappa_R3_c_IPR"/>
+        <map_variables variable_1="kappa_R4_c_IPR" variable_2="kappa_R4_c_IPR"/>
+        <map_variables variable_1="kappa_R5_c_IPR" variable_2="kappa_R5_c_IPR"/>
+        <map_variables variable_1="kappa_R6_c_IPR" variable_2="kappa_R6_c_IPR"/>
+        <map_variables variable_1="kappa_R7_c_IPR" variable_2="kappa_R7_c_IPR"/>
+        <map_variables variable_1="kappa_R8_c_IPR" variable_2="kappa_R8_c_IPR"/>
+        <map_variables variable_1="kappa_R9_c_IPR" variable_2="kappa_R9_c_IPR"/>
+        <map_variables variable_1="kappa_R10_c_IPR" variable_2="kappa_R10_c_IPR"/>
+        <map_variables variable_1="kappa_R11_c_IPR" variable_2="kappa_R11_c_IPR"/>
+        <map_variables variable_1="kappa_R12_c_IPR" variable_2="kappa_R12_c_IPR"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_SR" variable_2="K_Ca_SR"/>
+        <map_variables variable_1="K_IP3" variable_2="K_IP3"/>
+        <map_variables variable_1="K_Sa_000_IPR" variable_2="K_Sa_000_IPR"/>
+        <map_variables variable_1="K_Sa_001_IPR" variable_2="K_Sa_001_IPR"/>
+        <map_variables variable_1="K_Sa_010_IPR" variable_2="K_Sa_010_IPR"/>
+        <map_variables variable_1="K_Sa_011_IPR" variable_2="K_Sa_011_IPR"/>
+        <map_variables variable_1="K_Sa_100_IPR" variable_2="K_Sa_100_IPR"/>
+        <map_variables variable_1="K_Sa_101_IPR" variable_2="K_Sa_101_IPR"/>
+        <map_variables variable_1="K_Sa_110_IPR" variable_2="K_Sa_110_IPR"/>
+        <map_variables variable_1="K_Sa_111_IPR" variable_2="K_Sa_111_IPR"/>
+        <map_variables variable_1="K_Sb_000_IPR" variable_2="K_Sb_000_IPR"/>
+        <map_variables variable_1="K_Sb_001_IPR" variable_2="K_Sb_001_IPR"/>
+        <map_variables variable_1="K_Sb_010_IPR" variable_2="K_Sb_010_IPR"/>
+        <map_variables variable_1="K_Sb_011_IPR" variable_2="K_Sb_011_IPR"/>
+        <map_variables variable_1="K_Sb_100_IPR" variable_2="K_Sb_100_IPR"/>
+        <map_variables variable_1="K_Sb_101_IPR" variable_2="K_Sb_101_IPR"/>
+        <map_variables variable_1="K_Sb_110_IPR" variable_2="K_Sb_110_IPR"/>
+        <map_variables variable_1="K_Sb_111_IPR" variable_2="K_Sb_111_IPR"/>
+        <map_variables variable_1="K_Sc_000_IPR" variable_2="K_Sc_000_IPR"/>
+        <map_variables variable_1="K_Sc_001_IPR" variable_2="K_Sc_001_IPR"/>
+        <map_variables variable_1="K_Sc_010_IPR" variable_2="K_Sc_010_IPR"/>
+        <map_variables variable_1="K_Sc_011_IPR" variable_2="K_Sc_011_IPR"/>
+        <map_variables variable_1="K_Sc_100_IPR" variable_2="K_Sc_100_IPR"/>
+        <map_variables variable_1="K_Sc_101_IPR" variable_2="K_Sc_101_IPR"/>
+        <map_variables variable_1="K_Sc_110_IPR" variable_2="K_Sc_110_IPR"/>
+        <map_variables variable_1="K_Sc_111_IPR" variable_2="K_Sc_111_IPR"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="pCa"/>
+        <map_variables variable_1="kappa_pCa_R1" variable_2="kappa_pCa_R1"/>
+        <map_variables variable_1="kappa_pCa_R2" variable_2="kappa_pCa_R2"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="K_pCa" variable_2="K_pCa"/>
+        <map_variables variable_1="K_pCa_Ca" variable_2="K_pCa_Ca"/>
+        <map_variables variable_1="zCa" variable_2="zCa"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="SERCA"/>
+        <map_variables variable_1="kappa_SERCA_R1_2" variable_2="kappa_SERCA_R1_2"/>
+        <map_variables variable_1="kappa_SERCA_R2_4" variable_2="kappa_SERCA_R2_4"/>
+        <map_variables variable_1="kappa_SERCA_R2_2a" variable_2="kappa_SERCA_R2_2a"/>
+        <map_variables variable_1="kappa_SERCA_R4_5" variable_2="kappa_SERCA_R4_5"/>
+        <map_variables variable_1="kappa_SERCA_R5_6" variable_2="kappa_SERCA_R5_6"/>
+        <map_variables variable_1="kappa_SERCA_R6_8" variable_2="kappa_SERCA_R6_8"/>
+        <map_variables variable_1="kappa_SERCA_R8_9" variable_2="kappa_SERCA_R8_9"/>
+        <map_variables variable_1="kappa_SERCA_R9_10" variable_2="kappa_SERCA_R9_10"/>
+        <map_variables variable_1="kappa_SERCA_R10_1" variable_2="kappa_SERCA_R10_1"/>
+        <map_variables variable_1="K_P1_SERCA" variable_2="K_P1_SERCA"/>
+        <map_variables variable_1="K_P2_SERCA" variable_2="K_P2_SERCA"/>
+        <map_variables variable_1="K_P2a_SERCA" variable_2="K_P2a_SERCA"/>
+        <map_variables variable_1="K_P4_SERCA" variable_2="K_P4_SERCA"/>
+        <map_variables variable_1="K_P5_SERCA" variable_2="K_P5_SERCA"/>
+        <map_variables variable_1="K_P6_SERCA" variable_2="K_P6_SERCA"/>
+        <map_variables variable_1="K_P8_SERCA" variable_2="K_P8_SERCA"/>
+        <map_variables variable_1="K_P9_SERCA" variable_2="K_P9_SERCA"/>
+        <map_variables variable_1="K_P10_SERCA" variable_2="K_P10_SERCA"/>
+        <map_variables variable_1="K_H" variable_2="K_H"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_SR" variable_2="K_Ca_SR"/>
+        <map_variables variable_1="K_MgATP" variable_2="K_MgATP"/>
+        <map_variables variable_1="K_MgADP" variable_2="K_MgADP"/>
+        <map_variables variable_1="K_Pi" variable_2="K_Pi"/>
+        <map_variables variable_1="K_PLBp" variable_2="K_PLBp"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="Ca_leak"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="IPR"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="pCa"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="SERCA"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+</model>

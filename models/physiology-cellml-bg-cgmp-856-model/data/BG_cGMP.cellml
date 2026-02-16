@@ -1,0 +1,524 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="individual_cGMP" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <!-- initial values-->
+        <variable initial_value="1e-18" name="q_GTP" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_E5c" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_cGMP" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_PDE" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_GTP_E5c" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_cGMP_PDE" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_GMP" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="v_R_1a_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_1b_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_2a_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_2b_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_GTP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_1a_cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_E5c</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R_1a_cGMP</ci>
+                    </apply>
+                    <ci>v_R_1b_cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_cGMP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R_1b_cGMP</ci>
+                        <ci>v_R_2a_cGMP</ci>
+                    </apply>
+                    <ci>v_R_2b_cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PDE</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R_2a_cGMP</ci>
+                    </apply>
+                    <ci>v_R_2b_cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_GTP_E5c</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_1a_cGMP</ci>
+                    <ci>v_R_1b_cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_cGMP_PDE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_2a_cGMP</ci>
+                    <ci>v_R_2b_cGMP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_GMP</ci>
+                </apply>
+                <ci>v_R_2b_cGMP</ci>
+            </apply>
+        </math>
+    </component>
+    <component name="cGMP_parameters">
+        <variable initial_value="1772.99" name="kappa_R_1a_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0302117" name="kappa_R_1b_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="73652.7" name="kappa_R_2a_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0143623" name="kappa_R_2b_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1600.8" name="K_GTP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0255983" name="K_E5c" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0939434" name="K_cGMP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="10.5002" name="K_PDE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="152.027" name="K_GTP_E5c" public_interface="out" units="per_fmol"/>
+        <variable initial_value="7.31926" name="K_cGMP_PDE" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000481761" name="K_GMP" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="cGMP">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- parameters-->
+        <variable name="kappa_R_1a_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R_1b_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R_2a_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_R_2b_cGMP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_GTP" public_interface="in" units="per_fmol"/>
+        <variable name="K_E5c" public_interface="in" units="per_fmol"/>
+        <variable name="K_cGMP" public_interface="in" units="per_fmol"/>
+        <variable name="K_PDE" public_interface="in" units="per_fmol"/>
+        <variable name="K_GTP_E5c" public_interface="in" units="per_fmol"/>
+        <variable name="K_cGMP_PDE" public_interface="in" units="per_fmol"/>
+        <variable name="K_GMP" public_interface="in" units="per_fmol"/>
+        <!-- Input from global environment-->
+        <variable name="q_GTP" public_interface="in" units="fmol"/>
+        <variable name="q_E5c" public_interface="in" units="fmol"/>
+        <variable name="q_cGMP" public_interface="in" units="fmol"/>
+        <variable name="q_PDE" public_interface="in" units="fmol"/>
+        <variable name="q_GTP_E5c" public_interface="in" units="fmol"/>
+        <variable name="q_cGMP_PDE" public_interface="in" units="fmol"/>
+        <variable name="q_GMP" public_interface="in" units="fmol"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_GTP" units="J_per_mol"/>
+        <variable name="mu_E5c" units="J_per_mol"/>
+        <variable name="mu_cGMP" units="J_per_mol"/>
+        <variable name="mu_PDE" units="J_per_mol"/>
+        <variable name="mu_GTP_E5c" units="J_per_mol"/>
+        <variable name="mu_cGMP_PDE" units="J_per_mol"/>
+        <variable name="mu_GMP" units="J_per_mol"/>
+        <variable name="v_R_1a_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R_1b_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R_2a_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <variable name="v_R_2b_cGMP" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_GTP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_GTP</ci>
+                            <ci>q_GTP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_E5c</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_E5c</ci>
+                            <ci>q_E5c</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_cGMP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_cGMP</ci>
+                            <ci>q_cGMP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_PDE</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_PDE</ci>
+                            <ci>q_PDE</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_GTP_E5c</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_GTP_E5c</ci>
+                            <ci>q_GTP_E5c</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_cGMP_PDE</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_cGMP_PDE</ci>
+                            <ci>q_cGMP_PDE</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_GMP</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_GMP</ci>
+                            <ci>q_GMP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R_1a_cGMP</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R_1a_cGMP</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_GTP</ci>
+                                    <ci>mu_E5c</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_GTP_E5c</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R_1b_cGMP</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R_1b_cGMP</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_GTP_E5c</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_cGMP</ci>
+                                    <ci>mu_E5c</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R_2a_cGMP</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R_2a_cGMP</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_cGMP</ci>
+                                    <ci>mu_PDE</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_cGMP_PDE</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_R_2b_cGMP</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_R_2b_cGMP</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_cGMP_PDE</ci>
+                                    <ci>mu_cGMP</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_GMP</ci>
+                                    <ci>mu_PDE</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="cGMP"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_GTP" variable_2="q_GTP"/>
+        <map_variables variable_1="q_E5c" variable_2="q_E5c"/>
+        <map_variables variable_1="q_cGMP" variable_2="q_cGMP"/>
+        <map_variables variable_1="q_PDE" variable_2="q_PDE"/>
+        <map_variables variable_1="q_GTP_E5c" variable_2="q_GTP_E5c"/>
+        <map_variables variable_1="q_cGMP_PDE" variable_2="q_cGMP_PDE"/>
+        <map_variables variable_1="q_GMP" variable_2="q_GMP"/>
+        <map_variables variable_1="v_R_1a_cGMP" variable_2="v_R_1a_cGMP"/>
+        <map_variables variable_1="v_R_1b_cGMP" variable_2="v_R_1b_cGMP"/>
+        <map_variables variable_1="v_R_2a_cGMP" variable_2="v_R_2a_cGMP"/>
+        <map_variables variable_1="v_R_2b_cGMP" variable_2="v_R_2b_cGMP"/>
+    </connection>
+    <connection>
+        <map_components component_1="cGMP" component_2="cGMP_parameters"/>
+        <map_variables variable_1="kappa_R_1a_cGMP" variable_2="kappa_R_1a_cGMP"/>
+        <map_variables variable_1="kappa_R_1b_cGMP" variable_2="kappa_R_1b_cGMP"/>
+        <map_variables variable_1="kappa_R_2a_cGMP" variable_2="kappa_R_2a_cGMP"/>
+        <map_variables variable_1="kappa_R_2b_cGMP" variable_2="kappa_R_2b_cGMP"/>
+        <map_variables variable_1="K_GTP" variable_2="K_GTP"/>
+        <map_variables variable_1="K_E5c" variable_2="K_E5c"/>
+        <map_variables variable_1="K_cGMP" variable_2="K_cGMP"/>
+        <map_variables variable_1="K_PDE" variable_2="K_PDE"/>
+        <map_variables variable_1="K_GTP_E5c" variable_2="K_GTP_E5c"/>
+        <map_variables variable_1="K_cGMP_PDE" variable_2="K_cGMP_PDE"/>
+        <map_variables variable_1="K_GMP" variable_2="K_GMP"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="cGMP"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

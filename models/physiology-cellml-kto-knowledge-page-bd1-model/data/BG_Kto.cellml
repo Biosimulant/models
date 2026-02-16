@@ -1,0 +1,849 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- transient outward -->
+<model name="BG_transient_outward" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="1.0e6" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="0.116325" name="q_K_o" public_interface="out" units="fmol"/>
+        <variable initial_value="3.65002" name="q_K_i" public_interface="out" units="fmol"/>
+        <variable initial_value="3.1966124E-07" name="q_r0s0_TO" public_interface="out" units="fmol"/>
+        <variable initial_value="3.1966124E-07" name="q_r1s0_TO" public_interface="out" units="fmol"/>
+        <variable initial_value="3.1966124E-07" name="q_r0s1_TO" public_interface="out" units="fmol"/>
+        <variable initial_value="3.1966124E-07" name="q_r1s1_TO" public_interface="out" units="fmol"/>
+        <variable initial_value="-8.5e4" name="q_mem" public_interface="out" units="fC"/>
+        <variable name="Vmem" units="volt"/>
+        <variable initial_value="8.31" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96500" name="F" public_interface="out" units="C_per_mol"/>
+        <variable name="v_TO" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_TO" public_interface="in" units="fA"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_K_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_TO</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_K_o</ci>
+                </apply>
+                <ci>v_TO</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_mem</ci>
+                </apply>
+                <ci>I_mem_TO</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Vmem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="TO_parameters">
+        <variable initial_value="1.91513" name="kappa_TO" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="10.0063" name="kappa_gTO_1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.053573" name="kappa_gTO_2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0622138" name="kappa_gTO_3" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0155957" name="kappa_gTO_4" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0402291" name="K_K_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.267055" name="K_K_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00553253" name="K_r0s0_TO" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0220702" name="K_r1s0_TO" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.03336" name="K_r0s1_TO" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4.12222" name="K_r1s1_TO" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1" name="zK" public_interface="out" units="dimensionless"/>
+        <variable initial_value="2.28623234372134" name="z_rTO_f" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-1.51477720975217" name="z_sTO_f" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.131848324558065" name="z_rTO_r" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1.75042355789096" name="z_sTO_r" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="TO">
+        <variable name="t" private_interface="out" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="zK" public_interface="in" units="dimensionless"/>
+        <variable name="F" private_interface="out" public_interface="in" units="C_per_mol"/>
+        <variable name="C_m" public_interface="in" units="fF"/>
+        <!-- Parameters-->
+        <variable name="kappa_TO" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_K_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_K_o" public_interface="in" units="per_fmol"/>
+        <!-- state variables-->
+        <variable name="q_K_i" public_interface="in" units="fmol"/>
+        <variable name="q_K_o" public_interface="in" units="fmol"/>
+        <variable name="q_mem" public_interface="in" units="fC"/>
+        <variable name="v_TO" public_interface="out" units="fmol_per_sec"/>
+        <variable name="I_mem_TO" public_interface="out" units="fA"/>
+        <variable name="u_K_i" units="J_per_mol"/>
+        <variable name="u_K_o" units="J_per_mol"/>
+        <variable name="V_mem" units="J_per_C"/>
+        <variable name="Am_TO" units="J_per_mol"/>
+        <variable name="Af_TO" units="J_per_mol"/>
+        <variable name="Ar_TO" units="J_per_mol"/>
+        <!-- Conservation laws-->
+        <!-- Constitutive relations - Convention: positive flow from inside TO outside-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Am_TO</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <ci>V_mem</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_K_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K_i</ci>
+                            <ci>q_K_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>u_K_o</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_K_o</ci>
+                            <ci>q_K_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_TO</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_r1s1_TO</ci>
+                    <ci>u_K_i</ci>
+                    <ci>Am_TO</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_TO</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_r1s1_TO</ci>
+                    <ci>u_K_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_TO</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>kappa_TO</ci>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_TO</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_TO</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <eq/>
+                            <ci>Am_TO</ci>
+                            <cn cellml:units="J_per_mol">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <cn cellml:units="dimensionless">1</cn>
+                                        <ci>kappa_TO</ci>
+                                        <ci>Am_TO</ci>
+                                    </apply>
+                                    <apply>
+                                        <times/>
+                                        <ci>R</ci>
+                                        <ci>T</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>Am_TO</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>R</ci>
+                                                <ci>T</ci>
+                                            </apply>
+                                        </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Af_TO</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>Ar_TO</ci>
+                                        <apply>
+                                            <times/>
+                                            <ci>R</ci>
+                                            <ci>T</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_mem_TO</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>zK</ci>
+                            </apply>
+                            <ci>v_TO</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <ci>v_gTO_1</ci>
+                                <ci>v_gTO_2</ci>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <ci>z_rTO_r</ci>
+                                <ci>z_rTO_f</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <ci>v_gTO_3</ci>
+                                <ci>v_gTO_4</ci>
+                            </apply>
+                            <apply>
+                                <minus/>
+                                <ci>z_sTO_r</ci>
+                                <ci>z_sTO_f</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!-- GATE-->
+        <variable name="v_r0s0_TO" units="fmol_per_sec"/>
+        <variable name="v_r1s0_TO" units="fmol_per_sec"/>
+        <variable name="v_r0s1_TO" units="fmol_per_sec"/>
+        <variable name="v_r1s1_TO" units="fmol_per_sec"/>
+        <variable name="v_gTO_1" units="fmol_per_sec"/>
+        <variable name="v_gTO_3" units="fmol_per_sec"/>
+        <variable name="v_gTO_2" units="fmol_per_sec"/>
+        <variable name="v_gTO_4" units="fmol_per_sec"/>
+        <variable name="mu_r0s0_TO" units="J_per_mol"/>
+        <variable name="mu_r1s0_TO" units="J_per_mol"/>
+        <variable name="mu_r0s1_TO" units="J_per_mol"/>
+        <variable name="mu_r1s1_TO" units="J_per_mol"/>
+        <variable name="Af_gTO_1" units="J_per_mol"/>
+        <variable name="Ar_gTO_1" units="J_per_mol"/>
+        <variable name="Af_gTO_3" units="J_per_mol"/>
+        <variable name="Ar_gTO_3" units="J_per_mol"/>
+        <variable name="Af_gTO_2" units="J_per_mol"/>
+        <variable name="Ar_gTO_2" units="J_per_mol"/>
+        <variable name="Af_gTO_4" units="J_per_mol"/>
+        <variable name="Ar_gTO_4" units="J_per_mol"/>
+        <variable name="kappa_gTO_1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_gTO_2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_gTO_3" public_interface="in" units="fmol_per_sec"/>
+        <variable name="kappa_gTO_4" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_r0s0_TO" public_interface="in" units="per_fmol"/>
+        <variable name="K_r1s0_TO" public_interface="in" units="per_fmol"/>
+        <variable name="K_r0s1_TO" public_interface="in" units="per_fmol"/>
+        <variable name="K_r1s1_TO" public_interface="in" units="per_fmol"/>
+        <variable name="z_rTO_f" public_interface="in" units="dimensionless"/>
+        <variable name="z_sTO_f" public_interface="in" units="dimensionless"/>
+        <variable name="z_rTO_r" public_interface="in" units="dimensionless"/>
+        <variable name="z_sTO_r" public_interface="in" units="dimensionless"/>
+        <variable name="q_r0s0_TO" public_interface="in" units="fmol"/>
+        <variable name="q_r1s0_TO" public_interface="in" units="fmol"/>
+        <variable name="q_r0s1_TO" public_interface="in" units="fmol"/>
+        <variable name="q_r1s1_TO" public_interface="in" units="fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Af_gTO_1</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_r0s0_TO</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_rTO_f</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_gTO_1</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_r1s0_TO</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_rTO_r</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_gTO_3</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_r0s0_TO</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_sTO_f</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_gTO_3</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_r0s1_TO</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_sTO_r</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_gTO_2</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_r0s1_TO</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_rTO_f</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_gTO_2</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_r1s1_TO</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_rTO_r</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_gTO_4</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_r1s0_TO</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_sTO_f</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_gTO_4</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_r1s1_TO</ci>
+                    <apply>
+                        <times/>
+                        <ci>z_sTO_r</ci>
+                        <ci>F</ci>
+                        <ci>V_mem</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_gTO_1</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_gTO_1</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_gTO_1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_gTO_1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_gTO_3</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_gTO_3</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_gTO_3</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_gTO_3</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_gTO_2</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_gTO_2</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_gTO_2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_gTO_2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_gTO_4</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_gTO_4</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_gTO_4</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_gTO_4</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_r0s0_TO</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_gTO_1</ci>
+                    </apply>
+                    <ci>v_gTO_3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_r1s0_TO</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_gTO_1</ci>
+                    <ci>v_gTO_4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_r0s1_TO</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_gTO_2</ci>
+                    </apply>
+                    <ci>v_gTO_3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_r1s1_TO</ci>
+                <apply>
+                    <plus/>
+                    <ci>v_gTO_2</ci>
+                    <ci>v_gTO_4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_r0s0_TO</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_r0s0_TO</ci>
+                            <ci>q_r0s0_TO</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_r1s0_TO</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_r1s0_TO</ci>
+                            <ci>q_r1s0_TO</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_r0s1_TO</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_r0s1_TO</ci>
+                            <ci>q_r0s1_TO</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_r1s1_TO</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_r1s1_TO</ci>
+                            <ci>q_r1s1_TO</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_r0s0_TO</ci>
+                </apply>
+                <ci>v_r0s0_TO</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_r1s0_TO</ci>
+                </apply>
+                <ci>v_r1s0_TO</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_r0s1_TO</ci>
+                </apply>
+                <ci>v_r0s1_TO</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_r1s1_TO</ci>
+                </apply>
+                <ci>v_r1s1_TO</ci>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="TO"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_r0s0_TO" variable_2="q_r0s0_TO"/>
+        <map_variables variable_1="q_r1s0_TO" variable_2="q_r1s0_TO"/>
+        <map_variables variable_1="q_r0s1_TO" variable_2="q_r0s1_TO"/>
+        <map_variables variable_1="q_r1s1_TO" variable_2="q_r1s1_TO"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="v_TO" variable_2="v_TO"/>
+        <map_variables variable_1="I_mem_TO" variable_2="I_mem_TO"/>
+    </connection>
+    <connection>
+        <map_components component_1="TO" component_2="TO_parameters"/>
+        <map_variables variable_1="kappa_TO" variable_2="kappa_TO"/>
+        <map_variables variable_1="kappa_gTO_1" variable_2="kappa_gTO_1"/>
+        <map_variables variable_1="kappa_gTO_2" variable_2="kappa_gTO_2"/>
+        <map_variables variable_1="kappa_gTO_3" variable_2="kappa_gTO_3"/>
+        <map_variables variable_1="kappa_gTO_4" variable_2="kappa_gTO_4"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_r0s0_TO" variable_2="K_r0s0_TO"/>
+        <map_variables variable_1="K_r1s0_TO" variable_2="K_r1s0_TO"/>
+        <map_variables variable_1="K_r0s1_TO" variable_2="K_r0s1_TO"/>
+        <map_variables variable_1="K_r1s1_TO" variable_2="K_r1s1_TO"/>
+        <map_variables variable_1="z_rTO_f" variable_2="z_rTO_f"/>
+        <map_variables variable_1="z_sTO_f" variable_2="z_sTO_f"/>
+        <map_variables variable_1="z_rTO_r" variable_2="z_rTO_r"/>
+        <map_variables variable_1="z_sTO_r" variable_2="z_sTO_r"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

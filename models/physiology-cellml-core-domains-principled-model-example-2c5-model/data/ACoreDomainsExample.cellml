@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<model xmlns:xlink="http://www.w3.org/1999/xlink" name="ACoreDomainsExample" cmeta:id="ACoreDomainsExample" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+ 
+	<import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Principled_Base/Time.cellml">
+		<component name="Time" component_ref="Time"/>
+	</import> 
+	
+    <import xlink:href="Principled_Base/mohr_taylor_newell_2008_subset.cellml">
+    	<units name="J_per_mole_per_K" units_ref="J_per_mole_per_K" />
+	<units name="C_per_mole" units_ref="C_per_mole" />
+	<units name="per_mole" units_ref="per_mole" />
+    	<component name="codata_2006_physicochemical" component_ref="codata_2006_physicochemical_subset" />
+    </import>
+    
+   <connection>
+      <map_components component_1="ACoreDomainsExample" component_2="codata_2006_physicochemical"/>
+      <map_variables variable_1="R" 	variable_2="molar_gas_constant" />
+      <map_variables variable_1="F" 	variable_2="Faraday_constant" 	/>
+      <map_variables variable_1="avogadrosConstant" variable_2="Avogadro_constant"/>
+   </connection>
+   
+	<component name="ACoreDomainsExample_Parameters">
+		<variable name="stimTime" 		public_interface="out" initial_value="50000" units="ms"/>
+		<variable name="stimDuration" 		public_interface="out" initial_value="100"    units="ms"/>
+		<variable name="stimCurrent" 		public_interface="out" initial_value="-5"  units="uA_per_mm3"/>
+		<variable name="Am" 			public_interface="out" initial_value="200"  units="per_mm"/>
+
+		<variable name="Cm"  			units="uF_per_mm2" public_interface="out" initial_value="0.01"/>
+		<variable name="V_init"  		units="mV" public_interface="out" initial_value="-120"/>
+		<variable name="vC" 			units="dimensionless" public_interface="out" initial_value="0.49"/>
+		<variable name="H_init" 		units="mM" initial_value="6.31e-5" public_interface="out"/>
+		<variable name="ATP_init" 		units="mM" initial_value="6.8" public_interface="out"/>
+		<variable name="k_half_pHi" 		units="mM" 	initial_value="0.265e-3" public_interface="out"/>
+		<variable name="H_o" 			units="mM" 	initial_value="3.98e-5" public_interface="out"/>
+		<variable name="k_half_pHo" 		units="mM" 	initial_value="3.162e-3" public_interface="out"/>
+		<variable name="k_half_ATPi" 		units="mM" initial_value="1.4" public_interface="out"/>
+		<variable name="H_ATPi" 		units="dimensionless" 	initial_value="2.6" public_interface="out"/>
+		<variable name="g_CaL" 			units="mm_per_ms" initial_value="1.75e-6" public_interface="out" />
+		<variable name="Cai_init" 		units="mM" public_interface="out" initial_value="0.0007"/>
+		<variable name="Cao"  			units="mM" public_interface="out" initial_value="2.0" />
+		<variable name="T" 			units="K" public_interface="out" initial_value="310" />  
+		<variable name="d_init" 		initial_value="0.0" units="dimensionless"  public_interface="out"/>
+		<variable name="f_init"  		initial_value="1.0"   units="dimensionless" public_interface="out"/>
+		<variable name="fCa_init" 		initial_value="1.0"  units="dimensionless" public_interface="out"/>  
+		<variable name="I_V_MinusExternal" 	public_interface="out" initial_value="0"  units="uA_per_mm2" />
+		<variable name="J_Cai_External" 	public_interface="out" initial_value="0"  units="mM_per_s" />
+		
+		<variable name="ADP_init" units="M" initial_value="0" public_interface="out"/>
+		<variable name="Pi_init" units="M" initial_value="0" public_interface="out" />
+		<variable name="Mg_init" units="M" initial_value="1e-3" public_interface="out" />
+		<variable name="K_init" units="M" initial_value="1.5e-1" public_interface="out" />
+		<variable name="BX" units="M" initial_value="0" public_interface="out"/>
+		<variable name="K_BX" units="M" initial_value="1e-7" public_interface="out"/>
+		<variable name="ATPASE_p1" units="per_s" initial_value="0" public_interface="out"/>
+		<variable name="Env" units="dimensionless" initial_value="2.562" public_interface="out"/>
+		<variable name="Kh1" units="dimensionless" initial_value="2.8e-7" public_interface="out"/>
+		<variable name="Km1" units="dimensionless" initial_value="0.000108" public_interface="out"/>
+		<variable name="Kk1" units="dimensionless" initial_value="0.0971" public_interface="out"/>
+		<variable name="Kh2" units="dimensionless" initial_value="4.19e-7" public_interface="out"/>
+		<variable name="Km2" units="dimensionless" initial_value="0.000882" public_interface="out"/>
+		<variable name="Kk2" units="dimensionless" initial_value="0.131" public_interface="out"/>
+		<variable name="Kh3" units="dimensionless" initial_value="2.13e-7" public_interface="out"/>
+		<variable name="Km3" units="dimensionless" initial_value="0.0321" public_interface="out"/>
+		<variable name="Kk3" units="dimensionless" initial_value="0.379" public_interface="out"/>
+		<variable name="DGro_ATPASE" units="dimensionless" initial_value="4.508" public_interface="out"/>
+		<variable name="J_H_External" units="M_per_s" initial_value="0" public_interface="out"/>
+		<variable name="J_ATP_External" units="M_per_s" initial_value="0" public_interface="out"/>
+		<variable name="J_ADP_External" units="M_per_s" initial_value="0" public_interface="out"/>
+		<variable name="J_Pi_External" units="M_per_s" initial_value="0" public_interface="out" />
+		<variable name="J_Mg_External" units="M_per_s" initial_value="0" public_interface="out" />
+		<variable name="J_K_External" units="M_per_s" initial_value="0" public_interface="out" />
+		
+		<variable name="kon" units="per_uM_per_s" initial_value="0.1" public_interface="out"/>
+		<variable name="koff" units="per_s" initial_value="0.3" public_interface="out"/>
+		<variable name="CaM_init" units="uM"  initial_value="2.04" public_interface="out"/>
+		<variable name="CaM_star_init" units="uM" initial_value="0.46" public_interface="out"/>
+		<variable name="J_CaM_External" units="uM_per_s" initial_value="0" public_interface="out"/>
+		<variable name="J_CaM_star_External" units="uM_per_s" initial_value="0" public_interface="out"/>
+		
+		<variable name="Ccn" units="dimensionless" initial_value="50" public_interface="out"/>
+		<variable name="act_N" units="dimensionless"  initial_value="0.9" public_interface="out"/>
+		<variable name="Ntot" units="nM" initial_value="1000" public_interface="out"/>
+		
+		<variable name="K_mN" units="nM"  public_interface="out" initial_value="1200"/>
+		<variable name="n" units="dimensionless"  public_interface="out" initial_value="2.92"/>
+		<variable name="K_dN" units="nM"  public_interface="out" initial_value="1760"/>	
+		
+		<variable name="k_f1" units="per_nM_per_s" initial_value="2e-3" public_interface="out"/>
+		<variable name="k_r1" units="per_s" initial_value="2e1" public_interface="out"/>
+		<variable name="k_f2" units="per_s" initial_value="1.5" public_interface="out"/>
+		<variable name="k_f3" units="per_s" initial_value="3.7e-1" public_interface="out"/>
+		<variable name="k_r3" units="per_nM_per_s" initial_value="4.7e-2" public_interface="out"/>
+		<variable name="k_f4" units="per_s" initial_value="4.4e-1" public_interface="out"/>
+
+		<variable name="NFATp_c_init" units="nM" initial_value="0.615" public_interface="out"/>
+		<variable name="NFATN_c_init" units="nM" initial_value="6.55e-3" public_interface="out"/>
+		<variable name="NFATN_n_init" units="nM" initial_value="17.6" public_interface="out"/>
+		<variable name="NFATp_n_init" units="nM" initial_value="1.10" public_interface="out"/>
+
+		<variable name="J_NFATp_c_External" units="nM_per_s" initial_value="0" public_interface="out"/>
+		<variable name="J_NFATN_c_External" units="nM_per_s" initial_value="0" public_interface="out"/>
+		<variable name="J_NFATN_n_External" units="nM_per_s" initial_value="0" public_interface="out"/>
+		<variable name="J_NFATp_n_External" units="nM_per_s" initial_value="0" public_interface="out"/>	
+		
+		<variable name="Promoter_GFP_k" units="PoPs" initial_value="8.0" public_interface="out" />
+		<variable name="Promoter_GFP_n" units="dimensionless" initial_value="2" public_interface="out"/>
+		<variable name="Promoter_GFP_Km" units="nM" initial_value="320" public_interface="out"/>
+		<variable name="transcriptionalVolume_init" units="femtoliter" initial_value="1" public_interface="out" />
+		<variable name="translationalVolume_init" units="femtoliter" initial_value="50" public_interface="out" />
+		<variable name="RNA_n_init" units="nM" initial_value="0" public_interface="out" />
+		<variable name="J_RNA_n_External" units="nM_per_s" initial_value="0" public_interface="out" />
+		<variable name="RNA_c_init" units="nM" initial_value="0" public_interface="out" />
+		<variable name="J_RNA_c_External" units="nM_per_s" initial_value="0" public_interface="out" />
+		<variable name="GFP_init" units="nM" initial_value="0" public_interface="out" />
+		<variable name="J_GFP_External" units="nM_per_s" initial_value="0" public_interface="out" />
+		<variable name="RNA_kDecay" units="per_s" initial_value="1e-4" public_interface="out" />
+		<variable name="RNA_Transport_k" units="per_s" initial_value="0.8" public_interface="out" />
+		<variable name="RBS_k" units="RiPs" initial_value="6.0" public_interface="out" />
+		<variable name="GFP_kDecay" units="per_s" initial_value="0.6" public_interface="out" />
+	</component>
+	
+     	<connection>
+      		<map_components component_1="ACoreDomainsExample_Parameters" component_2="ACoreDomainsExample"/>
+      		<map_variables variable_1="stimTime"            variable_2="stimTime"/>
+      		<map_variables variable_1="stimDuration" 	variable_2="stimDuration" 	/>	
+      		<map_variables variable_1="stimCurrent" 	variable_2="stimCurrent" />		
+      		<map_variables variable_1="Am" 			variable_2="Am" 	/>		
+      		
+      		<map_variables variable_1="Cm"  		variable_2="Cm"  	/>		
+      		<map_variables variable_1="V_init"  		variable_2="V_init"  	/>	
+      		<map_variables variable_1="vC" 			variable_2="vC" 	/>		
+      		<map_variables variable_1="H_init" 		variable_2="H_init" 	/>		
+      		<map_variables variable_1="ATP_init" 		variable_2="ATP_init" 	/>		
+      		<map_variables variable_1="k_half_pHi" 		variable_2="k_half_pHi" />		
+		<map_variables variable_1="H_o" 		variable_2="H_o" 	/>		
+		<map_variables variable_1="k_half_pHo" 		variable_2="k_half_pHo" />		
+		<map_variables variable_1="k_half_ATPi" 	variable_2="k_half_ATPi" />		
+		<map_variables variable_1="H_ATPi" 		variable_2="H_ATPi" 	/>	
+		<map_variables variable_1="g_CaL" 		variable_2="g_CaL" 	/>		
+		<map_variables variable_1="Cai_init" 		variable_2="Cai_init" 	/>	
+		<map_variables variable_1="Cao"  		variable_2="Cao"  	/>		
+		<map_variables variable_1="T" 			variable_2="T" 		/>	
+		<map_variables variable_1="d_init" 		variable_2="d_init" 	/>	
+		<map_variables variable_1="f_init"  		variable_2="f_init"  	/>	
+		<map_variables variable_1="fCa_init" 		variable_2="fCa_init" 	/>	
+		<map_variables variable_1="I_V_MinusExternal" 	variable_2="I_V_MinusExternal"/>
+		<map_variables variable_1="J_Cai_External" 	variable_2="J_Cai_External"/>
+		
+		<map_variables variable_1="ADP_init" 	variable_2="ADP_init"	/>
+		<map_variables variable_1="Pi_init" 	variable_2="Pi_init"  	/>
+		<map_variables variable_1="Mg_init"	variable_2="Mg_init" 	/>
+		<map_variables variable_1="K_init" 	variable_2="K_init" 	/>
+		<map_variables variable_1="BX" 		variable_2="BX" 	/>
+		<map_variables variable_1="K_BX" 	variable_2="K_BX" 	/>
+		<map_variables variable_1="ATPASE_p1" 	variable_2="ATPASE_p1"	/>
+		<map_variables variable_1="Env" 	variable_2="Env" 	/>
+		<map_variables variable_1="Kh1" 	variable_2="Kh1" 	/>
+		<map_variables variable_1="Km1" 	variable_2="Km1" 	/>
+		<map_variables variable_1="Kk1" 	variable_2="Kk1" 	/>
+		<map_variables variable_1="Kh2" 	variable_2="Kh2" 	/>
+		<map_variables variable_1="Km2" 	variable_2="Km2" 	/>
+		<map_variables variable_1="Kk2" 	variable_2="Kk2" 	/>
+		<map_variables variable_1="Kh3" 	variable_2="Kh3" 	/>
+		<map_variables variable_1="Km3" 	variable_2="Km3" 	/>
+		<map_variables variable_1="Kk3" 	variable_2="Kk3" 	/>
+		<map_variables variable_1="DGro_ATPASE" variable_2="DGro_ATPASE"/>
+		<map_variables variable_1="J_ATP_External" 	variable_2="J_ATP_External"	/>
+		<map_variables variable_1="J_ADP_External" 	variable_2="J_ADP_External"	/>
+		<map_variables variable_1="J_H_External" 	variable_2="J_H_External"	/>
+		<map_variables variable_1="J_Pi_External" 	variable_2="J_Pi_External"  	/>
+		<map_variables variable_1="J_Mg_External"	variable_2="J_Mg_External" 	/>
+		<map_variables variable_1="J_K_External" 	variable_2="J_K_External" 	/>
+					
+		<map_variables variable_1="CaM_init" variable_2="CaM_init"/>
+		<map_variables variable_1="CaM_star_init" variable_2="CaM_star_init"/>
+		<map_variables variable_1="kon" variable_2="kon"/>
+		<map_variables variable_1="koff" variable_2="koff"/>
+		<map_variables variable_1="J_CaM_External" variable_2="J_CaM_External"/>
+		<map_variables variable_1="J_CaM_star_External" variable_2="J_CaM_star_External"/>
+		
+		<map_variables variable_1="Ccn" variable_2="Ccn" />
+		<map_variables variable_1="Ntot" variable_2="Ntot" />
+		<map_variables variable_1="k_f1" variable_2="k_f1" />
+		<map_variables variable_1="k_r1" variable_2="k_r1" />
+		<map_variables variable_1="k_f2" variable_2="k_f2" />
+		<map_variables variable_1="k_f3" variable_2="k_f3" />
+		<map_variables variable_1="k_r3" variable_2="k_r3" />
+		<map_variables variable_1="k_f4" variable_2="k_f4" />
+		<map_variables variable_1="NFATp_c_init" variable_2="NFATp_c_init" />
+		<map_variables variable_1="NFATN_c_init" variable_2="NFATN_c_init" />
+		<map_variables variable_1="NFATN_n_init" variable_2="NFATN_n_init" />
+		<map_variables variable_1="NFATp_n_init" variable_2="NFATp_n_init" />
+		<map_variables variable_1="J_NFATp_c_External"	variable_2="J_NFATp_c_External" />
+		<map_variables variable_1="J_NFATN_c_External"	variable_2="J_NFATN_c_External" />
+		<map_variables variable_1="J_NFATN_n_External"	variable_2="J_NFATN_n_External" />
+		<map_variables variable_1="J_NFATp_n_External"	variable_2="J_NFATp_n_External" />
+		
+		<map_variables variable_1="K_mN" variable_2="K_mN"/>
+		<map_variables variable_1="n" variable_2="n"/>
+		<map_variables variable_1="K_dN" variable_2="K_dN"/>
+		
+		<map_variables variable_1="Promoter_GFP_k" 	variable_2="Promoter_GFP_k" 	/>
+		<map_variables variable_1="Promoter_GFP_n" 	variable_2="Promoter_GFP_n" 	/>
+		<map_variables variable_1="Promoter_GFP_Km" 	variable_2="Promoter_GFP_Km" 	/>
+		<map_variables variable_1="transcriptionalVolume_init" 	variable_2="transcriptionalVolume_init" />
+		<map_variables variable_1="translationalVolume_init" 	variable_2="translationalVolume_init" />
+		<map_variables variable_1="RNA_n_init" 		variable_2="RNA_n_init" 		/>
+		<map_variables variable_1="J_RNA_n_External"	variable_2="J_RNA_n_External"	/>
+		<map_variables variable_1="RNA_c_init" 		variable_2="RNA_c_init" 		/>
+		<map_variables variable_1="J_RNA_c_External"	variable_2="J_RNA_c_External"	/>
+		<map_variables variable_1="GFP_init" 		variable_2="GFP_init" 		/>
+		<map_variables variable_1="J_GFP_External" 	variable_2="J_GFP_External" 	/>
+		<map_variables variable_1="RNA_kDecay" 		variable_2="RNA_kDecay" 	/>
+		<map_variables variable_1="RNA_Transport_k" 	variable_2="RNA_Transport_k" 	/>	
+		<map_variables variable_1="RBS_k" 		variable_2="RBS_k" 		/>
+		<map_variables variable_1="GFP_kDecay" 		variable_2="GFP_kDecay" 	/>	
+		
+	</connection> 
+  
+  	<group>
+  	<relationship_ref relationship="encapsulation" />
+  		<component_ref component="ACoreDomainsExample">  
+  			<component_ref component="StimCurrent_SinglePulse" />
+  			<component_ref component="ICaL_to_Cai" />
+  			<component_ref component="membraneV_delta" />
+  			<component_ref component="Myosin_ATPASE" />
+  			<component_ref component="Calmodulin_Activation" />
+  			<component_ref component="Cai_delta" />
+  			<component_ref component="CaMActivation_Ca_J_Scaling" />
+  			<component_ref component="CaN_to_DNAReady_NFAT" />
+  			<component_ref component="ExampleDevice" />
+  		</component_ref>
+	</group>
+	
+	 
+	<component name="ACoreDomainsExample">
+		<variable name="stimTime" 	public_interface="in" private_interface="out" units="ms"/>
+	        <variable name="stimDuration" 	public_interface="in" private_interface="out" units="ms"/>
+		<variable name="stimCurrent" 	public_interface="in" private_interface="out" units="uA_per_mm3"/>
+	        <variable name="Am" 		public_interface="in" private_interface="out" units="per_mm"/>
+	        <variable name="time"	        public_interface="in" private_interface="out" units="second"/>               
+
+		<variable name="Cm"  units="uF_per_mm2" public_interface="in" private_interface="out"/>
+		<variable name="V_init"  units="mV" public_interface="in" private_interface="out"/>
+		<variable name="vC" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="H_init" units="mM" public_interface="in" private_interface="out"/>
+		<variable name="k_half_pHi" units="mM" public_interface="in" private_interface="out"/>
+		<variable name="H_o" units="mM" public_interface="in" private_interface="out"/>
+		<variable name="k_half_pHo" units="mM" public_interface="in" private_interface="out"/>
+		<variable name="ATP_init" units="mM"  public_interface="in" private_interface="out"/>
+		<variable name="k_half_ATPi" units="mM" public_interface="in" private_interface="out"/>
+		<variable name="H_ATPi" units="dimensionless" public_interface="in" private_interface="out"/>
+		<variable name="g_CaL" public_interface="in" private_interface="out" units="mm_per_ms"/>
+		<variable name="Cai_init" public_interface="in" private_interface="out" units="mM"/>
+		<variable name="Cao" public_interface="in" private_interface="out" units="mM"/>
+		<variable name="T" public_interface="in" private_interface="out" units="K"/>
+		<variable name="R" public_interface="in" private_interface="out" units="J_per_mole_per_K"/>
+		<variable name="F" public_interface="in" private_interface="out" units="C_per_mole"/>
+		<variable name="d_init" public_interface="in" private_interface="out" units="dimensionless"  />
+		<variable name="f_init"  public_interface="in" private_interface="out"  units="dimensionless" />
+		<variable name="fCa_init" public_interface="in" private_interface="out"  units="dimensionless" />
+		<variable name="I_V_MinusExternal" public_interface="in" private_interface="out"  units="uA_per_mm2" />
+		<variable name="J_Cai_External" public_interface="in" private_interface="out"  units="mM_per_s" />
+
+		<variable name="ADP_init" units="M"  public_interface="in"  private_interface="out"/>
+		<variable name="Pi_init" units="M"  public_interface="in" private_interface="out"/>
+		<variable name="Mg_init" units="M"  public_interface="in" private_interface="out"/>
+		<variable name="K_init" units="M"  public_interface="in" private_interface="out"/>
+		<variable name="BX" units="M" public_interface="in" private_interface="out"/>
+		<variable name="K_BX" units="M"  public_interface="in" private_interface="out"/>
+		<variable name="ATPASE_p1" units="per_s"  public_interface="in" private_interface="out"/>
+		<variable name="Env" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="Kh1" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="Km1" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="Kk1" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="Kh2" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="Km2" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="Kk2" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="Kh3" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="Km3" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="Kk3" units="dimensionless" public_interface="in" private_interface="out"/>
+		<variable name="DGro_ATPASE" units="dimensionless"  public_interface="in" private_interface="out"/>
+		<variable name="J_H_External" units="M_per_s"  public_interface="in" private_interface="out"/>
+		<variable name="J_ATP_External" units="M_per_s"  public_interface="in" private_interface="out"/>
+		<variable name="J_ADP_External" units="M_per_s" public_interface="in" private_interface="out"/>
+		<variable name="J_Pi_External" units="M_per_s" public_interface="in"  private_interface="out"/>
+		<variable name="J_Mg_External" units="M_per_s" public_interface="in"  private_interface="out"/>
+		<variable name="J_K_External" units="M_per_s"  public_interface="in" private_interface="out"/>
+	        
+		<variable name="CaM_init" units="uM"  public_interface="in" private_interface="out"/>
+		<variable name="CaM_star_init" units="uM" public_interface="in" private_interface="out"/>
+		<variable name="kon" units="per_uM_per_s" public_interface="in" private_interface="out"/>
+		<variable name="koff" units="per_s" public_interface="in" private_interface="out"/>
+		<variable name="J_CaM_External" units="uM_per_s" public_interface="in" private_interface="out" />
+		<variable name="J_CaM_star_External" units="uM_per_s" public_interface="in" private_interface="out" />
+		
+		<variable name="CaMActivation_Ca_J_ScaleFactor" units="dimensionless" initial_value="4" private_interface="out" />
+		
+		<variable name="K_mN" units="nM" public_interface="in" private_interface="out"/>
+		<variable name="n" units="dimensionless" public_interface="in" private_interface="out"/>
+		<variable name="K_dN" units="nM" public_interface="in" private_interface="out"/>
+		<variable name="Ccn" units="dimensionless" public_interface="in" private_interface="out"/>
+		<variable name="Ntot" units="nM" public_interface="in" private_interface="out"/>  
+		<variable name="k_f1" units="per_nM_per_s" public_interface="in" private_interface="out"/>
+		<variable name="k_r1" units="per_s" public_interface="in" private_interface="out"/>
+		<variable name="k_f2" units="per_s" public_interface="in" private_interface="out"/>
+		<variable name="k_f3" units="per_s" public_interface="in" private_interface="out"/>
+		<variable name="k_r3" units="per_nM_per_s" public_interface="in" private_interface="out"/>
+		<variable name="k_f4" units="per_s" public_interface="in" private_interface="out"/>
+		<variable name="NFATp_c_init" units="nM" private_interface="out" public_interface="in"/>
+		<variable name="NFATN_c_init" units="nM" private_interface="out" public_interface="in"/>
+		<variable name="NFATN_n_init" units="nM" private_interface="out" public_interface="in"/>
+		<variable name="NFATp_n_init" units="nM" private_interface="out" public_interface="in"/>
+		<variable name="J_NFATp_c_External" units="nM_per_s" private_interface="out" public_interface="in"/>
+		<variable name="J_NFATN_c_External" units="nM_per_s" private_interface="out" public_interface="in"/>
+		<variable name="J_NFATN_n_External" units="nM_per_s" private_interface="out" public_interface="in"/>
+		<variable name="J_NFATp_n_External" units="nM_per_s" private_interface="out" public_interface="in"/> 
+
+		<variable name="I_V_Minus" public_interface="out" private_interface="in"  units="uA_per_mm2" />
+		<variable name="V"   public_interface="out" private_interface="in" units="mV"/>
+		<variable name="Cai" public_interface="out" private_interface="in" units="mM"/>
+	        <variable name="J_Cai" public_interface="out" private_interface="in" units="mM_per_s"/>   
+	        
+		<variable name="ATP" units="M"  public_interface="out" private_interface="in"/>
+		<variable name="ADP" units="M" public_interface="out" private_interface="in"/>
+		<variable name="Pi" units="M"  public_interface="out" private_interface="in"/>
+		<variable name="H" units="M"  public_interface="out" private_interface="in"/>
+		<variable name="Mg" units="M"  public_interface="out" private_interface="in"/>
+		<variable name="K" units="M"  public_interface="out" private_interface="in"/>
+		<variable name="J_H" units="M_per_s"  public_interface="out" private_interface="in"/>
+		<variable name="J_ATP" units="M_per_s"  public_interface="out" private_interface="in"/>
+		<variable name="J_ADP" units="M_per_s" public_interface="out" private_interface="in"/>
+		<variable name="J_Pi" units="M_per_s" public_interface="out"  private_interface="in"/>
+		<variable name="J_Mg" units="M_per_s" public_interface="out"  private_interface="in"/>
+		<variable name="J_K" units="M_per_s"  public_interface="out"  private_interface="in"/>
+	        
+		<variable name="CaM" units="uM" public_interface="out" private_interface="in"/>
+		<variable name="J_CaM" units="uM_per_s" public_interface="out" private_interface="in"/>
+		<variable name="CaM_star" units="uM" public_interface="out" private_interface="in"/>
+		<variable name="J_CaM_star" units="uM_per_s" public_interface="out" private_interface="in"/>
+		
+		<variable name="CaM_total" units="uM" private_interface="out" />
+		
+		<variable name="avogadrosConstant" units="per_mole" public_interface="in" private_interface="out"/>
+		<variable name="Promoter_GFP_k" units="PoPs" public_interface="in" private_interface="out" />
+		<variable name="Promoter_GFP_n" units="dimensionless" public_interface="in" private_interface="out"/>
+		<variable name="Promoter_GFP_Km" units="nM" public_interface="in" private_interface="out"/>
+		
+		<variable name="transcriptionalVolume_init" units="femtoliter" public_interface="in" private_interface="out"/>
+		<variable name="translationalVolume_init" units="femtoliter" public_interface="in" private_interface="out"/>
+		<variable name="RNA_n_init" units="nM" public_interface="in" private_interface="out" />
+		<variable name="J_RNA_n_External" units="nM_per_s" public_interface="in" private_interface="out" />
+		<variable name="RNA_c_init" units="nM" public_interface="in" private_interface="out" />
+		<variable name="J_RNA_c_External" units="nM_per_s" public_interface="in" private_interface="out" />
+		<variable name="GFP_init" units="nM" public_interface="in" private_interface="out" />
+		<variable name="J_GFP_External" units="nM_per_s" public_interface="in" private_interface="out" />
+		<variable name="RNA_kDecay" units="per_s" public_interface="in" private_interface="out" />
+		<variable name="RNA_Transport_k" units="per_s" public_interface="in" private_interface="out" />
+		<variable name="RBS_k" units="RiPs" public_interface="in" private_interface="out" />
+		<variable name="GFP_kDecay" units="per_s" public_interface="in" private_interface="out" />
+			
+		<variable name="N_active_ratio" units="dimensionless" private_interface="in" public_interface="out"/>
+		<variable name="NFATp_c" units="nM" private_interface="in" public_interface="out"/>
+		<variable name="NFATN_c" units="nM" private_interface="in" public_interface="out"/>
+		<variable name="NFATN_n" units="nM" private_interface="in" public_interface="out"/>
+		<variable name="NFATp_n" units="nM" private_interface="in" public_interface="out"/>
+		<variable name="J_NFATp_c" units="nM_per_s" private_interface="in" public_interface="out"/>
+		<variable name="J_NFATN_c" units="nM_per_s" private_interface="in" public_interface="out"/>
+		<variable name="J_NFATN_n" units="nM_per_s" private_interface="in" public_interface="out"/>
+		<variable name="J_NFATp_n" units="nM_per_s" private_interface="in" public_interface="out"/>
+		
+		<variable name="J_RNA_n" units="nM_per_s" public_interface="out" private_interface="in" />
+		<variable name="RNA_n" units="nM" public_interface="out" private_interface="in"/>
+		<variable name="J_RNA_c" units="nM_per_s" public_interface="out" private_interface="in" />
+		<variable name="RNA_c" units="nM" public_interface="out" private_interface="in"/>
+		<variable name="transcriptionalVolume" units="femtoliter" public_interface="out" private_interface="in"/>
+		<variable name="translationalVolume" units="femtoliter" public_interface="out" private_interface="in"/>
+		<variable name="J_GFP" units="nM_per_s" public_interface="out" private_interface="in" />
+		<variable name="GFP" units="nM" public_interface="out" private_interface="in"/>
+		
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply><eq/>
+			<ci>CaM_total</ci>
+				<apply>
+					<plus/>
+					<ci>CaM</ci>
+					<ci>CaM_star</ci>
+				</apply>
+			</apply>
+		</math>
+		
+	</component>
+	
+      	<connection>
+      		<map_components component_1="ACoreDomainsExample" component_2="Time"/>
+      		<map_variables variable_1="time" variable_2="time"/>
+	</connection> 
+
+
+	<import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="StimCurrent_SinglePulse.cellml">
+		<units name="ms" units_ref="ms" />
+		<units name="uA_per_mm3" units_ref="uA_per_mm3" />
+		<component name="StimCurrent_SinglePulse" component_ref="StimCurrent_SinglePulse"/>
+	</import> 
+	
+      	<connection>
+      		<map_components component_1="ACoreDomainsExample" component_2="StimCurrent_SinglePulse"/>
+      		<map_variables variable_1="stimTime" variable_2="stimTime"/>
+      		<map_variables variable_1="stimDuration" variable_2="stimDuration"/>
+      		<map_variables variable_1="stimCurrent" variable_2="stimCurrent"/>
+      		<map_variables variable_1="Am" variable_2="Am"/>
+      		<map_variables variable_1="time" variable_2="time"/>
+	</connection> 
+	
+    	<import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="ICaL_to_Cai.cellml">
+    		<units name="per_ms" units_ref="per_ms" />
+    		<units name="per_mm" units_ref="per_mm" />
+		<units name="uF_per_mm2" units_ref="uF_per_mm2" />
+		<units name="mV" units_ref="mV" />
+		<units name="mM" units_ref="mM" />
+		<units name="K" units_ref="K" />
+		<units name="uA_per_mm2" units_ref="uA_per_mm2" />
+		<units name="mm_per_ms" units_ref="mm_per_ms" />
+		<units name="mM_per_s" units_ref="mM_per_s" />
+		<component name="ICaL_to_Cai" component_ref="ICaL_to_Cai"/>
+    	</import>
+   
+	   <connection>
+		<map_components component_1="ACoreDomainsExample" component_2="ICaL_to_Cai"/>
+		<map_variables variable_1="time" 		variable_2="time" 		/>
+		<map_variables variable_1="Cm" 			variable_2="Cm" 		/>
+		<map_variables variable_1="V_init" 		variable_2="V_init" 		/>
+		<map_variables variable_1="Am" 			variable_2="Am" 		/>
+		<map_variables variable_1="vC" 			variable_2="vC" 		/>
+		<map_variables variable_1="k_half_pHi" 		variable_2="k_half_pHi" 	/>
+		<map_variables variable_1="H_o" 		variable_2="H_o" 		/>
+		<map_variables variable_1="k_half_pHo" 		variable_2="k_half_pHo" 	/>
+		<map_variables variable_1="k_half_ATPi" 	variable_2="k_half_ATPi" 	/>
+		<map_variables variable_1="H_ATPi" 		variable_2="H_ATPi" 		/>
+		<map_variables variable_1="g_CaL" 		variable_2="g_CaL" 		/>
+		<map_variables variable_1="Cai_init" 		variable_2="Cai_init" 		/>
+		<map_variables variable_1="Cao" 		variable_2="Cao" 		/>
+		<map_variables variable_1="T" 			variable_2="T" 			/>
+		<map_variables variable_1="F" 			variable_2="F" 			/>
+		<map_variables variable_1="R" 			variable_2="R" 			/>
+		<map_variables variable_1="d_init" 		variable_2="d_init" 		/>
+		<map_variables variable_1="f_init" 		variable_2="f_init" 		/>
+		<map_variables variable_1="fCa_init" 		variable_2="fCa_init" 		/>
+		<map_variables variable_1="V" 			variable_2="V" 			/>
+		<map_variables variable_1="Cai" 		variable_2="Cai" 	/>
+		<map_variables variable_1="J_Cai" 		variable_2="J_Cai" 	/>
+		<map_variables variable_1="I_V_Minus" 		variable_2="I_V_Minus" 	/>
+	   </connection>  
+	  
+	<component name="membraneV_delta">
+		<variable name="IStim" public_interface="in" units="uA_per_mm2"/>
+		<variable name="IMinusExternal" public_interface="in" units="uA_per_mm2"/>
+		<variable name="INetMinus" units="uA_per_mm2" public_interface="out" />
+
+	       <math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply><eq/>
+			<ci>INetMinus</ci>
+				<apply>
+					<minus/>
+					<apply>
+						<plus/>
+						<ci>IStim</ci>
+						<ci>IMinusExternal</ci>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+	
+	<connection>
+		<map_components component_1="ACoreDomainsExample" component_2="membraneV_delta"/>
+			<map_variables variable_1="I_V_MinusExternal" 	variable_2="IMinusExternal" 	/>
+ 	</connection> 
+ 	
+	   <connection>
+		<map_components component_1="membraneV_delta" component_2="ICaL_to_Cai"/>
+		<map_variables variable_1="INetMinus" 	variable_2="I_V_MinusExternal" 	/>
+	   </connection> 
+	   
+      	<connection>
+      		<map_components component_1="membraneV_delta" component_2="StimCurrent_SinglePulse"/>
+      		<map_variables variable_1="IStim" variable_2="IStim"/>
+	</connection> 
+	
+    	<import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Myosin_ATPASE.cellml">
+    		<component name="Myosin_ATPASE" component_ref="Myosin_ATPASE"/>
+    		<units name="M" units_ref="M" />
+    		<units name="per_s" units_ref="per_s" />
+    		<units name="M_per_s" units_ref="M_per_s" />
+        </import>
+        	
+    	<connection>
+    		<map_components component_1="ACoreDomainsExample" component_2="Myosin_ATPASE"/>
+    		<map_variables variable_1="time" 	variable_2="time" 	/>
+    		<map_variables variable_1="ATP_init" 	variable_2="ATP_init"	/>
+    		<map_variables variable_1="ADP_init" 	variable_2="ADP_init"	/>
+    		<map_variables variable_1="H_init" 	variable_2="H_init"	/>
+    		<map_variables variable_1="Pi_init" 	variable_2="Pi_init"  	/>
+    		<map_variables variable_1="Mg_init"	variable_2="Mg_init" 	/>
+    		<map_variables variable_1="K_init" 	variable_2="K_init" 	/>
+    		<map_variables variable_1="BX" 		variable_2="BX" 	/>
+    		<map_variables variable_1="K_BX" 	variable_2="K_BX" 	/>
+    		<map_variables variable_1="ATPASE_p1" 	variable_2="ATPASE_p1"	/>
+    		<map_variables variable_1="Env" 	variable_2="Env" 	/>
+    		<map_variables variable_1="Kh1" 	variable_2="Kh1" 	/>
+    		<map_variables variable_1="Km1" 	variable_2="Km1" 	/>
+    		<map_variables variable_1="Kk1" 	variable_2="Kk1" 	/>
+    		<map_variables variable_1="Kh2" 	variable_2="Kh2" 	/>
+    		<map_variables variable_1="Km2" 	variable_2="Km2" 	/>
+    		<map_variables variable_1="Kk2" 	variable_2="Kk2" 	/>
+    		<map_variables variable_1="Kh3" 	variable_2="Kh3" 	/>
+    		<map_variables variable_1="Km3" 	variable_2="Km3" 	/>
+    		<map_variables variable_1="Kk3" 	variable_2="Kk3" 	/>
+    		<map_variables variable_1="DGro_ATPASE" variable_2="DGro_ATPASE"/>
+    		<map_variables variable_1="J_ATP_External" 	variable_2="J_ATP_External"	/>
+    		<map_variables variable_1="J_ADP_External" 	variable_2="J_ADP_External"	/>
+    		<map_variables variable_1="J_H_External" 	variable_2="J_H_External"	/>
+    		<map_variables variable_1="J_Pi_External" 	variable_2="J_Pi_External"  	/>
+    		<map_variables variable_1="J_Mg_External"	variable_2="J_Mg_External" 	/>
+    		<map_variables variable_1="J_K_External" 	variable_2="J_K_External" 	/>
+    
+    		<map_variables variable_1="ATP" variable_2="ATP" 	/>
+    		<map_variables variable_1="ADP" variable_2="ADP" 	/>
+    		<map_variables variable_1="Pi" 	variable_2="Pi" 	/>
+    		<map_variables variable_1="H" 	variable_2="H" 		/>
+    		<map_variables variable_1="Mg" 	variable_2="Mg" 	/>	
+    		<map_variables variable_1="K" 	variable_2="K" 		/>
+    		<map_variables variable_1="J_H" variable_2="J_H" 	/>
+    		<map_variables variable_1="J_ATP" variable_2="J_ATP"	/>
+    		<map_variables variable_1="J_ADP" variable_2="J_ADP"	/>
+    		<map_variables variable_1="J_Pi" variable_2="J_Pi"	/>
+    		<map_variables variable_1="J_Mg" variable_2="J_Mg"	/>
+    		<map_variables variable_1="J_K" variable_2="J_K" 	/>
+     	</connection> 
+        	
+     	<connection>
+    		<map_components component_1="Myosin_ATPASE" component_2="ICaL_to_Cai"/>
+    		<map_variables variable_1="ATP" variable_2="ATP_i" 	/>
+    		<map_variables variable_1="H" 	variable_2="H_i" 	/>
+	 </connection> 
+	 
+	<import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Calmodulin_Activation.cellml">
+		<component name="Calmodulin_Activation" component_ref="Calmodulin_Activation"/>
+		<units name="uM" units_ref="uM" />
+		<units name="uM_per_s" units_ref="uM_per_s" />
+		<units name="per_uM_per_s" units_ref="per_uM_per_s" />
+	</import>
+	
+	<connection>
+    		<map_components component_1="ACoreDomainsExample" component_2="Calmodulin_Activation"/>
+			<map_variables variable_1="CaM_init" variable_2="CaM_init"/>
+			<map_variables variable_1="CaM_star_init" variable_2="CaM_star_init"/>
+			<map_variables variable_1="kon" variable_2="kon"/>
+			<map_variables variable_1="koff" variable_2="koff"/>
+			<map_variables variable_1="J_CaM_External" variable_2="J_CaM_External"/>
+			<map_variables variable_1="J_CaM_star_External" variable_2="J_CaM_star_External"/>
+			<map_variables variable_1="CaM" 	variable_2="CaM" 	/>
+			<map_variables variable_1="J_CaM" 	variable_2="J_CaM" 	/>
+			<map_variables variable_1="CaM_star" 	variable_2="CaM_star"   />
+			<map_variables variable_1="J_CaM_star"	variable_2="J_CaM_star" />
+			<map_variables variable_1="time"	variable_2="time" />
+ 	</connection> 
+ 	
+    	<connection>
+     		<map_components component_1="Calmodulin_Activation" component_2="ICaL_to_Cai"/>
+     		<map_variables variable_1="Ca" variable_2="Cai" 	/>
+	 </connection> 
+	 
+      	<component name="Cai_delta">
+      	<variable name="JMinusCaMActivation" public_interface="in" units="mM_per_s" />
+      	<variable name="JNet"  units="mM_per_s" public_interface="out" />
+      	<variable name="JExternal"  units="mM_per_s" public_interface="in" />
+      	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      		<apply>
+      			<eq/>
+      			<ci>JNet</ci>	
+      			<apply>
+      				<minus/>
+      				<ci>JExternal</ci>
+      				<ci>JMinusCaMActivation</ci>
+      			</apply>
+      		</apply>
+      	</math>
+      	</component>
+
+	<connection>
+	<map_components component_1="ACoreDomainsExample" component_2="Cai_delta"/>
+		<map_variables variable_1="J_Cai_External" 	variable_2="JExternal" 	/>
+	</connection> 
+
+	<connection>
+	<map_components component_1="Cai_delta" component_2="ICaL_to_Cai"/>
+	<map_variables variable_1="JNet" 	variable_2="J_Cai_External" 	/>
+	</connection> 
+
+	<connection>
+		<map_components component_1="CaMActivation_Ca_J_Scaling" component_2="Cai_delta"/>
+			<map_variables variable_1="J_scaled" variable_2="JMinusCaMActivation"/>
+	</connection> 
+
+
+	<import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Principled_Base/Template_FluxScaling_uM.cellml">
+	<component name="CaMActivation_Ca_J_Scaling" component_ref="Template_FluxScaling_uM"/> 
+	</import> 
+	
+	<connection>
+	<map_components component_1="Calmodulin_Activation" component_2="CaMActivation_Ca_J_Scaling"/>
+		<map_variables variable_1="J_CaM_star" variable_2="J_raw"/>
+	</connection> 
+
+	<connection>
+	<map_components component_1="CaMActivation_Ca_J_Scaling" component_2="ACoreDomainsExample"/>
+		<map_variables variable_1="scaleFactor" variable_2="CaMActivation_Ca_J_ScaleFactor"/>
+	</connection> 
+	
+	<import xlink:href="CaN_to_DNAReady_NFAT.cellml">
+		<units name="nM" units_ref="nM" />
+		<units name="nM_per_s" units_ref="nM_per_s" />
+		<units name="per_nM_per_s" units_ref="per_nM_per_s" />
+		<component name="CaN_to_DNAReady_NFAT" component_ref="CaN_to_DNAReady_NFAT"/>
+	</import>
+	
+	<connection>
+    		<map_components component_1="ACoreDomainsExample" component_2="CaN_to_DNAReady_NFAT"/>
+		<map_variables variable_1="time" 	variable_2="time" 	/>
+		<map_variables variable_1="Ccn" variable_2="Ccn" />
+		<map_variables variable_1="Ntot" variable_2="Ntot" />
+		<map_variables variable_1="k_f1" variable_2="k_f1" />
+		<map_variables variable_1="k_r1" variable_2="k_r1" />
+		<map_variables variable_1="k_f2" variable_2="k_f2" />
+		<map_variables variable_1="k_f3" variable_2="k_f3" />
+		<map_variables variable_1="k_r3" variable_2="k_r3" />
+		<map_variables variable_1="k_f4" variable_2="k_f4" />
+		<map_variables variable_1="NFATp_c_init" variable_2="NFATp_c_init" />
+		<map_variables variable_1="NFATN_c_init" variable_2="NFATN_c_init" />
+		<map_variables variable_1="NFATN_n_init" variable_2="NFATN_n_init" />
+		<map_variables variable_1="NFATp_n_init" variable_2="NFATp_n_init" />
+		<map_variables variable_1="J_NFATp_c_External"	variable_2="J_NFATp_c_External" />
+		<map_variables variable_1="J_NFATN_c_External"	variable_2="J_NFATN_c_External" />
+		<map_variables variable_1="J_NFATN_n_External"	variable_2="J_NFATN_n_External" />
+		<map_variables variable_1="J_NFATp_n_External"	variable_2="J_NFATp_n_External" />
+
+		<map_variables variable_1="K_mN" variable_2="K_mN"/>
+		<map_variables variable_1="n" variable_2="n"/>
+		<map_variables variable_1="K_dN" variable_2="K_dN"/>
+    		
+    		<map_variables variable_1="N_active_ratio" variable_2="N_active_ratio"/>
+		<map_variables variable_1="NFATp_c"	variable_2="NFATp_c" />
+		<map_variables variable_1="NFATN_c"	variable_2="NFATN_c" />
+		<map_variables variable_1="NFATN_n"	variable_2="NFATN_n" />
+		<map_variables variable_1="NFATp_n"	variable_2="NFATp_n" />
+		<map_variables variable_1="J_NFATp_c"	variable_2="J_NFATp_c" />
+		<map_variables variable_1="J_NFATN_c"	variable_2="J_NFATN_c" />
+		<map_variables variable_1="J_NFATN_n"	variable_2="J_NFATN_n" />
+		<map_variables variable_1="J_NFATp_n"	variable_2="J_NFATp_n" />
+		
+		<map_variables variable_1="CaM_total"	variable_2="M"/>		
+ 	</connection>    
+ 	
+ 	<connection>
+ 		<map_components component_1="CaN_to_DNAReady_NFAT" component_2="ICaL_to_Cai"/>
+ 			<map_variables variable_1="Ca"	variable_2="Cai"/>
+	</connection>  
+	
+	<import xlink:href="ExampleDevice.cellml">
+		<units name="PoPs" units_ref="PoPs"/>
+		<units name="RiPs" units_ref="RiPs"/>
+		<units name="femtoliter" units_ref="femtoliter"/>
+		<component name="ExampleDevice" component_ref="ExampleDevice"/>
+	</import>
+	
+	<connection>
+    		<map_components component_1="ACoreDomainsExample" component_2="ExampleDevice"/>
+		<map_variables variable_1="time" 	variable_2="time" 	/>
+		<map_variables variable_1="Promoter_GFP_k" variable_2="k"/>
+		<map_variables variable_1="Promoter_GFP_n" variable_2="n"/>
+		<map_variables variable_1="Promoter_GFP_Km" variable_2="Km"/>
+		<map_variables variable_1="transcriptionalVolume_init" variable_2="transcriptionalVolume_init"/>
+		<map_variables variable_1="translationalVolume_init" variable_2="translationalVolume_init"/>
+		<map_variables variable_1="RNA_n_init" variable_2="RNA_n_init"/>
+		<map_variables variable_1="J_RNA_n_External" variable_2="J_RNA_n_External"/>
+		<map_variables variable_1="RNA_c_init" variable_2="RNA_c_init"/>
+		<map_variables variable_1="J_RNA_c_External" variable_2="J_RNA_c_External"/>
+		<map_variables variable_1="GFP_init" variable_2="GFP_init"/>
+		<map_variables variable_1="J_GFP_External" variable_2="J_GFP_External"/>
+		<map_variables variable_1="RBS_k" variable_2="RBS_k"/>
+		<map_variables variable_1="RNA_kDecay" variable_2="RNA_kDecay"/>
+		<map_variables variable_1="RNA_Transport_k" variable_2="RNA_Transport_k"/>
+		<map_variables variable_1="GFP_kDecay" variable_2="GFP_kDecay"/>
+		<map_variables variable_1="avogadrosConstant" variable_2="avogadrosConstant"/>
+			
+		<map_variables variable_1="J_RNA_n" 		variable_2="J_RNA_n" 	/>	
+		<map_variables variable_1="RNA_n" 		variable_2="RNA_n" 	/>
+		<map_variables variable_1="J_RNA_c" 		variable_2="J_RNA_c" 	/>	
+		<map_variables variable_1="RNA_c" 		variable_2="RNA_c" 	/>	
+		<map_variables variable_1="transcriptionalVolume"	variable_2="transcriptionalVolume"/>	
+		<map_variables variable_1="translationalVolume"	variable_2="translationalVolume"/>
+		<map_variables variable_1="J_GFP" 		variable_2="J_GFP" 	/>	
+		<map_variables variable_1="GFP" 		variable_2="GFP" 	/>	
+ 	</connection> 
+ 	<connection>
+    		<map_components component_1="CaN_to_DNAReady_NFAT" component_2="ExampleDevice"/>
+ 			<map_variables variable_1="NFATN_n" 		variable_2="transcriptionFactor" 	/>
+	</connection> 
+</model>

@@ -1,0 +1,3212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="vasalou_2010" cmeta:id="vasalou_2010">
+  <documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <articleinfo>
+        <title>A multiscale model to investigate circadian rhythmicity of pacemaker neurons in the suprachiasmatic nucleus</title>
+        <author>
+          <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+          <affiliation>
+            <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+          </affiliation>
+        </author>
+      </articleinfo>
+      <section id="sec_status">
+        <title>Model Status</title>
+        <para>This model runs in both OpenCell and COR to replicate the published results (figure 2). This CellML model translation is based on the curated SBML model in the BioModels database (BIOMD0000000246.xml) which in turn was based on the original author's Matlab code. Note that in order to replicate figure 2 the model has to be run for at least 200 hours to allow the oscillations to stabilise (and for 500 hours to clearly see the stablisation).</para>
+      </section>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+        <para>ABSTRACT: The suprachiasmatic nucleus (SCN) of the hypothalamus is a multicellular system that drives daily rhythms in mammalian behavior and physiology. Although the gene regulatory network that produces daily oscillations within individual neurons is well characterized, less is known about the electrophysiology of the SCN cells and how firing rate correlates with circadian gene expression. We developed a firing rate code model to incorporate known electrophysiological properties of SCN pacemaker cells, including circadian dependent changes in membrane voltage and ion conductances. Calcium dynamics were included in the model as the putative link between electrical firing and gene expression. Individual ion currents exhibited oscillatory patterns matching experimental data both in current levels and phase relationships. VIP and GABA neurotransmitters, which encode synaptic signals across the SCN, were found to play critical roles in daily oscillations of membrane excitability and gene expression. Blocking various mechanisms of intracellular calcium accumulation by simulated pharmacological agents (nimodipine, IP3- and ryanodine-blockers) reproduced experimentally observed trends in firing rate dynamics and core-clock gene transcription. The intracellular calcium concentration was shown to regulate diverse circadian processes such as firing frequency, gene expression and system periodicity. The model predicted a direct relationship between firing frequency and gene expression amplitudes, demonstrated the importance of intracellular pathways for single cell behavior and provided a novel multiscale framework which captured characteristics of the SCN at both the electrophysiological and gene regulatory levels.</para>
+        <para>The original paper reference is cited below:</para>
+        <para>
+          A multiscale model to investigate circadian rhythmicity of pacemaker neurons in the suprachiasmatic nucleus, Vasalou C, Henson MA, 2010,
+          <emphasis>PLoS Computational Biology</emphasis>
+          , 6, e1000706.
+          <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/20300645">PubMed ID: 20300645</ulink>
+        </para>
+        <informalfigure float="0" id="fig_cell_diagram1">
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="vasalou_henson_2010.png" />
+            </imageobject>
+          </mediaobject>
+          <caption>Schematic representation of the SCN neuron model</caption>
+        </informalfigure>
+        <informalfigure float="0" id="fig_cell_diagram1">
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="leloup_2003.png" />
+            </imageobject>
+          </mediaobject>
+          <caption>
+            Leloup and Goldbeter 2003 model for circadian oscillations in mammals involving interlocked negative and positive regulations of
+            <emphasis>Per</emphasis>
+            ,
+            <emphasis>Cry</emphasis>
+            ,
+            <emphasis>Bmal1</emphasis>
+            , and
+            <emphasis>Rev-Erb</emphasis>
+            genes by their protein products.
+          </caption>
+        </informalfigure>
+      </sect1>
+    </article>
+  </documentation>
+  <units name="nanoM_2_2">
+    <unit exponent="2.2" units="nanoM" />
+  </units>
+  <units name="joule_per_mole_kelvin">
+    <unit units="joule" />
+    <unit exponent="-1.0" units="kelvin" />
+    <unit exponent="-1.0" units="mole" />
+  </units>
+  <units name="coulomb_per_mole">
+    <unit units="coulomb" />
+    <unit exponent="-1.0" units="mole" />
+  </units>
+  <units name="per_nanoM_0_2">
+    <unit exponent="-0.2" units="nanoM" />
+  </units>
+  <units name="picoA">
+    <unit prefix="pico" units="ampere" />
+  </units>
+  <units name="microM">
+    <unit prefix="micro" units="mole" />
+    <unit exponent="-1.0" units="litre" />
+  </units>
+  <units name="nanoM">
+    <unit prefix="nano" units="mole" />
+    <unit exponent="-1.0" units="litre" />
+  </units>
+  <units name="mOnS">
+    <unit units="nanoS" />
+    <unit units="milliohm" />
+  </units>
+  <units name="nanoS">
+    <unit prefix="nano" units="siemens" />
+  </units>
+  <units name="picoA_2_5">
+    <unit exponent="2.5" units="picoA" />
+  </units>
+  <units name="milliV">
+    <unit prefix="milli" units="volt" />
+  </units>
+  <units name="hertz_1_9">
+    <unit exponent="1.9" units="hertz" />
+  </units>
+  <units name="per_hour">
+    <unit exponent="-1.0" units="hour" />
+  </units>
+  <units name="nanoM_0_1">
+    <unit exponent="0.1" units="nanoM" />
+  </units>
+  <units name="per_nanoM2">
+    <unit exponent="-2.0" units="nanoM" />
+  </units>
+  <units name="per_milliV">
+    <unit exponent="-1.0" units="milliV" />
+  </units>
+  <units name="nanoM_4_5">
+    <unit exponent="4.5" units="nanoM" />
+  </units>
+  <units name="per_milliM">
+    <unit exponent="-1.0" units="milliM" />
+  </units>
+  <units name="per_nanoF">
+    <unit exponent="-1.0" prefix="nano" units="farad" />
+  </units>
+  <units name="per_microM">
+    <unit exponent="-1.0" units="microM" />
+  </units>
+  <units name="second_order_rate_constant">
+    <unit exponent="-1.0" units="hour" />
+    <unit exponent="-1.0" units="nanoM" />
+  </units>
+  <units name="nanoM_0_8_per_hour">
+    <unit exponent="0.8" units="nanoM" />
+    <unit exponent="-1.0" units="hour" />
+  </units>
+  <units name="milliM">
+    <unit prefix="milli" units="mole" />
+    <unit exponent="-1.0" units="litre" />
+  </units>
+  <units name="per_nanoM">
+    <unit exponent="-1.0" units="nanoM" />
+  </units>
+  <units name="per_kelvin">
+    <unit exponent="-1.0" units="kelvin" />
+  </units>
+  <units name="flux">
+    <unit exponent="-1.0" units="hour" />
+    <unit units="nanoM" />
+  </units>
+  <units name="hour">
+    <unit multiplier="3600.0" units="second" />
+  </units>
+  <units name="per_microM_per_hour">
+    <unit exponent="-1.0" units="hour" />
+    <unit exponent="-1.0" units="microM" />
+  </units>
+  <units name="first_order_rate_constant">
+    <unit exponent="-1.0" units="hour" />
+  </units>
+  <units name="gigaohm">
+    <unit prefix="giga" units="ohm" />
+  </units>
+  <units name="microM_per_hour">
+    <unit exponent="-1.0" units="hour" />
+    <unit units="microM" />
+  </units>
+  <units name="nanoF">
+    <unit prefix="nano" units="farad" />
+  </units>
+  <units name="milliohm">
+    <unit prefix="milli" units="ohm" />
+  </units>
+  <component name="environment">
+    <variable cmeta:id="environment.time" name="time" public_interface="out" units="hour" />
+  </component>
+  <component name="membrane" cmeta:id="membrane">
+    <variable cmeta:id="membrane.V_K" name="V_K" public_interface="out" units="nanoM" />
+    <variable cmeta:id="membrane.fr" name="fr" public_interface="out" units="hertz" />
+    <variable cmeta:id="membrane.v_sPC" name="v_sPC" public_interface="out" units="flux" />
+    <variable cmeta:id="membrane.Res" name="Res" units="gigaohm" />
+    <variable cmeta:id="membrane.V_rest" name="V_rest" units="milliV" />
+    <variable cmeta:id="membrane.V_reset" name="V_reset" units="milliV" />
+    <variable cmeta:id="membrane.V_theta" initial_value="20.0" name="V_theta" units="milliV" />
+    <variable cmeta:id="membrane.Cm" initial_value="5.0" name="Cm" units="nanoF" />
+    <variable cmeta:id="membrane.R" initial_value="8.314" name="R" units="joule_per_mole_kelvin" />
+    <variable cmeta:id="membrane.T" initial_value="37" name="T" units="kelvin" />
+    <variable cmeta:id="membrane.T_abs" initial_value="273.15" name="T_abs" units="kelvin" />
+    <variable cmeta:id="membrane.T_room" initial_value="22" name="T_room" units="kelvin" />
+    <variable cmeta:id="membrane.F" initial_value="96485" name="F" units="coulomb_per_mole" />
+    <variable cmeta:id="membrane.alpha" name="alpha" units="dimensionless" />
+    <variable cmeta:id="membrane.beta" name="beta" units="dimensionless" />
+    <variable cmeta:id="membrane.beta_a" name="beta_a" units="dimensionless" />
+    <variable cmeta:id="membrane.c" name="c" units="dimensionless" />
+    <variable cmeta:id="membrane.P_Ca" initial_value="0.05" name="P_Ca" units="per_milliM" />
+    <variable cmeta:id="membrane.P_K" name="P_K" units="per_milliM" />
+    <variable cmeta:id="membrane.P_Na" initial_value="0.036" name="P_Na" units="per_milliM" />
+    <variable cmeta:id="membrane.P_Cl" initial_value="0.3" name="P_Cl" units="per_milliM" />
+    <variable cmeta:id="membrane.v_PK" initial_value="1.9" name="v_PK" units="per_milliM" />
+    <variable cmeta:id="membrane.npk" initial_value="-2.0" name="npk" units="dimensionless" />
+    <variable cmeta:id="membrane.K_PK" initial_value="1.0" name="K_PK" units="per_nanoM2" />
+    <variable cmeta:id="membrane.V_R" initial_value="0.41" name="V_R" units="gigaohm" />
+    <variable cmeta:id="membrane.K_R" initial_value="34.0" name="K_R" units="milliV" />
+    <variable cmeta:id="membrane.Ca_ex" initial_value="5.0" name="Ca_ex" units="microM" />
+    <variable cmeta:id="membrane.Na_ex" initial_value="145.0" name="Na_ex" units="milliM" />
+    <variable cmeta:id="membrane.K_ex" initial_value="1.0" name="K_ex" units="milliM" />
+    <variable cmeta:id="membrane.Cl_ex" initial_value="114.5" name="Cl_ex" units="milliM" />
+    <variable cmeta:id="membrane.Na_in" name="Na_in" units="milliM" />
+    <variable cmeta:id="membrane.K_in" name="K_in" units="milliM" />
+    <variable cmeta:id="membrane.theta_Na" name="theta_Na" units="dimensionless" />
+    <variable cmeta:id="membrane.theta_K" name="theta_K" units="dimensionless" />
+    <variable cmeta:id="membrane.E_Na_0" initial_value="45.0" name="E_Na_0" units="milliV" />
+    <variable cmeta:id="membrane.E_Na" name="E_Na" units="milliV" />
+    <variable cmeta:id="membrane.g_Na" initial_value="36.0" name="g_Na" units="nanoS" />
+    <variable cmeta:id="membrane.E_Ca" name="E_Ca" units="milliV" />
+    <variable cmeta:id="membrane.g_Ca" name="g_Ca" units="nanoS" />
+    <variable cmeta:id="membrane.g_K" name="g_K" units="nanoS" />
+    <variable cmeta:id="membrane.g_K0" initial_value="9.7" name="g_K0" units="nanoS" />
+    <variable cmeta:id="membrane.v_gk" initial_value="10.0" name="v_gk" units="nanoS" />
+    <variable cmeta:id="membrane.K_gk" initial_value="10.0" name="K_gk" units="nanoM" />
+    <variable cmeta:id="membrane.g_KCa" name="g_KCa" units="nanoS" />
+    <variable cmeta:id="membrane.v_KCa" initial_value="3.0" name="v_KCa" units="nanoS" />
+    <variable cmeta:id="membrane.K_KCa" initial_value="0.16" name="K_KCa" units="per_nanoM" />
+    <variable cmeta:id="membrane.nkca" initial_value="-1.0" name="nkca" units="dimensionless" />
+    <variable cmeta:id="membrane.g_L" name="g_L" units="nanoS" />
+    <variable cmeta:id="membrane.E_L_0" initial_value="-29.0" name="E_L_0" units="milliV" />
+    <variable cmeta:id="membrane.E_L" name="E_L" units="milliV" />
+    <variable cmeta:id="membrane.E_K_0" initial_value="-97.0" name="E_K_0" units="milliV" />
+    <variable cmeta:id="membrane.E_K" name="E_K" units="milliV" />
+    <variable cmeta:id="membrane.g_ex" name="g_ex" units="nanoS" />
+    <variable cmeta:id="membrane.E_ex" initial_value="0.0" name="E_ex" units="milliV" />
+    <variable cmeta:id="membrane.v_ex1" initial_value="105.0" name="v_ex1" units="nanoS" />
+    <variable cmeta:id="membrane.v_ex2" initial_value="4.4" name="v_ex2" units="nanoS" />
+    <variable cmeta:id="membrane.K_ex1" initial_value="574050000.0" name="K_ex1" units="picoA_2_5" />
+    <variable cmeta:id="membrane.K_ex2" initial_value="1.0" name="K_ex2" units="per_microM" />
+    <variable cmeta:id="membrane.nex1" initial_value="2.5" name="nex1" units="dimensionless" />
+    <variable cmeta:id="membrane.nex2" initial_value="-1.0" name="nex2" units="dimensionless" />
+    <variable cmeta:id="membrane.g_inhib" initial_value="12.3" name="g_inhib" units="nanoS" />
+    <variable cmeta:id="membrane.E_inhib" name="E_inhib" units="milliV" />
+    <variable cmeta:id="membrane.GABA" name="GABA" units="nanoM" />
+    <variable cmeta:id="membrane.GABA0" initial_value="0.2" name="GABA0" units="nanoM" />
+    <variable cmeta:id="membrane.v_GABA" initial_value="19.0" name="v_GABA" units="nanoM" />
+    <variable cmeta:id="membrane.K_GABA" initial_value="3.0" name="K_GABA" units="nanoM" />
+    <variable cmeta:id="membrane.Cl_in" name="Cl_in" units="milliM" />
+    <variable cmeta:id="membrane.Cl0" initial_value="1.0" name="Cl0" units="milliM" />
+    <variable cmeta:id="membrane.v_Cl1" initial_value="15.5" name="v_Cl1" units="milliM" />
+    <variable cmeta:id="membrane.v_Cl2" initial_value="19.0" name="v_Cl2" units="milliM" />
+    <variable cmeta:id="membrane.K_Cl1" initial_value="4.0" name="K_Cl1" units="nanoM" />
+    <variable cmeta:id="membrane.K_Cl2" initial_value="1.0" name="K_Cl2" units="per_nanoM_0_2" />
+    <variable cmeta:id="membrane.nCl" initial_value="-0.2" name="nCl" units="dimensionless" />
+    <variable cmeta:id="membrane.i_Na" name="i_Na" units="picoA" />
+    <variable cmeta:id="membrane.i_Na_abs" name="i_Na_abs" units="picoA" />
+    <variable cmeta:id="membrane.i_Ca" name="i_Ca" units="picoA" />
+    <variable cmeta:id="membrane.i_K" name="i_K" units="picoA" />
+    <variable cmeta:id="membrane.i_KCa" name="i_KCa" units="picoA" />
+    <variable cmeta:id="membrane.i_L" name="i_L" units="picoA" />
+    <variable cmeta:id="membrane.i_ex" name="i_ex" units="picoA" />
+    <variable cmeta:id="membrane.i_inhib" name="i_inhib" units="picoA" />
+    <variable cmeta:id="membrane.I_star" name="I_star" units="picoA" />
+    <variable cmeta:id="membrane.R_star" name="R_star" units="milliohm" />
+    <variable cmeta:id="membrane.tau_m" name="tau_m" units="second" />
+    <variable cmeta:id="membrane.theta" name="theta" units="milliV" />
+    <variable cmeta:id="membrane.psi" name="psi" units="dimensionless" />
+    <variable cmeta:id="membrane.k_q" initial_value="8.75e-5" name="k_q" units="per_kelvin" />
+    <variable cmeta:id="membrane.k_MK" initial_value="2.9" name="k_MK" units="nanoM" />
+    <variable cmeta:id="membrane.V_MK" initial_value="5.0" name="V_MK" units="nanoM" />
+    <variable cmeta:id="membrane.V_b" initial_value="2.0" name="V_b" units="nanoM" />
+    <variable cmeta:id="membrane.k_b" initial_value="2.0" name="k_b" units="dimensionless" />
+    <variable cmeta:id="membrane.K_D" initial_value="0.08" name="K_D" units="nanoM" />
+    <variable cmeta:id="membrane.v_sP0" initial_value="1.0" name="v_sP0" units="flux" />
+    <variable cmeta:id="membrane.C_T" initial_value="1.6" name="C_T" units="flux" />
+    <variable cmeta:id="membrane.nca" initial_value="2.2" name="nca" units="dimensionless" />
+    <variable cmeta:id="membrane.v_Ca" initial_value="12.3" name="v_Ca" units="nanoS" />
+    <variable cmeta:id="membrane.K_Ca" initial_value="22.0" name="K_Ca" units="nanoM_2_2" />
+    <variable cmeta:id="membrane.K_C" initial_value="0.15" name="K_C" units="nanoM" />
+    <variable cmeta:id="membrane.time" name="time" public_interface="in" units="hour" />
+    <variable cmeta:id="membrane.Ca_in" name="Ca_in" public_interface="in" units="microM" />
+    <variable cmeta:id="membrane.BC" name="BC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="membrane.MP" name="MP" public_interface="in" units="nanoM" />
+    <variable cmeta:id="membrane.VIP" name="VIP" public_interface="in" units="nanoM" />
+    <variable cmeta:id="membrane.CC" name="CC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="membrane.CB" name="CB" public_interface="in" units="nanoM" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="I_star_calculation">
+        <eq />
+        <ci>I_star</ci>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>g_Na</ci>
+              <ci>E_Na</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>g_Ca</ci>
+              <ci>E_Ca</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>g_K</ci>
+              <ci>E_K</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>g_L</ci>
+              <ci>E_L</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>g_KCa</ci>
+              <ci>E_K</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>g_inhib</ci>
+              <ci>E_inhib</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>g_ex</ci>
+              <ci>E_ex</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="R_star_calculation">
+        <eq />
+        <ci>R_star</ci>
+        <apply>
+          <divide />
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mOnS">1.0</cn>
+          <apply>
+            <minus />
+            <apply>
+              <plus />
+              <ci>g_Na</ci>
+              <ci>g_K</ci>
+              <ci>g_L</ci>
+              <ci>g_Ca</ci>
+              <ci>g_KCa</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>g_inhib</ci>
+              <ci>g_ex</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="fr_calculation">
+        <eq />
+        <ci>fr</ci>
+        <apply>
+          <divide />
+          <apply>
+            <minus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+          </apply>
+          <apply>
+            <times />
+            <ci>tau_m</ci>
+            <apply>
+              <ln />
+              <apply>
+                <divide />
+                <apply>
+                  <minus />
+                  <ci>theta</ci>
+                  <apply>
+                    <times />
+                    <ci>R_star</ci>
+                    <ci>I_star</ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <minus />
+                  <ci>V_reset</ci>
+                  <apply>
+                    <times />
+                    <ci>R_star</ci>
+                    <ci>I_star</ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="tau_m_calculation">
+        <eq />
+        <ci>tau_m</ci>
+        <apply>
+          <times />
+          <ci>Cm</ci>
+          <ci>R_star</ci>
+        </apply>
+      </apply>
+      <apply id="V_rest_calculation">
+        <eq />
+        <ci>V_rest</ci>
+        <apply>
+          <times />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>R</ci>
+              <apply>
+                <plus />
+                <ci>T</ci>
+                <ci>T_abs</ci>
+              </apply>
+            </apply>
+            <ci>F</ci>
+          </apply>
+          <apply>
+            <ln />
+            <ci>psi</ci>
+          </apply>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1000.0</cn>
+        </apply>
+      </apply>
+      <apply id="theta_calculation">
+        <eq />
+        <ci>theta</ci>
+        <apply>
+          <plus />
+          <ci>V_rest</ci>
+          <ci>V_theta</ci>
+        </apply>
+      </apply>
+      <apply id="V_reset_calculation">
+        <eq />
+        <ci>V_reset</ci>
+        <apply>
+          <plus />
+          <ci>V_rest</ci>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="milliV">4.0</cn>
+        </apply>
+      </apply>
+      <apply id="psi_calculation">
+        <eq />
+        <ci>psi</ci>
+        <apply>
+          <divide />
+          <apply>
+            <minus />
+            <apply>
+              <root />
+              <apply>
+                <minus />
+                <apply>
+                  <power />
+                  <ci>beta_a</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                </apply>
+                <apply>
+                  <times />
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                  <ci>alpha</ci>
+                  <ci>c</ci>
+                </apply>
+              </apply>
+            </apply>
+            <ci>beta_a</ci>
+          </apply>
+          <apply>
+            <times />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            <ci>alpha</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="alpha_calculation">
+        <eq />
+        <ci>alpha</ci>
+        <apply>
+          <plus />
+          <apply>
+            <times />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+            <ci>P_Ca</ci>
+            <ci>Ca_in</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.001</cn>
+          </apply>
+          <apply>
+            <times />
+            <ci>P_K</ci>
+            <ci>K_in</ci>
+          </apply>
+          <apply>
+            <times />
+            <ci>P_Na</ci>
+            <ci>Na_in</ci>
+          </apply>
+          <apply>
+            <times />
+            <ci>P_Cl</ci>
+            <ci>Cl_ex</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="beta_a_calculation">
+        <eq />
+        <ci>beta_a</ci>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>P_K</ci>
+              <ci>K_in</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>P_Na</ci>
+              <ci>Na_in</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>P_Cl</ci>
+              <ci>Cl_ex</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>P_K</ci>
+              <ci>K_ex</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>P_Na</ci>
+              <ci>Na_ex</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>P_Cl</ci>
+              <ci>Cl_in</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="c_calculation">
+        <eq />
+        <ci>c</ci>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>P_K</ci>
+              <ci>K_ex</ci>
+            </apply>
+            <apply>
+              <times />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+              <ci>P_Ca</ci>
+              <ci>Ca_ex</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.001</cn>
+            </apply>
+            <apply>
+              <times />
+              <ci>P_Na</ci>
+              <ci>Na_ex</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>P_Cl</ci>
+              <ci>Cl_in</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="P_K_calculation">
+        <eq />
+        <ci>P_K</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>v_PK</ci>
+            <apply>
+              <power />
+              <apply>
+                <divide />
+                <ci>BC</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="nanoM">1</cn>
+              </apply>
+              <ci>npk</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <ci>K_PK</ci>
+            <apply>
+              <power />
+              <apply>
+                <divide />
+                <ci>BC</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="nanoM">1</cn>
+              </apply>
+              <ci>npk</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="Res_calculation">
+        <eq />
+        <ci>Res</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>V_R</ci>
+            <ci>V_rest</ci>
+          </apply>
+          <apply>
+            <plus />
+            <ci>K_R</ci>
+            <ci>V_rest</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>K_in</ci>
+        <apply>
+          <divide />
+          <ci>K_ex</ci>
+          <ci>theta_K</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>Na_in</ci>
+        <apply>
+          <divide />
+          <ci>Na_ex</ci>
+          <ci>theta_Na</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>theta_K</ci>
+        <apply>
+          <exp />
+          <apply>
+            <divide />
+            <ci>E_K</ci>
+            <apply>
+              <times />
+              <ci>k_q</ci>
+              <apply>
+                <plus />
+                <ci>T</ci>
+                <ci>T_abs</ci>
+              </apply>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="milliV">1000.0</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>theta_Na</ci>
+        <apply>
+          <exp />
+          <apply>
+            <divide />
+            <ci>E_Na</ci>
+            <apply>
+              <times />
+              <ci>k_q</ci>
+              <apply>
+                <plus />
+                <ci>T</ci>
+                <ci>T_abs</ci>
+              </apply>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="milliV">1000.0</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>E_K</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>E_K_0</ci>
+            <apply>
+              <plus />
+              <ci>T</ci>
+              <ci>T_abs</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <ci>T_room</ci>
+            <ci>T_abs</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>E_Na</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>E_Na_0</ci>
+            <apply>
+              <plus />
+              <ci>T</ci>
+              <ci>T_abs</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <ci>T_room</ci>
+            <ci>T_abs</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>E_L</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>E_L_0</ci>
+            <apply>
+              <plus />
+              <ci>T</ci>
+              <ci>T_abs</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <ci>T_room</ci>
+            <ci>T_abs</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>E_Ca</ci>
+        <apply>
+          <times />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>k_q</ci>
+              <apply>
+                <plus />
+                <ci>T</ci>
+                <ci>T_abs</ci>
+              </apply>
+            </apply>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+          </apply>
+          <apply>
+            <ln />
+            <apply>
+              <divide />
+              <ci>Ca_ex</ci>
+              <ci>Ca_in</ci>
+            </apply>
+          </apply>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="milliV">1000.0</cn>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>E_inhib</ci>
+        <apply>
+          <times />
+          <apply>
+            <minus />
+            <ci>k_q</ci>
+          </apply>
+          <apply>
+            <plus />
+            <ci>T</ci>
+            <ci>T_abs</ci>
+          </apply>
+          <apply>
+            <ln />
+            <apply>
+              <divide />
+              <ci>Cl_ex</ci>
+              <ci>Cl_in</ci>
+            </apply>
+          </apply>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="milliV">1000.0</cn>
+        </apply>
+      </apply>
+      <apply id="i_Na_calculation">
+        <eq />
+        <ci>i_Na</ci>
+        <apply>
+          <times />
+          <ci>g_Na</ci>
+          <apply>
+            <minus />
+            <ci>V_rest</ci>
+            <ci>E_Na</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="i_Na_abs_calculation">
+        <eq />
+        <ci>i_Na_abs</ci>
+        <apply>
+          <root />
+          <apply>
+            <power />
+            <ci>i_Na</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="g_K_calculation">
+        <eq />
+        <ci>g_K</ci>
+        <apply>
+          <plus />
+          <ci>g_K0</ci>
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>v_gk</ci>
+              <ci>MP</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>K_gk</ci>
+              <ci>MP</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="i_K_calculation">
+        <eq />
+        <ci>i_K</ci>
+        <apply>
+          <times />
+          <ci>g_K</ci>
+          <apply>
+            <minus />
+            <ci>V_rest</ci>
+            <ci>E_K</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="g_Ca_calculation">
+        <eq />
+        <ci>g_Ca</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>v_Ca</ci>
+            <apply>
+              <power />
+              <ci>MP</ci>
+              <ci>nca</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <ci>K_Ca</ci>
+            <apply>
+              <power />
+              <ci>MP</ci>
+              <ci>nca</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="i_Ca_calculation">
+        <eq />
+        <ci>i_Ca</ci>
+        <apply>
+          <times />
+          <ci>g_Ca</ci>
+          <apply>
+            <minus />
+            <ci>V_rest</ci>
+            <ci>E_Ca</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="g_KCa_calculation">
+        <eq />
+        <ci>g_KCa</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>v_KCa</ci>
+            <apply>
+              <power />
+              <ci>CC</ci>
+              <ci>nkca</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <ci>K_KCa</ci>
+            <apply>
+              <power />
+              <ci>CC</ci>
+              <ci>nkca</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="i_KCa_calculation">
+        <eq />
+        <ci>i_KCa</ci>
+        <apply>
+          <times />
+          <ci>g_KCa</ci>
+          <apply>
+            <minus />
+            <ci>V_rest</ci>
+            <ci>E_K</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="g_L_calculation">
+        <eq />
+        <ci>g_L</ci>
+        <apply>
+          <divide />
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+          <ci>Res</ci>
+        </apply>
+      </apply>
+      <apply id="i_L_calculation">
+        <eq />
+        <ci>i_L</ci>
+        <apply>
+          <times />
+          <ci>g_L</ci>
+          <apply>
+            <minus />
+            <ci>V_rest</ci>
+            <ci>E_L</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="g_ex_calculation">
+        <eq />
+        <ci>g_ex</ci>
+        <apply>
+          <plus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>v_ex1</ci>
+              <apply>
+                <power />
+                <ci>i_Na_abs</ci>
+                <ci>nex1</ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus />
+              <ci>K_ex1</ci>
+              <apply>
+                <power />
+                <ci>i_Na_abs</ci>
+                <ci>nex1</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>v_ex2</ci>
+              <apply>
+                <power />
+                <ci>Ca_in</ci>
+                <ci>nex2</ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus />
+              <ci>K_ex2</ci>
+              <apply>
+                <power />
+                <ci>Ca_in</ci>
+                <ci>nex2</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="i_ex_calculation">
+        <eq />
+        <ci>i_ex</ci>
+        <apply>
+          <times />
+          <ci>g_ex</ci>
+          <apply>
+            <minus />
+            <ci>V_rest</ci>
+            <ci>E_ex</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="i_inhib_calculation">
+        <eq />
+        <ci>i_inhib</ci>
+        <apply>
+          <times />
+          <ci>g_inhib</ci>
+          <apply>
+            <minus />
+            <ci>V_rest</ci>
+            <ci>E_inhib</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="GABA_calculation">
+        <eq />
+        <ci>GABA</ci>
+        <apply>
+          <plus />
+          <ci>GABA0</ci>
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>v_GABA</ci>
+              <ci>VIP</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>K_GABA</ci>
+              <ci>VIP</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="beta_calculation">
+        <eq />
+        <ci>beta</ci>
+        <apply>
+          <divide />
+          <ci>VIP</ci>
+          <apply>
+            <plus />
+            <ci>VIP</ci>
+            <ci>K_D</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="v_sPC_calculation">
+        <eq />
+        <ci>v_sPC</ci>
+        <apply>
+          <plus />
+          <ci>v_sP0</ci>
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>C_T</ci>
+              <ci>CB</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>K_C</ci>
+              <ci>CB</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="Cl_in_calculation">
+        <eq />
+        <ci>Cl_in</ci>
+        <apply>
+          <plus />
+          <ci>Cl0</ci>
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>v_Cl1</ci>
+              <ci>MP</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>K_Cl1</ci>
+              <ci>MP</ci>
+            </apply>
+          </apply>
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>v_Cl2</ci>
+              <apply>
+                <power />
+                <ci>GABA</ci>
+                <ci>nCl</ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus />
+              <ci>K_Cl2</ci>
+              <apply>
+                <power />
+                <ci>GABA</ci>
+                <ci>nCl</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="V_K_calculation">
+        <eq />
+        <ci>V_K</ci>
+        <apply>
+          <plus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>V_MK</ci>
+              <ci>Ca_in</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>k_MK</ci>
+              <ci>Ca_in</ci>
+            </apply>
+          </apply>
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>V_b</ci>
+              <ci>beta</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>k_b</ci>
+              <ci>beta</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Ca_in" cmeta:id="Ca_in">
+    <variable cmeta:id="Ca_in.Ca_in" initial_value="0.1" name="Ca_in" public_interface="out" units="microM" />
+    <variable cmeta:id="Ca_in.beta_IP3" initial_value="0.5" name="beta_IP3" units="dimensionless" />
+    <variable cmeta:id="Ca_in.Ca_store" initial_value="0.1" name="Ca_store" units="nanoM" />
+    <variable cmeta:id="Ca_in.v0" name="v0" units="microM_per_hour" />
+    <variable cmeta:id="Ca_in.v1" name="v1" units="microM_per_hour" />
+    <variable cmeta:id="Ca_in.v2" name="v2" units="microM_per_hour" />
+    <variable cmeta:id="Ca_in.v3" name="v3" units="microM_per_hour" />
+    <variable cmeta:id="Ca_in.v_kk" initial_value="3.3" name="v_kk" units="per_microM_per_hour" />
+    <variable cmeta:id="Ca_in.v_v0" initial_value="0.09" name="v_v0" units="microM_per_hour" />
+    <variable cmeta:id="Ca_in.kf" initial_value="0.001" name="kf" units="per_hour" />
+    <variable cmeta:id="Ca_in.k" name="k" units="per_microM_per_hour" />
+    <variable cmeta:id="Ca_in.nkk" initial_value="0.1" name="nkk" units="dimensionless" />
+    <variable cmeta:id="Ca_in.nv0" initial_value="4.5" name="nv0" units="dimensionless" />
+    <variable cmeta:id="Ca_in.m" initial_value="6.0" name="m" units="dimensionless" />
+    <variable cmeta:id="Ca_in.n" initial_value="2.2" name="n" units="dimensionless" />
+    <variable cmeta:id="Ca_in.p" initial_value="4.2" name="p" units="dimensionless" />
+    <variable cmeta:id="Ca_in.v" initial_value="2.0" name="v" units="dimensionless" />
+    <variable cmeta:id="Ca_in.K_kk" initial_value="0.02" name="K_kk" units="nanoM_0_1" />
+    <variable cmeta:id="Ca_in.K_v0" initial_value="4.5" name="K_v0" units="nanoM_4_5" />
+    <variable cmeta:id="Ca_in.K_2" initial_value="5.0" name="K_2" units="microM" />
+    <variable cmeta:id="Ca_in.K_R" initial_value="3.0" name="K_R" units="microM" />
+    <variable cmeta:id="Ca_in.K_A" initial_value="0.67" name="K_A" units="microM" />
+    <variable cmeta:id="Ca_in.v_M1" initial_value="0.0003" name="v_M1" units="microM_per_hour" />
+    <variable cmeta:id="Ca_in.v_M2" initial_value="149.5" name="v_M2" units="microM_per_hour" />
+    <variable cmeta:id="Ca_in.v_M3" initial_value="400.0" name="v_M3" units="microM_per_hour" />
+    <variable cmeta:id="Ca_in.time" name="time" public_interface="in" units="hour" />
+    <variable cmeta:id="Ca_in.MP" name="MP" public_interface="in" units="nanoM" />
+    <variable cmeta:id="Ca_in.CC" name="CC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="Ca_in.BC" name="BC" public_interface="in" units="nanoM" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Ca_diff_eq">
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>Ca_in</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <ci>v0</ci>
+            <ci>v1</ci>
+            <ci>v3</ci>
+            <apply>
+              <times />
+              <ci>kf</ci>
+              <ci>Ca_store</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <ci>v2</ci>
+            <apply>
+              <times />
+              <ci>k</ci>
+              <apply>
+                <power />
+                <ci>Ca_in</ci>
+                <ci>v</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="Ca_store_diff_eq">
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>Ca_store</ci>
+        </apply>
+        <apply>
+          <minus />
+          <ci>v2</ci>
+          <apply>
+            <plus />
+            <ci>v3</ci>
+            <apply>
+              <times />
+              <ci>kf</ci>
+              <ci>Ca_store</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="k_calculation">
+        <eq />
+        <ci>k</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>v_kk</ci>
+            <apply>
+              <power />
+              <ci>CC</ci>
+              <ci>nkk</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <ci>K_kk</ci>
+            <apply>
+              <power />
+              <ci>CC</ci>
+              <ci>nkk</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="v0_calculation">
+        <eq />
+        <ci>v0</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>v_v0</ci>
+            <apply>
+              <power />
+              <ci>BC</ci>
+              <ci>nv0</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <ci>K_v0</ci>
+            <apply>
+              <power />
+              <ci>BC</ci>
+              <ci>nv0</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="v1_calculation">
+        <eq />
+        <ci>v1</ci>
+        <apply>
+          <times />
+          <ci>v_M1</ci>
+          <ci>beta_IP3</ci>
+        </apply>
+      </apply>
+      <apply id="v2_calculation">
+        <eq />
+        <ci>v2</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>v_M2</ci>
+            <apply>
+              <power />
+              <ci>Ca_in</ci>
+              <ci>n</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <power />
+              <ci>K_2</ci>
+              <ci>n</ci>
+            </apply>
+            <apply>
+              <power />
+              <ci>Ca_in</ci>
+              <ci>n</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="v3_calculation">
+        <eq />
+        <ci>v3</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>v_M3</ci>
+                <apply>
+                  <power />
+                  <ci>Ca_store</ci>
+                  <ci>m</ci>
+                </apply>
+              </apply>
+              <apply>
+                <plus />
+                <apply>
+                  <power />
+                  <ci>K_R</ci>
+                  <ci>m</ci>
+                </apply>
+                <apply>
+                  <power />
+                  <ci>Ca_store</ci>
+                  <ci>m</ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <power />
+              <ci>Ca_in</ci>
+              <ci>p</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <power />
+              <ci>K_A</ci>
+              <ci>p</ci>
+            </apply>
+            <apply>
+              <power />
+              <ci>Ca_in</ci>
+              <ci>p</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="VIP" cmeta:id="VIP">
+    <variable cmeta:id="VIP.VIP" initial_value="0.0" name="VIP" public_interface="out" units="nanoM" />
+    <variable cmeta:id="VIP.v_VIP" initial_value="0.5" name="v_VIP" units="flux" />
+    <variable cmeta:id="VIP.K_VIP" initial_value="15.0" name="K_VIP" units="hertz_1_9" />
+    <variable cmeta:id="VIP.kd_VIP" initial_value="0.5" name="kd_VIP" units="nanoM_0_8_per_hour" />
+    <variable cmeta:id="VIP.nd_VIP" initial_value="0.2" name="nd_VIP" units="dimensionless" />
+    <variable cmeta:id="VIP.n_VIP" initial_value="1.9" name="n_VIP" units="dimensionless" />
+    <variable cmeta:id="VIP.time" name="time" public_interface="in" units="hour" />
+    <variable cmeta:id="VIP.fr" name="fr" public_interface="in" units="hertz" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="VIP_diff_eq">
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>VIP</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>v_VIP</ci>
+              <apply>
+                <power />
+                <ci>fr</ci>
+                <ci>n_VIP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus />
+              <ci>K_VIP</ci>
+              <apply>
+                <power />
+                <ci>fr</ci>
+                <ci>n_VIP</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>kd_VIP</ci>
+            <apply>
+              <power />
+              <ci>VIP</ci>
+              <ci>nd_VIP</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="MP" cmeta:id="MP">
+    <variable cmeta:id="MP_MP" initial_value="2.8" name="MP" public_interface="out" units="nanoM" />
+    <variable cmeta:id="MP.vmP" initial_value="1.1" name="vmP" units="flux" />
+    <variable cmeta:id="MP.kdmp" initial_value="0.01" name="kdmp" units="first_order_rate_constant" />
+    <variable cmeta:id="MP.KAP" initial_value="0.6" name="KAP" units="nanoM" />
+    <variable cmeta:id="MP.KmP" initial_value="0.31" name="KmP" units="nanoM" />
+    <variable cmeta:id="MP.n" name="n" public_interface="in" units="dimensionless" />
+    <variable cmeta:id="MP.BN" name="BN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="MP.time" name="time" public_interface="in" units="hour" />
+    <variable cmeta:id="MP.v_sPC" name="v_sPC" public_interface="in" units="flux" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>MP</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>v_sPC</ci>
+              <apply>
+                <power />
+                <ci>BN</ci>
+                <ci>n</ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus />
+              <apply>
+                <power />
+                <ci>KAP</ci>
+                <ci>n</ci>
+              </apply>
+              <apply>
+                <power />
+                <ci>BN</ci>
+                <ci>n</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vmP</ci>
+                <ci>MP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>KmP</ci>
+                <ci>MP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdmp</ci>
+              <ci>MP</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="MC" cmeta:id="MC">
+    <variable cmeta:id="MC_MC" initial_value="2.0" name="MC" public_interface="out" units="nanoM" />
+    <variable cmeta:id="MC.vsC" initial_value="1.1" name="vsC" units="flux" />
+    <variable cmeta:id="MC.vmC" initial_value="1.0" name="vmC" units="flux" />
+    <variable cmeta:id="MC.kdmc" initial_value="0.01" name="kdmc" units="first_order_rate_constant" />
+    <variable cmeta:id="MC.KAC" initial_value="0.6" name="KAC" units="nanoM" />
+    <variable cmeta:id="MC.KmC" initial_value="0.4" name="KmC" units="nanoM" />
+    <variable cmeta:id="MC.n" name="n" public_interface="in" units="dimensionless" />
+    <variable cmeta:id="MC.BN" name="BN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="MC.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>MC</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>vsC</ci>
+              <apply>
+                <power />
+                <ci>BN</ci>
+                <ci>n</ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus />
+              <apply>
+                <power />
+                <ci>KAC</ci>
+                <ci>n</ci>
+              </apply>
+              <apply>
+                <power />
+                <ci>BN</ci>
+                <ci>n</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vmC</ci>
+                <ci>MC</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>KmC</ci>
+                <ci>MC</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdmc</ci>
+              <ci>MC</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="MB" cmeta:id="MB">
+    <variable cmeta:id="MB_MB" initial_value="7.94" name="MB" public_interface="out" units="nanoM" />
+    <variable cmeta:id="MB.vsB" initial_value="1.0" name="vsB" units="flux" />
+    <variable cmeta:id="MB.vmB" initial_value="0.8" name="vmB" units="flux" />
+    <variable cmeta:id="MB.kdmb" initial_value="0.01" name="kdmb" units="first_order_rate_constant" />
+    <variable cmeta:id="MB.KIB" initial_value="2.2" name="KIB" units="nanoM" />
+    <variable cmeta:id="MB.KmB" initial_value="0.4" name="KmB" units="nanoM" />
+    <variable cmeta:id="MB.BN" name="BN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="MB.m" name="m" public_interface="in" units="dimensionless" />
+    <variable cmeta:id="MB.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>MB</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>vsB</ci>
+              <apply>
+                <power />
+                <ci>KIB</ci>
+                <ci>m</ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus />
+              <apply>
+                <power />
+                <ci>KIB</ci>
+                <ci>m</ci>
+              </apply>
+              <apply>
+                <power />
+                <ci>BN</ci>
+                <ci>m</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vmB</ci>
+                <ci>MB</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>KmB</ci>
+                <ci>MB</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdmb</ci>
+              <ci>MB</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="PC" cmeta:id="PC">
+    <variable cmeta:id="PC_PC" initial_value="0.4" name="PC" public_interface="out" units="nanoM" />
+    <variable cmeta:id="PC.ksP" name="ksP" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PC.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PC.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PC.k3" name="k3" public_interface="in" units="second_order_rate_constant" />
+    <variable cmeta:id="PC.k4" name="k4" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PC.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PC.V1P" name="V1P" public_interface="in" units="flux" />
+    <variable cmeta:id="PC.V2P" name="V2P" public_interface="in" units="flux" />
+    <variable cmeta:id="PC.PCP" name="PCP" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PC.PCC" name="PCC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PC.CC" name="CC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PC.MP" name="MP" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PC.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>PC</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>ksP</ci>
+              <ci>MP</ci>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V2P</ci>
+                <ci>PCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>PCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k4</ci>
+              <ci>PCC</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V1P</ci>
+                <ci>PC</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kp</ci>
+                <ci>PC</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k3</ci>
+              <ci>PC</ci>
+              <ci>CC</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>PC</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="CC" cmeta:id="CC">
+    <variable cmeta:id="CC_CC" initial_value="12.0" name="CC" public_interface="out" units="nanoM" />
+    <variable cmeta:id="CC.ksC" name="ksC" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="CC.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CC.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CC.k3" name="k3" public_interface="in" units="second_order_rate_constant" />
+    <variable cmeta:id="CC.k4" name="k4" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="CC.kdnc" name="kdnc" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="CC.V1C" name="V1C" public_interface="in" units="flux" />
+    <variable cmeta:id="CC.V2C" name="V2C" public_interface="in" units="flux" />
+    <variable cmeta:id="CC.CCP" name="CCP" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CC.PC" name="PC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CC.PCC" name="PCC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CC.MC" name="MC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CC.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>CC</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>ksC</ci>
+              <ci>MC</ci>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V2C</ci>
+                <ci>CCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>CCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k4</ci>
+              <ci>PCC</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V1C</ci>
+                <ci>CC</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kp</ci>
+                <ci>CC</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k3</ci>
+              <ci>PC</ci>
+              <ci>CC</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdnc</ci>
+              <ci>CC</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="PCP" cmeta:id="PCP">
+    <variable cmeta:id="PCP_PCP" initial_value="0.13" name="PCP" public_interface="out" units="nanoM" />
+    <variable cmeta:id="PCP.vdPC" name="vdPC" public_interface="in" units="flux" />
+    <variable cmeta:id="PCP.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCP.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCP.Kd" name="Kd" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCP.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCP.V1P" name="V1P" public_interface="in" units="flux" />
+    <variable cmeta:id="PCP.V2P" name="V2P" public_interface="in" units="flux" />
+    <variable cmeta:id="PCP.PC" name="PC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCP.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>PCP</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>V1P</ci>
+              <ci>PC</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>Kp</ci>
+              <ci>PC</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V2P</ci>
+                <ci>PCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>PCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vdPC</ci>
+                <ci>PCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kd</ci>
+                <ci>PCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>PCP</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="CCP" cmeta:id="CCP">
+    <variable cmeta:id="CCP_CCP" initial_value="9.0" name="CCP" public_interface="out" units="nanoM" />
+    <variable cmeta:id="CCP.vdCC" name="vdCC" public_interface="in" units="flux" />
+    <variable cmeta:id="CCP.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CCP.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CCP.Kd" name="Kd" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CCP.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="CCP.V1C" name="V1C" public_interface="in" units="flux" />
+    <variable cmeta:id="CCP.V2C" name="V2C" public_interface="in" units="flux" />
+    <variable cmeta:id="CCP.CC" name="CC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CCP.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>CCP</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>V1C</ci>
+              <ci>CC</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>Kp</ci>
+              <ci>CC</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V2C</ci>
+                <ci>CCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>CCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vdCC</ci>
+                <ci>CCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kd</ci>
+                <ci>CCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>CCP</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="PCC" cmeta:id="PCC">
+    <variable cmeta:id="PCC_PCC" initial_value="1.26" name="PCC" public_interface="out" units="nanoM" />
+    <variable cmeta:id="PCC.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCC.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCC.k1" name="k1" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCC.k2" name="k2" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCC.k3" name="k3" public_interface="in" units="second_order_rate_constant" />
+    <variable cmeta:id="PCC.k4" name="k4" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCC.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCC.V1PC" name="V1PC" public_interface="in" units="flux" />
+    <variable cmeta:id="PCC.V2PC" name="V2PC" public_interface="in" units="flux" />
+    <variable cmeta:id="PCC.PCCP" name="PCCP" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCC.PCN" name="PCN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCC.PC" name="PC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCC.CC" name="CC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCC.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>PCC</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V2PC</ci>
+                <ci>PCCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>PCCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k3</ci>
+              <ci>PC</ci>
+              <ci>CC</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k2</ci>
+              <ci>PCN</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V1PC</ci>
+                <ci>PCC</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kp</ci>
+                <ci>PCC</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k4</ci>
+              <ci>PCC</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k1</ci>
+              <ci>PCC</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>PCC</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="PCN" cmeta:id="PCN">
+    <variable cmeta:id="PCN_PCN" initial_value="0.16" name="PCN" public_interface="out" units="nanoM" />
+    <variable cmeta:id="PCN.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCN.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCN.k1" name="k1" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCN.k2" name="k2" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCN.k7" name="k7" public_interface="in" units="second_order_rate_constant" />
+    <variable cmeta:id="PCN.k8" name="k8" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCN.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCN.V3PC" name="V3PC" public_interface="in" units="flux" />
+    <variable cmeta:id="PCN.V4PC" name="V4PC" public_interface="in" units="flux" />
+    <variable cmeta:id="PCN.PCNP" name="PCNP" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCN.PCC" name="PCC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCN.BN" name="BN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCN.IN" name="IN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCN.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>PCN</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V4PC</ci>
+                <ci>PCNP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>PCNP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k1</ci>
+              <ci>PCC</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k8</ci>
+              <ci>IN</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V3PC</ci>
+                <ci>PCN</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kp</ci>
+                <ci>PCN</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k2</ci>
+              <ci>PCN</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k7</ci>
+              <ci>BN</ci>
+              <ci>PCN</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>PCN</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="PCCP" cmeta:id="PCCP">
+    <variable cmeta:id="PCCP_PCCP" initial_value="0.2" name="PCCP" public_interface="out" units="nanoM" />
+    <variable cmeta:id="PCCP.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCCP.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCCP.Kd" name="Kd" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCCP.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCCP.V1PC" name="V1PC" public_interface="in" units="flux" />
+    <variable cmeta:id="PCCP.V2PC" name="V2PC" public_interface="in" units="flux" />
+    <variable cmeta:id="PCCP.vdPCC" name="vdPCC" public_interface="in" units="flux" />
+    <variable cmeta:id="PCCP.PCC" name="PCC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCCP.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>PCCP</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>V1PC</ci>
+              <ci>PCC</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>Kp</ci>
+              <ci>PCC</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V2PC</ci>
+                <ci>PCCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>PCCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vdPCC</ci>
+                <ci>PCCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kd</ci>
+                <ci>PCCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>PCCP</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="PCNP" cmeta:id="PCNP">
+    <variable cmeta:id="PCNP_PCNP" initial_value="0.091" name="PCNP" public_interface="out" units="nanoM" />
+    <variable cmeta:id="PCNP.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCNP.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCNP.Kd" name="Kd" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCNP.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="PCNP.V3PC" name="V3PC" public_interface="in" units="flux" />
+    <variable cmeta:id="PCNP.V4PC" name="V4PC" public_interface="in" units="flux" />
+    <variable cmeta:id="PCNP.vdPCN" name="vdPCN" public_interface="in" units="flux" />
+    <variable cmeta:id="PCNP.PCN" name="PCN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="PCNP.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>PCNP</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>V3PC</ci>
+              <ci>PCN</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>Kp</ci>
+              <ci>PCN</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V4PC</ci>
+                <ci>PCNP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>PCNP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vdPCN</ci>
+                <ci>PCNP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kd</ci>
+                <ci>PCNP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>PCNP</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="BC" cmeta:id="BC">
+    <variable cmeta:id="BC_BC" initial_value="2.41" name="BC" public_interface="out" units="nanoM" />
+    <variable cmeta:id="BC.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BC.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BC.ksB" name="ksB" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="BC.k5" name="k5" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="BC.k6" name="k6" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="BC.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="BC.V1B" name="V1B" public_interface="in" units="flux" />
+    <variable cmeta:id="BC.V2B" name="V2B" public_interface="in" units="flux" />
+    <variable cmeta:id="BC.MB" name="MB" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BC.BCP" name="BCP" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BC.BN" name="BN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BC.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>BC</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V2B</ci>
+                <ci>BCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>BCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k6</ci>
+              <ci>BN</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>ksB</ci>
+              <ci>MB</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V1B</ci>
+                <ci>BC</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kp</ci>
+                <ci>BC</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k5</ci>
+              <ci>BC</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>BC</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="BCP" cmeta:id="BCP">
+    <variable cmeta:id="BCP_BCP" initial_value="0.48" name="BCP" public_interface="out" units="nanoM" />
+    <variable cmeta:id="BCP.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BCP.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BCP.Kd" name="Kd" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BCP.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="BCP.V1B" name="V1B" public_interface="in" units="flux" />
+    <variable cmeta:id="BCP.V2B" name="V2B" public_interface="in" units="flux" />
+    <variable cmeta:id="BCP.vdBC" name="vdBC" public_interface="in" units="flux" />
+    <variable cmeta:id="BCP.BC" name="BC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BCP.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>BCP</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>V1B</ci>
+              <ci>BC</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>Kp</ci>
+              <ci>BC</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V2B</ci>
+                <ci>BCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>BCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vdBC</ci>
+                <ci>BCP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kd</ci>
+                <ci>BCP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>BCP</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="BN" cmeta:id="BN">
+    <variable cmeta:id="BN_BN" initial_value="1.94" name="BN" public_interface="out" units="nanoM" />
+    <variable cmeta:id="BN.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BN.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BN.k5" name="k5" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="BN.k6" name="k6" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="BN.k7" name="k7" public_interface="in" units="second_order_rate_constant" />
+    <variable cmeta:id="BN.k8" name="k8" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="BN.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="BN.V3B" name="V3B" public_interface="in" units="flux" />
+    <variable cmeta:id="BN.V4B" name="V4B" public_interface="in" units="flux" />
+    <variable cmeta:id="BN.BNP" name="BNP" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BN.BC" name="BC" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BN.PCN" name="PCN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BN.IN" name="IN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BN.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>BN</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V4B</ci>
+                <ci>BNP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>BNP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k5</ci>
+              <ci>BC</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k8</ci>
+              <ci>IN</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V3B</ci>
+                <ci>BN</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kp</ci>
+                <ci>BN</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>k6</ci>
+              <ci>BN</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k7</ci>
+              <ci>BN</ci>
+              <ci>PCN</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>BN</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="BNP" cmeta:id="BNP">
+    <variable cmeta:id="BNP_BNP" initial_value="0.32" name="BNP" public_interface="out" units="nanoM" />
+    <variable cmeta:id="BNP.Kp" name="Kp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BNP.Kdp" name="Kdp" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BNP.Kd" name="Kd" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BNP.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="BNP.V3B" name="V3B" public_interface="in" units="flux" />
+    <variable cmeta:id="BNP.V4B" name="V4B" public_interface="in" units="flux" />
+    <variable cmeta:id="BNP.vdBN" name="vdBN" public_interface="in" units="flux" />
+    <variable cmeta:id="BNP.BN" name="BN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="BNP.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>BNP</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <apply>
+              <times />
+              <ci>V3B</ci>
+              <ci>BN</ci>
+            </apply>
+            <apply>
+              <plus />
+              <ci>Kp</ci>
+              <ci>BN</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V4B</ci>
+                <ci>BNP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kdp</ci>
+                <ci>BNP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vdBN</ci>
+                <ci>BNP</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kd</ci>
+                <ci>BNP</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>BNP</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="IN" cmeta:id="IN">
+    <variable cmeta:id="IN_IN" initial_value="0.05" name="IN" public_interface="out" units="nanoM" />
+    <variable cmeta:id="IN.Kd" name="Kd" public_interface="in" units="nanoM" />
+    <variable cmeta:id="IN.kdn" name="kdn" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="IN.k7" name="k7" public_interface="in" units="second_order_rate_constant" />
+    <variable cmeta:id="IN.k8" name="k8" public_interface="in" units="first_order_rate_constant" />
+    <variable cmeta:id="IN.vdIN" name="vdIN" public_interface="in" units="flux" />
+    <variable cmeta:id="IN.PCN" name="PCN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="IN.BN" name="BN" public_interface="in" units="nanoM" />
+    <variable cmeta:id="IN.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>IN</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <times />
+            <ci>k7</ci>
+            <ci>BN</ci>
+            <ci>PCN</ci>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k8</ci>
+              <ci>IN</ci>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vdIN</ci>
+                <ci>IN</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>Kd</ci>
+                <ci>IN</ci>
+              </apply>
+            </apply>
+            <apply>
+              <times />
+              <ci>kdn</ci>
+              <ci>IN</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="CB" cmeta:id="CB">
+    <variable cmeta:id="CB_CB" initial_value="0.12" name="CB" public_interface="out" units="nanoM" />
+    <variable cmeta:id="CB.K1CB" initial_value="0.01" name="K1CB" units="nanoM" />
+    <variable cmeta:id="CB.K2CB" initial_value="0.01" name="K2CB" units="nanoM" />
+    <variable cmeta:id="CB.WT" initial_value="1.0" name="WT" units="hour" />
+    <variable cmeta:id="CB.vP" initial_value="1.0" name="vP" units="nanoM" />
+    <variable cmeta:id="CB.V_K" name="V_K" public_interface="in" units="nanoM" />
+    <variable cmeta:id="CB.time" name="time" public_interface="in" units="hour" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>CB</ci>
+        </apply>
+        <apply>
+          <divide />
+          <apply>
+            <minus />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>V_K</ci>
+                <apply>
+                  <minus />
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="nanoM">1.0</cn>
+                  <ci>CB</ci>
+                </apply>
+              </apply>
+              <apply>
+                <minus />
+                <apply>
+                  <plus />
+                  <ci>K1CB</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="nanoM">1.0</cn>
+                </apply>
+                <ci>CB</ci>
+              </apply>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>vP</ci>
+                <ci>CB</ci>
+              </apply>
+              <apply>
+                <plus />
+                <ci>K2CB</ci>
+                <ci>CB</ci>
+              </apply>
+            </apply>
+          </apply>
+          <ci>WT</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="model_parameters">
+    <variable cmeta:id="model_parameters.k1" initial_value="0.45" name="k1" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.k2" initial_value="0.2" name="k2" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.k3" initial_value="0.4" name="k3" public_interface="out" units="second_order_rate_constant" />
+    <variable cmeta:id="model_parameters.k4" initial_value="0.2" name="k4" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.k5" initial_value="0.4" name="k5" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.k6" initial_value="0.2" name="k6" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.k7" initial_value="0.5" name="k7" public_interface="out" units="second_order_rate_constant" />
+    <variable cmeta:id="model_parameters.k8" initial_value="0.1" name="k8" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.kdnc" initial_value="0.12" name="kdnc" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.kdn" initial_value="0.01" name="kdn" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.ksB" initial_value="0.12" name="ksB" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.ksC" initial_value="1.6" name="ksC" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.ksP" initial_value="0.6" name="ksP" public_interface="out" units="first_order_rate_constant" />
+    <variable cmeta:id="model_parameters.m" initial_value="2.0" name="m" public_interface="out" units="dimensionless" />
+    <variable cmeta:id="model_parameters.n" initial_value="4.0" name="n" public_interface="out" units="dimensionless" />
+    <variable cmeta:id="model_parameters.Kd" initial_value="0.3" name="Kd" public_interface="out" units="nanoM" />
+    <variable cmeta:id="model_parameters.Kdp" initial_value="0.1" name="Kdp" public_interface="out" units="nanoM" />
+    <variable cmeta:id="model_parameters.Kp" initial_value="0.1" name="Kp" public_interface="out" units="nanoM" />
+    <variable cmeta:id="model_parameters.V1C" initial_value="0.6" name="V1C" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V1P" initial_value="0.4" name="V1P" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V1B" initial_value="0.5" name="V1B" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V2B" initial_value="0.1" name="V2B" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V3B" initial_value="0.5" name="V3B" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V4B" initial_value="0.2" name="V4B" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V1PC" initial_value="0.4" name="V1PC" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V2C" initial_value="0.1" name="V2C" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V2P" initial_value="0.3" name="V2P" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V2PC" initial_value="0.1" name="V2PC" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V3PC" initial_value="0.4" name="V3PC" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.V4PC" initial_value="0.1" name="V4PC" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.vdBC" initial_value="0.5" name="vdBC" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.vdBN" initial_value="0.6" name="vdBN" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.vdCC" initial_value="0.7" name="vdCC" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.vdIN" initial_value="0.8" name="vdIN" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.vdPC" initial_value="0.7" name="vdPC" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.vdPCC" initial_value="0.7" name="vdPCC" public_interface="out" units="flux" />
+    <variable cmeta:id="model_parameters.vdPCN" initial_value="0.7" name="vdPCN" public_interface="out" units="flux" />
+  </component>
+  <connection>
+    <map_components component_1="BN" component_2="MC" />
+    <map_variables variable_1="BN" variable_2="BN" />
+  </connection>
+  <connection>
+    <map_components component_1="BN" component_2="MP" />
+    <map_variables variable_1="BN" variable_2="BN" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="BN" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="PCN" />
+    <map_variables variable_1="V4PC" variable_2="V4PC" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="V3PC" variable_2="V3PC" />
+    <map_variables variable_1="k2" variable_2="k2" />
+    <map_variables variable_1="k8" variable_2="k8" />
+    <map_variables variable_1="k1" variable_2="k1" />
+    <map_variables variable_1="k7" variable_2="k7" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+  </connection>
+  <connection>
+    <map_components component_1="membrane" component_2="CB" />
+    <map_variables variable_1="V_K" variable_2="V_K" />
+  </connection>
+  <connection>
+    <map_components component_1="CC" component_2="PCC" />
+    <map_variables variable_1="CC" variable_2="CC" />
+  </connection>
+  <connection>
+    <map_components component_1="CCP" component_2="CC" />
+    <map_variables variable_1="CCP" variable_2="CCP" />
+  </connection>
+  <connection>
+    <map_components component_1="PCC" component_2="PCCP" />
+    <map_variables variable_1="PCC" variable_2="PCC" />
+  </connection>
+  <connection>
+    <map_components component_1="MC" component_2="CC" />
+    <map_variables variable_1="MC" variable_2="MC" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="IN" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="Kd" variable_2="Kd" />
+    <map_variables variable_1="k8" variable_2="k8" />
+    <map_variables variable_1="vdIN" variable_2="vdIN" />
+    <map_variables variable_1="k7" variable_2="k7" />
+  </connection>
+  <connection>
+    <map_components component_1="CC" component_2="membrane" />
+    <map_variables variable_1="CC" variable_2="CC" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="MP" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="PC" component_2="PCC" />
+    <map_variables variable_1="PC" variable_2="PC" />
+  </connection>
+  <connection>
+    <map_components component_1="PCC" component_2="CC" />
+    <map_variables variable_1="PCC" variable_2="PCC" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="PC" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="membrane" component_2="VIP" />
+    <map_variables variable_1="fr" variable_2="fr" />
+  </connection>
+  <connection>
+    <map_components component_1="CC" component_2="Ca_in" />
+    <map_variables variable_1="CC" variable_2="CC" />
+  </connection>
+  <connection>
+    <map_components component_1="BC" component_2="BN" />
+    <map_variables variable_1="BC" variable_2="BC" />
+  </connection>
+  <connection>
+    <map_components component_1="BC" component_2="BCP" />
+    <map_variables variable_1="BC" variable_2="BC" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Ca_in" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="PC" component_2="PCP" />
+    <map_variables variable_1="PC" variable_2="PC" />
+  </connection>
+  <connection>
+    <map_components component_1="CB" component_2="membrane" />
+    <map_variables variable_1="CB" variable_2="CB" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="CCP" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="PCNP" component_2="PCN" />
+    <map_variables variable_1="PCNP" variable_2="PCNP" />
+  </connection>
+  <connection>
+    <map_components component_1="BN" component_2="PCN" />
+    <map_variables variable_1="BN" variable_2="BN" />
+  </connection>
+  <connection>
+    <map_components component_1="MP" component_2="Ca_in" />
+    <map_variables variable_1="MP" variable_2="MP" />
+  </connection>
+  <connection>
+    <map_components component_1="PCCP" component_2="PCC" />
+    <map_variables variable_1="PCCP" variable_2="PCCP" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="PCC" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="BC" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="PC" component_2="CC" />
+    <map_variables variable_1="PC" variable_2="PC" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="IN" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="BNP" component_2="BN" />
+    <map_variables variable_1="BNP" variable_2="BNP" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="CC" />
+    <map_variables variable_1="kdnc" variable_2="kdnc" />
+    <map_variables variable_1="k3" variable_2="k3" />
+    <map_variables variable_1="V2C" variable_2="V2C" />
+    <map_variables variable_1="ksC" variable_2="ksC" />
+    <map_variables variable_1="V1C" variable_2="V1C" />
+    <map_variables variable_1="k4" variable_2="k4" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+  </connection>
+  <connection>
+    <map_components component_1="PCN" component_2="PCNP" />
+    <map_variables variable_1="PCN" variable_2="PCN" />
+  </connection>
+  <connection>
+    <map_components component_1="PCN" component_2="PCC" />
+    <map_variables variable_1="PCN" variable_2="PCN" />
+  </connection>
+  <connection>
+    <map_components component_1="BN" component_2="BNP" />
+    <map_variables variable_1="BN" variable_2="BN" />
+  </connection>
+  <connection>
+    <map_components component_1="IN" component_2="BN" />
+    <map_variables variable_1="IN" variable_2="IN" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="MC" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="CC" component_2="PC" />
+    <map_variables variable_1="CC" variable_2="CC" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="PCNP" />
+    <map_variables variable_1="vdPCN" variable_2="vdPCN" />
+    <map_variables variable_1="V4PC" variable_2="V4PC" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="V3PC" variable_2="V3PC" />
+    <map_variables variable_1="Kd" variable_2="Kd" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+  </connection>
+  <connection>
+    <map_components component_1="Ca_in" component_2="membrane" />
+    <map_variables variable_1="Ca_in" variable_2="Ca_in" />
+  </connection>
+  <connection>
+    <map_components component_1="BN" component_2="MB" />
+    <map_variables variable_1="BN" variable_2="BN" />
+  </connection>
+  <connection>
+    <map_components component_1="PCC" component_2="PCN" />
+    <map_variables variable_1="PCC" variable_2="PCC" />
+  </connection>
+  <connection>
+    <map_components component_1="PCN" component_2="BN" />
+    <map_variables variable_1="PCN" variable_2="PCN" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="MP" />
+    <map_variables variable_1="n" variable_2="n" />
+  </connection>
+  <connection>
+    <map_components component_1="PCN" component_2="IN" />
+    <map_variables variable_1="PCN" variable_2="PCN" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="MB" />
+    <map_variables variable_1="m" variable_2="m" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="PCC" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="V2PC" variable_2="V2PC" />
+    <map_variables variable_1="k3" variable_2="k3" />
+    <map_variables variable_1="k2" variable_2="k2" />
+    <map_variables variable_1="k1" variable_2="k1" />
+    <map_variables variable_1="k4" variable_2="k4" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+    <map_variables variable_1="V1PC" variable_2="V1PC" />
+  </connection>
+  <connection>
+    <map_components component_1="PCP" component_2="PC" />
+    <map_variables variable_1="PCP" variable_2="PCP" />
+  </connection>
+  <connection>
+    <map_components component_1="BN" component_2="IN" />
+    <map_variables variable_1="BN" variable_2="BN" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="BN" />
+    <map_variables variable_1="k5" variable_2="k5" />
+    <map_variables variable_1="V3B" variable_2="V3B" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="k6" variable_2="k6" />
+    <map_variables variable_1="k8" variable_2="k8" />
+    <map_variables variable_1="k7" variable_2="k7" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+    <map_variables variable_1="V4B" variable_2="V4B" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="BCP" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="membrane" component_2="MP" />
+    <map_variables variable_1="v_sPC" variable_2="v_sPC" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="BCP" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="Kd" variable_2="Kd" />
+    <map_variables variable_1="V2B" variable_2="V2B" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+    <map_variables variable_1="V1B" variable_2="V1B" />
+    <map_variables variable_1="vdBC" variable_2="vdBC" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="PCCP" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="V2PC" variable_2="V2PC" />
+    <map_variables variable_1="Kd" variable_2="Kd" />
+    <map_variables variable_1="vdPCC" variable_2="vdPCC" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+    <map_variables variable_1="V1PC" variable_2="V1PC" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="BNP" />
+    <map_variables variable_1="V3B" variable_2="V3B" />
+    <map_variables variable_1="vdBN" variable_2="vdBN" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="Kd" variable_2="Kd" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+    <map_variables variable_1="V4B" variable_2="V4B" />
+  </connection>
+  <connection>
+    <map_components component_1="MP" component_2="PC" />
+    <map_variables variable_1="MP" variable_2="MP" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="MB" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="PCCP" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="membrane" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="PCC" component_2="PC" />
+    <map_variables variable_1="PCC" variable_2="PCC" />
+  </connection>
+  <connection>
+    <map_components component_1="BC" component_2="Ca_in" />
+    <map_variables variable_1="BC" variable_2="BC" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="MC" />
+    <map_variables variable_1="n" variable_2="n" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="VIP" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="VIP" component_2="membrane" />
+    <map_variables variable_1="VIP" variable_2="VIP" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="PC" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="ksP" variable_2="ksP" />
+    <map_variables variable_1="V1P" variable_2="V1P" />
+    <map_variables variable_1="k3" variable_2="k3" />
+    <map_variables variable_1="V2P" variable_2="V2P" />
+    <map_variables variable_1="k4" variable_2="k4" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+  </connection>
+  <connection>
+    <map_components component_1="CC" component_2="CCP" />
+    <map_variables variable_1="CC" variable_2="CC" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="PCP" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="CC" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="MB" component_2="BC" />
+    <map_variables variable_1="MB" variable_2="MB" />
+  </connection>
+  <connection>
+    <map_components component_1="BN" component_2="BC" />
+    <map_variables variable_1="BN" variable_2="BN" />
+  </connection>
+  <connection>
+    <map_components component_1="IN" component_2="PCN" />
+    <map_variables variable_1="IN" variable_2="IN" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="CB" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="PCN" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="MP" component_2="membrane" />
+    <map_variables variable_1="MP" variable_2="MP" />
+  </connection>
+  <connection>
+    <map_components component_1="BC" component_2="membrane" />
+    <map_variables variable_1="BC" variable_2="BC" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="PCP" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="vdPC" variable_2="vdPC" />
+    <map_variables variable_1="V1P" variable_2="V1P" />
+    <map_variables variable_1="Kd" variable_2="Kd" />
+    <map_variables variable_1="V2P" variable_2="V2P" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="PCNP" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="BCP" component_2="BC" />
+    <map_variables variable_1="BCP" variable_2="BCP" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="CCP" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="vdCC" variable_2="vdCC" />
+    <map_variables variable_1="Kd" variable_2="Kd" />
+    <map_variables variable_1="V2C" variable_2="V2C" />
+    <map_variables variable_1="V1C" variable_2="V1C" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="BNP" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="BC" />
+    <map_variables variable_1="k5" variable_2="k5" />
+    <map_variables variable_1="kdn" variable_2="kdn" />
+    <map_variables variable_1="k6" variable_2="k6" />
+    <map_variables variable_1="V2B" variable_2="V2B" />
+    <map_variables variable_1="Kdp" variable_2="Kdp" />
+    <map_variables variable_1="Kp" variable_2="Kp" />
+    <map_variables variable_1="ksB" variable_2="ksB" />
+    <map_variables variable_1="V1B" variable_2="V1B" />
+  </connection>
+</model>
+

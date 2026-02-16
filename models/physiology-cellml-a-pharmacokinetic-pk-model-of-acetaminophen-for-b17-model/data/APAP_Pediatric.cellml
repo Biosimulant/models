@@ -1,0 +1,225 @@
+<?xml version='1.0'?>
+<model name="APAP_Paediatric_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="APAP_Pediatric_Units.cellml">
+        <units name="mg" units_ref="mg"/>
+        <units name="hr" units_ref="hr"/>
+        <units name="per_hr" units_ref="per_hr"/>
+        <units name="litre_per_hr" units_ref="litre_per_hr"/>
+        <units name="mg_per_litre" units_ref="mg_per_litre"/>
+    </import>
+    <component name="APAP_Pediatric_iv_PK">
+        <!--Glucuronidation-->
+        <variable initial_value="0.15" name="CL_mG" units="litre_per_hr"/>
+        <variable initial_value="0.196" name="k_eG" units="per_hr"/>
+        <!--var CL_uG: dimensionless {init: };-->
+        <!--Sulfation-->
+        <variable initial_value="0.42" name="CL_mS" units="litre_per_hr"/>
+        <variable initial_value="0.244" name="k_eS" units="per_hr"/>
+        <!--CM-->
+        <variable initial_value="0.016" name="CL_mCM" units="litre_per_hr"/>
+        <variable initial_value="0.014" name="k_eP" units="per_hr"/>
+        <variable initial_value="0.132" name="Fe_P" units="dimensionless"/>
+        <variable initial_value="0" name="tlag" units="hr"/>
+        <variable initial_value="20" name="ka" units="per_hr"/>
+        <!--2.04-->
+        <!--Vd-->
+        <variable initial_value="2.7" name="V" units="litre"/>
+        <variable initial_value="0.916" name="V_G" units="litre"/>
+        <variable initial_value="0.9" name="V_S" units="litre"/>
+        <variable initial_value="50" name="dose" units="mg"/>
+        <!--mg 12.5*4 or 15*4
+var t_v: dimensionless {init: 24};-->
+        <variable initial_value="0" name="t" units="hr"/>
+        <variable initial_value="0" name="Cp" units="mg_per_litre"/>
+        <variable initial_value="0" name="Cp_G" units="mg_per_litre"/>
+        <variable initial_value="0" name="Cp_S" units="mg_per_litre"/>
+        <variable initial_value="0" name="U_P" units="mg"/>
+        <variable initial_value="0" name="U_G" units="mg"/>
+        <variable initial_value="0" name="U_S" units="mg"/>
+        <variable initial_value="0" name="U_CM" units="mg"/>
+        <!--ode(Cp, t) = (dose/V)*b_liv-Cp*CL_mG/V-Cp*CL_mS/V-Cp*CL_mCM/V-Cp*k_eP;-->
+        <!--ode(Cp, t) = ka*dose/V*exp(-ka*(t-tlag))-Cp*CL_mG/V-Cp*CL_mS/V-Cp*CL_mCM/V-Cp*k_eP;-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>Cp</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <ci>ka</ci>
+                                    <ci>dose</ci>
+                                </apply>
+                                <ci>V</ci>
+                            </apply>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <minus/>
+                                        <ci>ka</ci>
+                                    </apply>
+                                    <apply>
+                                        <minus/>
+                                        <ci>t</ci>
+                                        <ci>tlag</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>Cp</ci>
+                                <apply>
+                                    <plus/>
+                                    <ci>CL_mG</ci>
+                                    <ci>CL_mS</ci>
+                                    <ci>CL_mCM</ci>
+                                </apply>
+                            </apply>
+                            <ci>V</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>Cp</ci>
+                        <ci>k_eP</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>Cp_G</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>Cp</ci>
+                            <ci>CL_mG</ci>
+                        </apply>
+                        <ci>V_G</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>Cp_G</ci>
+                        <ci>k_eG</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>Cp_S</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>Cp</ci>
+                            <ci>CL_mS</ci>
+                        </apply>
+                        <ci>V_S</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>Cp_S</ci>
+                        <ci>k_eS</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>U_P</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>Cp</ci>
+                    <ci>k_eP</ci>
+                    <ci>V</ci>
+                    <ci>Fe_P</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>U_G</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>Cp_G</ci>
+                    <ci>k_eG</ci>
+                    <ci>V_G</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>U_S</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>Cp_S</ci>
+                    <ci>k_eS</ci>
+                    <ci>V_S</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>U_CM</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>Cp</ci>
+                    <ci>CL_mCM</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

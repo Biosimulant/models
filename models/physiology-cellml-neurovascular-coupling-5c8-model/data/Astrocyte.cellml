@@ -1,0 +1,483 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="Astrocyte_module" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="Units.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="per_s" units_ref="per_s"/>
+        <units name="mM_per_s" units_ref="mM_per_s"/>
+        <units name="per_mM" units_ref="per_mM"/>
+        <units name="per_mM_s" units_ref="per_mM_s"/>
+    </import>
+    <import xlink:href="NVC_parameters.cellml">
+        <component component_ref="Parameters" name="Parameters"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+    </component>
+    <component name="Astrocyte">
+        <variable name="t" public_interface="in" units="second"/>
+        <!-- State variables-->
+        <variable initial_value="0" name="q_Glu" public_interface="in" units="mM"/>
+        <variable initial_value="127" name="q_NO" public_interface="in" units="mM"/>
+        <variable initial_value="8.666130575" name="q_Ca_Astro" units="mM"/>
+        <variable initial_value="1433" name="q_AA" units="mM"/>
+        <variable initial_value="82" name="q_HETE" public_interface="out" units="mM"/>
+        <variable initial_value="1.08" name="q_S1_HETE" units="mM"/>
+        <variable initial_value="95" name="q_S2_HETE" units="mM"/>
+        <variable initial_value="58" name="q_S3_HETE" units="mM"/>
+        <variable initial_value="0.06" name="q_PG" public_interface="out" units="mM"/>
+        <variable initial_value="2.6" name="q_S1_PG" units="mM"/>
+        <variable initial_value="0.36" name="q_S2_PG" units="mM"/>
+        <variable initial_value="0.08" name="q_S3_PG" units="mM"/>
+        <variable initial_value="32" name="q_EET" public_interface="out" units="mM"/>
+        <variable initial_value="40" name="q_S1_EET" units="mM"/>
+        <variable initial_value="34" name="q_S2_EET" units="mM"/>
+        <variable initial_value="31" name="q_S3_EET" units="mM"/>
+        <!-- Parameters-->
+        <variable name="k_2" public_interface="in" units="per_s"/>
+        <variable name="k_4" public_interface="in" units="per_mM_s"/>
+        <variable name="k_5" public_interface="in" units="mM_per_s"/>
+        <variable name="k_6" public_interface="in" units="per_s"/>
+        <variable name="k_7" public_interface="in" units="mM_per_s"/>
+        <variable name="k_8" public_interface="in" units="dimensionless"/>
+        <variable name="k_9" public_interface="in" units="dimensionless"/>
+        <variable name="k_12" public_interface="in" units="per_s"/>
+        <variable name="k_13" public_interface="in" units="per_s"/>
+        <variable name="k_14" public_interface="in" units="per_s"/>
+        <variable name="k_15" public_interface="in" units="per_s"/>
+        <variable name="k_16" public_interface="in" units="per_s"/>
+        <variable name="k_17" public_interface="in" units="per_s"/>
+        <variable name="k_18" public_interface="in" units="per_s"/>
+        <variable name="k_19" public_interface="in" units="per_s"/>
+        <variable name="k_20" public_interface="in" units="per_s"/>
+        <variable name="km_1" public_interface="in" units="mM"/>
+        <variable name="km_2" public_interface="in" units="mM"/>
+        <variable name="k_sink_A" public_interface="in" units="per_s"/>
+        <variable name="k_sink_H" public_interface="in" units="per_s"/>
+        <variable name="k_sink_P" public_interface="in" units="per_s"/>
+        <variable name="k_sink_E" public_interface="in" units="per_s"/>
+        <variable name="v_Ca_Abas" public_interface="in" units="mM_per_s"/>
+        <variable name="q_PL" public_interface="in" units="mM"/>
+        <!-- ODEs-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_Astro</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>k_2</ci>
+                            <ci>q_Glu</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>q_Ca_Astro</ci>
+                            <ci>k_sink_A</ci>
+                        </apply>
+                    </apply>
+                    <ci>v_Ca_Abas</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_AA</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>q_PL</ci>
+                        <ci>q_Ca_Astro</ci>
+                        <ci>k_4</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>k_5</ci>
+                                <ci>q_AA</ci>
+                            </apply>
+                            <apply>
+                                <plus/>
+                                <ci>km_1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>k_8</ci>
+                                    <ci>q_NO</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k_6</ci>
+                            <ci>q_AA</ci>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>k_7</ci>
+                                <ci>q_AA</ci>
+                            </apply>
+                            <apply>
+                                <plus/>
+                                <ci>km_2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>k_9</ci>
+                                    <ci>q_NO</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_S1_HETE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>k_5</ci>
+                            <ci>q_AA</ci>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <ci>km_1</ci>
+                            <apply>
+                                <times/>
+                                <ci>k_8</ci>
+                                <ci>q_NO</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_12</ci>
+                        <ci>q_S1_HETE</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_S2_HETE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k_12</ci>
+                        <ci>q_S1_HETE</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_13</ci>
+                        <ci>q_S2_HETE</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_S3_HETE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k_13</ci>
+                        <ci>q_S2_HETE</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_14</ci>
+                        <ci>q_S3_HETE</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_HETE</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k_14</ci>
+                        <ci>q_S3_HETE</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>q_HETE</ci>
+                        <ci>k_sink_H</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_S1_PG</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k_6</ci>
+                        <ci>q_AA</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_15</ci>
+                        <ci>q_S1_PG</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_S2_PG</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k_15</ci>
+                        <ci>q_S1_PG</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_16</ci>
+                        <ci>q_S2_PG</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_S3_PG</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k_16</ci>
+                        <ci>q_S2_PG</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_17</ci>
+                        <ci>q_S3_PG</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_PG</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k_17</ci>
+                        <ci>q_S3_PG</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>q_PG</ci>
+                        <ci>k_sink_P</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_S1_EET</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>k_7</ci>
+                            <ci>q_AA</ci>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <ci>km_2</ci>
+                            <apply>
+                                <times/>
+                                <ci>k_9</ci>
+                                <ci>q_NO</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_18</ci>
+                        <ci>q_S1_EET</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_S2_EET</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k_18</ci>
+                        <ci>q_S1_EET</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_19</ci>
+                        <ci>q_S2_EET</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_S3_EET</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k_19</ci>
+                        <ci>q_S2_EET</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_20</ci>
+                        <ci>q_S3_EET</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_EET</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k_20</ci>
+                        <ci>q_S3_EET</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>q_EET</ci>
+                        <ci>k_sink_E</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="Astrocyte"/>
+        <map_variables variable_1="time" variable_2="t"/>
+    </connection>
+    <connection>
+        <map_components component_1="Astrocyte" component_2="Parameters"/>
+        <map_variables variable_1="k_2" variable_2="k_2"/>
+        <map_variables variable_1="k_4" variable_2="k_4"/>
+        <map_variables variable_1="k_5" variable_2="k_5"/>
+        <map_variables variable_1="k_6" variable_2="k_6"/>
+        <map_variables variable_1="k_7" variable_2="k_7"/>
+        <map_variables variable_1="k_8" variable_2="k_8"/>
+        <map_variables variable_1="k_9" variable_2="k_9"/>
+        <map_variables variable_1="k_12" variable_2="k_12"/>
+        <map_variables variable_1="k_13" variable_2="k_13"/>
+        <map_variables variable_1="k_14" variable_2="k_14"/>
+        <map_variables variable_1="k_15" variable_2="k_15"/>
+        <map_variables variable_1="k_16" variable_2="k_16"/>
+        <map_variables variable_1="k_17" variable_2="k_17"/>
+        <map_variables variable_1="k_18" variable_2="k_18"/>
+        <map_variables variable_1="k_19" variable_2="k_19"/>
+        <map_variables variable_1="k_20" variable_2="k_20"/>
+        <map_variables variable_1="km_1" variable_2="km_1"/>
+        <map_variables variable_1="km_2" variable_2="km_2"/>
+        <map_variables variable_1="k_sink_A" variable_2="k_sink_A"/>
+        <map_variables variable_1="k_sink_H" variable_2="k_sink_H"/>
+        <map_variables variable_1="k_sink_P" variable_2="k_sink_P"/>
+        <map_variables variable_1="k_sink_E" variable_2="k_sink_E"/>
+        <map_variables variable_1="v_Ca_Abas" variable_2="v_Ca_Abas"/>
+        <map_variables variable_1="q_PL" variable_2="q_PL"/>
+    </connection>
+</model>

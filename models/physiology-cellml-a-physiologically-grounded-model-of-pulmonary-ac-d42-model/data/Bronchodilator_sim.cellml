@@ -1,0 +1,2634 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="multi_compartment_acinus_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <units name="mole_per_litre">
+        <unit units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="metre_cubed">
+        <unit exponent="3" units="metre"/>
+    </units>
+    <units name="m_cubed_per_s">
+        <unit exponent="3" units="metre"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="mole_per_second">
+        <unit units="mole"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="mole_per_m_cubed">
+        <unit units="mole"/>
+        <unit exponent="-3" units="metre"/>
+    </units>
+    <units name="per_pascal">
+        <unit exponent="-1" units="pascal"/>
+    </units>
+    <units name="mol_per_L_Pa">
+        <unit units="mole"/>
+        <unit exponent="-1" units="litre"/>
+        <unit exponent="-1" units="pascal"/>
+    </units>
+    <units name="mol_per_Pa_s">
+        <unit units="mole"/>
+        <unit exponent="-1" units="pascal"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <component name="Environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="101325" name="atm_pressure" public_interface="out" units="pascal"/>
+        <variable initial_value="6300" name="water_vapor_pressure" public_interface="out" units="pascal"/>
+        <variable name="P_atm_effective" public_interface="out" units="pascal"/>
+        <variable initial_value="300" name="intervention_time" public_interface="out" units="second"/>
+        <variable initial_value="1.0" name="exercise_factor" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1.0" name="drug_factor" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.25" name="bronchodilator_factor" public_interface="out" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>P_atm_effective</ci>
+                <apply>
+                    <minus/>
+                    <ci>atm_pressure</ci>
+                    <ci>water_vapor_pressure</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="breathing_waveform">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="intervention_time" public_interface="in" units="second"/>
+        <variable name="exercise_factor" public_interface="in" units="dimensionless"/>
+        <variable initial_value="0.0004" name="tidal_volume" public_interface="out" units="metre_cubed"/>
+        <variable name="breathing_frequency" public_interface="out" units="hertz"/>
+        <variable initial_value="0.2" name="breathing_frequency_base" public_interface="out" units="hertz"/>
+        <variable initial_value="0.4" name="inhale_fraction" units="dimensionless"/>
+        <variable name="Q_vent_total" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="cycle_dur" units="second"/>
+        <variable name="t_mod" units="second"/>
+        <variable name="t_in" units="second"/>
+        <variable name="t_ex" units="second"/>
+        <variable initial_value="1.0" name="One" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>breathing_frequency</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>breathing_frequency_base</ci>
+                            <ci>exercise_factor</ci>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <neq/>
+                                <ci>exercise_factor</ci>
+                                <ci>One</ci>
+                            </apply>
+                            <apply>
+                                <geq/>
+                                <ci>time</ci>
+                                <ci>intervention_time</ci>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>breathing_frequency_base</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>cycle_dur</ci>
+                <apply>
+                    <divide/>
+                    <ci>One</ci>
+                    <ci>breathing_frequency</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>t_mod</ci>
+                <apply>
+                    <minus/>
+                    <ci>time</ci>
+                    <apply>
+                        <times/>
+                        <ci>cycle_dur</ci>
+                        <apply>
+                            <floor/>
+                            <apply>
+                                <divide/>
+                                <ci>time</ci>
+                                <ci>cycle_dur</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>t_in</ci>
+                <apply>
+                    <times/>
+                    <ci>inhale_fraction</ci>
+                    <ci>cycle_dur</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>t_ex</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>One</ci>
+                        <ci>inhale_fraction</ci>
+                    </apply>
+                    <ci>cycle_dur</ci>
+                </apply>
+            </apply>
+            <!--Inhalation-->
+            <!-- Exhalation phase-->
+            <apply>
+                <eq/>
+                <ci>Q_vent_total</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="m_cubed_per_s">0</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <leq/>
+                                <ci>breathing_frequency</ci>
+                                <cn cellml:units="hertz">0</cn>
+                            </apply>
+                            <apply>
+                                <leq/>
+                                <ci>tidal_volume</ci>
+                                <cn cellml:units="metre_cubed">0</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <pi/>
+                                    <ci>tidal_volume</ci>
+                                    <ci>breathing_frequency</ci>
+                                </apply>
+                                <ci>inhale_fraction</ci>
+                            </apply>
+                            <apply>
+                                <sin/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>t_mod</ci>
+                                        <ci>t_in</ci>
+                                    </apply>
+                                    <pi/>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <lt/>
+                            <ci>t_mod</ci>
+                            <ci>t_in</ci>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <minus/>
+                                        <pi/>
+                                    </apply>
+                                    <ci>tidal_volume</ci>
+                                    <ci>breathing_frequency</ci>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <ci>One</ci>
+                                    <ci>inhale_fraction</ci>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <sin/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <divide/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>t_mod</ci>
+                                            <ci>t_in</ci>
+                                        </apply>
+                                        <ci>t_ex</ci>
+                                    </apply>
+                                    <pi/>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+    </component>
+    <component name="ventilation_distributor">
+        <variable name="Q_vent_total" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="bronchodilator_factor" public_interface="in" units="dimensionless"/>
+        <variable name="intervention_time" public_interface="in" units="second"/>
+        <variable name="bronchodilator_effect" units="dimensionless"/>
+        <variable name="f_obs_1" public_interface="out" units="dimensionless"/>
+        <variable name="f_obs_2" public_interface="out" units="dimensionless"/>
+        <variable name="f_obs_3" public_interface="out" units="dimensionless"/>
+        <variable name="f_obs_4" public_interface="out" units="dimensionless"/>
+        <variable name="f_obs_5" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.0" name="f_obs_1_base" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.8" name="f_obs_2_base" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.8" name="f_obs_3_base" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.0" name="f_obs_4_base" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.0" name="f_obs_5_base" public_interface="out" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>bronchodilator_effect</ci>
+                <piecewise>
+                    <piece>
+                        <ci>bronchodilator_factor</ci>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <neq/>
+                                <ci>bronchodilator_factor</ci>
+                                <cn cellml:units="dimensionless">1.0</cn>
+                            </apply>
+                            <apply>
+                                <geq/>
+                                <ci>time</ci>
+                                <ci>intervention_time</ci>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f_obs_1</ci>
+                <apply>
+                    <times/>
+                    <ci>f_obs_1_base</ci>
+                    <ci>bronchodilator_effect</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f_obs_2</ci>
+                <apply>
+                    <times/>
+                    <ci>f_obs_2_base</ci>
+                    <ci>bronchodilator_effect</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f_obs_3</ci>
+                <apply>
+                    <times/>
+                    <ci>f_obs_3_base</ci>
+                    <ci>bronchodilator_effect</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f_obs_4</ci>
+                <apply>
+                    <times/>
+                    <ci>f_obs_4_base</ci>
+                    <ci>bronchodilator_effect</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>f_obs_5</ci>
+                <apply>
+                    <times/>
+                    <ci>f_obs_5_base</ci>
+                    <ci>bronchodilator_effect</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="Q_A_1" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="Q_A_2" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="Q_A_3" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="Q_A_4" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="Q_A_5" public_interface="out" units="m_cubed_per_s"/>
+        <variable initial_value="0.000124" name="V0_1" public_interface="out" units="metre_cubed"/>
+        <variable initial_value="0.000124" name="V0_2" public_interface="out" units="metre_cubed"/>
+        <variable initial_value="0.000124" name="V0_3" public_interface="out" units="metre_cubed"/>
+        <variable initial_value="0.000124" name="V0_4" public_interface="out" units="metre_cubed"/>
+        <variable initial_value="0.000124" name="V0_5" public_interface="out" units="metre_cubed"/>
+        <variable initial_value="0.21" name="C_in_O2" public_interface="out" units="mole_per_m_cubed"/>
+        <variable initial_value="0.0004" name="C_in_CO2" public_interface="out" units="mole_per_m_cubed"/>
+        <variable name="sum_conductance" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>sum_conductance</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="dimensionless">5</cn>
+                                    <ci>f_obs_1</ci>
+                                </apply>
+                                <ci>f_obs_2</ci>
+                            </apply>
+                            <ci>f_obs_3</ci>
+                        </apply>
+                        <ci>f_obs_4</ci>
+                    </apply>
+                    <ci>f_obs_5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_A_1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_vent_total</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs_1</ci>
+                        </apply>
+                    </apply>
+                    <ci>sum_conductance</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_A_2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_vent_total</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs_2</ci>
+                        </apply>
+                    </apply>
+                    <ci>sum_conductance</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_A_3</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_vent_total</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs_3</ci>
+                        </apply>
+                    </apply>
+                    <ci>sum_conductance</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_A_4</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_vent_total</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs_4</ci>
+                        </apply>
+                    </apply>
+                    <ci>sum_conductance</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_A_5</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_vent_total</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs_5</ci>
+                        </apply>
+                    </apply>
+                    <ci>sum_conductance</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="perfusion_distributor">
+        <variable name="Q_blood_total" public_interface="in" units="m_cubed_per_s"/>
+        <variable initial_value="2666" name="P50" units="pascal"/>
+        <variable initial_value="2.0" name="n_hpv" units="dimensionless"/>
+        <variable name="intervention_time" public_interface="in" units="second"/>
+        <variable name="drug_factor" public_interface="in" units="dimensionless"/>
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="drug_effect" units="dimensionless"/>
+        <variable name="k_ex_O2_1" public_interface="out" units="mol_per_Pa_s"/>
+        <variable name="k_ex_CO2_1" public_interface="out" units="mol_per_Pa_s"/>
+        <variable name="k_ex_O2_2" public_interface="out" units="mol_per_Pa_s"/>
+        <variable name="k_ex_CO2_2" public_interface="out" units="mol_per_Pa_s"/>
+        <variable name="k_ex_O2_3" public_interface="out" units="mol_per_Pa_s"/>
+        <variable name="k_ex_CO2_3" public_interface="out" units="mol_per_Pa_s"/>
+        <variable name="k_ex_O2_4" public_interface="out" units="mol_per_Pa_s"/>
+        <variable name="k_ex_CO2_4" public_interface="out" units="mol_per_Pa_s"/>
+        <variable name="k_ex_O2_5" public_interface="out" units="mol_per_Pa_s"/>
+        <variable name="k_ex_CO2_5" public_interface="out" units="mol_per_Pa_s"/>
+        <variable initial_value="3e-10" name="k_ex_O2_1_base" public_interface="out" units="mol_per_Pa_s"/>
+        <variable initial_value="5e-9" name="k_ex_CO2_1_base" public_interface="out" units="mol_per_Pa_s"/>
+        <variable initial_value="3e-10" name="k_ex_O2_2_base" public_interface="out" units="mol_per_Pa_s"/>
+        <variable initial_value="5e-9" name="k_ex_CO2_2_base" public_interface="out" units="mol_per_Pa_s"/>
+        <variable initial_value="3e-10" name="k_ex_O2_3_base" public_interface="out" units="mol_per_Pa_s"/>
+        <variable initial_value="5e-9" name="k_ex_CO2_3_base" public_interface="out" units="mol_per_Pa_s"/>
+        <variable initial_value="3e-10" name="k_ex_O2_4_base" public_interface="out" units="mol_per_Pa_s"/>
+        <variable initial_value="5e-9" name="k_ex_CO2_4_base" public_interface="out" units="mol_per_Pa_s"/>
+        <variable initial_value="3e-10" name="k_ex_O2_5_base" public_interface="out" units="mol_per_Pa_s"/>
+        <variable initial_value="5e-9" name="k_ex_CO2_5_base" public_interface="out" units="mol_per_Pa_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>drug_effect</ci>
+                <piecewise>
+                    <piece>
+                        <ci>drug_factor</ci>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <neq/>
+                                <ci>drug_factor</ci>
+                                <cn cellml:units="dimensionless">1.0</cn>
+                            </apply>
+                            <apply>
+                                <geq/>
+                                <ci>time</ci>
+                                <ci>intervention_time</ci>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_ex_O2_1</ci>
+                <apply>
+                    <times/>
+                    <ci>drug_effect</ci>
+                    <ci>k_ex_O2_1_base</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_ex_CO2_1</ci>
+                <apply>
+                    <times/>
+                    <ci>drug_effect</ci>
+                    <ci>k_ex_CO2_1_base</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_ex_O2_2</ci>
+                <apply>
+                    <times/>
+                    <ci>drug_effect</ci>
+                    <ci>k_ex_O2_2_base</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_ex_CO2_2</ci>
+                <apply>
+                    <times/>
+                    <ci>drug_effect</ci>
+                    <ci>k_ex_CO2_2_base</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_ex_O2_3</ci>
+                <apply>
+                    <times/>
+                    <ci>drug_effect</ci>
+                    <ci>k_ex_O2_3_base</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_ex_CO2_3</ci>
+                <apply>
+                    <times/>
+                    <ci>drug_effect</ci>
+                    <ci>k_ex_CO2_3_base</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_ex_O2_4</ci>
+                <apply>
+                    <times/>
+                    <ci>drug_effect</ci>
+                    <ci>k_ex_O2_4_base</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_ex_CO2_4</ci>
+                <apply>
+                    <times/>
+                    <ci>drug_effect</ci>
+                    <ci>k_ex_CO2_4_base</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_ex_O2_5</ci>
+                <apply>
+                    <times/>
+                    <ci>drug_effect</ci>
+                    <ci>k_ex_O2_5_base</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k_ex_CO2_5</ci>
+                <apply>
+                    <times/>
+                    <ci>drug_effect</ci>
+                    <ci>k_ex_CO2_5_base</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="P_A_O2_1" public_interface="in" units="pascal"/>
+        <variable name="P_A_O2_2" public_interface="in" units="pascal"/>
+        <variable name="P_A_O2_3" public_interface="in" units="pascal"/>
+        <variable name="P_A_O2_4" public_interface="in" units="pascal"/>
+        <variable name="P_A_O2_5" public_interface="in" units="pascal"/>
+        <variable name="Q_b_1" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="Q_b_2" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="Q_b_3" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="Q_b_4" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="Q_b_5" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="w1" units="dimensionless"/>
+        <variable name="w2" units="dimensionless"/>
+        <variable name="w3" units="dimensionless"/>
+        <variable name="w4" units="dimensionless"/>
+        <variable name="w5" units="dimensionless"/>
+        <variable name="w_sum" units="dimensionless"/>
+        <variable initial_value="1.0" name="One" units="dimensionless"/>
+        <variable initial_value="1e-6" name="theta" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>w1</ci>
+                <apply>
+                    <divide/>
+                    <ci>One</ci>
+                    <apply>
+                        <plus/>
+                        <ci>One</ci>
+                        <apply>
+                            <power/>
+                            <apply>
+                                <divide/>
+                                <ci>P50</ci>
+                                <apply>
+                                    <max/>
+                                    <ci>theta</ci>
+                                    <ci>P_A_O2_1</ci>
+                                </apply>
+                            </apply>
+                            <ci>n_hpv</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>w2</ci>
+                <apply>
+                    <divide/>
+                    <ci>One</ci>
+                    <apply>
+                        <plus/>
+                        <ci>One</ci>
+                        <apply>
+                            <power/>
+                            <apply>
+                                <divide/>
+                                <ci>P50</ci>
+                                <apply>
+                                    <max/>
+                                    <ci>theta</ci>
+                                    <ci>P_A_O2_2</ci>
+                                </apply>
+                            </apply>
+                            <ci>n_hpv</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>w3</ci>
+                <apply>
+                    <divide/>
+                    <ci>One</ci>
+                    <apply>
+                        <plus/>
+                        <ci>One</ci>
+                        <apply>
+                            <power/>
+                            <apply>
+                                <divide/>
+                                <ci>P50</ci>
+                                <apply>
+                                    <max/>
+                                    <ci>theta</ci>
+                                    <ci>P_A_O2_3</ci>
+                                </apply>
+                            </apply>
+                            <ci>n_hpv</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>w4</ci>
+                <apply>
+                    <divide/>
+                    <ci>One</ci>
+                    <apply>
+                        <plus/>
+                        <ci>One</ci>
+                        <apply>
+                            <power/>
+                            <apply>
+                                <divide/>
+                                <ci>P50</ci>
+                                <apply>
+                                    <max/>
+                                    <ci>theta</ci>
+                                    <ci>P_A_O2_4</ci>
+                                </apply>
+                            </apply>
+                            <ci>n_hpv</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>w5</ci>
+                <apply>
+                    <divide/>
+                    <ci>One</ci>
+                    <apply>
+                        <plus/>
+                        <ci>One</ci>
+                        <apply>
+                            <power/>
+                            <apply>
+                                <divide/>
+                                <ci>P50</ci>
+                                <apply>
+                                    <max/>
+                                    <ci>theta</ci>
+                                    <ci>P_A_O2_5</ci>
+                                </apply>
+                            </apply>
+                            <ci>n_hpv</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>w_sum</ci>
+                <apply>
+                    <plus/>
+                    <ci>w1</ci>
+                    <ci>w2</ci>
+                    <ci>w3</ci>
+                    <ci>w4</ci>
+                    <ci>w5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_b_1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_blood_total</ci>
+                        <ci>w1</ci>
+                    </apply>
+                    <ci>w_sum</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_b_2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_blood_total</ci>
+                        <ci>w2</ci>
+                    </apply>
+                    <ci>w_sum</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_b_3</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_blood_total</ci>
+                        <ci>w3</ci>
+                    </apply>
+                    <ci>w_sum</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_b_4</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_blood_total</ci>
+                        <ci>w4</ci>
+                    </apply>
+                    <ci>w_sum</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Q_b_5</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>Q_blood_total</ci>
+                        <ci>w5</ci>
+                    </apply>
+                    <ci>w_sum</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="pulmonary_blood_pool">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable initial_value="0.05" name="V_b_pulm" public_interface="out" units="litre"/>
+        <variable name="Q_blood_total" public_interface="out" units="m_cubed_per_s"/>
+        <variable initial_value="8.3e-5" name="Q_blood_total_base" public_interface="out" units="m_cubed_per_s"/>
+        <variable name="intervention_time" public_interface="in" units="second"/>
+        <variable name="exercise_factor" public_interface="in" units="dimensionless"/>
+        <variable name="P_atm_effective" public_interface="in" units="pascal"/>
+        <variable name="C_sys_O2" public_interface="in" units="mole_per_litre"/>
+        <variable name="C_sys_CO2" public_interface="in" units="mole_per_litre"/>
+        <variable name="I_ex_O2_1" public_interface="in" units="mole_per_second"/>
+        <variable name="I_ex_O2_2" public_interface="in" units="mole_per_second"/>
+        <variable name="I_ex_O2_3" public_interface="in" units="mole_per_second"/>
+        <variable name="I_ex_O2_4" public_interface="in" units="mole_per_second"/>
+        <variable name="I_ex_O2_5" public_interface="in" units="mole_per_second"/>
+        <variable name="I_ex_CO2_1" public_interface="in" units="mole_per_second"/>
+        <variable name="I_ex_CO2_2" public_interface="in" units="mole_per_second"/>
+        <variable name="I_ex_CO2_3" public_interface="in" units="mole_per_second"/>
+        <variable name="I_ex_CO2_4" public_interface="in" units="mole_per_second"/>
+        <variable name="I_ex_CO2_5" public_interface="in" units="mole_per_second"/>
+        <variable initial_value="2666" name="P50" units="pascal"/>
+        <variable initial_value="2.7" name="n_hill" units="dimensionless"/>
+        <variable initial_value="0.0089" name="H_cap" units="mole_per_litre"/>
+        <variable initial_value="1.39e-6" name="alpha_O2" units="mol_per_L_Pa"/>
+        <variable initial_value="3.07e-5" name="alpha_CO2" units="mol_per_L_Pa"/>
+        <variable name="C_b_O2" public_interface="in" units="mole_per_litre"/>
+        <!--init: 0.0065, -->
+        <variable name="C_b_CO2" public_interface="in" units="mole_per_litre"/>
+        <!--init: 0.021,-->
+        <variable name="P_b_O2" public_interface="out" units="pascal"/>
+        <variable name="P_b_CO2" public_interface="out" units="pascal"/>
+        <variable name="I_ex_O2_total" units="mole_per_second"/>
+        <variable name="I_ex_CO2_total" units="mole_per_second"/>
+        <variable name="I_blood_O2" units="mole_per_second"/>
+        <variable name="I_blood_CO2" units="mole_per_second"/>
+        <variable name="dS_dp" units="per_pascal"/>
+        <variable name="cap_factor_O2" units="litre"/>
+        <variable name="cap_factor_CO2" units="litre"/>
+        <variable initial_value="1000" name="L_per_m_cubed" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Q_blood_total</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>exercise_factor</ci>
+                            <ci>Q_blood_total_base</ci>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <neq/>
+                                <ci>exercise_factor</ci>
+                                <cn cellml:units="dimensionless">1.0</cn>
+                            </apply>
+                            <apply>
+                                <geq/>
+                                <ci>time</ci>
+                                <ci>intervention_time</ci>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>Q_blood_total_base</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_O2_total</ci>
+                <apply>
+                    <plus/>
+                    <ci>I_ex_O2_1</ci>
+                    <ci>I_ex_O2_2</ci>
+                    <ci>I_ex_O2_3</ci>
+                    <ci>I_ex_O2_4</ci>
+                    <ci>I_ex_O2_5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_CO2_total</ci>
+                <apply>
+                    <plus/>
+                    <ci>I_ex_CO2_1</ci>
+                    <ci>I_ex_CO2_2</ci>
+                    <ci>I_ex_CO2_3</ci>
+                    <ci>I_ex_CO2_4</ci>
+                    <ci>I_ex_CO2_5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_b_O2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>C_b_O2</ci>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>H_cap</ci>
+                                <apply>
+                                    <power/>
+                                    <ci>P_b_O2</ci>
+                                    <ci>n_hill</ci>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <power/>
+                                    <ci>P50</ci>
+                                    <ci>n_hill</ci>
+                                </apply>
+                                <apply>
+                                    <power/>
+                                    <ci>P_b_O2</ci>
+                                    <ci>n_hill</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <ci>alpha_O2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_b_CO2</ci>
+                <apply>
+                    <divide/>
+                    <ci>C_b_CO2</ci>
+                    <ci>alpha_CO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>dS_dp</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>n_hill</ci>
+                        <apply>
+                            <power/>
+                            <ci>P_b_O2</ci>
+                            <apply>
+                                <minus/>
+                                <ci>n_hill</ci>
+                                <cn cellml:units="dimensionless">1</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <power/>
+                            <ci>P50</ci>
+                            <ci>n_hill</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <power/>
+                                <ci>P50</ci>
+                                <ci>n_hill</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>P_b_O2</ci>
+                                <ci>n_hill</ci>
+                            </apply>
+                        </apply>
+                        <cn cellml:units="dimensionless">2</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>cap_factor_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>V_b_pulm</ci>
+                    <apply>
+                        <plus/>
+                        <ci>alpha_O2</ci>
+                        <apply>
+                            <times/>
+                            <ci>H_cap</ci>
+                            <ci>dS_dp</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>cap_factor_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>V_b_pulm</ci>
+                    <ci>alpha_CO2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_blood_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>Q_blood_total</ci>
+                    <ci>L_per_m_cubed</ci>
+                    <apply>
+                        <minus/>
+                        <ci>C_sys_O2</ci>
+                        <ci>C_b_O2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_blood_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>Q_blood_total</ci>
+                    <ci>L_per_m_cubed</ci>
+                    <apply>
+                        <minus/>
+                        <ci>C_sys_CO2</ci>
+                        <ci>C_b_CO2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>C_b_O2</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <ci>I_ex_O2_total</ci>
+                        <ci>I_blood_O2</ci>
+                    </apply>
+                    <ci>cap_factor_O2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>C_b_CO2</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>I_ex_CO2_total</ci>
+                        </apply>
+                        <ci>I_blood_CO2</ci>
+                    </apply>
+                    <ci>cap_factor_CO2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="systemic_circulation">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable initial_value="60.0" name="tau_sys" public_interface="out" units="second"/>
+        <variable initial_value="0.0087" name="C_b_O2_init" public_interface="out" units="mole_per_litre"/>
+        <variable initial_value="0.0214" name="C_b_CO2_init" public_interface="out" units="mole_per_litre"/>
+        <variable initial_value="0.0065" name="C_s_O2" public_interface="out" units="mole_per_litre"/>
+        <variable initial_value="0.022" name="C_s_CO2" public_interface="out" units="mole_per_litre"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>C_s_O2</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>C_b_O2_init</ci>
+                        <ci>C_s_O2</ci>
+                    </apply>
+                    <ci>tau_sys</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>C_s_CO2</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>C_b_CO2_init</ci>
+                        <ci>C_s_CO2</ci>
+                    </apply>
+                    <ci>tau_sys</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="acinus_compartment_1">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="f_obs" public_interface="in" units="dimensionless"/>
+        <variable name="k_ex_O2" public_interface="in" units="mol_per_Pa_s"/>
+        <variable name="k_ex_CO2" public_interface="in" units="mol_per_Pa_s"/>
+        <variable name="V0" public_interface="in" units="metre_cubed"/>
+        <variable name="C_in_O2" public_interface="in" units="mole_per_m_cubed"/>
+        <variable name="C_in_CO2" public_interface="in" units="mole_per_m_cubed"/>
+        <variable name="P_atm_effective" public_interface="in" units="pascal"/>
+        <variable name="Q_blood_total" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="Q_A" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="Q_b" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="P_b_O2" public_interface="in" units="pascal"/>
+        <variable name="P_b_CO2" public_interface="in" units="pascal"/>
+        <variable initial_value="5.0e-5" name="V_A" public_interface="out" units="metre_cubed"/>
+        <variable initial_value="1.0e-6" name="n_O2" public_interface="out" units="mole"/>
+        <variable initial_value="1.0e-7" name="n_CO2" public_interface="out" units="mole"/>
+        <variable name="P_A_O2" public_interface="out" units="pascal"/>
+        <variable name="I_ex_O2" public_interface="out" units="mole_per_second"/>
+        <variable name="I_ex_CO2" public_interface="out" units="mole_per_second"/>
+        <variable name="C_A_O2" units="mole_per_m_cubed"/>
+        <variable name="C_A_CO2" units="mole_per_m_cubed"/>
+        <variable name="P_A_CO2" units="pascal"/>
+        <variable name="G_O2" units="mol_per_Pa_s"/>
+        <variable name="G_CO2" units="mol_per_Pa_s"/>
+        <variable name="I_vent_O2" units="mole_per_second"/>
+        <variable name="I_vent_CO2" units="mole_per_second"/>
+        <variable name="dV_A_dt" units="m_cubed_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>C_A_O2</ci>
+                <apply>
+                    <divide/>
+                    <ci>n_O2</ci>
+                    <ci>V_A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C_A_CO2</ci>
+                <apply>
+                    <divide/>
+                    <ci>n_CO2</ci>
+                    <ci>V_A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_A_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>C_A_O2</ci>
+                    <ci>P_atm_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_A_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>C_A_CO2</ci>
+                    <ci>P_atm_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>G_O2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_ex_O2</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs</ci>
+                        </apply>
+                        <ci>V_A</ci>
+                        <ci>Q_b</ci>
+                    </apply>
+                    <ci>Q_blood_total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>G_CO2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_ex_CO2</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs</ci>
+                        </apply>
+                        <ci>V_A</ci>
+                        <ci>Q_b</ci>
+                    </apply>
+                    <ci>Q_blood_total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>G_O2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_A_O2</ci>
+                        <ci>P_b_O2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>G_CO2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_b_CO2</ci>
+                        <ci>P_A_CO2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_vent_O2</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_in_O2</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>Q_A</ci>
+                            <cn cellml:units="m_cubed_per_s">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_A_O2</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_vent_CO2</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_in_CO2</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>Q_A</ci>
+                            <cn cellml:units="m_cubed_per_s">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_A_CO2</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>dV_A_dt</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="m_cubed_per_s">0</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <leq/>
+                                <ci>V_A</ci>
+                                <ci>V0</ci>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>Q_A</ci>
+                                <cn cellml:units="m_cubed_per_s">0</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>Q_A</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>V_A</ci>
+                </apply>
+                <ci>dV_A_dt</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>n_O2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>I_vent_O2</ci>
+                    <ci>I_ex_O2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>n_CO2</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>I_vent_CO2</ci>
+                    <ci>I_ex_CO2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="acinus_compartment_2">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="f_obs" public_interface="in" units="dimensionless"/>
+        <variable name="k_ex_O2" public_interface="in" units="mol_per_Pa_s"/>
+        <variable name="k_ex_CO2" public_interface="in" units="mol_per_Pa_s"/>
+        <variable name="V0" public_interface="in" units="metre_cubed"/>
+        <variable name="C_in_O2" public_interface="in" units="mole_per_m_cubed"/>
+        <variable name="C_in_CO2" public_interface="in" units="mole_per_m_cubed"/>
+        <variable name="P_atm_effective" public_interface="in" units="pascal"/>
+        <variable name="Q_blood_total" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="Q_A" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="Q_b" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="P_b_O2" public_interface="in" units="pascal"/>
+        <variable name="P_b_CO2" public_interface="in" units="pascal"/>
+        <variable initial_value="5.0e-5" name="V_A" public_interface="out" units="metre_cubed"/>
+        <variable initial_value="1.0e-6" name="n_O2" public_interface="out" units="mole"/>
+        <variable initial_value="1.0e-7" name="n_CO2" public_interface="out" units="mole"/>
+        <variable name="P_A_O2" public_interface="out" units="pascal"/>
+        <variable name="I_ex_O2" public_interface="out" units="mole_per_second"/>
+        <variable name="I_ex_CO2" public_interface="out" units="mole_per_second"/>
+        <variable name="C_A_O2" units="mole_per_m_cubed"/>
+        <variable name="C_A_CO2" units="mole_per_m_cubed"/>
+        <variable name="P_A_CO2" units="pascal"/>
+        <variable name="G_O2" units="mol_per_Pa_s"/>
+        <variable name="G_CO2" units="mol_per_Pa_s"/>
+        <variable name="I_vent_O2" units="mole_per_second"/>
+        <variable name="I_vent_CO2" units="mole_per_second"/>
+        <variable name="dV_A_dt" units="m_cubed_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>C_A_O2</ci>
+                <apply>
+                    <divide/>
+                    <ci>n_O2</ci>
+                    <ci>V_A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C_A_CO2</ci>
+                <apply>
+                    <divide/>
+                    <ci>n_CO2</ci>
+                    <ci>V_A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_A_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>C_A_O2</ci>
+                    <ci>P_atm_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_A_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>C_A_CO2</ci>
+                    <ci>P_atm_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>G_O2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_ex_O2</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs</ci>
+                        </apply>
+                        <ci>V_A</ci>
+                        <ci>Q_b</ci>
+                    </apply>
+                    <ci>Q_blood_total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>G_CO2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_ex_CO2</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs</ci>
+                        </apply>
+                        <ci>V_A</ci>
+                        <ci>Q_b</ci>
+                    </apply>
+                    <ci>Q_blood_total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>G_O2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_A_O2</ci>
+                        <ci>P_b_O2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>G_CO2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_b_CO2</ci>
+                        <ci>P_A_CO2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_vent_O2</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_in_O2</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>Q_A</ci>
+                            <cn cellml:units="m_cubed_per_s">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_A_O2</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_vent_CO2</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_in_CO2</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>Q_A</ci>
+                            <cn cellml:units="m_cubed_per_s">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_A_CO2</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>dV_A_dt</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="m_cubed_per_s">0</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <leq/>
+                                <ci>V_A</ci>
+                                <ci>V0</ci>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>Q_A</ci>
+                                <cn cellml:units="m_cubed_per_s">0</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>Q_A</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>V_A</ci>
+                </apply>
+                <ci>dV_A_dt</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>n_O2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>I_vent_O2</ci>
+                    <ci>I_ex_O2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>n_CO2</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>I_vent_CO2</ci>
+                    <ci>I_ex_CO2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="acinus_compartment_3">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="f_obs" public_interface="in" units="dimensionless"/>
+        <variable name="k_ex_O2" public_interface="in" units="mol_per_Pa_s"/>
+        <variable name="k_ex_CO2" public_interface="in" units="mol_per_Pa_s"/>
+        <variable name="V0" public_interface="in" units="metre_cubed"/>
+        <variable name="C_in_O2" public_interface="in" units="mole_per_m_cubed"/>
+        <variable name="C_in_CO2" public_interface="in" units="mole_per_m_cubed"/>
+        <variable name="P_atm_effective" public_interface="in" units="pascal"/>
+        <variable name="Q_blood_total" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="Q_A" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="Q_b" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="P_b_O2" public_interface="in" units="pascal"/>
+        <variable name="P_b_CO2" public_interface="in" units="pascal"/>
+        <variable initial_value="5.0e-5" name="V_A" public_interface="out" units="metre_cubed"/>
+        <variable initial_value="1.0e-6" name="n_O2" public_interface="out" units="mole"/>
+        <variable initial_value="1.0e-7" name="n_CO2" public_interface="out" units="mole"/>
+        <variable name="P_A_O2" public_interface="out" units="pascal"/>
+        <variable name="I_ex_O2" public_interface="out" units="mole_per_second"/>
+        <variable name="I_ex_CO2" public_interface="out" units="mole_per_second"/>
+        <variable name="C_A_O2" units="mole_per_m_cubed"/>
+        <variable name="C_A_CO2" units="mole_per_m_cubed"/>
+        <variable name="P_A_CO2" units="pascal"/>
+        <variable name="G_O2" units="mol_per_Pa_s"/>
+        <variable name="G_CO2" units="mol_per_Pa_s"/>
+        <variable name="I_vent_O2" units="mole_per_second"/>
+        <variable name="I_vent_CO2" units="mole_per_second"/>
+        <variable name="dV_A_dt" units="m_cubed_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>C_A_O2</ci>
+                <apply>
+                    <divide/>
+                    <ci>n_O2</ci>
+                    <ci>V_A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C_A_CO2</ci>
+                <apply>
+                    <divide/>
+                    <ci>n_CO2</ci>
+                    <ci>V_A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_A_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>C_A_O2</ci>
+                    <ci>P_atm_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_A_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>C_A_CO2</ci>
+                    <ci>P_atm_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>G_O2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_ex_O2</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs</ci>
+                        </apply>
+                        <ci>V_A</ci>
+                        <ci>Q_b</ci>
+                    </apply>
+                    <ci>Q_blood_total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>G_CO2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_ex_CO2</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs</ci>
+                        </apply>
+                        <ci>V_A</ci>
+                        <ci>Q_b</ci>
+                    </apply>
+                    <ci>Q_blood_total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>G_O2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_A_O2</ci>
+                        <ci>P_b_O2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>G_CO2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_b_CO2</ci>
+                        <ci>P_A_CO2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_vent_O2</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_in_O2</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>Q_A</ci>
+                            <cn cellml:units="m_cubed_per_s">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_A_O2</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_vent_CO2</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_in_CO2</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>Q_A</ci>
+                            <cn cellml:units="m_cubed_per_s">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_A_CO2</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>dV_A_dt</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="m_cubed_per_s">0</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <leq/>
+                                <ci>V_A</ci>
+                                <ci>V0</ci>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>Q_A</ci>
+                                <cn cellml:units="m_cubed_per_s">0</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>Q_A</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>V_A</ci>
+                </apply>
+                <ci>dV_A_dt</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>n_O2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>I_vent_O2</ci>
+                    <ci>I_ex_O2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>n_CO2</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>I_vent_CO2</ci>
+                    <ci>I_ex_CO2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="acinus_compartment_4">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="f_obs" public_interface="in" units="dimensionless"/>
+        <variable name="k_ex_O2" public_interface="in" units="mol_per_Pa_s"/>
+        <variable name="k_ex_CO2" public_interface="in" units="mol_per_Pa_s"/>
+        <variable name="V0" public_interface="in" units="metre_cubed"/>
+        <variable name="C_in_O2" public_interface="in" units="mole_per_m_cubed"/>
+        <variable name="C_in_CO2" public_interface="in" units="mole_per_m_cubed"/>
+        <variable name="P_atm_effective" public_interface="in" units="pascal"/>
+        <variable name="Q_blood_total" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="Q_A" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="Q_b" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="P_b_O2" public_interface="in" units="pascal"/>
+        <variable name="P_b_CO2" public_interface="in" units="pascal"/>
+        <variable initial_value="5.0e-5" name="V_A" public_interface="out" units="metre_cubed"/>
+        <variable initial_value="1.0e-6" name="n_O2" public_interface="out" units="mole"/>
+        <variable initial_value="1.0e-7" name="n_CO2" public_interface="out" units="mole"/>
+        <variable name="P_A_O2" public_interface="out" units="pascal"/>
+        <variable name="I_ex_O2" public_interface="out" units="mole_per_second"/>
+        <variable name="I_ex_CO2" public_interface="out" units="mole_per_second"/>
+        <variable name="C_A_O2" units="mole_per_m_cubed"/>
+        <variable name="C_A_CO2" units="mole_per_m_cubed"/>
+        <variable name="P_A_CO2" units="pascal"/>
+        <variable name="G_O2" units="mol_per_Pa_s"/>
+        <variable name="G_CO2" units="mol_per_Pa_s"/>
+        <variable name="I_vent_O2" units="mole_per_second"/>
+        <variable name="I_vent_CO2" units="mole_per_second"/>
+        <variable name="dV_A_dt" units="m_cubed_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>C_A_O2</ci>
+                <apply>
+                    <divide/>
+                    <ci>n_O2</ci>
+                    <ci>V_A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C_A_CO2</ci>
+                <apply>
+                    <divide/>
+                    <ci>n_CO2</ci>
+                    <ci>V_A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_A_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>C_A_O2</ci>
+                    <ci>P_atm_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_A_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>C_A_CO2</ci>
+                    <ci>P_atm_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>G_O2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_ex_O2</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs</ci>
+                        </apply>
+                        <ci>V_A</ci>
+                        <ci>Q_b</ci>
+                    </apply>
+                    <ci>Q_blood_total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>G_CO2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_ex_CO2</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>f_obs</ci>
+                        </apply>
+                        <ci>V_A</ci>
+                        <ci>Q_b</ci>
+                    </apply>
+                    <ci>Q_blood_total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>G_O2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_A_O2</ci>
+                        <ci>P_b_O2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>G_CO2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_b_CO2</ci>
+                        <ci>P_A_CO2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_vent_O2</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_in_O2</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>Q_A</ci>
+                            <cn cellml:units="m_cubed_per_s">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_A_O2</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_vent_CO2</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_in_CO2</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>Q_A</ci>
+                            <cn cellml:units="m_cubed_per_s">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_A_CO2</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>dV_A_dt</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="m_cubed_per_s">0</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <leq/>
+                                <ci>V_A</ci>
+                                <ci>V0</ci>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>Q_A</ci>
+                                <cn cellml:units="m_cubed_per_s">0</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>Q_A</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>V_A</ci>
+                </apply>
+                <ci>dV_A_dt</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>n_O2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>I_vent_O2</ci>
+                    <ci>I_ex_O2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>n_CO2</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>I_vent_CO2</ci>
+                    <ci>I_ex_CO2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="acinus_compartment_5">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="f_obs" public_interface="in" units="dimensionless"/>
+        <variable name="k_ex_O2" public_interface="in" units="mol_per_Pa_s"/>
+        <variable name="k_ex_CO2" public_interface="in" units="mol_per_Pa_s"/>
+        <variable name="V0" public_interface="in" units="metre_cubed"/>
+        <variable name="C_in_O2" public_interface="in" units="mole_per_m_cubed"/>
+        <variable name="C_in_CO2" public_interface="in" units="mole_per_m_cubed"/>
+        <variable name="P_atm_effective" public_interface="in" units="pascal"/>
+        <variable name="Q_blood_total" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="Q_A" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="Q_b" public_interface="in" units="m_cubed_per_s"/>
+        <variable name="P_b_O2" public_interface="in" units="pascal"/>
+        <variable name="P_b_CO2" public_interface="in" units="pascal"/>
+        <variable initial_value="5.0e-5" name="V_A" public_interface="out" units="metre_cubed"/>
+        <variable initial_value="1.0e-6" name="n_O2" public_interface="out" units="mole"/>
+        <variable initial_value="1.0e-7" name="n_CO2" public_interface="out" units="mole"/>
+        <variable name="P_A_O2" public_interface="out" units="pascal"/>
+        <variable name="I_ex_O2" public_interface="out" units="mole_per_second"/>
+        <variable name="I_ex_CO2" public_interface="out" units="mole_per_second"/>
+        <variable name="C_A_O2" units="mole_per_m_cubed"/>
+        <variable name="C_A_CO2" units="mole_per_m_cubed"/>
+        <variable name="P_A_CO2" units="pascal"/>
+        <variable name="G_O2" units="mol_per_Pa_s"/>
+        <variable name="G_CO2" units="mol_per_Pa_s"/>
+        <variable name="I_vent_O2" units="mole_per_second"/>
+        <variable name="I_vent_CO2" units="mole_per_second"/>
+        <variable name="dV_A_dt" units="m_cubed_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>C_A_O2</ci>
+                <apply>
+                    <divide/>
+                    <ci>n_O2</ci>
+                    <ci>V_A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C_A_CO2</ci>
+                <apply>
+                    <divide/>
+                    <ci>n_CO2</ci>
+                    <ci>V_A</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_A_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>C_A_O2</ci>
+                    <ci>P_atm_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>P_A_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>C_A_CO2</ci>
+                    <ci>P_atm_effective</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>G_O2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_ex_O2</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="m_cubed_per_s">1</cn>
+                            <ci>f_obs</ci>
+                        </apply>
+                        <ci>V_A</ci>
+                        <ci>Q_b</ci>
+                    </apply>
+                    <ci>Q_blood_total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>G_CO2</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_ex_CO2</ci>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="m_cubed_per_s">1</cn>
+                            <ci>f_obs</ci>
+                        </apply>
+                        <ci>V_A</ci>
+                        <ci>Q_b</ci>
+                    </apply>
+                    <ci>Q_blood_total</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_O2</ci>
+                <apply>
+                    <times/>
+                    <ci>G_O2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_A_O2</ci>
+                        <ci>P_b_O2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_ex_CO2</ci>
+                <apply>
+                    <times/>
+                    <ci>G_CO2</ci>
+                    <apply>
+                        <minus/>
+                        <ci>P_b_CO2</ci>
+                        <ci>P_A_CO2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_vent_O2</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_in_O2</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>Q_A</ci>
+                            <cn cellml:units="m_cubed_per_s">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_A_O2</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_vent_CO2</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_in_CO2</ci>
+                        </apply>
+                        <apply>
+                            <geq/>
+                            <ci>Q_A</ci>
+                            <cn cellml:units="m_cubed_per_s">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <ci>Q_A</ci>
+                            <ci>C_A_CO2</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>dV_A_dt</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="m_cubed_per_s">0</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <leq/>
+                                <ci>V_A</ci>
+                                <ci>V0</ci>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>Q_A</ci>
+                                <cn cellml:units="m_cubed_per_s">0</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <ci>Q_A</ci>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>V_A</ci>
+                </apply>
+                <ci>dV_A_dt</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>n_O2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>I_vent_O2</ci>
+                    <ci>I_ex_O2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>n_CO2</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>I_vent_CO2</ci>
+                    <ci>I_ex_CO2</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <group>
+        <relationship_ref relationship="containment"/>
+        <component_ref component="Environment">
+            <component_ref component="breathing_waveform"/>
+            <component_ref component="ventilation_distributor"/>
+            <component_ref component="perfusion_distributor"/>
+            <component_ref component="pulmonary_blood_pool"/>
+            <component_ref component="systemic_circulation"/>
+            <component_ref component="acinus_compartment_1"/>
+            <component_ref component="acinus_compartment_2"/>
+            <component_ref component="acinus_compartment_3"/>
+            <component_ref component="acinus_compartment_4"/>
+            <component_ref component="acinus_compartment_5"/>
+        </component_ref>
+    </group>
+    <connection>
+        <map_components component_1="Environment" component_2="breathing_waveform"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="intervention_time" variable_2="intervention_time"/>
+        <map_variables variable_1="exercise_factor" variable_2="exercise_factor"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="pulmonary_blood_pool"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="P_atm_effective" variable_2="P_atm_effective"/>
+        <map_variables variable_1="intervention_time" variable_2="intervention_time"/>
+        <map_variables variable_1="exercise_factor" variable_2="exercise_factor"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="systemic_circulation"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="perfusion_distributor"/>
+        <map_variables variable_1="intervention_time" variable_2="intervention_time"/>
+        <map_variables variable_1="drug_factor" variable_2="drug_factor"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="ventilation_distributor"/>
+        <map_variables variable_1="intervention_time" variable_2="intervention_time"/>
+        <map_variables variable_1="bronchodilator_factor" variable_2="bronchodilator_factor"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="breathing_waveform" component_2="ventilation_distributor"/>
+        <map_variables variable_1="Q_vent_total" variable_2="Q_vent_total"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="acinus_compartment_1"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="P_atm_effective" variable_2="P_atm_effective"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="acinus_compartment_2"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="P_atm_effective" variable_2="P_atm_effective"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="acinus_compartment_3"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="P_atm_effective" variable_2="P_atm_effective"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="acinus_compartment_4"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="P_atm_effective" variable_2="P_atm_effective"/>
+    </connection>
+    <connection>
+        <map_components component_1="Environment" component_2="acinus_compartment_5"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="P_atm_effective" variable_2="P_atm_effective"/>
+    </connection>
+    <connection>
+        <map_components component_1="ventilation_distributor" component_2="acinus_compartment_1"/>
+        <map_variables variable_1="Q_A_1" variable_2="Q_A"/>
+        <map_variables variable_1="V0_1" variable_2="V0"/>
+        <map_variables variable_1="f_obs_1" variable_2="f_obs"/>
+        <map_variables variable_1="C_in_O2" variable_2="C_in_O2"/>
+        <map_variables variable_1="C_in_CO2" variable_2="C_in_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="ventilation_distributor" component_2="acinus_compartment_2"/>
+        <map_variables variable_1="Q_A_2" variable_2="Q_A"/>
+        <map_variables variable_1="V0_2" variable_2="V0"/>
+        <map_variables variable_1="f_obs_2" variable_2="f_obs"/>
+        <map_variables variable_1="C_in_O2" variable_2="C_in_O2"/>
+        <map_variables variable_1="C_in_CO2" variable_2="C_in_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="ventilation_distributor" component_2="acinus_compartment_3"/>
+        <map_variables variable_1="Q_A_3" variable_2="Q_A"/>
+        <map_variables variable_1="V0_3" variable_2="V0"/>
+        <map_variables variable_1="f_obs_3" variable_2="f_obs"/>
+        <map_variables variable_1="C_in_O2" variable_2="C_in_O2"/>
+        <map_variables variable_1="C_in_CO2" variable_2="C_in_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="ventilation_distributor" component_2="acinus_compartment_4"/>
+        <map_variables variable_1="Q_A_4" variable_2="Q_A"/>
+        <map_variables variable_1="V0_4" variable_2="V0"/>
+        <map_variables variable_1="f_obs_4" variable_2="f_obs"/>
+        <map_variables variable_1="C_in_O2" variable_2="C_in_O2"/>
+        <map_variables variable_1="C_in_CO2" variable_2="C_in_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="ventilation_distributor" component_2="acinus_compartment_5"/>
+        <map_variables variable_1="Q_A_5" variable_2="Q_A"/>
+        <map_variables variable_1="V0_5" variable_2="V0"/>
+        <map_variables variable_1="f_obs_5" variable_2="f_obs"/>
+        <map_variables variable_1="C_in_O2" variable_2="C_in_O2"/>
+        <map_variables variable_1="C_in_CO2" variable_2="C_in_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="acinus_compartment_1"/>
+        <map_variables variable_1="Q_b_1" variable_2="Q_b"/>
+        <map_variables variable_1="k_ex_O2_1" variable_2="k_ex_O2"/>
+        <map_variables variable_1="k_ex_CO2_1" variable_2="k_ex_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="acinus_compartment_2"/>
+        <map_variables variable_1="Q_b_2" variable_2="Q_b"/>
+        <map_variables variable_1="k_ex_O2_2" variable_2="k_ex_O2"/>
+        <map_variables variable_1="k_ex_CO2_2" variable_2="k_ex_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="acinus_compartment_3"/>
+        <map_variables variable_1="Q_b_3" variable_2="Q_b"/>
+        <map_variables variable_1="k_ex_O2_3" variable_2="k_ex_O2"/>
+        <map_variables variable_1="k_ex_CO2_3" variable_2="k_ex_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="acinus_compartment_4"/>
+        <map_variables variable_1="Q_b_4" variable_2="Q_b"/>
+        <map_variables variable_1="k_ex_O2_4" variable_2="k_ex_O2"/>
+        <map_variables variable_1="k_ex_CO2_4" variable_2="k_ex_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="acinus_compartment_5"/>
+        <map_variables variable_1="Q_b_5" variable_2="Q_b"/>
+        <map_variables variable_1="k_ex_O2_5" variable_2="k_ex_O2"/>
+        <map_variables variable_1="k_ex_CO2_5" variable_2="k_ex_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="pulmonary_blood_pool"/>
+        <map_variables variable_1="Q_blood_total" variable_2="Q_blood_total"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="acinus_compartment_1"/>
+        <map_variables variable_1="Q_blood_total" variable_2="Q_blood_total"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="acinus_compartment_2"/>
+        <map_variables variable_1="Q_blood_total" variable_2="Q_blood_total"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="acinus_compartment_3"/>
+        <map_variables variable_1="Q_blood_total" variable_2="Q_blood_total"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="acinus_compartment_4"/>
+        <map_variables variable_1="Q_blood_total" variable_2="Q_blood_total"/>
+    </connection>
+    <connection>
+        <map_components component_1="perfusion_distributor" component_2="acinus_compartment_5"/>
+        <map_variables variable_1="Q_blood_total" variable_2="Q_blood_total"/>
+    </connection>
+    <connection>
+        <map_components component_1="acinus_compartment_1" component_2="perfusion_distributor"/>
+        <map_variables variable_1="P_A_O2" variable_2="P_A_O2_1"/>
+    </connection>
+    <connection>
+        <map_components component_1="acinus_compartment_2" component_2="perfusion_distributor"/>
+        <map_variables variable_1="P_A_O2" variable_2="P_A_O2_2"/>
+    </connection>
+    <connection>
+        <map_components component_1="acinus_compartment_3" component_2="perfusion_distributor"/>
+        <map_variables variable_1="P_A_O2" variable_2="P_A_O2_3"/>
+    </connection>
+    <connection>
+        <map_components component_1="acinus_compartment_4" component_2="perfusion_distributor"/>
+        <map_variables variable_1="P_A_O2" variable_2="P_A_O2_4"/>
+    </connection>
+    <connection>
+        <map_components component_1="acinus_compartment_5" component_2="perfusion_distributor"/>
+        <map_variables variable_1="P_A_O2" variable_2="P_A_O2_5"/>
+    </connection>
+    <connection>
+        <map_components component_1="acinus_compartment_1" component_2="pulmonary_blood_pool"/>
+        <map_variables variable_1="I_ex_O2" variable_2="I_ex_O2_1"/>
+        <map_variables variable_1="I_ex_CO2" variable_2="I_ex_CO2_1"/>
+    </connection>
+    <connection>
+        <map_components component_1="acinus_compartment_2" component_2="pulmonary_blood_pool"/>
+        <map_variables variable_1="I_ex_O2" variable_2="I_ex_O2_2"/>
+        <map_variables variable_1="I_ex_CO2" variable_2="I_ex_CO2_2"/>
+    </connection>
+    <connection>
+        <map_components component_1="acinus_compartment_3" component_2="pulmonary_blood_pool"/>
+        <map_variables variable_1="I_ex_O2" variable_2="I_ex_O2_3"/>
+        <map_variables variable_1="I_ex_CO2" variable_2="I_ex_CO2_3"/>
+    </connection>
+    <connection>
+        <map_components component_1="acinus_compartment_4" component_2="pulmonary_blood_pool"/>
+        <map_variables variable_1="I_ex_O2" variable_2="I_ex_O2_4"/>
+        <map_variables variable_1="I_ex_CO2" variable_2="I_ex_CO2_4"/>
+    </connection>
+    <connection>
+        <map_components component_1="acinus_compartment_5" component_2="pulmonary_blood_pool"/>
+        <map_variables variable_1="I_ex_O2" variable_2="I_ex_O2_5"/>
+        <map_variables variable_1="I_ex_CO2" variable_2="I_ex_CO2_5"/>
+    </connection>
+    <connection>
+        <map_components component_1="pulmonary_blood_pool" component_2="acinus_compartment_1"/>
+        <map_variables variable_1="P_b_O2" variable_2="P_b_O2"/>
+        <map_variables variable_1="P_b_CO2" variable_2="P_b_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="pulmonary_blood_pool" component_2="acinus_compartment_2"/>
+        <map_variables variable_1="P_b_O2" variable_2="P_b_O2"/>
+        <map_variables variable_1="P_b_CO2" variable_2="P_b_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="pulmonary_blood_pool" component_2="acinus_compartment_3"/>
+        <map_variables variable_1="P_b_O2" variable_2="P_b_O2"/>
+        <map_variables variable_1="P_b_CO2" variable_2="P_b_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="pulmonary_blood_pool" component_2="acinus_compartment_4"/>
+        <map_variables variable_1="P_b_O2" variable_2="P_b_O2"/>
+        <map_variables variable_1="P_b_CO2" variable_2="P_b_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="pulmonary_blood_pool" component_2="acinus_compartment_5"/>
+        <map_variables variable_1="P_b_O2" variable_2="P_b_O2"/>
+        <map_variables variable_1="P_b_CO2" variable_2="P_b_CO2"/>
+    </connection>
+    <connection>
+        <map_components component_1="pulmonary_blood_pool" component_2="systemic_circulation"/>
+        <map_variables variable_1="C_sys_O2" variable_2="C_s_O2"/>
+        <map_variables variable_1="C_sys_CO2" variable_2="C_s_CO2"/>
+        <map_variables variable_1="C_b_O2" variable_2="C_b_O2_init"/>
+        <map_variables variable_1="C_b_CO2" variable_2="C_b_CO2_init"/>
+    </connection>
+</model>

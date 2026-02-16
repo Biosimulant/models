@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="CardiovascularSystem" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units.cellml">
+        <units name="ml_per_s" units_ref="ml_per_s"/>
+        <units name="dyn_per_cm2" units_ref="dyn_per_cm2"/>
+        <units name="m3_per_s" units_ref="m3_per_s"/>
+        <units name="cm" units_ref="cm"/>
+        <units name="m_per_s" units_ref="m_per_s"/>
+        <units name="m6_per_J" units_ref="m6_per_J"/>
+        <units name="m6_per_Js" units_ref="m6_per_Js"/>
+        <units name="per_m" units_ref="per_m"/>
+        <units name="per_s" units_ref="per_s"/>
+        <units name="J_per_m3" units_ref="J_per_m3"/>
+        <units name="J_per_m3s" units_ref="J_per_m3s"/>
+        <units name="m3_per_J" units_ref="m3_per_J"/>
+        <units name="J2_per_m6" units_ref="J2_per_m6"/>
+        <units name="Js_per_m6" units_ref="Js_per_m6"/>
+        <units name="Js2_per_m6" units_ref="Js2_per_m6"/>
+        <units name="Js2_per_m5" units_ref="Js2_per_m5"/>
+        <units name="J_per_s" units_ref="J_per_s"/>
+        <units name="J_per_m6" units_ref="J_per_m6"/>
+        <units name="Js_per_m3" units_ref="Js_per_m3"/>
+        <units name="UnitValve" units_ref="UnitValve"/>
+        <units name="J_per_m9" units_ref="J_per_m9"/>
+        <units name="m3_per_Js" units_ref="m3_per_Js"/>
+        <units name="kg_per_m3" units_ref="kg_per_m3"/>
+        <units name="m3_per_kg" units_ref="m3_per_kg"/>
+        <units name="dyn_per_cm2_permls_1" units_ref="dyn_per_cm2_permls_1"/>
+        <units name="cm2_per_dyn" units_ref="cm2_per_dyn"/>
+        <!--viscosity-->
+        <units name="viscosity" units_ref="viscosity"/>
+        <!-- dyn_per_cm-->
+        <units name="dyn_per_cm" units_ref="dyn_per_cm"/>
+        <units name="Hz" units_ref="Hz"/>
+    </import>
+    <import xlink:href="parameters.cellml">
+        <component component_ref="parameters" name="parameters"/>
+        <component component_ref="parameters_global" name="parameters_global"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+    </component>
+    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;imports&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;//-->
+    <import xlink:href="modules.cellml">
+        <component component_ref="Valve_type" name="Valve_1_module"/>
+    </import>
+    <import xlink:href="modules.cellml">
+        <component component_ref="Lymph_vessel_type" name="Vessel_1_module"/>
+    </import>
+    <import xlink:href="modules.cellml">
+        <component component_ref="Valve_type" name="Valve_2_module"/>
+    </import>
+    <import xlink:href="modules.cellml">
+        <component component_ref="Lymph_vessel_type" name="Vessel_2_module"/>
+    </import>
+    <import xlink:href="modules.cellml">
+        <component component_ref="Valve_type" name="Valve_3_module"/>
+    </import>
+    <import xlink:href="modules.cellml">
+        <component component_ref="Lymph_vessel_type" name="Vessel_3_module"/>
+    </import>
+    <import xlink:href="modules.cellml">
+        <component component_ref="Valve_type" name="Valve_4_module"/>
+    </import>
+    <import xlink:href="modules.cellml">
+        <component component_ref="Lymph_vessel_type" name="Vessel_4_module"/>
+    </import>
+    <import xlink:href="modules.cellml">
+        <component component_ref="Valve_type" name="Valve_5_module"/>
+    </import>
+    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;vessel mappings&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;//-->
+    <connection>
+        <map_components component_1="Vessel_1_module" component_2="Valve_1_module"/>
+        <map_variables variable_1="Q_in" variable_2="Q"/>
+        <map_variables variable_1="P_in" variable_2="P_out"/>
+    </connection>
+    <connection>
+        <map_components component_1="Vessel_1_module" component_2="Valve_2_module"/>
+        <map_variables variable_1="Q_out" variable_2="Q"/>
+        <map_variables variable_1="P_out" variable_2="P_in"/>
+    </connection>
+    <connection>
+        <map_components component_1="Vessel_2_module" component_2="Valve_2_module"/>
+        <map_variables variable_1="Q_in" variable_2="Q"/>
+        <map_variables variable_1="P_in" variable_2="P_out"/>
+    </connection>
+    <connection>
+        <map_components component_1="Vessel_2_module" component_2="Valve_3_module"/>
+        <map_variables variable_1="Q_out" variable_2="Q"/>
+        <map_variables variable_1="P_out" variable_2="P_in"/>
+    </connection>
+    <connection>
+        <map_components component_1="Vessel_3_module" component_2="Valve_3_module"/>
+        <map_variables variable_1="Q_in" variable_2="Q"/>
+        <map_variables variable_1="P_in" variable_2="P_out"/>
+    </connection>
+    <connection>
+        <map_components component_1="Vessel_3_module" component_2="Valve_4_module"/>
+        <map_variables variable_1="Q_out" variable_2="Q"/>
+        <map_variables variable_1="P_out" variable_2="P_in"/>
+    </connection>
+    <connection>
+        <map_components component_1="Vessel_4_module" component_2="Valve_4_module"/>
+        <map_variables variable_1="Q_in" variable_2="Q"/>
+        <map_variables variable_1="P_in" variable_2="P_out"/>
+    </connection>
+    <connection>
+        <map_components component_1="Vessel_4_module" component_2="Valve_5_module"/>
+        <map_variables variable_1="Q_out" variable_2="Q"/>
+        <map_variables variable_1="P_out" variable_2="P_in"/>
+    </connection>
+    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;access_variables&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;//-->
+    <component name="Vessel_1">
+        <variable name="D" public_interface="in" units="cm"/>
+        <variable name="P11" public_interface="in" units="dyn_per_cm2"/>
+        <variable name="P12" public_interface="in" units="dyn_per_cm2"/>
+        <variable name="Mfunc_1" public_interface="in" units="dyn_per_cm2"/>
+    </component>
+    <component name="Vessel_2">
+        <variable name="D" public_interface="in" units="cm"/>
+        <variable name="P21" public_interface="in" units="dyn_per_cm2"/>
+        <variable name="P22" public_interface="in" units="dyn_per_cm2"/>
+        <variable name="Mfunc_2" public_interface="in" units="dyn_per_cm2"/>
+    </component>
+    <component name="Vessel_3">
+        <variable name="D" public_interface="in" units="cm"/>
+        <variable name="P31" public_interface="in" units="dyn_per_cm2"/>
+        <variable name="P32" public_interface="in" units="dyn_per_cm2"/>
+        <variable name="Mfunc_3" public_interface="in" units="dyn_per_cm2"/>
+    </component>
+    <component name="Vessel_4">
+        <variable name="D" public_interface="in" units="cm"/>
+        <variable name="P41" public_interface="in" units="dyn_per_cm2"/>
+        <variable name="P42" public_interface="in" units="dyn_per_cm2"/>
+        <variable name="Mfunc_4" public_interface="in" units="dyn_per_cm2"/>
+    </component>
+    <component name="Valve_1">
+        <variable name="Q1" public_interface="in" units="ml_per_s"/>
+        <variable name="Q1_delay" public_interface="in" units="ml_per_s"/>
+    </component>
+    <component name="Valve_2">
+        <variable name="Q2" public_interface="in" units="ml_per_s"/>
+        <variable name="Q2_delay" public_interface="in" units="ml_per_s"/>
+    </component>
+    <component name="Valve_3">
+        <variable name="Q3" public_interface="in" units="ml_per_s"/>
+        <variable name="Q3_delay" public_interface="in" units="ml_per_s"/>
+    </component>
+    <component name="Valve_4">
+        <variable name="Q4" public_interface="in" units="ml_per_s"/>
+        <variable name="Q4_delay" public_interface="in" units="ml_per_s"/>
+    </component>
+    <component name="Valve_5">
+        <variable name="Q5" public_interface="in" units="ml_per_s"/>
+        <variable name="Q5_delay" public_interface="in" units="ml_per_s"/>
+    </component>
+    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;vessel mappings&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;//-->
+    <connection>
+        <map_components component_1="Vessel_1" component_2="Vessel_1_module"/>
+        <map_variables variable_1="D" variable_2="D"/>
+        <map_variables variable_1="P11" variable_2="P_in"/>
+        <map_variables variable_1="P12" variable_2="P_out"/>
+        <map_variables variable_1="Mfunc_1" variable_2="Mfunc"/>
+    </connection>
+    <connection>
+        <map_components component_1="Vessel_2" component_2="Vessel_2_module"/>
+        <map_variables variable_1="D" variable_2="D"/>
+        <map_variables variable_1="P21" variable_2="P_in"/>
+        <map_variables variable_1="P22" variable_2="P_out"/>
+        <map_variables variable_1="Mfunc_2" variable_2="Mfunc"/>
+    </connection>
+    <connection>
+        <map_components component_1="Vessel_3" component_2="Vessel_3_module"/>
+        <map_variables variable_1="D" variable_2="D"/>
+        <map_variables variable_1="P31" variable_2="P_in"/>
+        <map_variables variable_1="P32" variable_2="P_out"/>
+        <map_variables variable_1="Mfunc_3" variable_2="Mfunc"/>
+    </connection>
+    <connection>
+        <map_components component_1="Vessel_4" component_2="Vessel_4_module"/>
+        <map_variables variable_1="D" variable_2="D"/>
+        <map_variables variable_1="P41" variable_2="P_in"/>
+        <map_variables variable_1="P42" variable_2="P_out"/>
+        <map_variables variable_1="Mfunc_4" variable_2="Mfunc"/>
+    </connection>
+    <connection>
+        <map_components component_1="Valve_1" component_2="Valve_1_module"/>
+        <map_variables variable_1="Q1" variable_2="Q"/>
+        <map_variables variable_1="Q1_delay" variable_2="Q_delay"/>
+    </connection>
+    <connection>
+        <map_components component_1="Valve_2" component_2="Valve_2_module"/>
+        <map_variables variable_1="Q2" variable_2="Q"/>
+        <map_variables variable_1="Q2_delay" variable_2="Q_delay"/>
+    </connection>
+    <connection>
+        <map_components component_1="Valve_3" component_2="Valve_3_module"/>
+        <map_variables variable_1="Q3" variable_2="Q"/>
+        <map_variables variable_1="Q3_delay" variable_2="Q_delay"/>
+    </connection>
+    <connection>
+        <map_components component_1="Valve_4" component_2="Valve_4_module"/>
+        <map_variables variable_1="Q4" variable_2="Q"/>
+        <map_variables variable_1="Q4_delay" variable_2="Q_delay"/>
+    </connection>
+    <connection>
+        <map_components component_1="Valve_5" component_2="Valve_5_module"/>
+        <map_variables variable_1="Q5" variable_2="Q"/>
+        <map_variables variable_1="Q5_delay" variable_2="Q_delay"/>
+    </connection>
+    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;parameters mapping to modules&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;//-->
+    <connection>
+        <map_components component_1="parameters" component_2="Valve_1_module"/>
+        <map_variables variable_1="P_a" variable_2="P_in"/>
+    </connection>
+    <connection>
+        <map_components component_1="parameters" component_2="Valve_5_module"/>
+        <map_variables variable_1="P_b" variable_2="P_out"/>
+    </connection>
+    <connection>
+        <map_components component_1="parameters" component_2="Vessel_1_module"/>
+        <map_variables variable_1="t_01_Vessel_1" variable_2="t_01"/>
+        <map_variables variable_1="P_d_01_Vessel_1" variable_2="P_d"/>
+        <map_variables variable_1="D_d_Vessel_1" variable_2="D_d"/>
+    </connection>
+    <connection>
+        <map_components component_1="parameters" component_2="Vessel_2_module"/>
+        <map_variables variable_1="t_01_Vessel_2" variable_2="t_01"/>
+        <map_variables variable_1="P_d_01_Vessel_2" variable_2="P_d"/>
+        <map_variables variable_1="D_d_Vessel_2" variable_2="D_d"/>
+    </connection>
+    <connection>
+        <map_components component_1="parameters" component_2="Vessel_3_module"/>
+        <map_variables variable_1="t_01_Vessel_3" variable_2="t_01"/>
+        <map_variables variable_1="P_d_01_Vessel_3" variable_2="P_d"/>
+        <map_variables variable_1="D_d_Vessel_3" variable_2="D_d"/>
+    </connection>
+    <connection>
+        <map_components component_1="parameters" component_2="Vessel_4_module"/>
+        <map_variables variable_1="t_01_Vessel_4" variable_2="t_01"/>
+        <map_variables variable_1="P_d_01_Vessel_4" variable_2="P_d"/>
+        <map_variables variable_1="D_d_Vessel_4" variable_2="D_d"/>
+    </connection>
+    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;time mapping&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;//-->
+    <connection>
+        <map_components component_1="environment" component_2="Valve_1_module"/>
+        <map_variables variable_1="time" variable_2="t"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Vessel_1_module"/>
+        <map_variables variable_1="time" variable_2="t"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Valve_2_module"/>
+        <map_variables variable_1="time" variable_2="t"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Vessel_2_module"/>
+        <map_variables variable_1="time" variable_2="t"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Valve_3_module"/>
+        <map_variables variable_1="time" variable_2="t"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Vessel_3_module"/>
+        <map_variables variable_1="time" variable_2="t"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Valve_4_module"/>
+        <map_variables variable_1="time" variable_2="t"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Vessel_4_module"/>
+        <map_variables variable_1="time" variable_2="t"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Valve_5_module"/>
+        <map_variables variable_1="time" variable_2="t"/>
+    </connection>
+</model>

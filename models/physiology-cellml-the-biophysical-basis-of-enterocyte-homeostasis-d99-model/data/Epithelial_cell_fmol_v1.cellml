@@ -1,0 +1,2202 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="my_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <!-- Epithelial cell model incorporating SS models of GLUT2, SGLT1, NKA, and IKir
+ Note that volume is expressed in Litres, energy in Joules, 
+ molar qtys in femtomoles (fmol), concentrations in milli-moles per litre (= fmol/pL), 
+ charge in Coulombs, voltage in milli-Volts (mV=J_per_C), chemical potential in J_per_mol
+ Cell membrane capacitance of 1F is C^2/J -->
+    <units name="dim">
+        <unit units="dimensionless"/>
+    </units>
+    <units name="fmol">
+        <unit prefix="femto" units="mole"/>
+    </units>
+    <units name="per_fmol">
+        <unit exponent="-1" units="fmol"/>
+    </units>
+    <units name="mol_per_fmol">
+        <unit units="mole"/>
+        <unit exponent="-1" units="fmol"/>
+    </units>
+    <units name="pL">
+        <unit prefix="pico" units="litre"/>
+    </units>
+    <units name="pL_per_mm3">
+        <unit prefix="pico" units="litre"/>
+        <unit exponent="-3" prefix="milli" units="meter"/>
+    </units>
+    <units name="per_s">
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="L_per_s">
+        <unit units="litre"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="pL_per_s">
+        <unit units="pL"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="fmol_per_s">
+        <unit units="fmol"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="per_m">
+        <unit exponent="-1" units="meter"/>
+    </units>
+    <units name="mM">
+        <unit prefix="milli" units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="M_per_L">
+        <unit units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="mM_per_s">
+        <unit units="mM"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="mM2">
+        <unit exponent="2" units="mM"/>
+    </units>
+    <units name="millimols_per_mol">
+        <unit prefix="milli" units="mole"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="per_mol">
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="J_per_s">
+        <unit units="joule"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="C_per_s">
+        <unit units="coulomb"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="mm2">
+        <unit exponent="2" prefix="milli" units="meter"/>
+    </units>
+    <units name="C_per_mm2_per_s">
+        <unit units="coulomb"/>
+        <unit exponent="-1" units="mm2"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="J_per_mol">
+        <unit units="joule"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="J_per_mol_per_K">
+        <unit units="joule"/>
+        <unit exponent="-1" units="mole"/>
+        <unit exponent="-1" units="kelvin"/>
+    </units>
+    <units name="C_per_mol">
+        <unit units="coulomb"/>
+        <unit exponent="-1" units="mole"/>
+    </units>
+    <units name="C2_per_J">
+        <unit exponent="2" units="coulomb"/>
+        <unit exponent="-1" units="joule"/>
+    </units>
+    <units name="C2_per_J_per_mm2">
+        <unit exponent="2" units="coulomb"/>
+        <unit exponent="-1" units="joule"/>
+        <unit exponent="-1" units="mm2"/>
+    </units>
+    <units name="mol_C_per_J_per_s">
+        <unit units="mole"/>
+        <unit units="coulomb"/>
+        <unit exponent="-1" units="joule"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="fmol_per_mm2_per_s">
+        <unit units="fmol"/>
+        <unit exponent="-1" units="mm2"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="fmol_C_per_J_per_s">
+        <unit units="fmol"/>
+        <unit units="coulomb"/>
+        <unit exponent="-1" units="joule"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="J_per_C">
+        <unit units="joule"/>
+        <unit exponent="-1" units="coulomb"/>
+    </units>
+    <units name="J_per_C_per_s">
+        <unit units="joule"/>
+        <unit exponent="-1" units="coulomb"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <component name="main">
+        <variable name="t" units="second"/>
+        <variable initial_value="8.314" name="R" units="J_per_mol_per_K"/>
+        <variable initial_value="308" name="T" units="kelvin"/>
+        <variable initial_value="0.964853321e5" name="F" units="C_per_mol"/>
+        <variable name="RT" units="J_per_mol"/>
+        <variable name="RTF" units="J_per_C"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>RT</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>RTF</ci>
+                <apply>
+                    <divide/>
+                    <ci>RT</ci>
+                    <ci>F</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- area-to-volume ratio-->
+        <variable initial_value="1e-3" name="area" units="mm2"/>
+        <!--
+ &#45;&#45;&#45;&#45;Balance eqns for whole cell using scaling for protein density &#45;&#45;-
+-->
+        <variable initial_value="0.1" name="Scale_GLUT2" units="dim"/>
+        <!--      var Scale_GLUT2: dim;
+      var Scale_SGLT1: dim {init: 0.5};-->
+        <variable name="Scale_SGLT1" units="dim"/>
+        <variable initial_value="0.28" name="Scale_NKE" units="dim"/>
+        <!--        var Scale_Kir:   dim {init: 1};-->
+        <variable name="Scale_Kir" units="dim"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_K_tot</ci>
+                <cn cellml:units="fmol_per_mm2_per_s">0</cn>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Na_tot</ci>
+                <cn cellml:units="fmol_per_mm2_per_s">0</cn>
+            </apply>
+        </math>
+        <!--        v_Glc_tot = 0{fmol_per_mm2_per_s};-->
+        <!--
+ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;- Outward electrical current &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+-->
+        <variable name="v_e_NKE" units="C_per_mm2_per_s"/>
+        <variable name="v_e_SGLT1" units="C_per_mm2_per_s"/>
+        <variable name="v_e_Kir" units="C_per_mm2_per_s"/>
+        <variable name="v_e_tot" units="C_per_mm2_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_e_NKE</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <cn cellml:units="mol_per_fmol" type="e-notation">1<sep/>-15</cn>
+                    <ci>v_NKE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_e_SGLT1</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>F</ci>
+                    </apply>
+                    <cn cellml:units="mol_per_fmol" type="e-notation">1<sep/>-15</cn>
+                    <cn cellml:units="dim">2</cn>
+                    <ci>v_SGLT1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_e_Kir</ci>
+                <apply>
+                    <times/>
+                    <ci>F</ci>
+                    <cn cellml:units="mol_per_fmol" type="e-notation">1<sep/>-15</cn>
+                    <ci>v_Kir</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_e_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>v_e_NKE</ci>
+                    <ci>v_e_SGLT1</ci>
+                    <ci>v_e_Kir</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0" name="u_e" units="J_per_C"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>u_e</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <cn cellml:units="J_per_C_per_s">0.12</cn>
+                </apply>
+            </apply>
+        </math>
+        <!--        var C_m: C2_per_J_per_mm2 {init: 1e-2};
+        ode(u_e, t) = F/C_m*(2{dim}*v_SGLT1-v_NKE-v_Kir);-->
+        <!--
+ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;- Outward potassium flux &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+-->
+        <variable name="v_K_NKE" units="fmol_per_mm2_per_s"/>
+        <variable name="v_K_Kir" units="fmol_per_mm2_per_s"/>
+        <variable name="v_K_tot" units="fmol_per_mm2_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_K_NKE</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dim">2</cn>
+                    </apply>
+                    <ci>v_NKE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_K_Kir</ci>
+                <ci>v_Kir</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_K_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>v_K_NKE</ci>
+                    <ci>v_K_Kir</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--
+ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;- Outward sodium flux &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+-->
+        <variable name="v_Na_NKE" units="fmol_per_mm2_per_s"/>
+        <variable name="v_Na_SGLT1" units="fmol_per_mm2_per_s"/>
+        <variable name="v_Na_tot" units="fmol_per_mm2_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_Na_NKE</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dim">3</cn>
+                    <ci>v_NKE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Na_SGLT1</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dim">2</cn>
+                    </apply>
+                    <ci>v_SGLT1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Na_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>v_Na_NKE</ci>
+                    <ci>v_Na_SGLT1</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--
+ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;- Outward Glucose flux &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+-->
+        <variable name="v_Glc_SGLT1" units="fmol_per_mm2_per_s"/>
+        <variable name="v_Glc_GLUT2" units="fmol_per_mm2_per_s"/>
+        <variable name="v_Glc_tot" units="fmol_per_mm2_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_Glc_SGLT1</ci>
+                <apply>
+                    <minus/>
+                    <ci>v_SGLT1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Glc_GLUT2</ci>
+                <ci>v_GLUT2</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Glc_tot</ci>
+                <apply>
+                    <plus/>
+                    <ci>v_Glc_SGLT1</ci>
+                    <ci>v_Glc_GLUT2</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--
+ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;- Boundary conditions &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+-->
+        <variable initial_value="140" name="c_Na_gut" units="mM"/>
+        <variable initial_value="140" name="c_Nao" units="mM"/>
+        <variable initial_value="10" name="c_Nai" units="mM"/>
+        <variable initial_value="4.5" name="c_Ko" units="mM"/>
+        <variable initial_value="140" name="c_Ki" units="mM"/>
+        <variable initial_value="40" name="c_Glc_gut" units="mM"/>
+        <variable initial_value="0" name="c_Glc_o" units="mM"/>
+        <variable initial_value="1" name="c_Glc_i" units="mM"/>
+        <!--      var c_Glc_i:   mM;-->
+        <variable initial_value="1" name="c_ATP" units="mM"/>
+        <variable initial_value="0.035" name="c_ADP" units="mM"/>
+        <variable initial_value="0.8" name="c_Pi" units="mM"/>
+        <variable name="c_H" units="mM"/>
+        <variable initial_value="7.2" name="pH" units="dim"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>c_H</ci>
+                <apply>
+                    <times/>
+                    <cn cellml:units="mM" type="e-notation">1<sep/>3</cn>
+                    <apply>
+                        <power/>
+                        <cn cellml:units="dim">10</cn>
+                        <apply>
+                            <minus/>
+                            <ci>pH</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="q_Na_gut" units="fmol"/>
+        <variable name="q_Na_i" units="fmol"/>
+        <variable name="q_Na_o" units="fmol"/>
+        <variable name="q_K_i" units="fmol"/>
+        <variable name="q_K_o" units="fmol"/>
+        <variable name="q_ATP" units="fmol"/>
+        <variable name="q_ADP" units="fmol"/>
+        <variable name="q_Pi" units="fmol"/>
+        <variable name="q_H" units="fmol"/>
+        <variable name="q_Glc_gut" units="fmol"/>
+        <variable name="q_Glc_i" units="fmol"/>
+        <variable initial_value="1" name="W_o" units="pL"/>
+        <variable initial_value="1" name="W_i" units="pL"/>
+        <variable initial_value="1" name="W_gut" units="pL"/>
+        <!--
+ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; GLUT2 model &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+
+ Note that kappa_GLUT2 (pL/s) x conc (mM=fmol/pL) /area (mm2) = surface flux (fmol/mm2/s) -->
+        <!--        var k_i_GLUT2:  mM {init: 0.1094};-->
+        <variable initial_value="0.01" name="k_i_GLUT2" units="mM"/>
+        <variable initial_value="1.6090" name="k_o_GLUT2" units="mM"/>
+        <variable initial_value="1.2959" name="k_io_GLUT2" units="mM2"/>
+        <variable initial_value="0.0442" name="kappa_GLUT2" units="pL_per_s"/>
+        <variable name="PHI_GLUT2" units="dim"/>
+        <variable name="v_GLUT2_raw" units="fmol_per_mm2_per_s"/>
+        <variable name="v_GLUT2" units="fmol_per_mm2_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>PHI_GLUT2</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dim">1</cn>
+                    <apply>
+                        <divide/>
+                        <ci>c_Glc_i</ci>
+                        <ci>k_i_GLUT2</ci>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <ci>c_Glc_o</ci>
+                        <ci>k_o_GLUT2</ci>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>c_Glc_i</ci>
+                            <ci>c_Glc_o</ci>
+                        </apply>
+                        <ci>k_io_GLUT2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_GLUT2_raw</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_GLUT2</ci>
+                        <apply>
+                            <times/>
+                            <ci>PHI_GLUT2</ci>
+                            <ci>area</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <ci>c_Glc_i</ci>
+                        <ci>c_Glc_o</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_GLUT2</ci>
+                <apply>
+                    <times/>
+                    <ci>v_GLUT2_raw</ci>
+                    <ci>Scale_GLUT2</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--
+ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; SGLT1 model &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+-->
+        <variable initial_value="0.0601" name="K_Na_gut" units="per_fmol"/>
+        <variable initial_value="2.4289" name="K_Glc_gut" units="per_fmol"/>
+        <variable initial_value="2.4289" name="K_Glc_i" units="per_fmol"/>
+        <variable name="q_bar_Na_gut" units="dim"/>
+        <variable name="q_bar_Glc_gut" units="dim"/>
+        <variable name="q_bar_Glc_i" units="dim"/>
+        <variable initial_value="3.66" name="K_1_SGLT1" units="per_fmol"/>
+        <variable initial_value="330" name="K_2_SGLT1" units="per_fmol"/>
+        <variable initial_value="321" name="K_3_SGLT1" units="per_fmol"/>
+        <variable initial_value="321" name="K_4_SGLT1" units="per_fmol"/>
+        <variable initial_value="905" name="K_5_SGLT1" units="per_fmol"/>
+        <variable initial_value="0.314" name="K_6_SGLT1" units="per_fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q_Na_gut</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Na_gut</ci>
+                    <ci>W_gut</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_Glc_gut</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Glc_gut</ci>
+                    <ci>W_gut</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_Glc_i</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Glc_i</ci>
+                    <ci>W_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_Na_gut</ci>
+                <apply>
+                    <times/>
+                    <ci>K_Na_gut</ci>
+                    <ci>q_Na_gut</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_Glc_gut</ci>
+                <apply>
+                    <times/>
+                    <ci>K_Glc_gut</ci>
+                    <ci>q_Glc_gut</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_Glc_i</ci>
+                <apply>
+                    <times/>
+                    <ci>K_Glc_i</ci>
+                    <ci>q_Glc_i</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0.3" name="z1_SGLT1" units="dim"/>
+        <variable initial_value="0.7" name="z2_SGLT1" units="dim"/>
+        <variable initial_value="0.156" name="kappa_3_SGLT1" units="fmol_per_s"/>
+        <variable initial_value="9.562" name="kappa_6_SGLT1" units="fmol_per_s"/>
+        <variable initial_value="3.5" name="kappa_SGLT1" units="fmol_per_s"/>
+        <variable name="PHI_SGLT1" units="dim"/>
+        <variable name="v_SGLT1_raw" units="fmol_per_mm2_per_s"/>
+        <variable name="v_SGLT1" units="fmol_per_mm2_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>PHI_SGLT1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <apply>
+                                            <times/>
+                                            <cn cellml:units="dim">2</cn>
+                                            <ci>z1_SGLT1</ci>
+                                            <ci>u_e</ci>
+                                        </apply>
+                                        <ci>RTF</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <power/>
+                                        <ci>q_bar_Na_gut</ci>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <apply>
+                                        <plus/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>K_1_SGLT1</ci>
+                                            <ci>K_2_SGLT1</ci>
+                                        </apply>
+                                        <apply>
+                                            <times/>
+                                            <apply>
+                                                <divide/>
+                                                <ci>K_1_SGLT1</ci>
+                                                <ci>K_3_SGLT1</ci>
+                                            </apply>
+                                            <ci>q_bar_Glc_gut</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <power/>
+                                        <ci>q_bar_Na_i</ci>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <ci>q_bar_Glc_i</ci>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <apply>
+                                                <times/>
+                                                <ci>z2_SGLT1</ci>
+                                                <ci>u_e</ci>
+                                            </apply>
+                                            <ci>RTF</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <divide/>
+                                    <ci>kappa_6_SGLT1</ci>
+                                    <ci>kappa_3_SGLT1</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <divide/>
+                                    <ci>K_1_SGLT1</ci>
+                                    <ci>K_6_SGLT1</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <power/>
+                                        <ci>q_bar_Na_i</ci>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <apply>
+                                        <plus/>
+                                        <apply>
+                                            <divide/>
+                                            <ci>K_1_SGLT1</ci>
+                                            <ci>K_5_SGLT1</ci>
+                                        </apply>
+                                        <apply>
+                                            <times/>
+                                            <apply>
+                                                <divide/>
+                                                <ci>K_1_SGLT1</ci>
+                                                <ci>K_4_SGLT1</ci>
+                                            </apply>
+                                            <ci>q_bar_Glc_i</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <power/>
+                                        <ci>q_bar_Na_gut</ci>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <ci>q_bar_Glc_gut</ci>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <apply>
+                                                <times/>
+                                                <ci>z2_SGLT1</ci>
+                                                <ci>u_e</ci>
+                                            </apply>
+                                            <ci>RTF</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <divide/>
+                                        <ci>kappa_6_SGLT1</ci>
+                                        <ci>kappa_3_SGLT1</ci>
+                                    </apply>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <apply>
+                                                <times/>
+                                                <cn cellml:units="dim">2</cn>
+                                                <ci>u_e</ci>
+                                            </apply>
+                                            <ci>RTF</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <power/>
+                            <ci>q_bar_Na_i</ci>
+                            <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <ci>q_bar_Glc_i</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_SGLT1_raw</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_SGLT1</ci>
+                        <apply>
+                            <times/>
+                            <ci>area</ci>
+                            <ci>PHI_SGLT1</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_Na_gut</ci>
+                                    <ci>c_Nai</ci>
+                                </apply>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                            <apply>
+                                <divide/>
+                                <ci>c_Glc_gut</ci>
+                                <ci>c_Glc_i</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <cn cellml:units="dim">2</cn>
+                                    <ci>u_e</ci>
+                                </apply>
+                                <ci>RTF</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_SGLT1</ci>
+                <apply>
+                    <times/>
+                    <ci>v_SGLT1_raw</ci>
+                    <ci>Scale_SGLT1</ci>
+                </apply>
+            </apply>
+        </math>
+        <!--
+ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; NKE model &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+-->
+        <variable initial_value="0.9450" name="z1_NKE" units="dim"/>
+        <variable name="z2_NKE" units="dim"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>z2_NKE</ci>
+                <apply>
+                    <minus/>
+                    <ci>z1_NKE</ci>
+                    <cn cellml:units="dim">1</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_Na_o</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Nao</ci>
+                    <ci>W_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_Na_i</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Nai</ci>
+                    <ci>W_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_K_o</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Ko</ci>
+                    <ci>W_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_K_i</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Ki</ci>
+                    <ci>W_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_ATP</ci>
+                <apply>
+                    <times/>
+                    <ci>c_ATP</ci>
+                    <ci>W_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_ADP</ci>
+                <apply>
+                    <times/>
+                    <ci>c_ADP</ci>
+                    <ci>W_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_Pi</ci>
+                <apply>
+                    <times/>
+                    <ci>c_Pi</ci>
+                    <ci>W_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_H</ci>
+                <apply>
+                    <times/>
+                    <ci>c_H</ci>
+                    <ci>W_i</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="q_bar_Na_o" units="dim"/>
+        <variable name="q_bar_Na_i" units="dim"/>
+        <variable name="q_bar_K_o" units="dim"/>
+        <variable name="q_bar_K_i" units="dim"/>
+        <variable name="q_bar_ATP" units="dim"/>
+        <variable name="q_bar_ADP" units="dim"/>
+        <variable name="q_bar_Pi" units="dim"/>
+        <variable name="q_bar_H" units="dim"/>
+        <variable initial_value="0.0239" name="K_Ko" units="per_fmol"/>
+        <variable initial_value="0.0239" name="K_Ki" units="per_fmol"/>
+        <variable initial_value="0.0159" name="K_Nao" units="per_fmol"/>
+        <variable initial_value="0.0159" name="K_Nai" units="per_fmol"/>
+        <variable initial_value="45.06" name="K_ATP" units="per_fmol"/>
+        <variable initial_value="0.0015" name="K_ADP" units="per_fmol"/>
+        <variable initial_value="0.8673" name="K_Pi" units="per_fmol"/>
+        <variable initial_value="0.8673" name="K_H" units="per_fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q_bar_Na_o</ci>
+                <apply>
+                    <times/>
+                    <ci>K_Nao</ci>
+                    <ci>q_Na_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_Na_i</ci>
+                <apply>
+                    <times/>
+                    <ci>K_Nai</ci>
+                    <ci>q_Na_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_K_o</ci>
+                <apply>
+                    <times/>
+                    <ci>K_Ko</ci>
+                    <ci>q_K_o</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_K_i</ci>
+                <apply>
+                    <times/>
+                    <ci>K_Ki</ci>
+                    <ci>q_K_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_ATP</ci>
+                <apply>
+                    <times/>
+                    <ci>K_ATP</ci>
+                    <ci>q_ATP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_ADP</ci>
+                <apply>
+                    <times/>
+                    <ci>K_ADP</ci>
+                    <ci>q_ADP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_Pi</ci>
+                <apply>
+                    <times/>
+                    <ci>K_Pi</ci>
+                    <ci>q_Pi</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_H</ci>
+                <apply>
+                    <times/>
+                    <ci>K_H</ci>
+                    <ci>q_H</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="A_NKE" units="dim"/>
+        <variable name="B_NKE" units="dim"/>
+        <variable name="C_NKE" units="dim"/>
+        <variable name="D_NKE" units="dim"/>
+        <variable name="Q_ATP_ratio" units="dim"/>
+        <variable name="Delta_G" units="J_per_mol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Q_ATP_ratio</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_bar_ATP</ci>
+                    <apply>
+                        <times/>
+                        <ci>q_bar_ADP</ci>
+                        <ci>q_bar_Pi</ci>
+                        <ci>q_bar_H</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Delta_G</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>RT</ci>
+                    </apply>
+                    <apply>
+                        <ln/>
+                        <ci>Q_ATP_ratio</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>A_NKE</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <power/>
+                            <apply>
+                                <divide/>
+                                <ci>c_Nai</ci>
+                                <ci>c_Nao</ci>
+                            </apply>
+                            <cn cellml:units="dim">3</cn>
+                        </apply>
+                        <ci>Q_ATP_ratio</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <power/>
+                            <apply>
+                                <divide/>
+                                <ci>c_Ki</ci>
+                                <ci>c_Ko</ci>
+                            </apply>
+                            <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <minus/>
+                                    <ci>u_e</ci>
+                                </apply>
+                                <ci>RTF</ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>B_NKE</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <divide/>
+                            <ci>c_Nai</ci>
+                            <ci>c_Nao</ci>
+                        </apply>
+                        <cn cellml:units="dim">3</cn>
+                    </apply>
+                    <ci>Q_ATP_ratio</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>z1_NKE</ci>
+                                <ci>u_e</ci>
+                            </apply>
+                            <ci>RTF</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>gamma_4</ci>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <plus/>
+                                <ci>gamma_5</ci>
+                                <apply>
+                                    <divide/>
+                                    <cn cellml:units="dim">1</cn>
+                                    <apply>
+                                        <times/>
+                                        <ci>q_bar_Pi</ci>
+                                        <ci>q_bar_H</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>q_bar_K_o</ci>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>C_NKE</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <divide/>
+                            <ci>gamma_1</ci>
+                            <apply>
+                                <times/>
+                                <ci>q_bar_Pi</ci>
+                                <ci>q_bar_H</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <ci>gamma_2</ci>
+                                <apply>
+                                    <power/>
+                                    <ci>q_bar_Na_i</ci>
+                                    <cn cellml:units="dim">3</cn>
+                                </apply>
+                                <ci>q_bar_ATP</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>q_bar_Pi</ci>
+                                <ci>q_bar_H</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>gamma_3</ci>
+                            <apply>
+                                <power/>
+                                <ci>q_bar_Na_i</ci>
+                                <cn cellml:units="dim">3</cn>
+                            </apply>
+                            <ci>Q_ATP_ratio</ci>
+                        </apply>
+                        <ci>B_NKE</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <plus/>
+                                        <ci>lambda_1</ci>
+                                        <ci>lambda_2</ci>
+                                    </apply>
+                                    <ci>q_bar_ADP</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>lambda_3</ci>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <apply>
+                                                <times/>
+                                                <apply>
+                                                    <minus/>
+                                                    <ci>z1_NKE</ci>
+                                                </apply>
+                                                <ci>u_e</ci>
+                                            </apply>
+                                            <ci>RTF</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>q_bar_Na_o</ci>
+                                <cn cellml:units="dim">3</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>lambda_4</ci>
+                                    <ci>lambda_5</ci>
+                                    <apply>
+                                        <times/>
+                                        <ci>q_bar_Pi</ci>
+                                        <ci>q_bar_H</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <power/>
+                                    <ci>q_bar_K_o</ci>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>z1_NKE</ci>
+                                        </apply>
+                                        <ci>u_e</ci>
+                                    </apply>
+                                    <ci>RTF</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>D_NKE</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci>gamma_2</ci>
+                        <ci>lambda_1</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>gamma_5</ci>
+                        <ci>lambda_4</ci>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <plus/>
+                            <ci>lambda_4</ci>
+                            <ci>lambda_5</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>q_bar_Pi</ci>
+                            <ci>q_bar_H</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci>gamma_3</ci>
+                            <apply>
+                                <plus/>
+                                <ci>lambda_1</ci>
+                                <ci>lambda_2</ci>
+                            </apply>
+                        </apply>
+                        <ci>q_bar_ADP</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <plus/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <divide/>
+                                        <apply>
+                                            <plus/>
+                                            <ci>lambda_1</ci>
+                                            <ci>lambda_2</ci>
+                                        </apply>
+                                        <ci>q_bar_ADP</ci>
+                                    </apply>
+                                    <apply>
+                                        <exp/>
+                                        <apply>
+                                            <divide/>
+                                            <apply>
+                                                <times/>
+                                                <ci>z1_NKE</ci>
+                                                <ci>u_e</ci>
+                                            </apply>
+                                            <ci>RTF</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <ci>lambda_3</ci>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <ci>q_bar_Na_o</ci>
+                                <cn cellml:units="dim">3</cn>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <plus/>
+                            <ci>gamma_4</ci>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <plus/>
+                                    <ci>gamma_5</ci>
+                                    <apply>
+                                        <divide/>
+                                        <cn cellml:units="dim">1</cn>
+                                        <apply>
+                                            <times/>
+                                            <ci>q_bar_Pi</ci>
+                                            <ci>q_bar_H</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <power/>
+                                    <ci>q_bar_K_o</ci>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="1e0" name="q_tot" units="fmol"/>
+        <variable name="PHI_NKE" units="dim"/>
+        <variable name="kappa_NKE" units="fmol_per_mm2_per_s"/>
+        <variable name="v_NKE_raw" units="fmol_per_mm2_per_s"/>
+        <variable name="v_NKE" units="fmol_per_mm2_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>kappa_NKE</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>kappa_6_NKE</ci>
+                        <ci>K_6</ci>
+                        <ci>q_tot</ci>
+                    </apply>
+                    <ci>area</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>PHI_NKE</ci>
+                <apply>
+                    <minus/>
+                    <ci>C_NKE</ci>
+                    <apply>
+                        <times/>
+                        <ci>A_NKE</ci>
+                        <ci>D_NKE</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_NKE_raw</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_NKE</ci>
+                        <ci>PHI_NKE</ci>
+                    </apply>
+                    <ci>A_NKE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_NKE</ci>
+                <apply>
+                    <times/>
+                    <ci>v_NKE_raw</ci>
+                    <ci>Scale_NKE</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="lambda_1" units="dim"/>
+        <variable name="lambda_2" units="dim"/>
+        <variable name="lambda_3" units="dim"/>
+        <variable name="lambda_4" units="dim"/>
+        <variable name="lambda_5" units="dim"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>lambda_1</ci>
+                <apply>
+                    <divide/>
+                    <ci>kappa_6_NKE</ci>
+                    <ci>kappa_1_NKE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>lambda_2</ci>
+                <apply>
+                    <divide/>
+                    <ci>kappa_6_NKE</ci>
+                    <ci>kappa_2_NKE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>lambda_3</ci>
+                <apply>
+                    <divide/>
+                    <ci>kappa_6_NKE</ci>
+                    <ci>kappa_3_NKE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>lambda_4</ci>
+                <apply>
+                    <divide/>
+                    <ci>kappa_6_NKE</ci>
+                    <ci>kappa_4_NKE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>lambda_5</ci>
+                <apply>
+                    <divide/>
+                    <ci>kappa_6_NKE</ci>
+                    <ci>kappa_5_NKE</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="q_bar_1" units="dim"/>
+        <variable name="q_bar_2" units="dim"/>
+        <variable name="q_bar_3" units="dim"/>
+        <variable name="q_bar_4" units="dim"/>
+        <variable name="q_bar_5" units="dim"/>
+        <variable name="q_bar_6" units="dim"/>
+        <variable name="vv" units="dim"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>vv</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>v_NKE</ci>
+                        <ci>area</ci>
+                    </apply>
+                    <ci>kappa_6_NKE</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_1</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>lambda_1</ci>
+                                    <ci>lambda_2</ci>
+                                </apply>
+                                <ci>q_bar_ADP</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>lambda_3</ci>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <apply>
+                                            <times/>
+                                            <apply>
+                                                <minus/>
+                                                <ci>z1_NKE</ci>
+                                            </apply>
+                                            <ci>u_e</ci>
+                                        </apply>
+                                        <ci>RTF</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <plus/>
+                                            <ci>lambda_4</ci>
+                                            <ci>lambda_5</ci>
+                                            <apply>
+                                                <times/>
+                                                <ci>q_bar_Pi</ci>
+                                                <ci>q_bar_H</ci>
+                                            </apply>
+                                        </apply>
+                                        <apply>
+                                            <power/>
+                                            <ci>q_bar_Na_o</ci>
+                                            <cn cellml:units="dim">3</cn>
+                                        </apply>
+                                    </apply>
+                                    <apply>
+                                        <power/>
+                                        <ci>q_bar_K_o</ci>
+                                        <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <exp/>
+                                    <apply>
+                                        <divide/>
+                                        <apply>
+                                            <times/>
+                                            <apply>
+                                                <minus/>
+                                                <ci>z1_NKE</ci>
+                                            </apply>
+                                            <ci>u_e</ci>
+                                        </apply>
+                                        <ci>RTF</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <ci>vv</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>q_bar_Pi</ci>
+                        <ci>q_bar_H</ci>
+                        <apply>
+                            <power/>
+                            <ci>q_bar_Na_o</ci>
+                            <cn cellml:units="dim">3</cn>
+                        </apply>
+                        <ci>A_NKE</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_2</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>q_bar_1</ci>
+                        <apply>
+                            <power/>
+                            <ci>q_bar_Na_i</ci>
+                            <cn cellml:units="dim">3</cn>
+                        </apply>
+                        <ci>q_bar_ATP</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>lambda_1</ci>
+                        <ci>vv</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_3</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>q_bar_2</ci>
+                        <apply>
+                            <times/>
+                            <ci>lambda_2</ci>
+                            <ci>vv</ci>
+                        </apply>
+                    </apply>
+                    <ci>q_bar_ADP</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_4</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>q_bar_3</ci>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>z1_NKE</ci>
+                                        <ci>u_e</ci>
+                                    </apply>
+                                    <ci>RTF</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>lambda_3</ci>
+                            <ci>vv</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <power/>
+                        <ci>q_bar_Na_o</ci>
+                        <cn cellml:units="dim">3</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_5</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>q_bar_4</ci>
+                        <apply>
+                            <power/>
+                            <ci>q_bar_K_o</ci>
+                            <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>lambda_4</ci>
+                        <ci>vv</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_bar_6</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>q_bar_5</ci>
+                        <apply>
+                            <times/>
+                            <ci>lambda_5</ci>
+                            <ci>vv</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>q_bar_Pi</ci>
+                        <ci>q_bar_H</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="q_1" units="fmol"/>
+        <variable name="q_2" units="fmol"/>
+        <variable name="q_3" units="fmol"/>
+        <variable name="q_4" units="fmol"/>
+        <variable name="q_5" units="fmol"/>
+        <variable name="q_6" units="fmol"/>
+        <variable initial_value="0.01673" name="K_1" units="per_fmol"/>
+        <variable initial_value="4.477e3" name="K_2" units="per_fmol"/>
+        <variable initial_value="46.64e3" name="K_3" units="per_fmol"/>
+        <variable initial_value="720.6" name="K_4" units="per_fmol"/>
+        <variable initial_value="1.607" name="K_5" units="per_fmol"/>
+        <variable initial_value="30.25e3" name="K_6" units="per_fmol"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>q_1</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_bar_1</ci>
+                    <ci>K_1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_2</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_bar_2</ci>
+                    <ci>K_2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_3</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_bar_3</ci>
+                    <ci>K_3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_4</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_bar_4</ci>
+                    <ci>K_4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_5</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_bar_5</ci>
+                    <ci>K_5</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>q_6</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_bar_6</ci>
+                    <ci>K_6</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="v_1" units="fmol_per_mm2_per_s"/>
+        <variable name="v_2" units="fmol_per_mm2_per_s"/>
+        <variable name="v_3" units="fmol_per_mm2_per_s"/>
+        <variable name="v_4" units="fmol_per_mm2_per_s"/>
+        <variable name="v_5" units="fmol_per_mm2_per_s"/>
+        <variable name="v_6" units="fmol_per_mm2_per_s"/>
+        <variable initial_value="2.839e3" name="kappa_1_NKE" units="fmol_per_s"/>
+        <variable initial_value="51.10" name="kappa_2_NKE" units="fmol_per_s"/>
+        <variable initial_value="469.3" name="kappa_3_NKE" units="fmol_per_s"/>
+        <variable initial_value="619.1e3" name="kappa_4_NKE" units="fmol_per_s"/>
+        <variable initial_value="35.87" name="kappa_5_NKE" units="fmol_per_s"/>
+        <variable initial_value="868.4" name="kappa_6_NKE" units="fmol_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v_1</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_1_NKE</ci>
+                        <ci>area</ci>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>q_bar_1</ci>
+                            <apply>
+                                <power/>
+                                <ci>q_bar_Na_i</ci>
+                                <cn cellml:units="dim">3</cn>
+                            </apply>
+                            <ci>q_bar_ATP</ci>
+                        </apply>
+                        <ci>q_bar_2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_2</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_2_NKE</ci>
+                        <ci>area</ci>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <ci>q_bar_2</ci>
+                        <apply>
+                            <times/>
+                            <ci>q_bar_3</ci>
+                            <ci>q_bar_ADP</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_3</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_3_NKE</ci>
+                        <ci>area</ci>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>q_bar_3</ci>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>z1_NKE</ci>
+                                        <ci>u_e</ci>
+                                    </apply>
+                                    <ci>RTF</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>q_bar_4</ci>
+                            <apply>
+                                <power/>
+                                <ci>q_bar_Na_o</ci>
+                                <cn cellml:units="dim">3</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_4</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_4_NKE</ci>
+                        <ci>area</ci>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>q_bar_4</ci>
+                            <apply>
+                                <power/>
+                                <ci>q_bar_K_o</ci>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                        </apply>
+                        <ci>q_bar_5</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_5</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_5_NKE</ci>
+                        <ci>area</ci>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <ci>q_bar_5</ci>
+                        <apply>
+                            <times/>
+                            <ci>q_bar_6</ci>
+                            <ci>q_bar_Pi</ci>
+                            <ci>q_bar_H</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_6</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_6_NKE</ci>
+                        <ci>area</ci>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <ci>q_bar_6</ci>
+                        <apply>
+                            <times/>
+                            <ci>q_bar_1</ci>
+                            <apply>
+                                <power/>
+                                <ci>q_bar_K_i</ci>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <ci>z2_NKE</ci>
+                                        <ci>u_e</ci>
+                                    </apply>
+                                    <ci>RTF</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable name="gamma_1" units="dim"/>
+        <variable name="gamma_2" units="dim"/>
+        <variable name="gamma_3" units="dim"/>
+        <variable name="gamma_4" units="dim"/>
+        <variable name="gamma_5" units="dim"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>gamma_1</ci>
+                <apply>
+                    <divide/>
+                    <ci>K_6</ci>
+                    <ci>K_1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>gamma_2</ci>
+                <apply>
+                    <divide/>
+                    <ci>K_6</ci>
+                    <ci>K_2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>gamma_3</ci>
+                <apply>
+                    <divide/>
+                    <ci>K_6</ci>
+                    <ci>K_3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>gamma_4</ci>
+                <apply>
+                    <divide/>
+                    <ci>K_6</ci>
+                    <ci>K_4</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>gamma_5</ci>
+                <apply>
+                    <divide/>
+                    <ci>K_6</ci>
+                    <ci>K_5</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="u_rev_NKE" units="J_per_C"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>u_rev_NKE</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>RTF</ci>
+                    </apply>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_Nai</ci>
+                                    <ci>c_Nao</ci>
+                                </apply>
+                                <cn cellml:units="dim">3</cn>
+                            </apply>
+                            <apply>
+                                <power/>
+                                <apply>
+                                    <divide/>
+                                    <ci>c_Ko</ci>
+                                    <ci>c_Ki</ci>
+                                </apply>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                            <ci>Q_ATP_ratio</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <!--
+ &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; IKir model &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-
+
+ Note that kappa_Kir (pL/s) x conc (mM=fmol/pL) /area (mm2) = surface flux (fmol/mm2/s) -->
+        <variable initial_value="0" name="z1_Kir" units="dim"/>
+        <variable initial_value="0" name="z2_Kir" units="dim"/>
+        <variable initial_value="0" name="z3_Kir" units="dim"/>
+        <variable initial_value="-0.18" name="z4_Kir" units="dim"/>
+        <variable initial_value="0" name="z5_Kir" units="dim"/>
+        <variable initial_value="-0.82" name="z6_Kir" units="dim"/>
+        <variable initial_value="1" name="k_i_Kir" units="mM"/>
+        <variable initial_value="1" name="k_o_Kir" units="mM"/>
+        <variable name="PHI_Kir" units="dim"/>
+        <variable initial_value="1e-1" name="kappa_Kir" units="pL_per_s"/>
+        <variable name="v_Kir_raw" units="fmol_per_mm2_per_s"/>
+        <variable name="v_Kir" units="fmol_per_mm2_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>PHI_Kir</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <plus/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>z1_Kir</ci>
+                                        </apply>
+                                        <ci>z2_Kir</ci>
+                                    </apply>
+                                    <ci>z3_Kir</ci>
+                                </apply>
+                                <ci>u_e</ci>
+                            </apply>
+                            <ci>RTF</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dim">1</cn>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <ci>c_Ki</ci>
+                                <ci>k_i_Kir</ci>
+                            </apply>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>z1_Kir</ci>
+                                            <ci>z2_Kir</ci>
+                                        </apply>
+                                        <ci>u_e</ci>
+                                    </apply>
+                                    <ci>RTF</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <divide/>
+                                <ci>c_Ko</ci>
+                                <ci>k_o_Kir</ci>
+                            </apply>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <times/>
+                                        <apply>
+                                            <minus/>
+                                            <ci>z6_Kir</ci>
+                                            <ci>z5_Kir</ci>
+                                        </apply>
+                                        <ci>u_e</ci>
+                                    </apply>
+                                    <ci>RTF</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Kir_raw</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <divide/>
+                        <ci>kappa_Kir</ci>
+                        <apply>
+                            <times/>
+                            <ci>PHI_Kir</ci>
+                            <ci>area</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <ci>c_Ki</ci>
+                        <apply>
+                            <times/>
+                            <ci>c_Ko</ci>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <minus/>
+                                        <ci>u_e</ci>
+                                    </apply>
+                                    <ci>RTF</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Kir</ci>
+                <apply>
+                    <times/>
+                    <ci>v_Kir_raw</ci>
+                    <ci>Scale_Kir</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="u_rev_Kir" units="J_per_C"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>u_rev_Kir</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>RTF</ci>
+                    </apply>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <divide/>
+                            <ci>c_Ki</ci>
+                            <ci>c_Ko</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#model">
+            <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+                    <rdf:value xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <rdf:Bag xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                            <rdf:li xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">protein-modules</rdf:li>
+                        </rdf:Bag>
+                    </rdf:value>
+                </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

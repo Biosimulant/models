@@ -1,0 +1,280 @@
+<?xml version='1.0'?>
+<model name="Chan2004_TCell_receptor_activation" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <units name="s">
+        <unit units="second"/>
+    </units>
+    <units name="micromolar">
+        <unit prefix="micro" units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="micromolar_per_second">
+        <unit units="micromolar"/>
+        <unit exponent="-1" units="s"/>
+    </units>
+    <units name="per_micromolar_per_second">
+        <unit exponent="-1" units="micromolar"/>
+        <unit exponent="-1" units="s"/>
+    </units>
+    <units name="per_second">
+        <unit exponent="-1" units="s"/>
+    </units>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="s"/>
+    </component>
+    <component name="TCell_receptor_activation">
+        <variable name="time" public_interface="in" units="s"/>
+        <variable initial_value="0" name="lck_inactive" units="micromolar"/>
+        <variable initial_value="0" name="lck_active" units="micromolar"/>
+        <variable initial_value="0.6" name="phosphatase_inactive" units="micromolar"/>
+        <variable initial_value="0.6" name="phosphatase_active" units="micromolar"/>
+        <variable name="lck_total" units="micromolar"/>
+        <variable name="r_l" units="micromolar_per_second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>r_l</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="micromolar_per_second">1</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>time</ci>
+                                <cn cellml:units="s">9.8</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>time</ci>
+                                <cn cellml:units="s">24.5</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="micromolar_per_second">0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <variable initial_value="1" name="n1" units="per_micromolar_per_second"/>
+        <variable initial_value="0.01" name="k1" units="per_second"/>
+        <variable initial_value="1" name="m1" units="dimensionless"/>
+        <variable initial_value="0.15" name="d0" units="per_second"/>
+        <variable initial_value="0.15" name="d1" units="per_second"/>
+        <variable initial_value="0.01" name="k2" units="per_second"/>
+        <variable initial_value="1" name="m2" units="per_micromolar_per_second"/>
+        <variable initial_value="0.02" name="n2" units="per_second"/>
+        <variable initial_value="0" name="d2" units="per_second"/>
+        <variable initial_value="1.95" name="n" units="dimensionless"/>
+        <variable name="v1" units="micromolar_per_second"/>
+        <variable name="v2" units="micromolar_per_second"/>
+        <variable name="v3" units="micromolar_per_second"/>
+        <variable name="v4" units="micromolar_per_second"/>
+        <variable name="v5" units="micromolar_per_second"/>
+        <variable name="v6" units="micromolar_per_second"/>
+        <variable name="v7" units="micromolar_per_second"/>
+        <variable name="v8" units="micromolar_per_second"/>
+        <variable name="v9" units="micromolar_per_second"/>
+        <variable name="v10" units="micromolar_per_second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>v10</ci>
+                <apply>
+                    <times/>
+                    <ci>d2</ci>
+                    <ci>phosphatase_active</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v9</ci>
+                <apply>
+                    <times/>
+                    <ci>n2</ci>
+                    <ci>phosphatase_active</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v8</ci>
+                <apply>
+                    <times/>
+                    <ci>m2</ci>
+                    <ci>lck_active</ci>
+                    <ci>phosphatase_inactive</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v7</ci>
+                <apply>
+                    <times/>
+                    <ci>k2</ci>
+                    <ci>phosphatase_inactive</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v6</ci>
+                <apply>
+                    <times/>
+                    <ci>d1</ci>
+                    <ci>lck_active</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v5</ci>
+                <apply>
+                    <times/>
+                    <ci>d0</ci>
+                    <ci>lck_inactive</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v4</ci>
+                <apply>
+                    <times/>
+                    <ci>m1</ci>
+                    <apply>
+                        <power/>
+                        <ci>lck_active</ci>
+                        <ci>n</ci>
+                    </apply>
+                    <ci>lck_inactive</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v3</ci>
+                <apply>
+                    <times/>
+                    <ci>k1</ci>
+                    <ci>lck_inactive</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v2</ci>
+                <apply>
+                    <times/>
+                    <ci>n1</ci>
+                    <ci>lck_active</ci>
+                    <ci>phosphatase_active</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v1</ci>
+                <ci>r_l</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>lck_total</ci>
+                <apply>
+                    <plus/>
+                    <ci>lck_inactive</ci>
+                    <ci>lck_active</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>phosphatase_active</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <ci>v10</ci>
+                        </apply>
+                        <ci>v9</ci>
+                    </apply>
+                    <ci>v8</ci>
+                    <ci>v7</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>phosphatase_inactive</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <ci>v9</ci>
+                        <ci>v8</ci>
+                    </apply>
+                    <ci>v7</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>lck_active</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>v6</ci>
+                        </apply>
+                        <ci>v4</ci>
+                        <ci>v3</ci>
+                    </apply>
+                    <ci>v2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>lck_inactive</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <ci>v5</ci>
+                            </apply>
+                            <ci>v4</ci>
+                        </apply>
+                        <ci>v3</ci>
+                    </apply>
+                    <ci>v2</ci>
+                    <ci>v1</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="TCell_receptor_activation"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+</model>

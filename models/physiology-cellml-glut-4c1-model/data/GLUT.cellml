@@ -1,0 +1,213 @@
+<?xml version='1.0'?>
+<model name="GLUT_BG" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="Units.cellml">
+        <units name="per_mol" units_ref="per_mol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="J_per_mol_K" units_ref="J_per_mol_K"/>
+        <units name="mol_per_s" units_ref="mol_per_s"/>
+    </import>
+    <component name="GLUT">
+        <variable name="t" units="second"/>
+        <!-- Parameters-->
+        <variable initial_value="8.324" name="R" units="J_per_mol_K"/>
+        <variable initial_value="300" name="T" units="kelvin"/>
+        <variable initial_value="2.3789" name="K_Glu_i" public_interface="out" units="per_mol"/>
+        <variable initial_value="0.2888" name="K_Glu_o" public_interface="out" units="per_mol"/>
+        <variable initial_value="3.3843" name="K_E_i" public_interface="out" units="per_mol"/>
+        <variable initial_value="0.2030" name="K_E_o" public_interface="out" units="per_mol"/>
+        <variable initial_value="4.2349" name="K_EGlu_i" public_interface="out" units="per_mol"/>
+        <variable initial_value="0.3435" name="K_EGlu_o" public_interface="out" units="per_mol"/>
+        <variable initial_value="17046.5083" name="kappa_1" public_interface="out" units="mol_per_s"/>
+        <variable initial_value="124.2048" name="kappa_2" public_interface="out" units="mol_per_s"/>
+        <variable initial_value="3.5752" name="kappa_3" public_interface="out" units="mol_per_s"/>
+        <variable initial_value="262.8136" name="kappa_4" public_interface="out" units="mol_per_s"/>
+        <!-- State variables-->
+        <variable initial_value="1.0" name="q_Glu_i" units="mole"/>
+        <variable initial_value="0" name="q_Glu_o" units="mole"/>
+        <variable initial_value="1.0" name="q_E_i" units="mole"/>
+        <variable initial_value="0.0" name="q_E_o" units="mole"/>
+        <variable initial_value="0.0" name="q_EGlu_i" units="mole"/>
+        <variable initial_value="0.0" name="q_EGlu_o" units="mole"/>
+        <variable name="upsilon_1" public_interface="out" units="mol_per_s"/>
+        <variable name="upsilon_2" public_interface="out" units="mol_per_s"/>
+        <variable name="upsilon_3" public_interface="out" units="mol_per_s"/>
+        <variable name="upsilon_4" public_interface="out" units="mol_per_s"/>
+        <!-- Conservation laws-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Glu_o</ci>
+                </apply>
+                <ci>upsilon_1</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Glu_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>upsilon_2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_E_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>upsilon_1</ci>
+                    <ci>upsilon_3</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_E_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>upsilon_3</ci>
+                    <ci>upsilon_2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_EGlu_o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>upsilon_4</ci>
+                    <ci>upsilon_1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_EGlu_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>upsilon_2</ci>
+                    <ci>upsilon_4</ci>
+                </apply>
+            </apply>
+            <!-- Constitutive relations-->
+            <apply>
+                <eq/>
+                <ci>upsilon_1</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_1</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>K_EGlu_o</ci>
+                            <ci>q_EGlu_o</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>K_Glu_o</ci>
+                            <ci>q_Glu_o</ci>
+                            <ci>K_E_o</ci>
+                            <ci>q_E_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>upsilon_2</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_2</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>K_Glu_i</ci>
+                            <ci>q_Glu_i</ci>
+                            <ci>K_E_i</ci>
+                            <ci>q_E_i</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>K_EGlu_i</ci>
+                            <ci>q_EGlu_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>upsilon_3</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_3</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>K_E_o</ci>
+                            <ci>q_E_o</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>K_E_i</ci>
+                            <ci>q_E_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>upsilon_4</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_4</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <times/>
+                            <ci>K_EGlu_i</ci>
+                            <ci>q_EGlu_i</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>K_EGlu_o</ci>
+                            <ci>q_EGlu_o</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+</model>

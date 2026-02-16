@@ -1,0 +1,453 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="sten2020_NVC_main" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--import modules-->
+    <import xlink:href="sten2020_neuron_pyramidal.cellml">
+        <component component_ref="pyramidal" name="pyramidal"/>
+    </import>
+    <import xlink:href="sten2020_neuron_GABAergicNPY.cellml">
+        <component component_ref="gabaNPY" name="gabaNPY"/>
+    </import>
+    <import xlink:href="sten2020_neuron_GABAergicNO.cellml">
+        <component component_ref="gabaNO" name="gabaNO"/>
+    </import>
+    <!--import units-->
+    <import xlink:href="sten2020_units.cellml">
+        <units name="per_sec" units_ref="per_sec"/>
+    </import>
+    <!--import parameters. Change this document to run different model cases!-->
+    <import xlink:href="sten2020_parameters_Fig5and6_Ana.cellml">
+        <component component_ref="parameters" name="parameters"/>
+    </import>
+    <!-- build environment time and neuronal stimulation-->
+    <component name="environment">
+        <variable initial_value="0" name="t" public_interface="out" units="second"/>
+        <variable name="Sig" public_interface="out" units="dimensionless"/>
+        <variable name="tstart" public_interface="in" units="second"/>
+        <variable name="tend" public_interface="in" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>Sig</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>t</ci>
+                                <ci>tstart</ci>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>t</ci>
+                                <ci>tend</ci>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="dimensionless">0.0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+    </component>
+    <component name="NVCUnit">
+        <!--environment time, signal, and initiate activity-->
+        <variable name="t" private_interface="out" public_interface="in" units="second"/>
+        <variable name="Sig" public_interface="in" units="dimensionless"/>
+        <variable initial_value="0" name="N_Pyr" private_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="N_NPY" private_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="N_NO" private_interface="out" units="dimensionless"/>
+        <!--rate constants for neuron interactions-->
+        <variable name="k_pf1" public_interface="in" units="per_sec"/>
+        <variable name="k_pf2" public_interface="in" units="per_sec"/>
+        <variable name="k_in1" public_interface="in" units="per_sec"/>
+        <variable name="k_in2" public_interface="in" units="per_sec"/>
+        <variable name="k_inf1" public_interface="in" units="per_sec"/>
+        <variable name="k_inf2" public_interface="in" units="per_sec"/>
+        <variable name="k_u_NO" public_interface="in" units="per_sec"/>
+        <variable name="k_u_NPY" public_interface="in" units="per_sec"/>
+        <variable name="k_u_Pyr" public_interface="in" units="per_sec"/>
+        <variable name="E_Pyr" units="dimensionless"/>
+        <variable name="E_NPY" units="dimensionless"/>
+        <variable name="E_NO" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>E_Pyr</ci>
+                <piecewise>
+                    <piece>
+                        <ci>N_Pyr</ci>
+                        <apply>
+                            <gt/>
+                            <ci>N_Pyr</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="dimensionless">0.0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>E_NPY</ci>
+                <piecewise>
+                    <piece>
+                        <ci>N_NPY</ci>
+                        <apply>
+                            <gt/>
+                            <ci>N_NPY</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="dimensionless">0.0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>E_NO</ci>
+                <piecewise>
+                    <piece>
+                        <ci>N_NO</ci>
+                        <apply>
+                            <gt/>
+                            <ci>N_NO</ci>
+                            <cn cellml:units="dimensionless">0</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="dimensionless">0.0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <!-- imported rate constants for export to each neuronal pathway-->
+        <variable name="k_Ca" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="initCA_NO" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="initNO" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="initNO_vsm" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="initCA_NPY" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="initNPY" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="initNPY_vsm" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="initCA_Pyr" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="initAA" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="initPGE2" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="initPGE2_vsm" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="sink_N_NO" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="sink_N_NPY" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="sink_N_Pyr" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="sink_Ca_NO" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="sink_Ca_NPY" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="sink_Ca_Pyr" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="k_PL" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="k_COX" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="k_PGE2" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="sink_PGE2" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="k_NOS" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="k_NO" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="sink_NO" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="k_NPY" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="V_max" private_interface="out" public_interface="in" units="per_sec"/>
+        <variable name="K_M" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="sink_NPY" private_interface="out" public_interface="in" units="per_sec"/>
+        <!-- grab the output activities from other modules-->
+        <variable name="Ca_NPY" private_interface="in" units="dimensionless"/>
+        <variable name="Ca_Pyr" private_interface="in" units="dimensionless"/>
+        <variable name="Ca_NO" private_interface="in" units="dimensionless"/>
+        <variable name="PGE_2vsm" private_interface="in" units="dimensionless"/>
+        <variable name="NPY_vsm" private_interface="in" units="dimensionless"/>
+        <variable name="NO_vsm" private_interface="in" units="dimensionless"/>
+        <variable name="AA" private_interface="in" units="dimensionless"/>
+        <variable name="PGE_2" private_interface="in" units="dimensionless"/>
+        <variable name="NO" private_interface="in" units="dimensionless"/>
+        <variable name="NPY" private_interface="in" units="dimensionless"/>
+        <!--calculate S, and Dilation-->
+        <variable name="k_y1" public_interface="in" units="dimensionless"/>
+        <variable name="k_y2" public_interface="in" units="dimensionless"/>
+        <variable name="k_y3" public_interface="in" units="dimensionless"/>
+        <variable name="initS_o" public_interface="in" units="dimensionless"/>
+        <variable name="D" public_interface="out" units="dimensionless"/>
+        <variable name="S_t" public_interface="out" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>S_t</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>k_y1</ci>
+                            <ci>NO_vsm</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k_y2</ci>
+                            <ci>PGE_2vsm</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k_y3</ci>
+                        <ci>NPY_vsm</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>D</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">100</cn>
+                        <apply>
+                            <minus/>
+                            <ci>S_t</ci>
+                            <ci>initS_o</ci>
+                        </apply>
+                    </apply>
+                    <ci>initS_o</ci>
+                </apply>
+            </apply>
+            <!--set neuron ode's-->
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>N_Pyr</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <times/>
+                                <ci>k_u_Pyr</ci>
+                                <ci>Sig</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>k_inf1</ci>
+                                <ci>E_NO</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k_inf2</ci>
+                            <ci>E_NPY</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>sink_N_Pyr</ci>
+                        <ci>N_Pyr</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>N_NPY</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <ci>k_u_NPY</ci>
+                                <ci>Sig</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>k_pf2</ci>
+                                <ci>E_Pyr</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k_in2</ci>
+                            <ci>E_NO</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>sink_N_NPY</ci>
+                        <ci>N_NPY</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>N_NO</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <ci>k_u_NO</ci>
+                                <ci>Sig</ci>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>k_pf1</ci>
+                                <ci>E_Pyr</ci>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k_in1</ci>
+                            <ci>E_NPY</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>sink_N_NO</ci>
+                        <ci>N_NO</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <!-- necessary maps between all variables and respective modules-->
+    <connection>
+        <map_components component_1="parameters" component_2="environment"/>
+        <map_variables variable_1="tstart" variable_2="tstart"/>
+        <map_variables variable_1="tend" variable_2="tend"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="NVCUnit"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="Sig" variable_2="Sig"/>
+    </connection>
+    <connection>
+        <map_components component_1="parameters" component_2="NVCUnit"/>
+        <map_variables variable_1="k_Ca" variable_2="k_Ca"/>
+        <map_variables variable_1="k_pf1" variable_2="k_pf1"/>
+        <map_variables variable_1="k_pf2" variable_2="k_pf2"/>
+        <map_variables variable_1="k_in1" variable_2="k_in1"/>
+        <map_variables variable_1="k_in2" variable_2="k_in2"/>
+        <map_variables variable_1="k_inf1" variable_2="k_inf1"/>
+        <map_variables variable_1="k_inf2" variable_2="k_inf2"/>
+        <map_variables variable_1="sink_N_NO" variable_2="sink_N_NO"/>
+        <map_variables variable_1="sink_N_NPY" variable_2="sink_N_NPY"/>
+        <map_variables variable_1="sink_N_Pyr" variable_2="sink_N_Pyr"/>
+        <map_variables variable_1="sink_Ca_NO" variable_2="sink_Ca_NO"/>
+        <map_variables variable_1="sink_Ca_NPY" variable_2="sink_Ca_NPY"/>
+        <map_variables variable_1="sink_Ca_Pyr" variable_2="sink_Ca_Pyr"/>
+        <map_variables variable_1="k_PL" variable_2="k_PL"/>
+        <map_variables variable_1="k_COX" variable_2="k_COX"/>
+        <map_variables variable_1="k_PGE2" variable_2="k_PGE2"/>
+        <map_variables variable_1="sink_PGE2" variable_2="sink_PGE2"/>
+        <map_variables variable_1="k_NOS" variable_2="k_NOS"/>
+        <map_variables variable_1="k_NO" variable_2="k_NO"/>
+        <map_variables variable_1="sink_NO" variable_2="sink_NO"/>
+        <map_variables variable_1="k_NPY" variable_2="k_NPY"/>
+        <map_variables variable_1="V_max" variable_2="V_max"/>
+        <map_variables variable_1="K_M" variable_2="K_M"/>
+        <map_variables variable_1="sink_NPY" variable_2="sink_NPY"/>
+        <map_variables variable_1="k_y1" variable_2="k_y1"/>
+        <map_variables variable_1="k_y2" variable_2="k_y2"/>
+        <map_variables variable_1="k_y3" variable_2="k_y3"/>
+        <map_variables variable_1="k_u_NO" variable_2="k_u_NO"/>
+        <map_variables variable_1="k_u_NPY" variable_2="k_u_NPY"/>
+        <map_variables variable_1="k_u_Pyr" variable_2="k_u_Pyr"/>
+        <map_variables variable_1="initCA_NO" variable_2="initCA_NO"/>
+        <map_variables variable_1="initNO" variable_2="initNO"/>
+        <map_variables variable_1="initNO_vsm" variable_2="initNO_vsm"/>
+        <map_variables variable_1="initCA_NPY" variable_2="initCA_NPY"/>
+        <map_variables variable_1="initNPY" variable_2="initNPY"/>
+        <map_variables variable_1="initNPY_vsm" variable_2="initNPY_vsm"/>
+        <map_variables variable_1="initCA_Pyr" variable_2="initCA_Pyr"/>
+        <map_variables variable_1="initAA" variable_2="initAA"/>
+        <map_variables variable_1="initPGE2" variable_2="initPGE2"/>
+        <map_variables variable_1="initPGE2_vsm" variable_2="initPGE2_vsm"/>
+        <map_variables variable_1="initS_o" variable_2="initS_o"/>
+    </connection>
+    <connection>
+        <map_components component_1="NVCUnit" component_2="pyramidal"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="initCA_Pyr" variable_2="initCA_Pyr"/>
+        <map_variables variable_1="initAA" variable_2="initAA"/>
+        <map_variables variable_1="initPGE2" variable_2="initPGE2"/>
+        <map_variables variable_1="initPGE2_vsm" variable_2="initPGE2_vsm"/>
+        <map_variables variable_1="N_Pyr" variable_2="N_Pyr"/>
+        <map_variables variable_1="k_Ca" variable_2="k_Ca"/>
+        <map_variables variable_1="sink_Ca_Pyr" variable_2="sink_Ca_Pyr"/>
+        <map_variables variable_1="k_PL" variable_2="k_PL"/>
+        <map_variables variable_1="k_COX" variable_2="k_COX"/>
+        <map_variables variable_1="k_PGE2" variable_2="k_PGE2"/>
+        <map_variables variable_1="sink_PGE2" variable_2="sink_PGE2"/>
+        <map_variables variable_1="PGE_2vsm" variable_2="PGE_2vsm"/>
+        <map_variables variable_1="Ca_Pyr" variable_2="Ca_Pyr"/>
+        <map_variables variable_1="AA" variable_2="AA"/>
+        <map_variables variable_1="PGE_2" variable_2="PGE_2"/>
+    </connection>
+    <connection>
+        <map_components component_1="NVCUnit" component_2="gabaNPY"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="initCA_NPY" variable_2="initCA_NPY"/>
+        <map_variables variable_1="initNPY" variable_2="initNPY"/>
+        <map_variables variable_1="initNPY_vsm" variable_2="initNPY_vsm"/>
+        <map_variables variable_1="N_NPY" variable_2="N_NPY"/>
+        <map_variables variable_1="k_Ca" variable_2="k_Ca"/>
+        <map_variables variable_1="sink_Ca_NPY" variable_2="sink_Ca_NPY"/>
+        <map_variables variable_1="k_NPY" variable_2="k_NPY"/>
+        <map_variables variable_1="V_max" variable_2="V_max"/>
+        <map_variables variable_1="K_M" variable_2="K_M"/>
+        <map_variables variable_1="sink_NPY" variable_2="sink_NPY"/>
+        <map_variables variable_1="NPY" variable_2="NPY"/>
+        <map_variables variable_1="NPY_vsm" variable_2="NPY_vsm"/>
+        <map_variables variable_1="Ca_NPY" variable_2="Ca_NPY"/>
+    </connection>
+    <connection>
+        <map_components component_1="NVCUnit" component_2="gabaNO"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="initCA_NO" variable_2="initCA_NO"/>
+        <map_variables variable_1="initNO" variable_2="initNO"/>
+        <map_variables variable_1="initNO_vsm" variable_2="initNO_vsm"/>
+        <map_variables variable_1="N_NO" variable_2="N_NO"/>
+        <map_variables variable_1="k_Ca" variable_2="k_Ca"/>
+        <map_variables variable_1="sink_Ca_NO" variable_2="sink_Ca_NO"/>
+        <map_variables variable_1="k_NOS" variable_2="k_NOS"/>
+        <map_variables variable_1="k_NO" variable_2="k_NO"/>
+        <map_variables variable_1="sink_NO" variable_2="sink_NO"/>
+        <map_variables variable_1="NO" variable_2="NO"/>
+        <map_variables variable_1="NO_vsm" variable_2="NO_vsm"/>
+        <map_variables variable_1="Ca_NO" variable_2="Ca_NO"/>
+    </connection>
+    <group>
+        <relationship_ref relationship="encapsulation"/>
+        <component_ref component="NVCUnit">
+            <component_ref component="pyramidal"/>
+            <component_ref component="gabaNPY"/>
+            <component_ref component="gabaNO"/>
+        </component_ref>
+    </group>
+</model>

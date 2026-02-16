@@ -1,0 +1,2382 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="FCU_AP_and_FCU_EC" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="millivolt" units_ref="millivolt"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="mM_per_sec" units_ref="mM_per_sec"/>
+        <units name="uM_per_sec" units_ref="uM_per_sec"/>
+        <units name="pL" units_ref="pL"/>
+        <units name="m_to_u" units_ref="m_to_u"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <import xlink:href="FCU_AP/CMDN_buffer/BG_CMDN_buffer.cellml">
+        <component component_ref="CMDN_buffer" name="CMDN_buffer"/>
+    </import>
+    <import xlink:href="FCU_AP/CaB/BG_CaB.cellml">
+        <component component_ref="CaB" name="CaB"/>
+    </import>
+    <import xlink:href="FCU_EC/Ca_leak/BG_Ca_leak.cellml">
+        <component component_ref="Ca_leak" name="Ca_leak"/>
+    </import>
+    <import xlink:href="FCU_AP/K/BG_K.cellml">
+        <component component_ref="K" name="K"/>
+    </import>
+    <import xlink:href="FCU_AP/K1/BG_K1.cellml">
+        <component component_ref="K1" name="K1"/>
+    </import>
+    <import xlink:href="FCU_AP/K_ATP/BG_K_ATP.cellml">
+        <component component_ref="K_ATP" name="K_ATP"/>
+    </import>
+    <import xlink:href="FCU_AP/Kp/BG_Kp.cellml">
+        <component component_ref="Kp" name="Kp"/>
+    </import>
+    <import xlink:href="FCU_AP/Kr/BG_Kr.cellml">
+        <component component_ref="Kr" name="Kr"/>
+    </import>
+    <import xlink:href="FCU_AP/Ks/BG_Ks.cellml">
+        <component component_ref="Ks" name="Ks"/>
+    </import>
+    <import xlink:href="FCU_EC/LCC_diadic/BG_LCC_diadic.cellml">
+        <component component_ref="LCC" name="LCC_diadic"/>
+    </import>
+    <import xlink:href="FCU_EC/NCX/BG_NCX.cellml">
+        <component component_ref="NCX" name="NCX"/>
+    </import>
+    <import xlink:href="FCU_AP/NaB/BG_NaB.cellml">
+        <component component_ref="NaB" name="NaB"/>
+    </import>
+    <import xlink:href="FCU_AP/NaK/BG_NaK.cellml">
+        <component component_ref="NaK" name="NaK"/>
+    </import>
+    <import xlink:href="FCU_EC/PLB/BG_PLB.cellml">
+        <component component_ref="PLB" name="PLB"/>
+    </import>
+    <import xlink:href="FCU_EC/RyR/BG_RyR.cellml">
+        <component component_ref="RyR" name="RyR"/>
+    </import>
+    <import xlink:href="FCU_EC/SERCA/BG_SERCA.cellml">
+        <component component_ref="SERCA" name="SERCA"/>
+    </import>
+    <import xlink:href="FCU_AP/TCC/BG_TCC.cellml">
+        <component component_ref="TCC" name="TCC"/>
+    </import>
+    <import xlink:href="FCU_AP/TO/BG_TO.cellml">
+        <component component_ref="TO" name="TO"/>
+    </import>
+    <import xlink:href="FCU_EC/crossbridge_TRPN/BG_crossbridge_TRPN.cellml">
+        <component component_ref="crossbridge_TRPN" name="crossbridge_TRPN"/>
+    </import>
+    <import xlink:href="FCU_EC/diadCaDiffusion/BG_diadCaDiffusion.cellml">
+        <component component_ref="diadCaDiffusion" name="diadCaDiffusion"/>
+    </import>
+    <import xlink:href="FCU_AP/fast_Na/BG_fast_Na.cellml">
+        <component component_ref="fast_Na" name="fast_Na"/>
+    </import>
+    <import xlink:href="FCU_AP/funny/BG_funny.cellml">
+        <component component_ref="funny" name="funny"/>
+    </import>
+    <import xlink:href="FCU_AP/ns/BG_ns.cellml">
+        <component component_ref="ns" name="ns"/>
+    </import>
+    <import xlink:href="FCU_EC/pCa/BG_pCa.cellml">
+        <component component_ref="pCa" name="pCa"/>
+    </import>
+    <units name="m_per_s">
+        <unit units="metre"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <component name="BG_parameters">
+        <variable initial_value="730.008" name="kappa_b2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00901911" name="kappa_CaB" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="3.49023e-07" name="kappa_leak" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="11.6278" name="kappa_K1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1095.07" name="kappa_gK1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="45025.8" name="kappa_Kr" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.51352" name="kappa_xr10" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0672974" name="kappa_xr11" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="8.45146" name="kappa_xr20" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="68.9799" name="kappa_xr21" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1260.5" name="kappa_Ks" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.523159" name="kappa_xs1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.86539" name="kappa_xs2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.435643" name="kappa_LCC_Ca1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.573586" name="kappa_LCC_Ca2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="474.069" name="kappa_d000" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="23.9404" name="kappa_d010" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="31.5209" name="kappa_d020" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0820342" name="kappa_d001" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00414271" name="kappa_d011" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00545447" name="kappa_d021" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="45.6644" name="kappa_f1_000" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="226.758" name="kappa_f1_100" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0079019" name="kappa_f1_001" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0392389" name="kappa_f1_101" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.96802" name="kappa_f2_000" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="14.7385" name="kappa_f2_100" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.000513595" name="kappa_f2_001" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00255038" name="kappa_f2_101" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6475.63" name="kappa_f3_010" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="32156.4" name="kappa_f3_110" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.12056" name="kappa_f3_011" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.56443" name="kappa_f3_111" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="28088.4" name="kappa_fCa000" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="139480" name="kappa_fCa100" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1418.46" name="kappa_fCa010" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="7043.71" name="kappa_fCa110" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1867.6" name="kappa_fCa020" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="9274.05" name="kappa_fCa120" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.70753e+06" name="kappa_1_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="3.9661e+07" name="kappa_2_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1685.32" name="kappa_3_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6.23757e+07" name="kappa_4_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.08571e+06" name="kappa_5_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.20854" name="kappa_6_NCX" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00188588" name="kappa_NaB" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="157.722" name="kappa_1_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="495715" name="kappa_2_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.84118e+06" name="kappa_3_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6.36624e+06" name="kappa_4_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="9492.58" name="kappa_5_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="13.2742" name="kappa_6_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.765166" name="kappa_7_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.721294" name="kappa_8_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1188.11" name="kappa_9_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="489264" name="kappa_10_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="98765.9" name="kappa_11_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="466928" name="kappa_12_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="41.2376" name="kappa_13_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="35.0829" name="kappa_14_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0075218" name="kappa_15_NaK" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="12.5109" name="kappa_PLBph1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.80246" name="kappa_PLBph2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0610875" name="kappa_PLBd1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.191583" name="kappa_PLBd2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1305.42" name="kappa_Inh" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.30319e+06" name="kappa_RyR" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="8.17222" name="kappa_OC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.217391" name="kappa_CCI" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="438.875" name="kappa_CII" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="36.5729" name="kappa_IO" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="4.34512e-08" name="kappa_SERCA_R1_2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="18.3302" name="kappa_SERCA_R2_4" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="9519.76" name="kappa_SERCA_R2_2a" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="18.6556" name="kappa_SERCA_R4_5" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.19414" name="kappa_SERCA_R5_6" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="437.886" name="kappa_SERCA_R6_8" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="17004.4" name="kappa_SERCA_R8_9" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="17306.3" name="kappa_SERCA_R9_10" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.47775e-06" name="kappa_SERCA_R10_1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5808.46" name="kappa_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1266.14" name="kappa_R1_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="4.33488" name="kappa_R2_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.34962" name="kappa_R3_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="7.44777" name="kappa_R4_TCC" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="132.938" name="kappa_R_TRPNCa" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="13.9779" name="kappa_R_BU" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.265707" name="kappa_R_UW" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00625192" name="kappa_R_WS" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="112535" name="kappa_R_SU" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0592562" name="kappa_diadDf" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="17.1253" name="kappa_Na" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="5.19377e+06" name="kappa_m000" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.60678" name="kappa_m001" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="2.17771" name="kappa_m010" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6.73711e-07" name="kappa_m011" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.62519e+09" name="kappa_m100" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="502.781" name="kappa_m101" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="681.432" name="kappa_m110" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.000210812" name="kappa_m111" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.27136e+11" name="kappa_m200" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="39331.6" name="kappa_m201" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="53307.1" name="kappa_m210" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0164914" name="kappa_m211" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0463911" name="kappa_h000" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.43519e-08" name="kappa_h001" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="21.7745" name="kappa_h100" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="6.73631e-06" name="kappa_h101" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="3406.75" name="kappa_h200" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00105394" name="kappa_h201" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="177669" name="kappa_h300" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0549649" name="kappa_h301" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0180903" name="kappa_j000" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="7.58513e-09" name="kappa_j010" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="8.49102" name="kappa_j100" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="3.56022e-06" name="kappa_j110" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1328.47" name="kappa_j200" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.000557018" name="kappa_j210" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="69282.5" name="kappa_j300" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.0290496" name="kappa_j310" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.171301" name="kappa_funny_Na" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.00115689" name="kappa_funny_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.188833" name="kappa_R_xf" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="18766.4" name="kappa_pCa_R1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="1.23662e-05" name="kappa_pCa_R2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_X00_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_X10_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_X01_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_X11_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_i00_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_i10_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_i20_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_K_ATP" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_TO" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_gTO_1" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_gTO_2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_gTO_3" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_gTO_4" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_ns_Ca" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_ns_Na" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_ns_K" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_Kp" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0" name="kappa_gKp" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="0.177842" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="6.50909" name="K_CMDN" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0947743" name="K_CMDN_Ca" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.14596" name="K_Ca_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.58277" name="K_Ca_SR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0110732" name="K_K_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0741574" name="K_K_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.02946" name="K_C_K1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="12368.8" name="K_O_K1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.47312" name="K_Sa_Kr" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.180487" name="K_Sb_Kr" public_interface="out" units="per_fmol"/>
+        <variable initial_value="55.02" name="K_Sc_Kr" public_interface="out" units="per_fmol"/>
+        <variable initial_value="6.74109" name="K_Sd_Kr" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4.456" name="K_S_Ks0" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.624857" name="K_S_Ks1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.350491" name="K_S_Ks2" public_interface="out" units="per_fmol"/>
+        <variable initial_value="90.9131" name="K_Ca_D" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.02678" name="K_000_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="20.3323" name="K_010_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="15.4425" name="K_020_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.206771" name="K_100_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4.0945" name="K_110_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="3.1098" name="K_120_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="5933.65" name="K_001_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="117498" name="K_011_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="89240.9" name="K_021_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1194.91" name="K_101_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="23661.8" name="K_111_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="17971.3" name="K_121_LCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="8.02977e+07" name="K_1_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="320.082" name="K_2_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="82765.4" name="K_3_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="600864" name="K_4_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.22681e+07" name="K_5_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="328.196" name="K_6_NCX" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00292933" name="K_Na_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0152356" name="K_Na_o" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.11103e+08" name="K_1_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="16791.8" name="K_2_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="5.34266" name="K_3_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.54515" name="K_4_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.78749" name="K_5_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="106.276" name="K_6_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="14981.7" name="K_7_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="47932.8" name="K_8_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.77154e+07" name="K_9_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="10754.9" name="K_10_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="26.1168" name="K_11_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="5.5243" name="K_12_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4.67406" name="K_13_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="8.98029" name="K_14_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4.03648e+06" name="K_15_NaK" public_interface="out" units="per_fmol"/>
+        <variable initial_value="91.4607" name="K_MgATP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="3.33133e-05" name="K_MgADP" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0041009" name="K_Pi" public_interface="out" units="per_fmol"/>
+        <variable initial_value="157.763" name="K_H" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.413365" name="K_PLB" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0082013" name="K_PKACI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.32356" name="K_PLB_PKACI" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0130674" name="K_PP1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.28975" name="K_PLBp_PP1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="57.1656" name="K_PLBp" public_interface="out" units="per_fmol"/>
+        <variable initial_value="49.5385" name="K_Ip" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0222685" name="K_Ip_PP1" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1235.18" name="K_C_RyR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="23.0001" name="K_CI_RyR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.136713" name="K_I_RyR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="7.34195" name="K_O_RyR" public_interface="out" units="per_fmol"/>
+        <variable initial_value="49.4242" name="K_P1_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="11.8932" name="K_P2_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.703539" name="K_P2a_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="362.181" name="K_P4_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00341313" name="K_P5_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="77.423" name="K_P6_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.28486" name="K_P8_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.390419" name="K_P9_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.976308" name="K_P10_SERCA" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.10659" name="K_S00_TCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.381738" name="K_S10_TCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="615.294" name="K_S01_TCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="111.498" name="K_S11_TCC" public_interface="out" units="per_fmol"/>
+        <variable initial_value="93.4815" name="K_TRPN" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0218672" name="K_Ca_TRPN" public_interface="out" units="per_fmol"/>
+        <variable initial_value="7.58545" name="K_B_XB" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2.84454" name="K_U_XB" public_interface="out" units="per_fmol"/>
+        <variable initial_value="18.5989" name="K_W_XB" public_interface="out" units="per_fmol"/>
+        <variable initial_value="4.64973e-06" name="K_S_XB" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00722969" name="K_000_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.5403e-05" name="K_100_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="9.84495e-08" name="K_200_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.88774e-09" name="K_300_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="17242.6" name="K_010_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="36.7358" name="K_110_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.234799" name="K_210_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0045022" name="K_310_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="23369.3" name="K_001_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="49.7889" name="K_101_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.318229" name="K_201_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00610195" name="K_301_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="5.57351e+10" name="K_011_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1.18745e+08" name="K_111_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="758967" name="K_211_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="14553" name="K_311_Na" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.00306604" name="K_x0_funny" public_interface="out" units="per_fmol"/>
+        <variable initial_value="61.5887" name="K_x1_funny" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0113547" name="K_pCa" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.0172712" name="K_pCa_Ca" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_S00_K" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_S10_K" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_S20_K" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_S01_K" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_S11_K" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_S21_K" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_r0s0_TO" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_r1s0_TO" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_r0s1_TO" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_r1s1_TO" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_C_Kp" public_interface="out" units="per_fmol"/>
+        <variable initial_value="1e-6" name="K_O_Kp" public_interface="out" units="per_fmol"/>
+        <variable initial_value="2" name="zCa" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1" name="zK" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.033569" name="z_fK1" public_interface="out" units="dimensionless"/>
+        <variable initial_value="3.1153" name="z_rK1" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="z_f_Kp" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-4.4669" name="z_r_Kp" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1.6149028778859738" name="z_xr1_f" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-1.3218634652232777" name="z_xr1_r" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-1.0273976425216251" name="z_xr2_f" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.18153135376657775" name="z_xr2_r" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.000400323747581994" name="z_xs_f" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-1.41544821457997" name="z_xs_r" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.55679" name="zf_NCX" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.44321" name="zr_NCX" public_interface="out" units="dimensionless"/>
+        <variable initial_value="3" name="nNa_o_NCX" public_interface="out" units="dimensionless"/>
+        <variable initial_value="3" name="nNa_i_NCX" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1" name="zNa" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-5301.979" name="zF_5" public_interface="out" units="C_per_mol"/>
+        <variable initial_value="-91183.021" name="zF_8" public_interface="out" units="C_per_mol"/>
+        <variable initial_value="0.876568910405296" name="z_df" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.576510778245838" name="z_ff" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.872117216889333" name="z_dr" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1.73582739545622" name="z_fr" public_interface="out" units="dimensionless"/>
+        <variable initial_value="2.28623234372134" name="z_rTO_f" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-1.51477720975217" name="z_sTO_f" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.131848324558065" name="z_rTO_r" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1.75042355789096" name="z_sTO_r" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-4.1892" name="z_fh" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-4.0381" name="z_fj" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.49541" name="z_fm" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1.2995" name="z_rh" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1.4281" name="z_rj" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-2.4284" name="z_rm" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-2.29569" name="z_xff" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.707659" name="z_xfr" public_interface="out" units="dimensionless"/>
+        <variable initial_value="2.1404" name="z_fd" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-1.1495" name="z_ff1" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.72162" name="z_ff2" public_interface="out" units="dimensionless"/>
+        <variable initial_value="4.2933" name="z_ff3" public_interface="out" units="dimensionless"/>
+        <variable initial_value="2" name="z_rCa" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-2.1404" name="z_rd" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1.8993" name="z_rf1" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.52288" name="z_rf2" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="z_rf3" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.5" name="nK" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.51923" name="z_fX" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0" name="z_fXi" public_interface="out" units="dimensionless"/>
+        <variable initial_value="-0.73169" name="z_rX" public_interface="out" units="dimensionless"/>
+        <variable initial_value="0.83216" name="z_rXi" public_interface="out" units="dimensionless"/>
+        <variable initial_value="1.1" name="n_Tm" public_interface="out" units="dimensionless"/>
+        <variable initial_value="2" name="n_CaTRPN" public_interface="out" units="dimensionless"/>
+    </component>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <variable initial_value="34.4" name="vol_myo" public_interface="out" units="pL"/>
+        <variable initial_value="153400" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="0.007540192" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <variable initial_value="9.327272727" name="q_Ca_o" public_interface="out" units="fmol"/>
+        <variable initial_value="0.763997897" name="q_Ca_SR" public_interface="out" units="fmol"/>
+        <variable initial_value="81.872" name="q_CMDN" public_interface="out" units="fmol"/>
+        <variable initial_value="0.08256" name="q_CMDN_Ca" public_interface="out" units="fmol"/>
+        <variable initial_value="246.623232" name="q_Na_i" public_interface="out" units="fmol"/>
+        <variable initial_value="725.48" name="q_Na_o" public_interface="out" units="fmol"/>
+        <variable initial_value="3603.359559" name="q_K_i" public_interface="out" units="fmol"/>
+        <variable initial_value="27.98181818" name="q_K_o" public_interface="out" units="fmol"/>
+        <variable initial_value="239.08" name="q_MgATP" public_interface="out" units="fmol"/>
+        <variable initial_value="1.204" name="q_MgADP" public_interface="out" units="fmol"/>
+        <variable initial_value="516" name="q_Pi" public_interface="out" units="fmol"/>
+        <variable initial_value="2.435233E-06" name="q_H" public_interface="out" units="fmol"/>
+        <variable initial_value="0.0032" name="q_pCa" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-9" name="q_pCa_Ca" public_interface="out" units="fmol"/>
+        <variable initial_value="1.94197" name="q_TRPN" public_interface="out" units="fmol"/>
+        <variable initial_value="3.68876E-07" name="q_Ca_D" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_Ca_TRPN" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-5" name="q_B_XB" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_U_XB" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_W_XB" public_interface="out" units="fmol"/>
+        <variable initial_value="0" name="q_S_XB" public_interface="out" units="fmol"/>
+        <variable initial_value="3.646" name="q_PLB" public_interface="out" units="fmol"/>
+        <variable initial_value="2.234E-03" name="q_PKACI" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_PLB_PKACI" public_interface="out" units="fmol"/>
+        <variable initial_value="3.062E-02" name="q_PP1" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_PLBp_PP1" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_PLBp" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_PLBp_baseline" public_interface="out" units="fmol"/>
+        <variable initial_value="1.999E-03" name="q_Ip" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_Ip_PP1" public_interface="out" units="fmol"/>
+        <variable name="n_CaTRPN" public_interface="in" units="dimensionless"/>
+        <variable initial_value="-13039" name="q_mem" public_interface="out" units="fC"/>
+        <variable name="V_mem" public_interface="out" units="J_per_C"/>
+        <!-- gate species-->
+        <variable initial_value="2.97188e-06" name="q_S00_K" public_interface="out" units="fmol"/>
+        <variable initial_value="2.97188e-06" name="q_S10_K" public_interface="out" units="fmol"/>
+        <variable initial_value="2.97188e-06" name="q_S20_K" public_interface="out" units="fmol"/>
+        <variable initial_value="2.97188e-06" name="q_S01_K" public_interface="out" units="fmol"/>
+        <variable initial_value="2.97188e-06" name="q_S11_K" public_interface="out" units="fmol"/>
+        <variable initial_value="2.97188e-06" name="q_S21_K" public_interface="out" units="fmol"/>
+        <variable initial_value="7.06883e-06" name="q_C_K1" public_interface="out" units="fmol"/>
+        <variable initial_value="7.06883e-06" name="q_O_K1" public_interface="out" units="fmol"/>
+        <variable initial_value="1.20998e-06" name="q_C_Kp" public_interface="out" units="fmol"/>
+        <variable initial_value="1.20998e-06" name="q_O_Kp" public_interface="out" units="fmol"/>
+        <variable initial_value="2.22891e-06" name="q_Sa_Kr" public_interface="out" units="fmol"/>
+        <variable initial_value="2.22891e-06" name="q_Sb_Kr" public_interface="out" units="fmol"/>
+        <variable initial_value="2.22891e-06" name="q_Sc_Kr" public_interface="out" units="fmol"/>
+        <variable initial_value="2.22891e-06" name="q_Sd_Kr" public_interface="out" units="fmol"/>
+        <variable initial_value="2.97188e-06" name="q_S_Ks0" public_interface="out" units="fmol"/>
+        <variable initial_value="2.97188e-06" name="q_S_Ks1" public_interface="out" units="fmol"/>
+        <variable initial_value="2.97188e-06" name="q_S_Ks2" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_000_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_010_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_020_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_100_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_110_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_120_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_001_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_011_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_021_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_101_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_111_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="1.3798e-05" name="q_121_LCC" public_interface="out" units="fmol"/>
+        <variable initial_value="4.24554e-07" name="q_1_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="4.24554e-07" name="q_2_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="4.24554e-07" name="q_3_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="4.24554e-07" name="q_4_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="4.24554e-07" name="q_5_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="4.24554e-07" name="q_6_NCX" public_interface="out" units="fmol"/>
+        <variable initial_value="4.13941e-05" name="q_C_RyR" public_interface="out" units="fmol"/>
+        <variable initial_value="4.13941e-05" name="q_CI_RyR" public_interface="out" units="fmol"/>
+        <variable initial_value="4.13941e-05" name="q_I_RyR" public_interface="out" units="fmol"/>
+        <variable initial_value="4.13941e-05" name="q_O_RyR" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P1_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P2_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P2a_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P4_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P5_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P6_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P8_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P9_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-08" name="q_P10_SERCA" public_interface="out" units="fmol"/>
+        <variable initial_value="9.55247e-05" name="q_S00_TCC" public_interface="out" units="fmol"/>
+        <variable initial_value="9.55247e-05" name="q_S10_TCC" public_interface="out" units="fmol"/>
+        <variable initial_value="9.55247e-05" name="q_S01_TCC" public_interface="out" units="fmol"/>
+        <variable initial_value="9.55247e-05" name="q_S11_TCC" public_interface="out" units="fmol"/>
+        <variable initial_value="6.36832e-07" name="q_r0s0_TO" public_interface="out" units="fmol"/>
+        <variable initial_value="6.36832e-07" name="q_r1s0_TO" public_interface="out" units="fmol"/>
+        <variable initial_value="6.36832e-07" name="q_r0s1_TO" public_interface="out" units="fmol"/>
+        <variable initial_value="6.36832e-07" name="q_r1s1_TO" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_000_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_100_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_200_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_300_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_010_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_110_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_210_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_310_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_001_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_101_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_201_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_301_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_011_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_111_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_211_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="2.54733e-05" name="q_311_Na" public_interface="out" units="fmol"/>
+        <variable initial_value="1.27366e-06" name="q_x0_funny" public_interface="out" units="fmol"/>
+        <variable initial_value="1.27366e-06" name="q_x1_funny" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P7" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P14" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P15" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P1" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P2" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P3" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P4" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P5" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P6" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P10" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P11" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P12" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P13" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P8" public_interface="out" units="fmol"/>
+        <variable initial_value="7.6683E-05" name="q_P9" public_interface="out" units="fmol"/>
+        <!--var q_pCa: fmol {init: 1.27366e-06, pub: out};
+var q_pCa_Ca: fmol {init: 1.27366e-06, pub: out};-->
+        <!-- CaB imports-->
+        <variable name="v_CaB" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_CaB" public_interface="in" units="fA"/>
+        <!-- Ca_leak imports-->
+        <variable name="v_leak" public_interface="in" units="fmol_per_sec"/>
+        <!-- CMDN_buffer imports-->
+        <variable name="v_b2" public_interface="in" units="fmol_per_sec"/>
+        <!-- fast_Na imports-->
+        <variable name="v_Na" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_Na" public_interface="in" units="fA"/>
+        <!-- funny imports-->
+        <variable name="v_funny_K" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_funny_Na" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_funny" public_interface="in" units="fA"/>
+        <!-- K imports-->
+        <variable name="v_K" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_K" public_interface="in" units="fA"/>
+        <!-- K_ATP imports-->
+        <variable name="v_K_ATP" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_K_ATP" public_interface="in" units="fA"/>
+        <!-- K1 imports-->
+        <variable name="v_K1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_K1" public_interface="in" units="fA"/>
+        <!-- Kp imports-->
+        <variable name="v_Kp" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_Kp" public_interface="in" units="fA"/>
+        <!-- Kr imports-->
+        <variable name="v_Kr" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_Kr" public_interface="in" units="fA"/>
+        <!-- Ks imports-->
+        <variable name="v_Ks" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_Ks" public_interface="in" units="fA"/>
+        <!-- NaK imports-->
+        <variable name="v_K_o_NaK" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_K_i_NaK" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Na_o_NaK" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Na_i_NaK" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_H_NaK" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_MgADP_NaK" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_MgATP_NaK" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Pi_NaK" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_NaK" public_interface="in" units="fA"/>
+        <!-- NaB imports-->
+        <variable name="v_NaB" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_NaB" public_interface="in" units="fA"/>
+        <!-- ns imports-->
+        <variable name="v_ns_Ca" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_ns_Na" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_ns_K" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_ns_Ca" public_interface="in" units="fA"/>
+        <variable name="I_mem_ns_Na" public_interface="in" units="fA"/>
+        <variable name="I_mem_ns_K" public_interface="in" units="fA"/>
+        <!-- NCX imports-->
+        <variable name="v_Ca_o_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Ca_i_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Na_o_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Na_i_NCX" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_NCX" public_interface="in" units="fA"/>
+        <!-- pCa imports-->
+        <variable name="v_pCa_R1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_pCa_R2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_pCa" public_interface="in" units="fA"/>
+        <!-- SERCA imports-->
+        <variable name="v_Ca_i_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Ca_SR_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_H_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_MgADP_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_MgATP_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Pi_SERCA" public_interface="in" units="fmol_per_sec"/>
+        <!-- TCC imports-->
+        <variable name="v_TCC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_TCC" public_interface="in" units="fA"/>
+        <!-- TO imports-->
+        <variable name="v_TO" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_TO" public_interface="in" units="fA"/>
+        <!-- crossbridge_TRPN imports-->
+        <variable name="v_R_TRPNCa" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_BU" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_UW" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_WS" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_R_SU" public_interface="in" units="fmol_per_sec"/>
+        <variable name="Tension" public_interface="in" units="kPa"/>
+        <variable name="SL" public_interface="in" units="metre"/>
+        <!-- diadCaDiffusion imports-->
+        <variable name="v_diadDf" public_interface="in" units="fmol_per_sec"/>
+        <!-- LCC_diadic imports-->
+        <variable name="v_Ca_D_LCC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Ca_o_LCC" public_interface="in" units="fmol_per_sec"/>
+        <variable name="I_mem_LCC" public_interface="in" units="fA"/>
+        <!-- PLB imports-->
+        <variable name="v_PLBph1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_PLBph2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_PLBd1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_PLBd2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_Inh" public_interface="in" units="fmol_per_sec"/>
+        <!-- RyR imports-->
+        <variable name="v_RyR" public_interface="in" units="fmol_per_sec"/>
+        <variable name="v_RyRgate_Ca_D" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>V_mem</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_mem</ci>
+                    <ci>C_m</ci>
+                </apply>
+            </apply>
+        </math>
+        <variable name="I_stim" units="fA"/>
+        <variable initial_value="1" name="stimPeriod" units="second"/>
+        <variable initial_value="0.0001" name="stimDuration" units="second"/>
+        <variable name="tPeriod" units="second"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>tPeriod</ci>
+                <apply>
+                    <minus/>
+                    <ci>time</ci>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <floor/>
+                            <apply>
+                                <divide/>
+                                <ci>time</ci>
+                                <ci>stimPeriod</ci>
+                            </apply>
+                        </apply>
+                        <ci>stimPeriod</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_stim</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <divide/>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dimensionless">1</cn>
+                                <cn cellml:units="volt">0.075</cn>
+                                <ci>C_m</ci>
+                            </apply>
+                            <ci>stimDuration</ci>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <geq/>
+                                <ci>tPeriod</ci>
+                                <cn cellml:units="second">0.3</cn>
+                            </apply>
+                            <apply>
+                                <leq/>
+                                <ci>tPeriod</ci>
+                                <apply>
+                                    <plus/>
+                                    <cn cellml:units="second">0.3</cn>
+                                    <ci>stimDuration</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="fA">0.0</cn>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+        <!-- changing sarcomere length-->
+        <variable name="dSL" public_interface="out" units="m_per_s"/>
+        <variable initial_value="19e-6" name="V_max" units="m_per_s"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>dSL</ci>
+                <piecewise>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>V_max</ci>
+                        </apply>
+                        <apply>
+                            <lt/>
+                            <ci>time</ci>
+                            <cn cellml:units="second">0.06</cn>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <cn cellml:units="dimensionless">0.1</cn>
+                            </apply>
+                            <ci>V_max</ci>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">0.5</cn>
+                            </apply>
+                            <apply>
+                                <lt/>
+                                <ci>time</ci>
+                                <cn cellml:units="second">1.1</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless">0</cn>
+                            <ci>V_max</ci>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <plus/>
+                                    <apply>
+                                        <minus/>
+                                        <apply>
+                                            <plus/>
+                                            <apply>
+                                                <minus/>
+                                                <apply>
+                                                    <plus/>
+                                                    <apply>
+                                                        <minus/>
+                                                        <ci>v_CaB</ci>
+                                                    </apply>
+                                                    <ci>v_leak</ci>
+                                                </apply>
+                                                <ci>v_b2</ci>
+                                            </apply>
+                                            <ci>v_Ca_i_NCX</ci>
+                                        </apply>
+                                        <ci>v_pCa_R1</ci>
+                                    </apply>
+                                    <ci>v_Ca_i_SERCA</ci>
+                                </apply>
+                                <ci>v_TCC</ci>
+                            </apply>
+                            <ci>v_ns_Ca</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>v_R_TRPNCa</ci>
+                            <ci>n_CaTRPN</ci>
+                        </apply>
+                    </apply>
+                    <ci>v_diadDf</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_SR</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <ci>v_leak</ci>
+                        </apply>
+                        <ci>v_Ca_SR_SERCA</ci>
+                    </apply>
+                    <ci>v_RyR</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_D</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_diadDf</ci>
+                    </apply>
+                    <ci>v_Ca_D_LCC</ci>
+                    <ci>v_RyR</ci>
+                    <ci>v_RyRgate_Ca_D</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_o</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <plus/>
+                        <ci>v_CaB</ci>
+                        <ci>v_Ca_o_LCC</ci>
+                        <ci>v_Ca_o_NCX</ci>
+                        <ci>v_pCa_R2</ci>
+                        <ci>v_TCC</ci>
+                        <ci>v_ns_Ca</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_CMDN</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_b2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_CMDN_Ca</ci>
+                </apply>
+                <ci>v_b2</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Na_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <plus/>
+                                    <apply>
+                                        <minus/>
+                                        <ci>v_Na</ci>
+                                    </apply>
+                                    <ci>v_Na_i_NaK</ci>
+                                </apply>
+                                <ci>v_NaB</ci>
+                            </apply>
+                            <ci>v_Na_i_NCX</ci>
+                        </apply>
+                        <ci>v_ns_Na</ci>
+                    </apply>
+                    <ci>v_funny_Na</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_K_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <plus/>
+                                    <apply>
+                                        <minus/>
+                                        <apply>
+                                            <minus/>
+                                            <apply>
+                                                <minus/>
+                                                <apply>
+                                                    <minus/>
+                                                    <apply>
+                                                        <minus/>
+                                                        <ci>v_K</ci>
+                                                    </apply>
+                                                    <ci>v_K1</ci>
+                                                </apply>
+                                                <ci>v_Kp</ci>
+                                            </apply>
+                                            <ci>v_Kr</ci>
+                                        </apply>
+                                        <ci>v_Ks</ci>
+                                    </apply>
+                                    <ci>v_K_i_NaK</ci>
+                                </apply>
+                                <ci>v_TO</ci>
+                            </apply>
+                            <ci>v_K_ATP</ci>
+                        </apply>
+                        <ci>v_ns_K</ci>
+                    </apply>
+                    <ci>v_funny_K</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Na_o</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <plus/>
+                        <ci>v_Na</ci>
+                        <ci>v_Na_o_NaK</ci>
+                        <ci>v_NaB</ci>
+                        <ci>v_Na_o_NCX</ci>
+                        <ci>v_ns_Na</ci>
+                        <ci>v_funny_Na</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_K_o</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless">1</cn>
+                    <apply>
+                        <plus/>
+                        <ci>v_K</ci>
+                        <ci>v_K1</ci>
+                        <ci>v_Kp</ci>
+                        <ci>v_Kr</ci>
+                        <ci>v_Ks</ci>
+                        <ci>v_K_o_NaK</ci>
+                        <ci>v_TO</ci>
+                        <ci>v_K_ATP</ci>
+                        <ci>v_ns_K</ci>
+                        <ci>v_funny_K</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_MgATP</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>v_MgATP_NaK</ci>
+                    <ci>v_MgATP_SERCA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_MgADP</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>v_MgADP_NaK</ci>
+                    <ci>v_MgADP_SERCA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Pi</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>v_Pi_NaK</ci>
+                    <ci>v_Pi_SERCA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_H</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>v_H_NaK</ci>
+                    <ci>v_H_SERCA</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_pCa</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_pCa_R1</ci>
+                    </apply>
+                    <ci>v_pCa_R2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_pCa_Ca</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_pCa_R1</ci>
+                    <ci>v_pCa_R2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_TRPN</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_TRPNCa</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ca_TRPN</ci>
+                </apply>
+                <ci>v_R_TRPNCa</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_B_XB</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_BU</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_U_XB</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>v_R_BU</ci>
+                        <ci>v_R_UW</ci>
+                    </apply>
+                    <ci>v_R_SU</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_W_XB</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_UW</ci>
+                    <ci>v_R_WS</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_S_XB</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_R_WS</ci>
+                    <ci>v_R_SU</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PLB</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBd2</ci>
+                    <ci>v_PLBph1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PKACI</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBph2</ci>
+                    <ci>v_PLBph1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PLB_PKACI</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBph1</ci>
+                    <ci>v_PLBph2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PP1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBph1</ci>
+                    <ci>v_PLBph2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PLBp_PP1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBd1</ci>
+                    <ci>v_PLBd2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_PLBp</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_PLBph2</ci>
+                    <ci>v_PLBd1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ip</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Inh</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_Ip_PP1</ci>
+                </apply>
+                <ci>v_Inh</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_mem</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <ci>I_mem_CaB</ci>
+                    <ci>I_mem_Na</ci>
+                    <ci>I_mem_K</ci>
+                    <ci>I_mem_K_ATP</ci>
+                    <ci>I_mem_K1</ci>
+                    <ci>I_mem_Kp</ci>
+                    <ci>I_mem_Kr</ci>
+                    <ci>I_mem_Ks</ci>
+                    <ci>I_mem_LCC</ci>
+                    <ci>I_mem_NaB</ci>
+                    <ci>I_mem_NaK</ci>
+                    <ci>I_mem_NCX</ci>
+                    <ci>I_mem_ns_Ca</ci>
+                    <ci>I_mem_pCa</ci>
+                    <ci>I_mem_TCC</ci>
+                    <ci>I_mem_TO</ci>
+                    <ci>I_stim</ci>
+                    <ci>I_mem_ns_Na</ci>
+                    <ci>I_mem_ns_K</ci>
+                    <ci>I_mem_funny</ci>
+                </apply>
+            </apply>
+        </math>
+        <!-- pH-->
+        <variable name="cHi" units="mM"/>
+        <variable name="pHi" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>cHi</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_H</ci>
+                    <ci>vol_myo</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>pHi</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <log/>
+                        <ci>cHi</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="CaB"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="v_CaB" variable_2="v_CaB"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="V_mem" variable_2="V_mem"/>
+        <map_variables variable_1="I_mem_CaB" variable_2="I_mem_CaB"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Ca_leak"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_Ca_SR" variable_2="q_Ca_SR"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="v_leak" variable_2="v_leak"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="CMDN_buffer"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_CMDN" variable_2="q_CMDN"/>
+        <map_variables variable_1="q_CMDN_Ca" variable_2="q_CMDN_Ca"/>
+        <map_variables variable_1="v_b2" variable_2="v_b2"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="fast_Na"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_000_Na" variable_2="q_S000_Na"/>
+        <map_variables variable_1="q_100_Na" variable_2="q_S100_Na"/>
+        <map_variables variable_1="q_200_Na" variable_2="q_S200_Na"/>
+        <map_variables variable_1="q_300_Na" variable_2="q_S300_Na"/>
+        <map_variables variable_1="q_010_Na" variable_2="q_S010_Na"/>
+        <map_variables variable_1="q_110_Na" variable_2="q_S110_Na"/>
+        <map_variables variable_1="q_210_Na" variable_2="q_S210_Na"/>
+        <map_variables variable_1="q_310_Na" variable_2="q_S310_Na"/>
+        <map_variables variable_1="q_001_Na" variable_2="q_S001_Na"/>
+        <map_variables variable_1="q_101_Na" variable_2="q_S101_Na"/>
+        <map_variables variable_1="q_201_Na" variable_2="q_S201_Na"/>
+        <map_variables variable_1="q_301_Na" variable_2="q_S301_Na"/>
+        <map_variables variable_1="q_011_Na" variable_2="q_S011_Na"/>
+        <map_variables variable_1="q_111_Na" variable_2="q_S111_Na"/>
+        <map_variables variable_1="q_211_Na" variable_2="q_S211_Na"/>
+        <map_variables variable_1="q_311_Na" variable_2="q_S311_Na"/>
+        <map_variables variable_1="v_Na" variable_2="v_Na"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_Na" variable_2="I_mem_Na"/>
+    </connection>
+    <connection>
+        <map_components component_1="K" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="time"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_S00_K" variable_2="q_S00_K"/>
+        <map_variables variable_1="q_S10_K" variable_2="q_S10_K"/>
+        <map_variables variable_1="q_S20_K" variable_2="q_S20_K"/>
+        <map_variables variable_1="q_S01_K" variable_2="q_S01_K"/>
+        <map_variables variable_1="q_S11_K" variable_2="q_S11_K"/>
+        <map_variables variable_1="q_S21_K" variable_2="q_S21_K"/>
+        <map_variables variable_1="v_K" variable_2="v_K"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_K" variable_2="I_mem_K"/>
+    </connection>
+    <connection>
+        <map_components component_1="K_ATP" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="time"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="v_K_ATP" variable_2="v_K_ATP"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_K_ATP" variable_2="I_mem_K_ATP"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="K1"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_C_K1" variable_2="q_C_K1"/>
+        <map_variables variable_1="q_O_K1" variable_2="q_O_K1"/>
+        <map_variables variable_1="v_K1" variable_2="v_K1"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_K1" variable_2="I_mem_K1"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Kp"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_C_Kp" variable_2="q_C_Kp"/>
+        <map_variables variable_1="q_O_Kp" variable_2="q_O_Kp"/>
+        <map_variables variable_1="v_Kp" variable_2="v_Kp"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_Kp" variable_2="I_mem_Kp"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Kr"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_Sa_Kr" variable_2="q_Sa"/>
+        <map_variables variable_1="q_Sb_Kr" variable_2="q_Sb"/>
+        <map_variables variable_1="q_Sc_Kr" variable_2="q_Sc"/>
+        <map_variables variable_1="q_Sd_Kr" variable_2="q_Sd"/>
+        <map_variables variable_1="v_Kr" variable_2="v_Kr"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_Kr" variable_2="I_mem_Kr"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="Ks"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_S_Ks0" variable_2="q_S_Ks0"/>
+        <map_variables variable_1="q_S_Ks1" variable_2="q_S_Ks1"/>
+        <map_variables variable_1="q_S_Ks2" variable_2="q_S_Ks2"/>
+        <map_variables variable_1="v_Ks" variable_2="v_Ks"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_Ks" variable_2="I_mem_Ks"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="LCC_diadic"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_Ca_D" variable_2="q_Ca_D"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="v_Ca_D_LCC" variable_2="v_Ca_D_LCC"/>
+        <map_variables variable_1="v_Ca_o_LCC" variable_2="v_Ca_o_LCC"/>
+        <map_variables variable_1="I_mem_LCC" variable_2="I_mem_LCC"/>
+        <map_variables variable_1="q_000_LCC" variable_2="q_S000_LCC"/>
+        <map_variables variable_1="q_010_LCC" variable_2="q_S010_LCC"/>
+        <map_variables variable_1="q_020_LCC" variable_2="q_S020_LCC"/>
+        <map_variables variable_1="q_100_LCC" variable_2="q_S100_LCC"/>
+        <map_variables variable_1="q_110_LCC" variable_2="q_S110_LCC"/>
+        <map_variables variable_1="q_120_LCC" variable_2="q_S120_LCC"/>
+        <map_variables variable_1="q_001_LCC" variable_2="q_S001_LCC"/>
+        <map_variables variable_1="q_011_LCC" variable_2="q_S011_LCC"/>
+        <map_variables variable_1="q_021_LCC" variable_2="q_S021_LCC"/>
+        <map_variables variable_1="q_101_LCC" variable_2="q_S101_LCC"/>
+        <map_variables variable_1="q_111_LCC" variable_2="q_S111_LCC"/>
+        <map_variables variable_1="q_121_LCC" variable_2="q_S121_LCC"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="NaK"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_MgATP" variable_2="q_MgATP"/>
+        <map_variables variable_1="q_MgADP" variable_2="q_MgADP"/>
+        <map_variables variable_1="q_Pi" variable_2="q_Pi"/>
+        <map_variables variable_1="q_H" variable_2="q_H"/>
+        <map_variables variable_1="q_P7" variable_2="q_P7"/>
+        <map_variables variable_1="q_P14" variable_2="q_P14"/>
+        <map_variables variable_1="q_P15" variable_2="q_P15"/>
+        <map_variables variable_1="q_P1" variable_2="q_P1"/>
+        <map_variables variable_1="q_P2" variable_2="q_P2"/>
+        <map_variables variable_1="q_P3" variable_2="q_P3"/>
+        <map_variables variable_1="q_P4" variable_2="q_P4"/>
+        <map_variables variable_1="q_P5" variable_2="q_P5"/>
+        <map_variables variable_1="q_P6" variable_2="q_P6"/>
+        <map_variables variable_1="q_P10" variable_2="q_P10"/>
+        <map_variables variable_1="q_P11" variable_2="q_P11"/>
+        <map_variables variable_1="q_P12" variable_2="q_P12"/>
+        <map_variables variable_1="q_P13" variable_2="q_P13"/>
+        <map_variables variable_1="q_P8" variable_2="q_P8"/>
+        <map_variables variable_1="q_P9" variable_2="q_P9"/>
+        <map_variables variable_1="v_K_o_NaK" variable_2="v_K_o_NaK"/>
+        <map_variables variable_1="v_K_i_NaK" variable_2="v_K_i_NaK"/>
+        <map_variables variable_1="v_Na_o_NaK" variable_2="v_Na_o_NaK"/>
+        <map_variables variable_1="v_Na_i_NaK" variable_2="v_Na_i_NaK"/>
+        <map_variables variable_1="v_H_NaK" variable_2="v_H_NaK"/>
+        <map_variables variable_1="v_MgADP_NaK" variable_2="v_MgADP_NaK"/>
+        <map_variables variable_1="v_MgATP_NaK" variable_2="v_MgATP_NaK"/>
+        <map_variables variable_1="v_Pi_NaK" variable_2="v_Pi_NaK"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_NaK" variable_2="I_mem_NaK"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="NaB"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="v_NaB" variable_2="v_NaB"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="V_mem" variable_2="V_mem"/>
+        <map_variables variable_1="I_mem_NaB" variable_2="I_mem_NaB"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="NCX"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_1_NCX" variable_2="q_P1_NCX"/>
+        <map_variables variable_1="q_2_NCX" variable_2="q_P2_NCX"/>
+        <map_variables variable_1="q_3_NCX" variable_2="q_P3_NCX"/>
+        <map_variables variable_1="q_4_NCX" variable_2="q_P4_NCX"/>
+        <map_variables variable_1="q_5_NCX" variable_2="q_P5_NCX"/>
+        <map_variables variable_1="q_6_NCX" variable_2="q_P6_NCX"/>
+        <map_variables variable_1="v_Ca_o_NCX" variable_2="v_Ca_o_NCX"/>
+        <map_variables variable_1="v_Ca_i_NCX" variable_2="v_Ca_i_NCX"/>
+        <map_variables variable_1="v_Na_o_NCX" variable_2="v_Na_o_NCX"/>
+        <map_variables variable_1="v_Na_i_NCX" variable_2="v_Na_i_NCX"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_NCX" variable_2="I_mem_NCX"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="ns"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="v_ns_Ca" variable_2="v_ns_Ca"/>
+        <map_variables variable_1="I_mem_ns_Ca" variable_2="I_mem_ns_Ca"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="v_ns_Na" variable_2="v_ns_Na"/>
+        <map_variables variable_1="I_mem_ns_Na" variable_2="I_mem_ns_Na"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="v_ns_K" variable_2="v_ns_K"/>
+        <map_variables variable_1="I_mem_ns_K" variable_2="I_mem_ns_K"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="pCa"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_pCa" variable_2="q_pCa"/>
+        <map_variables variable_1="q_pCa_Ca" variable_2="q_pCa_Ca"/>
+        <map_variables variable_1="v_pCa_R1" variable_2="v_pCa_R1"/>
+        <map_variables variable_1="v_pCa_R2" variable_2="v_pCa_R2"/>
+        <map_variables variable_1="I_mem_pCa" variable_2="I_mem_pCa"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="SERCA"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_H" variable_2="q_H"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_SR" variable_2="q_Ca_SR"/>
+        <map_variables variable_1="q_MgATP" variable_2="q_MgATP"/>
+        <map_variables variable_1="q_MgADP" variable_2="q_MgADP"/>
+        <map_variables variable_1="q_Pi" variable_2="q_Pi"/>
+        <map_variables variable_1="q_PLBp" variable_2="q_PLBp"/>
+        <map_variables variable_1="q_PLBp_baseline" variable_2="q_PLBp_baseline"/>
+        <map_variables variable_1="v_Ca_i_SERCA" variable_2="v_Ca_i_SERCA"/>
+        <map_variables variable_1="v_Ca_SR_SERCA" variable_2="v_Ca_SR_SERCA"/>
+        <map_variables variable_1="v_H_SERCA" variable_2="v_H_SERCA"/>
+        <map_variables variable_1="v_MgADP_SERCA" variable_2="v_MgADP_SERCA"/>
+        <map_variables variable_1="v_MgATP_SERCA" variable_2="v_MgATP_SERCA"/>
+        <map_variables variable_1="v_Pi_SERCA" variable_2="v_Pi_SERCA"/>
+        <map_variables variable_1="q_P1_SERCA" variable_2="q_P1_SERCA"/>
+        <map_variables variable_1="q_P2_SERCA" variable_2="q_P2_SERCA"/>
+        <map_variables variable_1="q_P2a_SERCA" variable_2="q_P2a_SERCA"/>
+        <map_variables variable_1="q_P4_SERCA" variable_2="q_P4_SERCA"/>
+        <map_variables variable_1="q_P5_SERCA" variable_2="q_P5_SERCA"/>
+        <map_variables variable_1="q_P6_SERCA" variable_2="q_P6_SERCA"/>
+        <map_variables variable_1="q_P8_SERCA" variable_2="q_P8_SERCA"/>
+        <map_variables variable_1="q_P9_SERCA" variable_2="q_P9_SERCA"/>
+        <map_variables variable_1="q_P10_SERCA" variable_2="q_P10_SERCA"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="TCC"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_o" variable_2="q_Ca_o"/>
+        <map_variables variable_1="q_S00_TCC" variable_2="q_s00_TCC"/>
+        <map_variables variable_1="q_S10_TCC" variable_2="q_s10_TCC"/>
+        <map_variables variable_1="q_S01_TCC" variable_2="q_s01_TCC"/>
+        <map_variables variable_1="q_S11_TCC" variable_2="q_s11_TCC"/>
+        <map_variables variable_1="v_TCC" variable_2="v_TCC"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_TCC" variable_2="I_mem_TCC"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="TO"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_r0s0_TO" variable_2="q_r0s0_TO"/>
+        <map_variables variable_1="q_r1s0_TO" variable_2="q_r1s0_TO"/>
+        <map_variables variable_1="q_r0s1_TO" variable_2="q_r0s1_TO"/>
+        <map_variables variable_1="q_r1s1_TO" variable_2="q_r1s1_TO"/>
+        <map_variables variable_1="v_TO" variable_2="v_TO"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="I_mem_TO" variable_2="I_mem_TO"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="crossbridge_TRPN"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_TRPN" variable_2="q_TRPN"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="q_Ca_TRPN" variable_2="q_Ca_TRPN"/>
+        <map_variables variable_1="q_B_XB" variable_2="q_B_XB"/>
+        <map_variables variable_1="q_U_XB" variable_2="q_U_XB"/>
+        <map_variables variable_1="q_W_XB" variable_2="q_W_XB"/>
+        <map_variables variable_1="q_S_XB" variable_2="q_S_XB"/>
+        <map_variables variable_1="v_R_TRPNCa" variable_2="v_R_TRPNCa"/>
+        <map_variables variable_1="v_R_BU" variable_2="v_R_BU"/>
+        <map_variables variable_1="v_R_UW" variable_2="v_R_UW"/>
+        <map_variables variable_1="v_R_WS" variable_2="v_R_WS"/>
+        <map_variables variable_1="v_R_SU" variable_2="v_R_SU"/>
+        <map_variables variable_1="Tension" variable_2="T_total"/>
+        <map_variables variable_1="SL" variable_2="SL"/>
+        <map_variables variable_1="dSL" variable_2="dSL"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="diadCaDiffusion"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_Ca_D" variable_2="q_Ca_D"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="v_diadDf" variable_2="v_diadDf"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="PLB"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_PLB" variable_2="q_PLB"/>
+        <map_variables variable_1="q_PKACI" variable_2="q_PKACI"/>
+        <map_variables variable_1="q_PLB_PKACI" variable_2="q_PLB_PKACI"/>
+        <map_variables variable_1="q_PP1" variable_2="q_PP1"/>
+        <map_variables variable_1="q_PLBp_PP1" variable_2="q_PLBp_PP1"/>
+        <map_variables variable_1="q_PLBp" variable_2="q_PLBp"/>
+        <map_variables variable_1="q_Ip" variable_2="q_Ip"/>
+        <map_variables variable_1="q_Ip_PP1" variable_2="q_Ip_PP1"/>
+        <map_variables variable_1="v_PLBph1" variable_2="v_PLBph1"/>
+        <map_variables variable_1="v_PLBph2" variable_2="v_PLBph2"/>
+        <map_variables variable_1="v_PLBd1" variable_2="v_PLBd1"/>
+        <map_variables variable_1="v_PLBd2" variable_2="v_PLBd2"/>
+        <map_variables variable_1="v_Inh" variable_2="v_Inh"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="RyR"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_Ca_SR" variable_2="q_Ca_SR"/>
+        <map_variables variable_1="q_Ca_D" variable_2="q_Ca_D"/>
+        <map_variables variable_1="v_RyR" variable_2="v_RyR"/>
+        <map_variables variable_1="v_RyRgate_Ca_D" variable_2="v_RyRgate_Ca_D"/>
+        <map_variables variable_1="q_C_RyR" variable_2="q_C_RyR"/>
+        <map_variables variable_1="q_O_RyR" variable_2="q_O_RyR"/>
+        <map_variables variable_1="q_CI_RyR" variable_2="q_CI_RyR"/>
+        <map_variables variable_1="q_I_RyR" variable_2="q_I_RyR"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="BG_parameters"/>
+        <map_variables variable_1="n_CaTRPN" variable_2="n_CaTRPN"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="CaB"/>
+        <map_variables variable_1="kappa_CaB" variable_2="kappa_CaB"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="zCa" variable_2="zCa"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="Ca_leak"/>
+        <map_variables variable_1="kappa_leak" variable_2="kappa_leak"/>
+        <map_variables variable_1="K_Ca_SR" variable_2="K_Ca_SR"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="fast_Na"/>
+        <map_variables variable_1="kappa_Na" variable_2="kappa_Na"/>
+        <map_variables variable_1="kappa_m000" variable_2="kappa_m000"/>
+        <map_variables variable_1="kappa_m001" variable_2="kappa_m001"/>
+        <map_variables variable_1="kappa_m010" variable_2="kappa_m010"/>
+        <map_variables variable_1="kappa_m011" variable_2="kappa_m011"/>
+        <map_variables variable_1="kappa_m100" variable_2="kappa_m100"/>
+        <map_variables variable_1="kappa_m101" variable_2="kappa_m101"/>
+        <map_variables variable_1="kappa_m110" variable_2="kappa_m110"/>
+        <map_variables variable_1="kappa_m111" variable_2="kappa_m111"/>
+        <map_variables variable_1="kappa_m200" variable_2="kappa_m200"/>
+        <map_variables variable_1="kappa_m201" variable_2="kappa_m201"/>
+        <map_variables variable_1="kappa_m210" variable_2="kappa_m210"/>
+        <map_variables variable_1="kappa_m211" variable_2="kappa_m211"/>
+        <map_variables variable_1="kappa_h000" variable_2="kappa_h000"/>
+        <map_variables variable_1="kappa_h001" variable_2="kappa_h001"/>
+        <map_variables variable_1="kappa_h100" variable_2="kappa_h100"/>
+        <map_variables variable_1="kappa_h101" variable_2="kappa_h101"/>
+        <map_variables variable_1="kappa_h200" variable_2="kappa_h200"/>
+        <map_variables variable_1="kappa_h201" variable_2="kappa_h201"/>
+        <map_variables variable_1="kappa_h300" variable_2="kappa_h300"/>
+        <map_variables variable_1="kappa_h301" variable_2="kappa_h301"/>
+        <map_variables variable_1="kappa_j000" variable_2="kappa_j000"/>
+        <map_variables variable_1="kappa_j010" variable_2="kappa_j010"/>
+        <map_variables variable_1="kappa_j100" variable_2="kappa_j100"/>
+        <map_variables variable_1="kappa_j110" variable_2="kappa_j110"/>
+        <map_variables variable_1="kappa_j200" variable_2="kappa_j200"/>
+        <map_variables variable_1="kappa_j210" variable_2="kappa_j210"/>
+        <map_variables variable_1="kappa_j300" variable_2="kappa_j300"/>
+        <map_variables variable_1="kappa_j310" variable_2="kappa_j310"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_000_Na" variable_2="K_000_Na"/>
+        <map_variables variable_1="K_100_Na" variable_2="K_100_Na"/>
+        <map_variables variable_1="K_200_Na" variable_2="K_200_Na"/>
+        <map_variables variable_1="K_300_Na" variable_2="K_300_Na"/>
+        <map_variables variable_1="K_010_Na" variable_2="K_010_Na"/>
+        <map_variables variable_1="K_110_Na" variable_2="K_110_Na"/>
+        <map_variables variable_1="K_210_Na" variable_2="K_210_Na"/>
+        <map_variables variable_1="K_310_Na" variable_2="K_310_Na"/>
+        <map_variables variable_1="K_001_Na" variable_2="K_001_Na"/>
+        <map_variables variable_1="K_101_Na" variable_2="K_101_Na"/>
+        <map_variables variable_1="K_201_Na" variable_2="K_201_Na"/>
+        <map_variables variable_1="K_301_Na" variable_2="K_301_Na"/>
+        <map_variables variable_1="K_011_Na" variable_2="K_011_Na"/>
+        <map_variables variable_1="K_111_Na" variable_2="K_111_Na"/>
+        <map_variables variable_1="K_211_Na" variable_2="K_211_Na"/>
+        <map_variables variable_1="K_311_Na" variable_2="K_311_Na"/>
+        <map_variables variable_1="zNa" variable_2="zNa"/>
+        <map_variables variable_1="z_fh" variable_2="z_fh"/>
+        <map_variables variable_1="z_fj" variable_2="z_fj"/>
+        <map_variables variable_1="z_fm" variable_2="z_fm"/>
+        <map_variables variable_1="z_rh" variable_2="z_rh"/>
+        <map_variables variable_1="z_rj" variable_2="z_rj"/>
+        <map_variables variable_1="z_rm" variable_2="z_rm"/>
+    </connection>
+    <connection>
+        <map_components component_1="K" component_2="BG_parameters"/>
+        <map_variables variable_1="K_S00_K" variable_2="K_S00_K"/>
+        <map_variables variable_1="K_S01_K" variable_2="K_S01_K"/>
+        <map_variables variable_1="K_S10_K" variable_2="K_S10_K"/>
+        <map_variables variable_1="K_S11_K" variable_2="K_S11_K"/>
+        <map_variables variable_1="K_S20_K" variable_2="K_S20_K"/>
+        <map_variables variable_1="K_S21_K" variable_2="K_S21_K"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="kappa_K" variable_2="kappa_K"/>
+        <map_variables variable_1="kappa_X00_K" variable_2="kappa_X00_K"/>
+        <map_variables variable_1="kappa_X01_K" variable_2="kappa_X01_K"/>
+        <map_variables variable_1="kappa_X10_K" variable_2="kappa_X10_K"/>
+        <map_variables variable_1="kappa_X11_K" variable_2="kappa_X11_K"/>
+        <map_variables variable_1="kappa_i00_K" variable_2="kappa_i00_K"/>
+        <map_variables variable_1="kappa_i10_K" variable_2="kappa_i10_K"/>
+        <map_variables variable_1="kappa_i20_K" variable_2="kappa_i20_K"/>
+        <map_variables variable_1="nK" variable_2="nK"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+        <map_variables variable_1="z_fX" variable_2="z_fX"/>
+        <map_variables variable_1="z_fXi" variable_2="z_fXi"/>
+        <map_variables variable_1="z_rX" variable_2="z_rX"/>
+        <map_variables variable_1="z_rXi" variable_2="z_rXi"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="K1"/>
+        <map_variables variable_1="kappa_K1" variable_2="kappa_K1"/>
+        <map_variables variable_1="kappa_gK1" variable_2="kappa_gK1"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_C_K1" variable_2="K_C_K1"/>
+        <map_variables variable_1="K_O_K1" variable_2="K_O_K1"/>
+        <map_variables variable_1="z_fK1" variable_2="z_fK1"/>
+        <map_variables variable_1="z_rK1" variable_2="z_rK1"/>
+        <map_variables variable_1="nK" variable_2="nK"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <connection>
+        <map_components component_1="K_ATP" component_2="BG_parameters"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="kappa_K_ATP" variable_2="kappa_K_ATP"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="Kp"/>
+        <map_variables variable_1="kappa_Kp" variable_2="kappa_Kp"/>
+        <map_variables variable_1="kappa_gKp" variable_2="kappa_gKp"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_C_Kp" variable_2="K_C_Kp"/>
+        <map_variables variable_1="K_O_Kp" variable_2="K_O_Kp"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+        <map_variables variable_1="z_f_Kp" variable_2="z_f_Kp"/>
+        <map_variables variable_1="z_r_Kp" variable_2="z_r_Kp"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="Kr"/>
+        <map_variables variable_1="kappa_Kr" variable_2="kappa_Kr"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="kappa_xr10" variable_2="kappa_xr10"/>
+        <map_variables variable_1="kappa_xr11" variable_2="kappa_xr11"/>
+        <map_variables variable_1="kappa_xr20" variable_2="kappa_xr20"/>
+        <map_variables variable_1="kappa_xr21" variable_2="kappa_xr21"/>
+        <map_variables variable_1="K_Sa_Kr" variable_2="K_Sa_Kr"/>
+        <map_variables variable_1="K_Sb_Kr" variable_2="K_Sb_Kr"/>
+        <map_variables variable_1="K_Sc_Kr" variable_2="K_Sc_Kr"/>
+        <map_variables variable_1="K_Sd_Kr" variable_2="K_Sd_Kr"/>
+        <map_variables variable_1="z_xr1_f" variable_2="z_xr1_f"/>
+        <map_variables variable_1="z_xr1_r" variable_2="z_xr1_r"/>
+        <map_variables variable_1="z_xr2_f" variable_2="z_xr2_f"/>
+        <map_variables variable_1="z_xr2_r" variable_2="z_xr2_r"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="Ks"/>
+        <map_variables variable_1="kappa_Ks" variable_2="kappa_Ks"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="kappa_xs1" variable_2="kappa_xs1"/>
+        <map_variables variable_1="kappa_xs2" variable_2="kappa_xs2"/>
+        <map_variables variable_1="K_S_Ks0" variable_2="K_S_Ks0"/>
+        <map_variables variable_1="K_S_Ks1" variable_2="K_S_Ks1"/>
+        <map_variables variable_1="K_S_Ks2" variable_2="K_S_Ks2"/>
+        <map_variables variable_1="z_xs_f" variable_2="z_xs_f"/>
+        <map_variables variable_1="z_xs_r" variable_2="z_xs_r"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="NaK"/>
+        <map_variables variable_1="kappa_1_NaK" variable_2="kappa_1_NaK"/>
+        <map_variables variable_1="kappa_2_NaK" variable_2="kappa_2_NaK"/>
+        <map_variables variable_1="kappa_3_NaK" variable_2="kappa_3_NaK"/>
+        <map_variables variable_1="kappa_4_NaK" variable_2="kappa_4_NaK"/>
+        <map_variables variable_1="kappa_5_NaK" variable_2="kappa_5_NaK"/>
+        <map_variables variable_1="kappa_6_NaK" variable_2="kappa_6_NaK"/>
+        <map_variables variable_1="kappa_7_NaK" variable_2="kappa_7_NaK"/>
+        <map_variables variable_1="kappa_8_NaK" variable_2="kappa_8_NaK"/>
+        <map_variables variable_1="kappa_9_NaK" variable_2="kappa_9_NaK"/>
+        <map_variables variable_1="kappa_10_NaK" variable_2="kappa_10_NaK"/>
+        <map_variables variable_1="kappa_11_NaK" variable_2="kappa_11_NaK"/>
+        <map_variables variable_1="kappa_12_NaK" variable_2="kappa_12_NaK"/>
+        <map_variables variable_1="kappa_13_NaK" variable_2="kappa_13_NaK"/>
+        <map_variables variable_1="kappa_14_NaK" variable_2="kappa_14_NaK"/>
+        <map_variables variable_1="kappa_15_NaK" variable_2="kappa_15_NaK"/>
+        <map_variables variable_1="K_1_NaK" variable_2="K_1_NaK"/>
+        <map_variables variable_1="K_2_NaK" variable_2="K_2_NaK"/>
+        <map_variables variable_1="K_3_NaK" variable_2="K_3_NaK"/>
+        <map_variables variable_1="K_4_NaK" variable_2="K_4_NaK"/>
+        <map_variables variable_1="K_5_NaK" variable_2="K_5_NaK"/>
+        <map_variables variable_1="K_6_NaK" variable_2="K_6_NaK"/>
+        <map_variables variable_1="K_7_NaK" variable_2="K_7_NaK"/>
+        <map_variables variable_1="K_8_NaK" variable_2="K_8_NaK"/>
+        <map_variables variable_1="K_9_NaK" variable_2="K_9_NaK"/>
+        <map_variables variable_1="K_10_NaK" variable_2="K_10_NaK"/>
+        <map_variables variable_1="K_11_NaK" variable_2="K_11_NaK"/>
+        <map_variables variable_1="K_12_NaK" variable_2="K_12_NaK"/>
+        <map_variables variable_1="K_13_NaK" variable_2="K_13_NaK"/>
+        <map_variables variable_1="K_14_NaK" variable_2="K_14_NaK"/>
+        <map_variables variable_1="K_15_NaK" variable_2="K_15_NaK"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_MgATP" variable_2="K_MgATP"/>
+        <map_variables variable_1="K_MgADP" variable_2="K_MgADP"/>
+        <map_variables variable_1="K_Pi" variable_2="K_Pi"/>
+        <map_variables variable_1="K_H" variable_2="K_H"/>
+        <map_variables variable_1="zF_5" variable_2="zF_5"/>
+        <map_variables variable_1="zF_8" variable_2="zF_8"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="NaB"/>
+        <map_variables variable_1="kappa_NaB" variable_2="kappa_NaB"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="zNa" variable_2="zNa"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="NCX"/>
+        <map_variables variable_1="kappa_1_NCX" variable_2="kappa_1_NCX"/>
+        <map_variables variable_1="kappa_2_NCX" variable_2="kappa_2_NCX"/>
+        <map_variables variable_1="kappa_3_NCX" variable_2="kappa_3_NCX"/>
+        <map_variables variable_1="kappa_4_NCX" variable_2="kappa_4_NCX"/>
+        <map_variables variable_1="kappa_5_NCX" variable_2="kappa_5_NCX"/>
+        <map_variables variable_1="kappa_6_NCX" variable_2="kappa_6_NCX"/>
+        <map_variables variable_1="K_1_NCX" variable_2="K_1_NCX"/>
+        <map_variables variable_1="K_2_NCX" variable_2="K_2_NCX"/>
+        <map_variables variable_1="K_3_NCX" variable_2="K_3_NCX"/>
+        <map_variables variable_1="K_4_NCX" variable_2="K_4_NCX"/>
+        <map_variables variable_1="K_5_NCX" variable_2="K_5_NCX"/>
+        <map_variables variable_1="K_6_NCX" variable_2="K_6_NCX"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="nNa_o_NCX" variable_2="nNa_o_NCX"/>
+        <map_variables variable_1="nNa_i_NCX" variable_2="nNa_i_NCX"/>
+        <map_variables variable_1="zf_NCX" variable_2="zf_NCX"/>
+        <map_variables variable_1="zr_NCX" variable_2="zr_NCX"/>
+    </connection>
+    <connection>
+        <map_components component_1="ns" component_2="BG_parameters"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="kappa_ns_Ca" variable_2="kappa_ns_Ca"/>
+        <map_variables variable_1="kappa_ns_Na" variable_2="kappa_ns_Na"/>
+        <map_variables variable_1="kappa_ns_K" variable_2="kappa_ns_K"/>
+        <map_variables variable_1="zCa" variable_2="zCa"/>
+        <map_variables variable_1="zNa" variable_2="zNa"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="pCa"/>
+        <map_variables variable_1="kappa_pCa_R1" variable_2="kappa_pCa_R1"/>
+        <map_variables variable_1="kappa_pCa_R2" variable_2="kappa_pCa_R2"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="K_pCa" variable_2="K_pCa"/>
+        <map_variables variable_1="K_pCa_Ca" variable_2="K_pCa_Ca"/>
+        <map_variables variable_1="zCa" variable_2="zCa"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="SERCA"/>
+        <map_variables variable_1="kappa_SERCA_R1_2" variable_2="kappa_SERCA_R1_2"/>
+        <map_variables variable_1="kappa_SERCA_R2_4" variable_2="kappa_SERCA_R2_4"/>
+        <map_variables variable_1="kappa_SERCA_R2_2a" variable_2="kappa_SERCA_R2_2a"/>
+        <map_variables variable_1="kappa_SERCA_R4_5" variable_2="kappa_SERCA_R4_5"/>
+        <map_variables variable_1="kappa_SERCA_R5_6" variable_2="kappa_SERCA_R5_6"/>
+        <map_variables variable_1="kappa_SERCA_R6_8" variable_2="kappa_SERCA_R6_8"/>
+        <map_variables variable_1="kappa_SERCA_R8_9" variable_2="kappa_SERCA_R8_9"/>
+        <map_variables variable_1="kappa_SERCA_R9_10" variable_2="kappa_SERCA_R9_10"/>
+        <map_variables variable_1="kappa_SERCA_R10_1" variable_2="kappa_SERCA_R10_1"/>
+        <map_variables variable_1="K_P1_SERCA" variable_2="K_P1_SERCA"/>
+        <map_variables variable_1="K_P2_SERCA" variable_2="K_P2_SERCA"/>
+        <map_variables variable_1="K_P2a_SERCA" variable_2="K_P2a_SERCA"/>
+        <map_variables variable_1="K_P4_SERCA" variable_2="K_P4_SERCA"/>
+        <map_variables variable_1="K_P5_SERCA" variable_2="K_P5_SERCA"/>
+        <map_variables variable_1="K_P6_SERCA" variable_2="K_P6_SERCA"/>
+        <map_variables variable_1="K_P8_SERCA" variable_2="K_P8_SERCA"/>
+        <map_variables variable_1="K_P9_SERCA" variable_2="K_P9_SERCA"/>
+        <map_variables variable_1="K_P10_SERCA" variable_2="K_P10_SERCA"/>
+        <map_variables variable_1="K_H" variable_2="K_H"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_SR" variable_2="K_Ca_SR"/>
+        <map_variables variable_1="K_MgATP" variable_2="K_MgATP"/>
+        <map_variables variable_1="K_MgADP" variable_2="K_MgADP"/>
+        <map_variables variable_1="K_Pi" variable_2="K_Pi"/>
+        <map_variables variable_1="K_PLBp" variable_2="K_PLBp"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="TCC"/>
+        <map_variables variable_1="kappa_TCC" variable_2="kappa_TCC"/>
+        <map_variables variable_1="kappa_R1_TCC" variable_2="kappa_R1_TCC"/>
+        <map_variables variable_1="kappa_R2_TCC" variable_2="kappa_R2_TCC"/>
+        <map_variables variable_1="kappa_R3_TCC" variable_2="kappa_R3_TCC"/>
+        <map_variables variable_1="kappa_R4_TCC" variable_2="kappa_R4_TCC"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="K_S00_TCC" variable_2="K_S00_TCC"/>
+        <map_variables variable_1="K_S10_TCC" variable_2="K_S10_TCC"/>
+        <map_variables variable_1="K_S01_TCC" variable_2="K_S01_TCC"/>
+        <map_variables variable_1="K_S11_TCC" variable_2="K_S11_TCC"/>
+        <map_variables variable_1="z_df" variable_2="z_df"/>
+        <map_variables variable_1="z_ff" variable_2="z_ff"/>
+        <map_variables variable_1="z_dr" variable_2="z_dr"/>
+        <map_variables variable_1="z_fr" variable_2="z_fr"/>
+        <map_variables variable_1="zCa" variable_2="zCa"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="TO"/>
+        <map_variables variable_1="kappa_TO" variable_2="kappa_TO"/>
+        <map_variables variable_1="kappa_gTO_1" variable_2="kappa_gTO_1"/>
+        <map_variables variable_1="kappa_gTO_2" variable_2="kappa_gTO_2"/>
+        <map_variables variable_1="kappa_gTO_3" variable_2="kappa_gTO_3"/>
+        <map_variables variable_1="kappa_gTO_4" variable_2="kappa_gTO_4"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_r0s0_TO" variable_2="K_r0s0_TO"/>
+        <map_variables variable_1="K_r1s0_TO" variable_2="K_r1s0_TO"/>
+        <map_variables variable_1="K_r0s1_TO" variable_2="K_r0s1_TO"/>
+        <map_variables variable_1="K_r1s1_TO" variable_2="K_r1s1_TO"/>
+        <map_variables variable_1="z_rTO_f" variable_2="z_rTO_f"/>
+        <map_variables variable_1="z_sTO_f" variable_2="z_sTO_f"/>
+        <map_variables variable_1="z_rTO_r" variable_2="z_rTO_r"/>
+        <map_variables variable_1="z_sTO_r" variable_2="z_sTO_r"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <connection>
+        <map_components component_1="environment" component_2="funny"/>
+        <map_variables variable_1="time" variable_2="t"/>
+        <map_variables variable_1="q_K_i" variable_2="q_K_i"/>
+        <map_variables variable_1="q_K_o" variable_2="q_K_o"/>
+        <map_variables variable_1="q_Na_i" variable_2="q_Na_i"/>
+        <map_variables variable_1="q_Na_o" variable_2="q_Na_o"/>
+        <map_variables variable_1="q_x0_funny" variable_2="q_x0_funny"/>
+        <map_variables variable_1="q_x1_funny" variable_2="q_x1_funny"/>
+        <map_variables variable_1="q_mem" variable_2="q_mem"/>
+        <map_variables variable_1="C_m" variable_2="C_m"/>
+        <map_variables variable_1="v_funny_K" variable_2="v_funny_K"/>
+        <map_variables variable_1="v_funny_Na" variable_2="v_funny_Na"/>
+        <map_variables variable_1="I_mem_funny" variable_2="I_mem_funny"/>
+    </connection>
+    <connection>
+        <map_components component_1="funny" component_2="BG_parameters"/>
+        <map_variables variable_1="kappa_funny_Na" variable_2="kappa_funny_Na"/>
+        <map_variables variable_1="kappa_funny_K" variable_2="kappa_funny_K"/>
+        <map_variables variable_1="kappa_R_xf" variable_2="kappa_R_xf"/>
+        <map_variables variable_1="K_Na_i" variable_2="K_Na_i"/>
+        <map_variables variable_1="K_Na_o" variable_2="K_Na_o"/>
+        <map_variables variable_1="K_K_i" variable_2="K_K_i"/>
+        <map_variables variable_1="K_K_o" variable_2="K_K_o"/>
+        <map_variables variable_1="K_x0_funny" variable_2="K_x0_funny"/>
+        <map_variables variable_1="K_x1_funny" variable_2="K_x1_funny"/>
+        <map_variables variable_1="z_xff" variable_2="z_xff"/>
+        <map_variables variable_1="z_xfr" variable_2="z_xfr"/>
+        <map_variables variable_1="zNa" variable_2="zNa"/>
+        <map_variables variable_1="zK" variable_2="zK"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="CMDN_buffer"/>
+        <map_variables variable_1="kappa_b2" variable_2="kappa_b2"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_CMDN" variable_2="K_CMDN"/>
+        <map_variables variable_1="K_CMDN_Ca" variable_2="K_CMDN_Ca"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="crossbridge_TRPN"/>
+        <map_variables variable_1="kappa_R_TRPNCa" variable_2="kappa_R_TRPNCa"/>
+        <map_variables variable_1="kappa_R_BU" variable_2="kappa_R_BU"/>
+        <map_variables variable_1="kappa_R_UW" variable_2="kappa_R_UW"/>
+        <map_variables variable_1="kappa_R_WS" variable_2="kappa_R_WS"/>
+        <map_variables variable_1="kappa_R_SU" variable_2="kappa_R_SU"/>
+        <map_variables variable_1="K_TRPN" variable_2="K_TRPN"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="K_Ca_TRPN" variable_2="K_Ca_TRPN"/>
+        <map_variables variable_1="K_B_XB" variable_2="K_B_XB"/>
+        <map_variables variable_1="K_U_XB" variable_2="K_U_XB"/>
+        <map_variables variable_1="K_W_XB" variable_2="K_W_XB"/>
+        <map_variables variable_1="K_S_XB" variable_2="K_S_XB"/>
+        <map_variables variable_1="n_Tm" variable_2="n_Tm"/>
+        <map_variables variable_1="n_CaTRPN" variable_2="n_CaTRPN"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="diadCaDiffusion"/>
+        <map_variables variable_1="kappa_diadDf" variable_2="kappa_diadDf"/>
+        <map_variables variable_1="K_Ca_D" variable_2="K_Ca_D"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="LCC_diadic"/>
+        <map_variables variable_1="kappa_LCC_Ca1" variable_2="kappa_LCC_Ca1"/>
+        <map_variables variable_1="kappa_LCC_Ca2" variable_2="kappa_LCC_Ca2"/>
+        <map_variables variable_1="kappa_d000" variable_2="kappa_d000"/>
+        <map_variables variable_1="kappa_d010" variable_2="kappa_d010"/>
+        <map_variables variable_1="kappa_d020" variable_2="kappa_d020"/>
+        <map_variables variable_1="kappa_d001" variable_2="kappa_d001"/>
+        <map_variables variable_1="kappa_d011" variable_2="kappa_d011"/>
+        <map_variables variable_1="kappa_d021" variable_2="kappa_d021"/>
+        <map_variables variable_1="kappa_f1_000" variable_2="kappa_f1_000"/>
+        <map_variables variable_1="kappa_f1_100" variable_2="kappa_f1_100"/>
+        <map_variables variable_1="kappa_f1_001" variable_2="kappa_f1_001"/>
+        <map_variables variable_1="kappa_f1_101" variable_2="kappa_f1_101"/>
+        <map_variables variable_1="kappa_f2_000" variable_2="kappa_f2_000"/>
+        <map_variables variable_1="kappa_f2_100" variable_2="kappa_f2_100"/>
+        <map_variables variable_1="kappa_f2_001" variable_2="kappa_f2_001"/>
+        <map_variables variable_1="kappa_f2_101" variable_2="kappa_f2_101"/>
+        <map_variables variable_1="kappa_f3_010" variable_2="kappa_f3_010"/>
+        <map_variables variable_1="kappa_f3_110" variable_2="kappa_f3_110"/>
+        <map_variables variable_1="kappa_f3_011" variable_2="kappa_f3_011"/>
+        <map_variables variable_1="kappa_f3_111" variable_2="kappa_f3_111"/>
+        <map_variables variable_1="kappa_fCa000" variable_2="kappa_fCa000"/>
+        <map_variables variable_1="kappa_fCa100" variable_2="kappa_fCa100"/>
+        <map_variables variable_1="kappa_fCa010" variable_2="kappa_fCa010"/>
+        <map_variables variable_1="kappa_fCa110" variable_2="kappa_fCa110"/>
+        <map_variables variable_1="kappa_fCa020" variable_2="kappa_fCa020"/>
+        <map_variables variable_1="kappa_fCa120" variable_2="kappa_fCa120"/>
+        <map_variables variable_1="K_Ca_D" variable_2="K_Ca_D"/>
+        <map_variables variable_1="K_Ca_o" variable_2="K_Ca_o"/>
+        <map_variables variable_1="K_000_LCC" variable_2="K_000_LCC"/>
+        <map_variables variable_1="K_010_LCC" variable_2="K_010_LCC"/>
+        <map_variables variable_1="K_020_LCC" variable_2="K_020_LCC"/>
+        <map_variables variable_1="K_100_LCC" variable_2="K_100_LCC"/>
+        <map_variables variable_1="K_110_LCC" variable_2="K_110_LCC"/>
+        <map_variables variable_1="K_120_LCC" variable_2="K_120_LCC"/>
+        <map_variables variable_1="K_001_LCC" variable_2="K_001_LCC"/>
+        <map_variables variable_1="K_011_LCC" variable_2="K_011_LCC"/>
+        <map_variables variable_1="K_021_LCC" variable_2="K_021_LCC"/>
+        <map_variables variable_1="K_101_LCC" variable_2="K_101_LCC"/>
+        <map_variables variable_1="K_111_LCC" variable_2="K_111_LCC"/>
+        <map_variables variable_1="K_121_LCC" variable_2="K_121_LCC"/>
+        <map_variables variable_1="zCa" variable_2="zCa"/>
+        <map_variables variable_1="z_rCa" variable_2="z_rCa"/>
+        <map_variables variable_1="z_fd" variable_2="z_fd"/>
+        <map_variables variable_1="z_ff1" variable_2="z_ff1"/>
+        <map_variables variable_1="z_ff2" variable_2="z_ff2"/>
+        <map_variables variable_1="z_ff3" variable_2="z_ff3"/>
+        <map_variables variable_1="z_rd" variable_2="z_rd"/>
+        <map_variables variable_1="z_rf1" variable_2="z_rf1"/>
+        <map_variables variable_1="z_rf2" variable_2="z_rf2"/>
+        <map_variables variable_1="z_rf3" variable_2="z_rf3"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="PLB"/>
+        <map_variables variable_1="kappa_PLBph1" variable_2="kappa_PLBph1"/>
+        <map_variables variable_1="kappa_PLBph2" variable_2="kappa_PLBph2"/>
+        <map_variables variable_1="kappa_PLBd1" variable_2="kappa_PLBd1"/>
+        <map_variables variable_1="kappa_PLBd2" variable_2="kappa_PLBd2"/>
+        <map_variables variable_1="kappa_Inh" variable_2="kappa_Inh"/>
+        <map_variables variable_1="K_PLB" variable_2="K_PLB"/>
+        <map_variables variable_1="K_PKACI" variable_2="K_PKACI"/>
+        <map_variables variable_1="K_PLB_PKACI" variable_2="K_PLB_PKACI"/>
+        <map_variables variable_1="K_PP1" variable_2="K_PP1"/>
+        <map_variables variable_1="K_PLBp_PP1" variable_2="K_PLBp_PP1"/>
+        <map_variables variable_1="K_PLBp" variable_2="K_PLBp"/>
+        <map_variables variable_1="K_Ip" variable_2="K_Ip"/>
+        <map_variables variable_1="K_Ip_PP1" variable_2="K_Ip_PP1"/>
+    </connection>
+    <connection>
+        <map_components component_1="BG_parameters" component_2="RyR"/>
+        <map_variables variable_1="kappa_RyR" variable_2="kappa_RyR"/>
+        <map_variables variable_1="kappa_OC" variable_2="kappa_OC"/>
+        <map_variables variable_1="kappa_CCI" variable_2="kappa_CCI"/>
+        <map_variables variable_1="kappa_CII" variable_2="kappa_CII"/>
+        <map_variables variable_1="kappa_IO" variable_2="kappa_IO"/>
+        <map_variables variable_1="K_Ca_SR" variable_2="K_Ca_SR"/>
+        <map_variables variable_1="K_Ca_D" variable_2="K_Ca_D"/>
+        <map_variables variable_1="K_C_RyR" variable_2="K_C_RyR"/>
+        <map_variables variable_1="K_CI_RyR" variable_2="K_CI_RyR"/>
+        <map_variables variable_1="K_I_RyR" variable_2="K_I_RyR"/>
+        <map_variables variable_1="K_O_RyR" variable_2="K_O_RyR"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="CaB"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="Ca_leak"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="CMDN_buffer"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="fast_Na"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="funny"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="K"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="K_ATP"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="K1"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="Kp"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="Kr"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="Ks"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="NaK"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="NaB"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="NCX"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="ns"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="pCa"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="SERCA"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="TCC"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="TO"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="crossbridge_TRPN"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="diadCaDiffusion"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="LCC_diadic"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="PLB"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="RyR"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="F" variable_2="F"/>
+    </connection>
+</model>

@@ -1,0 +1,717 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+This CellML file was generated on 10/05/2006 at 19:16:13 using:
+
+COR (0.9.31.309)
+Copyright 2002-2006 Oxford Cardiac Electrophysiology Group
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this cellular model
+http://www.CellML.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="fenton_karma_2006_version03_variant02" name="fenton_karma_2006_version03">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>A Simplified Ventricular Myocyte Model</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This version of this model was created by Penny Noble of Oxford University, and is known to read in COR and PCEnv. The parameter values used in this variant (BR) of the Fenton-Karma model are consistent with the original Beeler-Reuter model (see Table 1 of the 1998 model errata).  Simulations of this CellML model can be run using CMISS.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Ventricular fibrillation (VF) is a disorganised electrical wave activity that disrupts the regular and synchronised contraction of the ventricular muscle and consequently destroys the main pumping function of the heart.  Research to date has suggested that electrical vortices are the mechanism underlying VF.  These are manisfested in the 2D heart as spiral waves, and in the 3D heart as scroll waves of action potential.  Compared with the extensive knowledge available on vortex filament behaviour in an isotropic medium, relatively little is known about how the vortices behave in the anisotropic ventricular muscle.  This 1998 publication by Fenton and Karma (fully referenced below) explores the dynamics of the vortex filament in continuous myocardium via numerical simulation.    </para>
+
+<para>
+Over the past 25 to 30 years, mathematical models that describe ventricular action potential have become increasingly complex as new experimental data has become available and has been incorporated into the mathematical equations.  Although these complex models are more realistic, they are also computationally expensive to run, and isolating subsets of essential parameters from the model is difficult.  One traditional method for avoiding this complexity is to use simplified models such as <ulink url="${HTML_EXMPL_FN_SIMPLE}">the FitzHugh-Nagumo model, 1961</ulink>.  However, these simplified models have been criticised as being too simple and as not having the capacity to fully capture certain important features of the ventricular action potential.
+</para>  
+
+<para>
+The modelling approach that Fenton and Karma take is to use a simplified ionic model of ventricular action potential with three membrane currents.  This model retains enough detail to quantitatively reproduce the behaviour of the ventricular action potential captured by the more complex ionic models of cardiac action potential (such as <ulink url="${HTML_EXMPL_BR_MODEL}">the Beeler-Reuter 1977 model</ulink>, and <ulink url="${HTML_EXMPL_LR_I_MODEL}">the original Luo-Rudy 1991 model</ulink>), but it is less computationally expensive than these other models.
+</para>
+
+<para>
+The three currents in the Fenton-Karma model are: 
+</para>
+<itemizedlist>
+  <listitem>
+            <para>
+              <emphasis>I<subscript>fi</subscript>
+              </emphasis>, a fast inward current which corresponds to the <emphasis>I<subscript>Na</subscript>
+              </emphasis> current</para>
+          </listitem>;
+  <listitem>
+            <para>
+              <emphasis>I<subscript>so</subscript>
+              </emphasis>, a slow outward current which corresponds to the <emphasis>I<subscript>K</subscript>
+              </emphasis> current</para>
+          </listitem>; and     
+  <listitem>
+            <para>
+              <emphasis>I<subscript>si</subscript>
+              </emphasis>, a slow inward current which corresponds to the <emphasis>I<subscript>Ca</subscript>
+              </emphasis> current</para>
+          </listitem>.
+</itemizedlist> 
+<para>
+(see <xref linkend="fig_cell_diagram"/> below).
+The authors choose to use these labels as opposed to Na, K and Ca, as a reminder that <emphasis>I<subscript>fi</subscript>
+          </emphasis>, <emphasis>I<subscript>so</subscript>
+          </emphasis>, and  <emphasis>I<subscript>si</subscript>
+          </emphasis> do not actually represent measured currents, but only their activation, inactivation and reactivation dynamics which are needed to quantitatively reproduce restitution properties.
+</para>
+
+<para>
+Model validation indicates that this simplified model is able to faithfully reproduce the 2D patterns of reentry of the more complex models.
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://ojps.aip.org/getabs/servlet/GetabsServlet?prog=normal&amp;id=CHAOEH000008000001000020000001&amp;idtype=cvips&amp;gifs=Yes">Vortex dynamics in three-dimensional continuous myocardium with fiber rotation: Filament instability and fibrillation</ulink>, Flavio Fenton and Alain Karma, 1998, <ulink url="http://ojps.aip.org/journals/doc/CHAOEH-home/top.jsp">
+            <emphasis>Chaos</emphasis>
+          </ulink>, 8, 20-47.  (Full text (HTML) and PDF versions of the article are available to subscribers on the <emphasis>Chaos</emphasis> website.)  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=12779708&amp;dopt=Abstract">PubMed ID: 12779708</ulink>
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>cell diagram</title>
+    </objectinfo>
+    <imagedata fileref="cell_diagram.gif"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the three ionic currents described by the Fenton-Karma model of a ventricular myocyte.</caption>
+</informalfigure>
+
+<para>
+The Fenton-Karma model has been described here in CellML (the raw CellML description of the Fenton-Karma model can be downloaded in various formats as described in <xref linkend="sec_download_this_model"/>).          
+</para>
+
+</sect1>
+</article>
+</documentation>
+   <units name="ms">
+      <unit units="second" prefix="milli"/>
+   </units>
+   <units name="per_ms">
+      <unit units="second" prefix="milli" exponent="-1"/>
+   </units>
+   <units name="mV">
+      <unit units="volt" prefix="milli"/>
+   </units>
+   <units name="per_mV">
+      <unit units="volt" prefix="milli" exponent="-1"/>
+   </units>
+   <units name="per_mV_ms">
+      <unit units="mV" exponent="-1"/>
+      <unit units="ms" exponent="-1"/>
+   </units>
+   <units name="mS_per_cm2">
+      <unit units="siemens" prefix="milli"/>
+      <unit units="metre" prefix="centi" exponent="-2"/>
+   </units>
+   <units name="uF_per_cm2">
+      <unit units="farad" prefix="micro"/>
+      <unit units="metre" prefix="centi" exponent="-2"/>
+   </units>
+   <units name="uA_per_cm2">
+      <unit units="ampere" prefix="micro"/>
+      <unit units="metre" prefix="centi" exponent="-2"/>
+   </units>
+   <units name="concentration_units">
+      <unit units="mole" prefix="nano"/>
+      <unit units="metre" prefix="milli" exponent="-3"/>
+   </units>
+   <component name="environment">
+      <variable units="ms" public_interface="out" name="time"/>
+   </component>
+   <component name="membrane">
+      <variable units="dimensionless" public_interface="out" name="u" initial_value="0"/>
+      <variable units="uF_per_cm2" public_interface="out" name="Cm" initial_value="1"/>
+      <variable units="mV" name="Vm"/>
+      <variable units="mV" name="V_0" initial_value="-85"/>
+      <variable units="mV" name="V_fi" initial_value="15"/>
+      <variable units="ms" public_interface="in" name="time"/>
+      <variable units="per_ms" public_interface="in" name="J_fi"/>
+      <variable units="per_ms" public_interface="in" name="J_so"/>
+      <variable units="per_ms" public_interface="in" name="J_si"/>
+      <variable units="per_ms" name="J_stim"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_stim</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <cn cellml:units="per_ms">0.2</cn>
+                  </apply>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <geq/>
+                        <ci>time</ci>
+                        <cn cellml:units="ms">100</cn>
+                     </apply>
+                     <apply>
+                        <leq/>
+                        <ci>time</ci>
+                        <cn cellml:units="ms">101</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn cellml:units="per_ms">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>u</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>J_fi</ci>
+                  <ci>J_so</ci>
+                  <ci>J_si</ci>
+                  <ci>J_stim</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Vm</ci>
+            <apply>
+               <plus/>
+               <ci>V_0</ci>
+               <apply>
+                  <times/>
+                  <ci>u</ci>
+                  <apply>
+                     <minus/>
+                     <ci>V_fi</ci>
+                     <ci>V_0</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="p">
+      <variable units="dimensionless" public_interface="out" name="p"/>
+      <variable units="mV" public_interface="out" name="u_c" initial_value="0.13"/>
+      <variable units="dimensionless" public_interface="in" name="u"/>
+      <variable units="ms" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>p</ci>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="dimensionless">0</cn>
+                  <apply>
+                     <lt/>
+                     <ci>u</ci>
+                     <ci>u_c</ci>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn cellml:units="dimensionless">1</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="q">
+      <variable units="dimensionless" public_interface="out" name="q"/>
+      <variable units="dimensionless" name="u_v" initial_value="0.04"/>
+      <variable units="dimensionless" public_interface="in" name="u"/>
+      <variable units="ms" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>q</ci>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="dimensionless">0</cn>
+                  <apply>
+                     <lt/>
+                     <ci>u</ci>
+                     <ci>u_v</ci>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn cellml:units="dimensionless">1</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="fast_inward_current">
+      <variable units="per_ms" public_interface="out" name="J_fi"/>
+      <variable units="ms" name="tau_d"/>
+      <variable units="mS_per_cm2" name="g_fi_max" initial_value="4"/>
+      <variable units="uF_per_cm2" public_interface="in" name="Cm"/>
+      <variable units="dimensionless" public_interface="in" private_interface="out" name="p"/>
+      <variable units="dimensionless" public_interface="in" private_interface="out" name="q"/>
+      <variable units="mV" public_interface="in" name="u_c"/>
+      <variable units="ms" public_interface="in" private_interface="out" name="time"/>
+      <variable units="dimensionless" public_interface="in" private_interface="out" name="u"/>
+      <variable units="dimensionless" private_interface="in" name="v"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>tau_d</ci>
+            <apply>
+               <divide/>
+               <ci>Cm</ci>
+               <ci>g_fi_max</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_fi</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>v</ci>
+                  </apply>
+                  <ci>p</ci>
+                  <apply>
+                     <minus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>u</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>u</ci>
+                     <ci>u_c</ci>
+                  </apply>
+               </apply>
+               <ci>tau_d</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="fast_inward_current_v_gate">
+      <variable units="dimensionless" public_interface="out" name="v" initial_value="1"/>
+      <variable units="ms" name="tau_v_minus"/>
+      <variable units="ms" name="tau_v1_minus" initial_value="1250"/>
+      <variable units="ms" name="tau_v2_minus" initial_value="19.6"/>
+      <variable units="ms" name="tau_v_plus" initial_value="3.33"/>
+      <variable units="dimensionless" public_interface="in" name="q"/>
+      <variable units="dimensionless" public_interface="in" name="p"/>
+      <variable units="dimensionless" public_interface="in" name="u"/>
+      <variable units="ms" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>tau_v_minus</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>q</ci>
+                  <ci>tau_v1_minus</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>q</ci>
+                  </apply>
+                  <ci>tau_v2_minus</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>v</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>p</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>v</ci>
+                     </apply>
+                  </apply>
+                  <ci>tau_v_minus</ci>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>p</ci>
+                     <ci>v</ci>
+                  </apply>
+                  <ci>tau_v_plus</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="slow_outward_current">
+      <variable units="per_ms" public_interface="out" name="J_so"/>
+      <variable units="ms" name="tau_0" initial_value="12.5"/>
+      <variable units="ms" name="tau_r" initial_value="33.33"/>
+      <variable units="dimensionless" public_interface="in" name="p"/>
+      <variable units="ms" public_interface="in" name="time"/>
+      <variable units="dimensionless" public_interface="in" name="u"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_so</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>u</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>p</ci>
+                     </apply>
+                  </apply>
+                  <ci>tau_0</ci>
+               </apply>
+               <apply>
+                  <divide/>
+                  <ci>p</ci>
+                  <ci>tau_r</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="slow_inward_current">
+      <variable units="per_ms" public_interface="out" name="J_si"/>
+      <variable units="ms" name="tau_si" initial_value="29"/>
+      <variable units="dimensionless" name="u_csi" initial_value="0.85"/>
+      <variable units="dimensionless" name="k" initial_value="10"/>
+      <variable units="dimensionless" public_interface="in" private_interface="out" name="p"/>
+      <variable units="ms" public_interface="in" private_interface="out" name="time"/>
+      <variable units="dimensionless" public_interface="in" private_interface="out" name="u"/>
+      <variable units="dimensionless" private_interface="in" name="w"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_si</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>w</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <tanh/>
+                        <apply>
+                           <times/>
+                           <ci>k</ci>
+                           <apply>
+                              <minus/>
+                              <ci>u</ci>
+                              <ci>u_csi</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless">2</cn>
+                  <ci>tau_si</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="slow_inward_current_w_gate">
+      <variable units="dimensionless" public_interface="out" name="w" initial_value="1"/>
+      <variable units="ms" name="tau_w_minus" initial_value="41"/>
+      <variable units="ms" name="tau_w_plus" initial_value="870"/>
+      <variable units="dimensionless" public_interface="in" name="p"/>
+      <variable units="dimensionless" public_interface="in" name="u"/>
+      <variable units="ms" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>w</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>p</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>w</ci>
+                     </apply>
+                  </apply>
+                  <ci>tau_w_minus</ci>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>p</ci>
+                     <ci>w</ci>
+                  </apply>
+                  <ci>tau_w_plus</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <group>
+      <relationship_ref relationship="containment"/>
+      <component_ref component="membrane">
+         <component_ref component="fast_inward_current">
+            <component_ref component="fast_inward_current_v_gate"/>
+         </component_ref>
+         <component_ref component="slow_outward_current"/>
+         <component_ref component="slow_inward_current">
+            <component_ref component="slow_inward_current_w_gate"/>
+         </component_ref>
+         <component_ref component="p"/>
+         <component_ref component="q"/>
+      </component_ref>
+   </group>
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+      <component_ref component="fast_inward_current">
+         <component_ref component="fast_inward_current_v_gate"/>
+      </component_ref>
+      <component_ref component="slow_inward_current">
+         <component_ref component="slow_inward_current_w_gate"/>
+      </component_ref>
+   </group>
+   <connection>
+      <map_components component_2="environment" component_1="membrane"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="p"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="q"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="fast_inward_current"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="slow_outward_current"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="slow_inward_current"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="fast_inward_current" component_1="membrane"/>
+      <map_variables variable_2="u" variable_1="u"/>
+      <map_variables variable_2="J_fi" variable_1="J_fi"/>
+      <map_variables variable_2="Cm" variable_1="Cm"/>
+   </connection>
+   <connection>
+      <map_components component_2="slow_outward_current" component_1="membrane"/>
+      <map_variables variable_2="u" variable_1="u"/>
+      <map_variables variable_2="J_so" variable_1="J_so"/>
+   </connection>
+   <connection>
+      <map_components component_2="slow_inward_current" component_1="membrane"/>
+      <map_variables variable_2="u" variable_1="u"/>
+      <map_variables variable_2="J_si" variable_1="J_si"/>
+   </connection>
+   <connection>
+      <map_components component_2="p" component_1="membrane"/>
+      <map_variables variable_2="u" variable_1="u"/>
+   </connection>
+   <connection>
+      <map_components component_2="q" component_1="membrane"/>
+      <map_variables variable_2="u" variable_1="u"/>
+   </connection>
+   <connection>
+      <map_components component_2="fast_inward_current" component_1="p"/>
+      <map_variables variable_2="p" variable_1="p"/>
+      <map_variables variable_2="u_c" variable_1="u_c"/>
+   </connection>
+   <connection>
+      <map_components component_2="slow_outward_current" component_1="p"/>
+      <map_variables variable_2="p" variable_1="p"/>
+   </connection>
+   <connection>
+      <map_components component_2="slow_inward_current" component_1="p"/>
+      <map_variables variable_2="p" variable_1="p"/>
+   </connection>
+   <connection>
+      <map_components component_2="fast_inward_current" component_1="q"/>
+      <map_variables variable_2="q" variable_1="q"/>
+   </connection>
+   <connection>
+      <map_components component_2="fast_inward_current_v_gate" component_1="fast_inward_current"/>
+      <map_variables variable_2="v" variable_1="v"/>
+      <map_variables variable_2="p" variable_1="p"/>
+      <map_variables variable_2="q" variable_1="q"/>
+      <map_variables variable_2="time" variable_1="time"/>
+      <map_variables variable_2="u" variable_1="u"/>
+   </connection>
+   <connection>
+      <map_components component_2="slow_inward_current_w_gate" component_1="slow_inward_current"/>
+      <map_variables variable_2="w" variable_1="w"/>
+      <map_variables variable_2="p" variable_1="p"/>
+      <map_variables variable_2="time" variable_1="time"/>
+      <map_variables variable_2="u" variable_1="u"/>
+   </connection>
+
+
+
+
+
+
+
+
+
+
+<rdf:RDF>
+  <rdf:Seq rdf:about="rdf:#citationAuthorsSeq">
+    <rdf:li rdf:resource="rdf:#author1Vcard"/>
+    <rdf:li rdf:resource="rdf:#author2Vcard"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#author2VcardN">
+    <vCard:Given>A</vCard:Given>
+    <vCard:Family>Karma</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c4839568-fe2c-4f5e-bfe0-8dfb8fa036aa">
+    <dcterms:W3CDTF>1998-03-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fcf21f6a-2639-4df4-84e0-3cc3c39d44d3">
+    <dc:creator rdf:resource="rdf:#a98098dc-01e6-413b-a6b9-39383d5ecc55"/>
+    <rdf:value>This model was based on the parameters of the Beeler Reuter model.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fb9597f9-4bab-4d7e-98c8-c7b88c7fa9b9">
+    <vCard:Given>unknown</vCard:Given>
+    <vCard:Family>unknown</vCard:Family>
+    <vCard:Other>unknown</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a98098dc-01e6-413b-a6b9-39383d5ecc55">
+    <vCard:FN>unknown</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#20ad0cdc-45ea-417a-8e74-243375bb9604">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>unknown</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#47d851a6-d204-4f90-8c80-9af95ddda12a">
+    <bqs:volume>8 1</bqs:volume>
+    <dc:creator rdf:resource="rdf:#citationAuthorsSeq"/>
+    <dc:title>Vortex dynamics in three-dimensional continuous myocardium with fiber rotation: Filament instability and fibrillation</dc:title>
+    <bqs:issue>unknown</bqs:issue>
+    <bqs:first_page>20</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#cb7a066e-46c8-45cb-9ba6-db91081ae701"/>
+    <dcterms:issued rdf:resource="rdf:#c4839568-fe2c-4f5e-bfe0-8dfb8fa036aa"/>
+    <bqs:last_page>47</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author2VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ab51746b-bdfb-4433-92e1-78f047566980">
+    <vCard:ORG rdf:resource="rdf:#3f693f46-042a-4342-b4b4-153f80966f32"/>
+    <vCard:EMAIL rdf:resource="rdf:#20ad0cdc-45ea-417a-8e74-243375bb9604"/>
+    <vCard:N rdf:resource="rdf:#fb9597f9-4bab-4d7e-98c8-c7b88c7fa9b9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author1VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1VcardN">
+    <vCard:Given>F</vCard:Given>
+    <vCard:Family>Fenton</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dcterms:created rdf:resource="rdf:#bbf07dc8-852c-4a43-8c76-51eb738b82d2"/>
+    <dc:creator rdf:resource="rdf:#ab51746b-bdfb-4433-92e1-78f047566980"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3f693f46-042a-4342-b4b4-153f80966f32">
+    <vCard:Orgname>unknown</vCard:Orgname>
+    <vCard:Orgunit>unknown</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bbf07dc8-852c-4a43-8c76-51eb738b82d2">
+    <dcterms:W3CDTF>2006-01-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9cc61475-3fcc-4893-94be-bc57cca40f84">
+    <bqs:Pubmed_id>12779708</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#47d851a6-d204-4f90-8c80-9af95ddda12a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cb7a066e-46c8-45cb-9ba6-db91081ae701">
+    <dc:title>Chaos</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#fenton_karma_2006_version03_variant02">
+    <dc:title>unknown</dc:title>
+    <cmeta:comment rdf:resource="rdf:#fcf21f6a-2639-4df4-84e0-3cc3c39d44d3"/>
+    <bqs:reference rdf:resource="rdf:#9cc61475-3fcc-4893-94be-bc57cca40f84"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

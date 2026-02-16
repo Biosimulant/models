@@ -1,0 +1,1590 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This CellML file was generated on 28/08/2009 at 1:20:47 at p.m. using:
+
+COR (0.9.31.1265)
+Copyright 2002-2009 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+-->
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="gross_1998" name="gross_1998">
+
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Voltage and cosubstrate dependence of the Na-HCO3 cotransporter kinetics in renal proximal tubule cellse</title>
+				<author>
+					<firstname>Jonna</firstname>
+					<surname>Terkildsen</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<sect1 id="sec_status">
+				<title>Model Status</title>
+				<para>
+This CellML model..........................................
+				</para>
+			</sect1>
+        <sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: The voltage dependence of the kinetics of the sodium bicarbonate cotransporter was studied in proximal tubule cells. This electrogenic cotransporter transports one Na+, three HCO3-, and two negative charges. Cells were grown to confluence on a permeable support, mounted on a Ussing-type chamber, and permeabilized apically to small monovalent ions with amphotericin B. The steady-state, di-nitro-stilbene-di-sulfonate-sensitive current was shown to be sodium and bicarbonate dependent and therefore was taken as flux through the cotransporter. Voltage-current relations were measured as a function of Na+ and HCO3- concentrations between -160 and +160 mV under zero-trans and symmetrical conditions. The kinetics could be described by a Michaelis-Menten behavior with a Hill coefficient of 3 for HCO3- and 1 for Na+. The data were fitted to six-state ordered binding models without restrictions with respect to the rate-limiting step. All ordered models could quantitatively account for the observed current-voltage relationships and the transinhibition by high bicarbonate concentration. The models indicate that 1) the unloaded transporter carries a positive charge; 2) the binding of cytosolic bicarbonate to the transporter "senses" 12% of the electric field in the membrane, whereas its translocation across the membrane "senses" 88% of the field; 3) the binding of Na+ to the cotransporter is voltage independent.
+				</para>
+				
+				<para>
+The original paper reference is cited below:
+				</para>
+				
+				<para>
+					Voltage and cosubstrate dependence of the Na-HCO3 cotransporter kinetics in renal proximal tubule cellse, E. Gross and U. Hopfer, 1998,  
+						<emphasis>Biophysical Journal</emphasis>, 75, 810-824.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/9675182">PubMed ID: 9675182</ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="gross_1998.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>A six-state ordered-binding transport model of the Na-HCO3 cotransporter. The binding of three HCO3- anions to the carrier is described as a single, lumped step.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+
+
+		<units xmlns="http://www.cellml.org/cellml/1.0#" name="per_second">
+      <unit units="second" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_second5">
+      <unit units="second" exponent="-5"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="mM">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="J_per_K_per_mol">
+      <unit units="mole" exponent="-1"/>
+      <unit units="joule"/>
+      <unit units="kelvin" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="pmol_per_cm2">
+      <unit units="mole" prefix="pico"/>
+      <unit units="metre" prefix="centi" exponent="-2"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="pA_per_cm2">
+      <unit units="ampere" prefix="pico"/>
+      <unit units="metre" prefix="centi" exponent="-2"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="C_per_mol">
+      <unit units="mole" exponent="-1"/>
+      <unit units="coulomb"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_mM_per_second">
+      <unit units="mM" exponent="-1"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_mM3_per_second">
+      <unit units="mM" exponent="-3"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="mM_per_second">
+      <unit units="mM"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="environment">
+      <variable name="time" units="second" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="parameters">
+      <variable name="f0_1" units="per_mM_per_second" initial_value="5.9e-1" public_interface="out"/>
+      <variable name="b0_1" units="per_second" initial_value="40" public_interface="out"/>
+      <variable name="f0_2" units="per_mM3_per_second" initial_value="2.5e-4" public_interface="out"/>
+      <variable name="b0_2" units="per_second" initial_value="3.7e3" public_interface="out"/>
+      <variable name="f0_3" units="per_second" initial_value="1.5e3" public_interface="out"/>
+      <variable name="b0_3" units="per_second" initial_value="2.4e3" public_interface="out"/>
+      <variable name="f0_4" units="per_second" initial_value="4.6e3" public_interface="out"/>
+      <variable name="b0_4" units="per_mM3_per_second" initial_value="5.3e-4" public_interface="out"/>
+      <variable name="f0_5" units="per_second" initial_value="0.2" public_interface="out"/>
+      <variable name="b0_5" units="per_mM_per_second" initial_value="35e-3" public_interface="out"/>
+      <variable name="f0_6" units="per_second" initial_value="0.2" public_interface="out"/>
+      <variable name="b0_6" units="per_second" public_interface="out"/>
+      <variable name="delta_z" units="dimensionless" initial_value="1.5" public_interface="out"/>
+      <variable name="delta_m" units="dimensionless" public_interface="out"/>
+      <variable name="delta_n" units="dimensionless" public_interface="out"/>
+      <variable name="alpha_p" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="alpha_pp" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="beta_p" units="dimensionless" initial_value="0.11" public_interface="out"/>
+      <variable name="beta_pp" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="C_T" units="pmol_per_cm2" initial_value="2" public_interface="out"/>
+      <variable name="n" units="dimensionless" initial_value="1" public_interface="out"/>
+      <variable name="m" units="dimensionless" initial_value="3" public_interface="out"/>
+      <variable name="F" units="C_per_mol" initial_value="96485.34" public_interface="out"/>
+      <variable name="R" units="J_per_K_per_mol" initial_value="8.314" public_interface="out"/>
+      <variable name="T" units="kelvin" initial_value="310" public_interface="out"/>
+      <variable name="V" units="volt" public_interface="in"/>
+      <variable name="u" units="dimensionless" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>b0_6</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>f0_1</ci>
+                  <ci>f0_2</ci>
+                  <ci>f0_3</ci>
+                  <ci>f0_4</ci>
+                  <ci>f0_5</ci>
+                  <ci>f0_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b0_1</ci>
+                  <ci>b0_2</ci>
+                  <ci>b0_3</ci>
+                  <ci>b0_4</ci>
+                  <ci>b0_5</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>u</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>F</ci>
+                  <ci>V</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>R</ci>
+                  <ci>T</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>delta_m</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <ci>beta_p</ci>
+               </apply>
+               <ci>beta_pp</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>delta_n</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <ci>alpha_p</ci>
+               </apply>
+               <ci>alpha_pp</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="ion_concentrations">
+      <variable name="V" units="volt" initial_value="-60e-3" public_interface="out"/>
+      <variable name="Na_i" units="mM" initial_value="20" public_interface="out"/>
+      <variable name="Na_o" units="mM" initial_value="0" public_interface="out"/>
+      <variable name="HCO3_i" units="mM" initial_value="18" public_interface="out"/>
+      <variable name="HCO3_o" units="mM" initial_value="0.6" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="rate_constants">
+      <variable name="Na_i" units="mM" public_interface="in"/>
+      <variable name="Na_o" units="mM" public_interface="in"/>
+      <variable name="HCO3_i" units="mM" public_interface="in"/>
+      <variable name="HCO3_o" units="mM" public_interface="in"/>
+      <variable name="f_1" units="per_second" public_interface="out"/>
+      <variable name="b_1" units="per_second" public_interface="out"/>
+      <variable name="f_2" units="per_second" public_interface="out"/>
+      <variable name="b_2" units="per_second" public_interface="out"/>
+      <variable name="f_3" units="per_second" public_interface="out"/>
+      <variable name="b_3" units="per_second" public_interface="out"/>
+      <variable name="f_4" units="per_second" public_interface="out"/>
+      <variable name="b_4" units="per_second" public_interface="out"/>
+      <variable name="f_5" units="per_second" public_interface="out"/>
+      <variable name="b_5" units="per_second" public_interface="out"/>
+      <variable name="f_6" units="per_second" public_interface="out"/>
+      <variable name="b_6" units="per_second" public_interface="out"/>
+      <variable name="f0_1" units="per_mM_per_second" public_interface="in"/>
+      <variable name="b0_1" units="per_second" public_interface="in"/>
+      <variable name="f0_2" units="per_mM3_per_second" public_interface="in"/>
+      <variable name="b0_2" units="per_second" public_interface="in"/>
+      <variable name="f0_3" units="per_second" public_interface="in"/>
+      <variable name="b0_3" units="per_second" public_interface="in"/>
+      <variable name="f0_4" units="per_second" public_interface="in"/>
+      <variable name="b0_4" units="per_mM3_per_second" public_interface="in"/>
+      <variable name="f0_5" units="per_second" public_interface="in"/>
+      <variable name="b0_5" units="per_mM_per_second" public_interface="in"/>
+      <variable name="f0_6" units="per_second" public_interface="in"/>
+      <variable name="b0_6" units="per_second" public_interface="in"/>
+      <variable name="delta_z" units="dimensionless" public_interface="in"/>
+      <variable name="delta_m" units="dimensionless" public_interface="in"/>
+      <variable name="delta_n" units="dimensionless" public_interface="in"/>
+      <variable name="alpha_p" units="dimensionless" public_interface="in"/>
+      <variable name="alpha_pp" units="dimensionless" public_interface="in"/>
+      <variable name="beta_p" units="dimensionless" public_interface="in"/>
+      <variable name="beta_pp" units="dimensionless" public_interface="in"/>
+      <variable name="C_T" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="n" units="dimensionless" public_interface="in"/>
+      <variable name="m" units="dimensionless" public_interface="in"/>
+      <variable name="u" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>f_1</ci>
+            <apply>
+               <times/>
+               <ci>f0_1</ci>
+               <apply>
+                  <power/>
+                  <ci>Na_i</ci>
+                  <ci>n</ci>
+               </apply>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>n</ci>
+                        <ci>alpha_p</ci>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>b_1</ci>
+            <apply>
+               <times/>
+               <ci>b0_1</ci>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>n</ci>
+                        </apply>
+                        <ci>alpha_p</ci>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>f_2</ci>
+            <apply>
+               <times/>
+               <ci>f0_2</ci>
+               <apply>
+                  <power/>
+                  <ci>HCO3_i</ci>
+                  <ci>m</ci>
+               </apply>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>m</ci>
+                        </apply>
+                        <ci>beta_p</ci>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>b_2</ci>
+            <apply>
+               <times/>
+               <ci>b0_2</ci>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>m</ci>
+                        <ci>beta_p</ci>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>f_3</ci>
+            <apply>
+               <times/>
+               <ci>f0_3</ci>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <ci>delta_z</ci>
+                              <apply>
+                                 <times/>
+                                 <ci>n</ci>
+                                 <ci>delta_n</ci>
+                              </apply>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>m</ci>
+                              <ci>delta_m</ci>
+                           </apply>
+                        </apply>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>b_3</ci>
+            <apply>
+               <times/>
+               <ci>b0_3</ci>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>delta_z</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>n</ci>
+                                    <ci>delta_n</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>m</ci>
+                                 <ci>delta_m</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>f_4</ci>
+            <apply>
+               <times/>
+               <ci>f0_4</ci>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>m</ci>
+                        </apply>
+                        <ci>beta_pp</ci>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>b_4</ci>
+            <apply>
+               <times/>
+               <ci>b0_4</ci>
+               <apply>
+                  <power/>
+                  <ci>HCO3_o</ci>
+                  <ci>m</ci>
+               </apply>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>m</ci>
+                        <ci>beta_pp</ci>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>f_5</ci>
+            <apply>
+               <times/>
+               <ci>f0_5</ci>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>n</ci>
+                        <ci>alpha_pp</ci>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>b_5</ci>
+            <apply>
+               <times/>
+               <ci>b0_5</ci>
+               <apply>
+                  <power/>
+                  <ci>Na_o</ci>
+                  <ci>n</ci>
+               </apply>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>n</ci>
+                        </apply>
+                        <ci>alpha_pp</ci>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>f_6</ci>
+            <apply>
+               <times/>
+               <ci>f0_6</ci>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>delta_z</ci>
+                        </apply>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>b_6</ci>
+            <apply>
+               <times/>
+               <ci>b0_6</ci>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>delta_z</ci>
+                        <ci>u</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="kinetic_equations">
+      <variable name="f_1" units="per_second" public_interface="in"/>
+      <variable name="b_1" units="per_second" public_interface="in"/>
+      <variable name="f_2" units="per_second" public_interface="in"/>
+      <variable name="b_2" units="per_second" public_interface="in"/>
+      <variable name="f_3" units="per_second" public_interface="in"/>
+      <variable name="b_3" units="per_second" public_interface="in"/>
+      <variable name="f_4" units="per_second" public_interface="in"/>
+      <variable name="b_4" units="per_second" public_interface="in"/>
+      <variable name="f_5" units="per_second" public_interface="in"/>
+      <variable name="b_5" units="per_second" public_interface="in"/>
+      <variable name="f_6" units="per_second" public_interface="in"/>
+      <variable name="b_6" units="per_second" public_interface="in"/>
+      <variable name="C_1" units="pmol_per_cm2" initial_value="0.86691" public_interface="out"/>
+      <variable name="C_2" units="pmol_per_cm2" initial_value="0.510255" public_interface="out"/>
+      <variable name="C_3" units="pmol_per_cm2" initial_value="0.004611" public_interface="out"/>
+      <variable name="C_4" units="pmol_per_cm2" initial_value="0.0041975" public_interface="out"/>
+      <variable name="C_5" units="pmol_per_cm2" initial_value="0.5678" public_interface="out"/>
+      <variable name="C_6" units="pmol_per_cm2" public_interface="out"/>
+      <variable name="C_6_temp" units="pmol_per_cm2" initial_value="0.046227" public_interface="out"/>
+      <variable name="C_T" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="time" units="second" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>b_1</ci>
+                     <ci>C_2</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>f_6</ci>
+                     <ci>C_6</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>f_1</ci>
+                     <ci>b_6</ci>
+                  </apply>
+                  <ci>C_1</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>f_1</ci>
+                     <ci>C_1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>b_2</ci>
+                     <ci>C_3</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>b_1</ci>
+                     <ci>f_2</ci>
+                  </apply>
+                  <ci>C_2</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_3</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>f_2</ci>
+                     <ci>C_2</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>b_3</ci>
+                     <ci>C_4</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>b_2</ci>
+                     <ci>f_3</ci>
+                  </apply>
+                  <ci>C_3</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_4</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>f_3</ci>
+                     <ci>C_3</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>b_4</ci>
+                     <ci>C_5</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>b_3</ci>
+                     <ci>f_4</ci>
+                  </apply>
+                  <ci>C_4</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_5</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>f_4</ci>
+                     <ci>C_4</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>b_5</ci>
+                     <ci>C_6</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>b_4</ci>
+                     <ci>f_5</ci>
+                  </apply>
+                  <ci>C_5</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_6_temp</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>f_5</ci>
+                     <ci>C_5</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>b_6</ci>
+                     <ci>C_1</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>b_5</ci>
+                     <ci>f_6</ci>
+                  </apply>
+                  <ci>C_6</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C_6</ci>
+            <apply>
+               <minus/>
+               <ci>C_T</ci>
+               <apply>
+                  <plus/>
+                  <ci>C_1</ci>
+                  <ci>C_2</ci>
+                  <ci>C_3</ci>
+                  <ci>C_4</ci>
+                  <ci>C_5</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="king_altman_states">
+      <variable name="f_1" units="per_second" public_interface="in"/>
+      <variable name="b_1" units="per_second" public_interface="in"/>
+      <variable name="f_2" units="per_second" public_interface="in"/>
+      <variable name="b_2" units="per_second" public_interface="in"/>
+      <variable name="f_3" units="per_second" public_interface="in"/>
+      <variable name="b_3" units="per_second" public_interface="in"/>
+      <variable name="f_4" units="per_second" public_interface="in"/>
+      <variable name="b_4" units="per_second" public_interface="in"/>
+      <variable name="f_5" units="per_second" public_interface="in"/>
+      <variable name="b_5" units="per_second" public_interface="in"/>
+      <variable name="f_6" units="per_second" public_interface="in"/>
+      <variable name="b_6" units="per_second" public_interface="in"/>
+      <variable name="C1_sum" units="per_second5"/>
+      <variable name="C2_sum" units="per_second5"/>
+      <variable name="C3_sum" units="per_second5"/>
+      <variable name="C4_sum" units="per_second5"/>
+      <variable name="C5_sum" units="per_second5"/>
+      <variable name="C6_sum" units="per_second5"/>
+      <variable name="C_sum" units="per_second5"/>
+      <variable name="C_T" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="C1" units="pmol_per_cm2" public_interface="out"/>
+      <variable name="C2" units="pmol_per_cm2" public_interface="out"/>
+      <variable name="C3" units="pmol_per_cm2" public_interface="out"/>
+      <variable name="C4" units="pmol_per_cm2" public_interface="out"/>
+      <variable name="C5" units="pmol_per_cm2" public_interface="out"/>
+      <variable name="C6" units="pmol_per_cm2" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>C1_sum</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>f_2</ci>
+                  <ci>f_3</ci>
+                  <ci>f_4</ci>
+                  <ci>f_5</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>f_3</ci>
+                  <ci>f_4</ci>
+                  <ci>f_5</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_2</ci>
+                  <ci>f_4</ci>
+                  <ci>f_5</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_2</ci>
+                  <ci>b_3</ci>
+                  <ci>f_5</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_2</ci>
+                  <ci>b_3</ci>
+                  <ci>b_4</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_2</ci>
+                  <ci>b_3</ci>
+                  <ci>b_4</ci>
+                  <ci>b_5</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C2_sum</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>f_1</ci>
+                  <ci>f_3</ci>
+                  <ci>f_4</ci>
+                  <ci>f_5</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_2</ci>
+                  <ci>f_1</ci>
+                  <ci>f_4</ci>
+                  <ci>f_5</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_2</ci>
+                  <ci>b_3</ci>
+                  <ci>f_1</ci>
+                  <ci>f_5</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_2</ci>
+                  <ci>b_3</ci>
+                  <ci>b_4</ci>
+                  <ci>f_1</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_2</ci>
+                  <ci>b_3</ci>
+                  <ci>b_4</ci>
+                  <ci>b_5</ci>
+                  <ci>f_1</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_2</ci>
+                  <ci>b_3</ci>
+                  <ci>b_4</ci>
+                  <ci>b_5</ci>
+                  <ci>b_6</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C3_sum</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>f_1</ci>
+                  <ci>f_2</ci>
+                  <ci>f_4</ci>
+                  <ci>f_5</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_3</ci>
+                  <ci>f_1</ci>
+                  <ci>f_2</ci>
+                  <ci>f_5</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_3</ci>
+                  <ci>b_4</ci>
+                  <ci>f_1</ci>
+                  <ci>f_2</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_3</ci>
+                  <ci>b_4</ci>
+                  <ci>b_5</ci>
+                  <ci>f_1</ci>
+                  <ci>f_2</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_3</ci>
+                  <ci>b_4</ci>
+                  <ci>b_5</ci>
+                  <ci>b_6</ci>
+                  <ci>f_2</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_3</ci>
+                  <ci>b_4</ci>
+                  <ci>b_5</ci>
+                  <ci>b_6</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C4_sum</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>f_1</ci>
+                  <ci>f_2</ci>
+                  <ci>f_3</ci>
+                  <ci>f_5</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_4</ci>
+                  <ci>f_1</ci>
+                  <ci>f_2</ci>
+                  <ci>f_3</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_4</ci>
+                  <ci>b_5</ci>
+                  <ci>f_1</ci>
+                  <ci>f_2</ci>
+                  <ci>f_3</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_4</ci>
+                  <ci>b_5</ci>
+                  <ci>b_6</ci>
+                  <ci>f_2</ci>
+                  <ci>f_3</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_4</ci>
+                  <ci>b_5</ci>
+                  <ci>b_6</ci>
+                  <ci>f_3</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_2</ci>
+                  <ci>b_4</ci>
+                  <ci>b_5</ci>
+                  <ci>b_6</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C5_sum</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>f_1</ci>
+                  <ci>f_2</ci>
+                  <ci>f_3</ci>
+                  <ci>f_4</ci>
+                  <ci>f_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_5</ci>
+                  <ci>f_1</ci>
+                  <ci>f_2</ci>
+                  <ci>f_3</ci>
+                  <ci>f_4</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_5</ci>
+                  <ci>b_6</ci>
+                  <ci>f_2</ci>
+                  <ci>f_3</ci>
+                  <ci>f_4</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_5</ci>
+                  <ci>b_6</ci>
+                  <ci>f_3</ci>
+                  <ci>f_4</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_2</ci>
+                  <ci>b_5</ci>
+                  <ci>b_6</ci>
+                  <ci>f_4</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_2</ci>
+                  <ci>b_3</ci>
+                  <ci>b_5</ci>
+                  <ci>b_6</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C6_sum</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>f_1</ci>
+                  <ci>f_2</ci>
+                  <ci>f_3</ci>
+                  <ci>f_4</ci>
+                  <ci>f_5</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_6</ci>
+                  <ci>f_2</ci>
+                  <ci>f_3</ci>
+                  <ci>f_4</ci>
+                  <ci>f_5</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_6</ci>
+                  <ci>f_3</ci>
+                  <ci>f_4</ci>
+                  <ci>f_5</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_2</ci>
+                  <ci>b_6</ci>
+                  <ci>f_4</ci>
+                  <ci>f_5</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_2</ci>
+                  <ci>b_3</ci>
+                  <ci>b_6</ci>
+                  <ci>f_5</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>b_1</ci>
+                  <ci>b_2</ci>
+                  <ci>b_3</ci>
+                  <ci>b_4</ci>
+                  <ci>b_6</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C_sum</ci>
+            <apply>
+               <plus/>
+               <ci>C1_sum</ci>
+               <ci>C2_sum</ci>
+               <ci>C3_sum</ci>
+               <ci>C4_sum</ci>
+               <ci>C5_sum</ci>
+               <ci>C6_sum</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C1</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>C_T</ci>
+                  <ci>C1_sum</ci>
+               </apply>
+               <ci>C_sum</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C2</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>C_T</ci>
+                  <ci>C2_sum</ci>
+               </apply>
+               <ci>C_sum</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C3</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>C_T</ci>
+                  <ci>C3_sum</ci>
+               </apply>
+               <ci>C_sum</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C4</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>C_T</ci>
+                  <ci>C4_sum</ci>
+               </apply>
+               <ci>C_sum</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C5</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>C_T</ci>
+                  <ci>C5_sum</ci>
+               </apply>
+               <ci>C_sum</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>C6</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>C_T</ci>
+                  <ci>C6_sum</ci>
+               </apply>
+               <ci>C_sum</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="NBC_current">
+      <variable name="f_3" units="per_second" public_interface="in"/>
+      <variable name="b_3" units="per_second" public_interface="in"/>
+      <variable name="f_6" units="per_second" public_interface="in"/>
+      <variable name="b_6" units="per_second" public_interface="in"/>
+      <variable name="C_1" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="C_3" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="C_4" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="C_6" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="C1" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="C3" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="C4" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="C6" units="pmol_per_cm2" public_interface="in"/>
+      <variable name="delta_z" units="dimensionless" public_interface="in"/>
+      <variable name="n" units="dimensionless" public_interface="in"/>
+      <variable name="m" units="dimensionless" public_interface="in"/>
+      <variable name="F" units="C_per_mol" public_interface="in"/>
+      <variable name="I_NBC" units="pA_per_cm2" public_interface="out"/>
+      <variable name="I_NBC_SS" units="pA_per_cm2" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>I_NBC</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <ci>F</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>delta_z</ci>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>b_6</ci>
+                           <ci>C_1</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>f_6</ci>
+                           <ci>C_6</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <plus/>
+                           <ci>delta_z</ci>
+                           <ci>n</ci>
+                        </apply>
+                        <ci>m</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>f_3</ci>
+                           <ci>C_3</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>b_3</ci>
+                           <ci>C_4</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>I_NBC_SS</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <ci>F</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>delta_z</ci>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>b_6</ci>
+                           <ci>C1</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>f_6</ci>
+                           <ci>C6</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <plus/>
+                           <ci>delta_z</ci>
+                           <ci>n</ci>
+                        </apply>
+                        <ci>m</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>f_3</ci>
+                           <ci>C3</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>b_3</ci>
+                           <ci>C4</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="rate_constants" component_2="ion_concentrations"/>
+      <map_variables variable_1="Na_i" variable_2="Na_i"/>
+      <map_variables variable_1="Na_o" variable_2="Na_o"/>
+      <map_variables variable_1="HCO3_i" variable_2="HCO3_i"/>
+      <map_variables variable_1="HCO3_o" variable_2="HCO3_o"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="rate_constants" component_2="kinetic_equations"/>
+      <map_variables variable_1="f_1" variable_2="f_1"/>
+      <map_variables variable_1="b_1" variable_2="b_1"/>
+      <map_variables variable_1="f_2" variable_2="f_2"/>
+      <map_variables variable_1="b_2" variable_2="b_2"/>
+      <map_variables variable_1="f_3" variable_2="f_3"/>
+      <map_variables variable_1="b_3" variable_2="b_3"/>
+      <map_variables variable_1="f_4" variable_2="f_4"/>
+      <map_variables variable_1="b_4" variable_2="b_4"/>
+      <map_variables variable_1="f_5" variable_2="f_5"/>
+      <map_variables variable_1="b_5" variable_2="b_5"/>
+      <map_variables variable_1="f_6" variable_2="f_6"/>
+      <map_variables variable_1="b_6" variable_2="b_6"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="rate_constants" component_2="king_altman_states"/>
+      <map_variables variable_1="f_1" variable_2="f_1"/>
+      <map_variables variable_1="b_1" variable_2="b_1"/>
+      <map_variables variable_1="f_2" variable_2="f_2"/>
+      <map_variables variable_1="b_2" variable_2="b_2"/>
+      <map_variables variable_1="f_3" variable_2="f_3"/>
+      <map_variables variable_1="b_3" variable_2="b_3"/>
+      <map_variables variable_1="f_4" variable_2="f_4"/>
+      <map_variables variable_1="b_4" variable_2="b_4"/>
+      <map_variables variable_1="f_5" variable_2="f_5"/>
+      <map_variables variable_1="b_5" variable_2="b_5"/>
+      <map_variables variable_1="f_6" variable_2="f_6"/>
+      <map_variables variable_1="b_6" variable_2="b_6"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="rate_constants" component_2="NBC_current"/>
+      <map_variables variable_1="f_3" variable_2="f_3"/>
+      <map_variables variable_1="b_3" variable_2="b_3"/>
+      <map_variables variable_1="f_6" variable_2="f_6"/>
+      <map_variables variable_1="b_6" variable_2="b_6"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="NBC_current" component_2="parameters"/>
+      <map_variables variable_1="delta_z" variable_2="delta_z"/>
+      <map_variables variable_1="n" variable_2="n"/>
+      <map_variables variable_1="m" variable_2="m"/>
+      <map_variables variable_1="F" variable_2="F"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="NBC_current" component_2="kinetic_equations"/>
+      <map_variables variable_1="C_1" variable_2="C_1"/>
+      <map_variables variable_1="C_3" variable_2="C_3"/>
+      <map_variables variable_1="C_4" variable_2="C_4"/>
+      <map_variables variable_1="C_6" variable_2="C_6"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="NBC_current" component_2="king_altman_states"/>
+      <map_variables variable_1="C1" variable_2="C1"/>
+      <map_variables variable_1="C3" variable_2="C3"/>
+      <map_variables variable_1="C4" variable_2="C4"/>
+      <map_variables variable_1="C6" variable_2="C6"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="kinetic_equations" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="kinetic_equations" component_2="parameters"/>
+      <map_variables variable_1="C_T" variable_2="C_T"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="king_altman_states" component_2="parameters"/>
+      <map_variables variable_1="C_T" variable_2="C_T"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="rate_constants" component_2="parameters"/>
+      <map_variables variable_1="f0_1" variable_2="f0_1"/>
+      <map_variables variable_1="b0_1" variable_2="b0_1"/>
+      <map_variables variable_1="f0_2" variable_2="f0_2"/>
+      <map_variables variable_1="b0_2" variable_2="b0_2"/>
+      <map_variables variable_1="f0_3" variable_2="f0_3"/>
+      <map_variables variable_1="b0_3" variable_2="b0_3"/>
+      <map_variables variable_1="f0_4" variable_2="f0_4"/>
+      <map_variables variable_1="b0_4" variable_2="b0_4"/>
+      <map_variables variable_1="f0_5" variable_2="f0_5"/>
+      <map_variables variable_1="b0_5" variable_2="b0_5"/>
+      <map_variables variable_1="f0_6" variable_2="f0_6"/>
+      <map_variables variable_1="b0_6" variable_2="b0_6"/>
+      <map_variables variable_1="delta_z" variable_2="delta_z"/>
+      <map_variables variable_1="delta_m" variable_2="delta_m"/>
+      <map_variables variable_1="delta_n" variable_2="delta_n"/>
+      <map_variables variable_1="alpha_p" variable_2="alpha_p"/>
+      <map_variables variable_1="alpha_pp" variable_2="alpha_pp"/>
+      <map_variables variable_1="beta_p" variable_2="beta_p"/>
+      <map_variables variable_1="beta_pp" variable_2="beta_pp"/>
+      <map_variables variable_1="C_T" variable_2="C_T"/>
+      <map_variables variable_1="n" variable_2="n"/>
+      <map_variables variable_1="m" variable_2="m"/>
+      <map_variables variable_1="u" variable_2="u"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ion_concentrations" component_2="parameters"/>
+      <map_variables variable_1="V" variable_2="V"/>
+   </connection>
+   
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+   <rdf:Description rdf:about="">
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Terkildsen</vCard:Family>
+          <vCard:Given>Jonna</vCard:Given>
+		</vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>j.terkildsen@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>Auckland Bioengineering Institute</vCard:Orgname>
+        </vCard:ORG>
+      </dc:creator>
+      
+      <dcterms:created rdf:parseType="Resource">
+        <dcterms:W3CDTF>2009-08-28</dcterms:W3CDTF>
+      </dcterms:created>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#gross_1998">
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>Na/HCO3 cotransport</rdf:li>
+              <rdf:li>ion transport</rdf:li>
+			  <rdf:li>kidney</rdf:li>
+              <rdf:li>proximal tubule</rdf:li>
+			  <rdf:li>renal</rdf:li>
+			  <rdf:li>pH</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+       <bqs:Pubmed_id>9675182</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Gross</vCard:Family>
+                    <vCard:Given>E</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Hopfer</vCard:Family>
+                    <vCard:Given>U</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+           Voltage and cosubstrate dependence of the Na-HCO3 cotransporter kinetics in renal proximal tubule cellse
+          </dc:title>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Biophysical Journal</dc:title>
+          </bqs:Journal>
+          <bqs:volume>75</bqs:volume>
+          <bqs:first_page>810</bqs:first_page> 
+		  <bqs:last_page>824</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<model xmlns:xlink="http://www.w3.org/1999/xlink" name="ASignallingExample" cmeta:id="ASignallingExample" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+	<import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Principled_Base/Units_Cellular_Systems.cellml">
+		<units name="per_s" units_ref="per_s"/>
+		<units name="per_m" units_ref="per_m"/>
+		<units name="per_m2" units_ref="per_m2"/>
+		<units name="N_per_m2" units_ref="N_per_m2"/>
+		<units name="m2_per_N" units_ref="m2_per_N"/>
+		<units name="N_per_m" units_ref="N_per_m"/>
+		<units name="N_m_per_K" units_ref="N_m_per_K"/>
+		<units name="uM" units_ref="uM"/>
+		<units name="uM_per_s" units_ref="uM_per_s"/>
+		<units name="per_uM_per_s" units_ref="per_uM_per_s"/>
+	</import>
+	<import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Principled_Base/Time.cellml">
+		<component name="Time" component_ref="Time"/>
+	</import>   
+	
+  <component name="environment_parameters">
+      <variable name="Ca_ext" units="uM" initial_value="2000" public_interface="out"/>
+      <variable name="tau" units="N_per_m2" initial_value="10" public_interface="out"/>
+      <variable name="T" units="kelvin" initial_value="310" public_interface="out"/>
+   </component>
+   
+   <component name="cell_geometry_parameters">
+      <variable name="V_ce" units="dimensionless" initial_value="3.5" public_interface="out"/>
+      <variable name="l" units="meter" initial_value="3.5e-5" public_interface="out"/>
+   </component>
+   
+   <import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="ShearStress_to_IP3_Parameters.cellml">
+   		<component name="ShearStress_to_IP3_Parameters" component_ref="ShearStress_to_IP3_Parameters"/> 
+   </import> 
+   
+   <import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="ShearStress_to_IP3.cellml">
+   		<component name="ShearStress_to_IP3" component_ref="ShearStress_to_IP3"/> 
+   </import> 
+   
+   <connection>
+         <map_components component_1="ShearStress_to_IP3_Parameters" component_2="ShearStress_to_IP3"/>
+         <map_variables variable_1="tau_c" variable_2="tau_c"/>
+         <map_variables variable_1="Rtau_phi_max" variable_2="Rtau_phi_max" />
+         <map_variables variable_1="Rtau_phi_init" variable_2="Rtau_phi_init" />
+         <map_variables variable_1="beta_phi" variable_2="beta_phi" />
+         <map_variables variable_1="Rtau_init" variable_2="Rtau_init" />
+         <map_variables variable_1="Rtau_k1" variable_2="Rtau_k1" />
+         <map_variables variable_1="Rtau_k2" variable_2="Rtau_k2" />
+         <map_variables variable_1="IP3_k1_init" variable_2="IP3_k1_init" />
+         <map_variables variable_1="IP3_k1_max" variable_2="IP3_k1_max" />
+         <map_variables variable_1="beta_IP3_k1" variable_2="beta_IP3_k1" />
+         
+         <map_variables variable_1="IP3_k2_init" variable_2="IP3_k2_init" />
+         <map_variables variable_1="IP3_k2_max" variable_2="IP3_k2_max" />
+         <map_variables variable_1="beta_IP3_k2" variable_2="beta_IP3_k2" />
+         
+         <map_variables variable_1="IP3_f_k1" variable_2="IP3_f_k1" />
+         <map_variables variable_1="IP3_f_k2" variable_2="IP3_f_k2" />
+         <map_variables variable_1="IP3_f_Km" variable_2="IP3_f_Km" />
+         <map_variables variable_1="IP3_f_init" variable_2="IP3_f_init" />
+         <map_variables variable_1="IP3_init" variable_2="IP3_init" />
+         <map_variables variable_1="J_IP3_External" variable_2="J_IP3_External" />
+     </connection>
+     
+   <connection>
+      <map_components component_1="environment_parameters" component_2="ShearStress_to_IP3"/>
+      <map_variables variable_1="tau" variable_2="tau"/>
+   </connection>
+   
+   <connection>
+      <map_components component_1="Time" component_2="ShearStress_to_IP3"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_1="ShearStress_to_IP3" component_2="Calcium_Handling"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_if"/>
+   </connection>
+   
+   <connection>
+      <map_components component_1="ShearStress_to_IP3" component_2="Calcium_Handling_Parameters"/>   
+   	<map_variables variable_1="Ca_i0" variable_2="Ca_if_rest"/>
+    </connection>  
+   
+     <component name="IP3_scaling_parameters">
+        <variable name="IP3_scalefactor" units="uM" initial_value="0.5" public_interface="out"/>
+     </component>
+  
+    <component name="IP3_dimensionless_to_uM">
+      <variable name="IP3nd" units="dimensionless" public_interface="in"/>
+      <variable name="IP3_s" units="uM" public_interface="in"/>
+      <variable name="IP3" units="uM" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>IP3</ci>
+            <apply>
+               <times/>
+               <ci>IP3nd</ci>
+               <ci>IP3_s</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <connection>
+         <map_components component_1="IP3_scaling_parameters" component_2="IP3_dimensionless_to_uM"/>
+         <map_variables variable_1="IP3_scalefactor" variable_2="IP3_s"/>
+   </connection>
+   
+   <connection>
+      <map_components component_1="IP3_dimensionless_to_uM" component_2="ShearStress_to_IP3"/>
+      <map_variables variable_1="IP3nd" variable_2="IP3"/>
+   </connection>
+   
+   <import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Calcium_Handling_Parameters.cellml">
+   		<component name="Calcium_Handling_Parameters" component_ref="Calcium_Handling_Parameters"/> 
+   </import> 
+   
+   <connection>
+         <map_components component_1="Calcium_Handling" component_2="Calcium_Handling_Parameters"/>
+         <map_variables variable_1="Ca_if_init" variable_2="Ca_if_init"/>
+         <map_variables variable_1="Ca_st_init" variable_2="Ca_st_init"/>
+         <map_variables variable_1="Ca_st_rest" variable_2="Ca_st_rest"/>
+         <map_variables variable_1="Ca_if_rest" variable_2="Ca_if_rest"/>
+         <map_variables variable_1="qout_basal_vmax" variable_2="qout_basal_vmax"/>
+         <map_variables variable_1="qout_basal_Km" variable_2="qout_basal_Km"/>
+         <map_variables variable_1="qout_basal_n" variable_2="qout_basal_n" />
+         <map_variables variable_1="qout_pump_vmax" variable_2="qout_pump_vmax"/>
+         <map_variables variable_1="qout_pump_Km"  variable_2="qout_pump_Km"/>
+         <map_variables variable_1="qout_pump_n" variable_2="qout_pump_n"/>
+         <map_variables variable_1="qout_exch_vmax" variable_2="qout_exch_vmax"/>
+         <map_variables variable_1="qout_exch_Km" variable_2="qout_exch_Km"/>
+         <map_variables variable_1="qout_exch_n" variable_2="qout_exch_n"/>
+         <map_variables variable_1="qrel_k2" variable_2="qrel_k2"/>
+         <map_variables variable_1="qrel_k1" variable_2="qrel_k1"/>
+         <map_variables variable_1="qres_k1" variable_2="qres_k1"/>
+         <map_variables variable_1="qres_k2" variable_2="qres_k2"/>
+         <map_variables variable_1="qres_k3" variable_2="qres_k3"/>
+         <map_variables variable_1="qin_kcce"  variable_2="qin_kcce" />
+         <map_variables variable_1="qin_max"   variable_2="qin_max" />
+         <map_variables variable_1="qin_alpha" variable_2="qin_alpha"/>
+         <map_variables variable_1="qinw_f"    variable_2="qinw_f" />
+         <map_variables variable_1="epsilon" variable_2="epsilon" />
+         <map_variables variable_1="k"  variable_2="k" />
+         <map_variables variable_1="cac"  variable_2="cac" />
+         <map_variables variable_1="qinw_delta" variable_2="qinw_delta"/>
+         <map_variables variable_1="J_Ca_st_External" variable_2="J_Ca_st_External"/>
+   </connection>
+   
+   <import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Calcium_Handling.cellml">
+      		<component name="Calcium_Handling" component_ref="Calcium_Handling"/>
+   </import> 
+   
+   <connection>
+      <map_components component_1="Calcium_Handling" component_2="environment_parameters"/>
+      <map_variables variable_1="Ca_ex" variable_2="Ca_ext"/>
+      <map_variables variable_1="tau" variable_2="tau"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   
+   <connection>
+      <map_components component_1="Calcium_Handling" component_2="cell_geometry_parameters"/>
+      <map_variables variable_1="V_ce" variable_2="V_ce"/>
+      <map_variables variable_1="l" variable_2="l"/>
+   </connection>
+   
+   <connection>
+      <map_components component_1="Calcium_Handling" component_2="IP3_dimensionless_to_uM"/>
+      <map_variables variable_1="IP3" variable_2="IP3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_1="Time" component_2="Calcium_Handling"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   
+   <import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Calmodulin_Activation_Parameters.cellml">
+      		<component name="Calmodulin_Activation_Parameters" component_ref="Calmodulin_Activation_Parameters"/>
+   </import> 
+    
+   <import xmlns="http://www.cellml.org/cellml/1.1#" xlink:href="Calmodulin_Activation.cellml">
+      		<component name="Calmodulin_Activation" component_ref="Calmodulin_Activation"/>
+   </import> 
+   
+   <connection>
+      <map_components component_1="Calmodulin_Activation" component_2="Calmodulin_Activation_Parameters"/>
+      <map_variables variable_1="kon" variable_2="kon"/>
+      <map_variables variable_1="koff" variable_2="koff"/>
+      <map_variables variable_1="CaM_init" variable_2="CaM_init"/>
+      <map_variables variable_1="CaM_star_init" variable_2="CaM_star_init"/>
+      <map_variables variable_1="J_CaM_External" variable_2="J_CaM_External"/>
+      <map_variables variable_1="J_CaM_star_External" variable_2="J_CaM_star_External"/>
+   </connection>
+   
+    <connection>
+      <map_components component_1="Calmodulin_Activation" component_2="Calcium_Handling"/>
+      <map_variables variable_1="Ca" variable_2="Ca_if"/>
+   </connection>
+   
+   <connection>
+      <map_components component_1="Calmodulin_Activation" component_2="Time"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   
+   <component name="Calmodulin_derived_Ca_buffering_outflux">
+   	<variable name="J_Ca_buffering_outflux" units="uM_per_s" public_interface="out"/>
+   	<variable name="J_CaM_star" units="uM_per_s" public_interface="in"/>
+         <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+               <eq/>
+               <ci>J_Ca_buffering_outflux</ci>
+               <apply>
+                  <times/>
+                  <ci>J_CaM_star</ci>
+                  <cn cellml:units="dimensionless">-4</cn>
+               </apply>
+            </apply>
+      </math>
+   </component>
+   
+   <connection>
+      <map_components component_1="Calmodulin_derived_Ca_buffering_outflux" component_2="Calcium_Handling"/>
+        <map_variables variable_1="J_Ca_buffering_outflux" variable_2="J_Ca_if_External"/>
+   </connection>
+   
+   <connection>
+      <map_components component_1="Calmodulin_derived_Ca_buffering_outflux" component_2="Calmodulin_Activation"/>
+        <map_variables variable_1="J_CaM_star" variable_2="J_CaM_star"/>
+   </connection>
+   
+</model>

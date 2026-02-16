@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="individual_pH_B2" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="mM" units_ref="mM"/>
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="microm3" units_ref="microm3"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="uM" units_ref="uM"/>
+        <units name="pL" units_ref="pL"/>
+    </import>
+    <import xlink:href="units_and_constants/constants_BG.cellml">
+        <component component_ref="constants" name="constants"/>
+    </import>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="second"/>
+        <!-- initial values-->
+        <variable initial_value="2.69019E-06" name="q_H_i" public_interface="out" units="fmol"/>
+        <variable initial_value="1117.2" name="q_B2" public_interface="out" units="fmol"/>
+        <variable initial_value="1e-18" name="q_HB2" public_interface="out" units="fmol"/>
+        <!-- From submodule-->
+        <variable name="v_Re_B2" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_H_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re_B2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_B2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_Re_B2</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>q_HB2</ci>
+                </apply>
+                <ci>v_Re_B2</ci>
+            </apply>
+        </math>
+        <variable name="pH_i" units="dimensionless"/>
+        <variable name="cH_i" units="mM"/>
+        <variable initial_value="38" name="w_i" units="pL"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>cH_i</ci>
+                <apply>
+                    <divide/>
+                    <ci>q_H_i</ci>
+                    <ci>w_i</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>pH_i</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <log/>
+                        <ci>cH_i</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="pH_B2_parameters">
+        <variable initial_value="3.7325" name="kappa_Re_B2" public_interface="out" units="fmol_per_sec"/>
+        <variable initial_value="13.6212" name="K_H_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="13.6212" name="K_B2" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.000189765" name="K_HB2" public_interface="out" units="per_fmol"/>
+    </component>
+    <component name="pH_B2">
+        <variable name="time" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <!-- parameters-->
+        <variable name="kappa_Re_B2" public_interface="in" units="fmol_per_sec"/>
+        <variable name="K_H_i" public_interface="in" units="per_fmol"/>
+        <variable name="K_B2" public_interface="in" units="per_fmol"/>
+        <variable name="K_HB2" public_interface="in" units="per_fmol"/>
+        <!-- Input from global environment-->
+        <variable name="q_H_i" public_interface="in" units="fmol"/>
+        <variable name="q_B2" public_interface="in" units="fmol"/>
+        <variable name="q_HB2" public_interface="in" units="fmol"/>
+        <!-- Constitutive parameters-->
+        <variable name="mu_H_i" units="J_per_mol"/>
+        <variable name="mu_B2" units="J_per_mol"/>
+        <variable name="mu_HB2" units="J_per_mol"/>
+        <variable name="v_Re_B2" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_H_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_H_i</ci>
+                            <ci>q_H_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_B2</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_B2</ci>
+                            <ci>q_B2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_HB2</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_HB2</ci>
+                            <ci>q_HB2</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_Re_B2</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_Re_B2</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>mu_H_i</ci>
+                                    <ci>mu_B2</ci>
+                                </apply>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>mu_HB2</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="environment" component_2="pH_B2"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="q_H_i" variable_2="q_H_i"/>
+        <map_variables variable_1="q_B2" variable_2="q_B2"/>
+        <map_variables variable_1="q_HB2" variable_2="q_HB2"/>
+        <map_variables variable_1="v_Re_B2" variable_2="v_Re_B2"/>
+    </connection>
+    <connection>
+        <map_components component_1="pH_B2" component_2="pH_B2_parameters"/>
+        <map_variables variable_1="kappa_Re_B2" variable_2="kappa_Re_B2"/>
+        <map_variables variable_1="K_H_i" variable_2="K_H_i"/>
+        <map_variables variable_1="K_B2" variable_2="K_B2"/>
+        <map_variables variable_1="K_HB2" variable_2="K_HB2"/>
+    </connection>
+    <connection>
+        <map_components component_1="constants" component_2="pH_B2"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+    </connection>
+</model>

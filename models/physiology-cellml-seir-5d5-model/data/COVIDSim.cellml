@@ -1,0 +1,361 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="COVID_model" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <units name="day">
+        <unit multiplier="86400" units="second"/>
+    </units>
+    <units name="per_day">
+        <unit exponent="-1" multiplier="86400" units="second"/>
+    </units>
+    <component name="environment">
+        <variable name="time" public_interface="out" units="day"/>
+    </component>
+    <component name="main">
+        <!--/////////////// Variables /////////////////-->
+        <variable name="t" public_interface="in" units="day"/>
+        <!-- Susceptible-->
+        <variable initial_value="0.999996" name="S" units="dimensionless"/>
+        <!-- Exposed-->
+        <variable initial_value="0.000004" name="E" units="dimensionless"/>
+        <!-- Pre-Symptomatic-->
+        <variable initial_value="0" name="P" units="dimensionless"/>
+        <!-- Infectious, untested-->
+        <variable initial_value="0" name="I_u" units="dimensionless"/>
+        <!-- Infectious, tested-->
+        <variable initial_value="0" name="I_t" units="dimensionless"/>
+        <!-- Infectious, total-->
+        <variable name="I" units="dimensionless"/>
+        <!-- Recovered, untested-->
+        <variable initial_value="0" name="R_u" units="dimensionless"/>
+        <!-- Recovered, tested-->
+        <variable initial_value="0" name="R_t" units="dimensionless"/>
+        <!-- Recovered, total-->
+        <variable name="R" units="dimensionless"/>
+        <!-- Deaths-->
+        <variable name="D" units="dimensionless"/>
+        <!-- Population Size-->
+        <variable initial_value="5000000" name="N" units="dimensionless"/>
+        <!-- Infection Fatality Rate-->
+        <variable name="IFR" units="dimensionless"/>
+        <!--/////////////// Parameters /////////////////-->
+        <!-- Infection Fatality Rate (when ICU is under max capacity)-->
+        <variable initial_value="0.01" name="IFR_0" units="dimensionless"/>
+        <!-- Infection Fatality Rate (for infectious exceeding ICU capacity)-->
+        <variable initial_value="0.02" name="IFR_1" units="dimensionless"/>
+        <!-- Transmission Coefficient-->
+        <variable name="beta" units="per_day"/>
+        <!-- Relative Infectiousness in Pre-Symptomatic Period-->
+        <variable initial_value="0.15" name="epsilon" units="dimensionless"/>
+        <!-- E->P Transition Rate-->
+        <variable initial_value="0.25" name="alpha" units="per_day"/>
+        <!-- P->I Transition Rate-->
+        <variable initial_value="1.0" name="delta" units="per_day"/>
+        <!-- I->R Transition Rate-->
+        <variable initial_value="0.1" name="gamma" units="per_day"/>
+        <!-- Testing Rate for Symptomatic Infections-->
+        <variable initial_value="0.1" name="c" units="per_day"/>
+        <!-- Estimated ICU Maximum Capacity-->
+        <variable initial_value="500" name="n_ICU" units="dimensionless"/>
+        <!-- Proportion of Total Infections Requiring ICU-->
+        <variable initial_value="0.0125" name="p_ICU" units="dimensionless"/>
+        <!-- Proportion of Total Infections Requiring Hospitalisation-->
+        <variable initial_value="0.05" name="p_hosp" units="dimensionless"/>
+        <!-- Basic Reproduction Number-->
+        <variable initial_value="2.5" name="R_0" units="dimensionless"/>
+        <!--/////////////// System of ODEs /////////////////-->
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>S</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <apply>
+                        <minus/>
+                        <ci>beta</ci>
+                    </apply>
+                    <ci>S</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>epsilon</ci>
+                            <ci>P</ci>
+                        </apply>
+                        <ci>I_u</ci>
+                        <ci>I_t</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>E</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>beta</ci>
+                        <ci>S</ci>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+                                <ci>epsilon</ci>
+                                <ci>P</ci>
+                            </apply>
+                            <ci>I_u</ci>
+                            <ci>I_t</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>alpha</ci>
+                        <ci>E</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>P</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>alpha</ci>
+                        <ci>E</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>delta</ci>
+                        <ci>P</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>I_u</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>delta</ci>
+                        <ci>P</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>gamma</ci>
+                            <ci>c</ci>
+                        </apply>
+                        <ci>I_u</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>I_t</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>c</ci>
+                        <ci>I_u</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>gamma</ci>
+                        <ci>I_t</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>R_u</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>gamma</ci>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>IFR</ci>
+                    </apply>
+                    <ci>I_u</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>R_t</ci>
+                </apply>
+                <apply>
+                    <times/>
+                    <ci>gamma</ci>
+                    <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>IFR</ci>
+                    </apply>
+                    <ci>I_t</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>D</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <minus/>
+                            <apply>
+                                <minus/>
+                                <apply>
+                                    <minus/>
+                                    <apply>
+                                        <minus/>
+                                        <apply>
+                                            <minus/>
+                                            <cn cellml:units="dimensionless">1</cn>
+                                            <ci>S</ci>
+                                        </apply>
+                                        <ci>E</ci>
+                                    </apply>
+                                    <ci>P</ci>
+                                </apply>
+                                <ci>I_u</ci>
+                            </apply>
+                            <ci>I_t</ci>
+                        </apply>
+                        <ci>R_u</ci>
+                    </apply>
+                    <ci>R_t</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I</ci>
+                <apply>
+                    <plus/>
+                    <ci>I_t</ci>
+                    <ci>I_u</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>R</ci>
+                <apply>
+                    <plus/>
+                    <ci>R_t</ci>
+                    <ci>R_u</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>beta</ci>
+                <apply>
+                    <divide/>
+                    <ci>R_0</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <divide/>
+                            <ci>epsilon</ci>
+                            <ci>delta</ci>
+                        </apply>
+                        <apply>
+                            <divide/>
+                            <cn cellml:units="dimensionless">1</cn>
+                            <ci>gamma</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>IFR</ci>
+                <piecewise>
+                    <piece>
+                        <ci>IFR_0</ci>
+                        <apply>
+                            <leq/>
+                            <apply>
+                                <times/>
+                                <ci>N</ci>
+                                <ci>I</ci>
+                                <ci>p_ICU</ci>
+                            </apply>
+                            <ci>n_ICU</ci>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <apply>
+                            <minus/>
+                            <ci>IFR_1</ci>
+                            <apply>
+                                <times/>
+                                <apply>
+                                    <divide/>
+                                    <ci>n_ICU</ci>
+                                    <apply>
+                                        <times/>
+                                        <ci>N</ci>
+                                        <ci>I</ci>
+                                        <ci>p_ICU</ci>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <ci>IFR_1</ci>
+                                    <ci>IFR_0</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </otherwise>
+                </piecewise>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="main" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="time"/>
+    </connection>
+</model>

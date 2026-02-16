@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="cardiac_AP_TRPN_only" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="units_and_constants/units_BG.cellml">
+        <units name="fmol" units_ref="fmol"/>
+        <units name="per_fmol" units_ref="per_fmol"/>
+        <units name="J_per_mol" units_ref="J_per_mol"/>
+        <units name="fmol_per_sec" units_ref="fmol_per_sec"/>
+        <units name="C_per_mol" units_ref="C_per_mol"/>
+        <units name="J_per_C" units_ref="J_per_C"/>
+        <units name="fF" units_ref="fF"/>
+        <units name="fC" units_ref="fC"/>
+        <units name="fA" units_ref="fA"/>
+        <units name="per_second" units_ref="per_second"/>
+        <units name="per_sec" units_ref="per_sec"/>
+        <units name="J_per_K_per_mol" units_ref="J_per_K_per_mol"/>
+        <units name="fmol_per_L" units_ref="fmol_per_L"/>
+        <units name="fmol_per_L_per_sec" units_ref="fmol_per_L_per_sec"/>
+        <units name="per_sec_per_fmol_per_L" units_ref="per_sec_per_fmol_per_L"/>
+        <units name="pL" units_ref="pL"/>
+    </import>
+    <component name="environment">
+        <variable initial_value="0" name="t" public_interface="out" units="second"/>
+        <variable initial_value="8.314" name="R" public_interface="out" units="J_per_K_per_mol"/>
+        <variable initial_value="310" name="T" public_interface="out" units="kelvin"/>
+        <variable initial_value="96485" name="F" public_interface="out" units="C_per_mol"/>
+        <variable initial_value="153400" name="C_m" public_interface="out" units="fF"/>
+        <variable initial_value="0.00456" name="q_Ca_i" public_interface="out" units="fmol"/>
+        <variable initial_value="2.1452" name="q_TRPN" public_interface="out" units="fmol"/>
+        <variable initial_value="0.51484" name="q_TRPN_Ca" public_interface="out" units="fmol"/>
+        <variable name="v_b1" public_interface="in" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_TRPN</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_b1</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_TRPN_Ca</ci>
+                </apply>
+                <ci>v_b1</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>q_Ca_i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>v_b1</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="TRPN_parameters">
+        <variable initial_value="0.022218" name="K_Ca_i" public_interface="out" units="per_fmol"/>
+        <variable initial_value="37.1165" name="K_TRPN" public_interface="out" units="per_fmol"/>
+        <variable initial_value="0.015668" name="K_TRPN_Ca" public_interface="out" units="per_fmol"/>
+        <variable initial_value="839.7697" name="kappa_b1" public_interface="out" units="fmol_per_sec"/>
+    </component>
+    <component name="TRPN_buffer">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="R" public_interface="in" units="J_per_K_per_mol"/>
+        <variable name="T" public_interface="in" units="kelvin"/>
+        <variable name="K_TRPN" public_interface="in" units="per_fmol"/>
+        <variable name="K_TRPN_Ca" public_interface="in" units="per_fmol"/>
+        <variable name="K_Ca_i" public_interface="in" units="per_fmol"/>
+        <variable name="kappa_b1" public_interface="in" units="fmol_per_sec"/>
+        <variable name="q_TRPN" public_interface="in" units="fmol"/>
+        <variable name="q_TRPN_Ca" public_interface="in" units="fmol"/>
+        <variable name="q_Ca_i" public_interface="in" units="fmol"/>
+        <variable name="mu_TRPN" units="J_per_mol"/>
+        <variable name="mu_TRPN_Ca" units="J_per_mol"/>
+        <variable name="mu_Ca_i" units="J_per_mol"/>
+        <variable name="Af_b1" units="J_per_mol"/>
+        <variable name="Ar_b1" units="J_per_mol"/>
+        <variable name="v_b1" public_interface="out" units="fmol_per_sec"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>mu_TRPN</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_TRPN</ci>
+                            <ci>q_TRPN</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_TRPN_Ca</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_TRPN_Ca</ci>
+                            <ci>q_TRPN_Ca</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>mu_Ca_i</ci>
+                <apply>
+                    <times/>
+                    <ci>R</ci>
+                    <ci>T</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <times/>
+                            <ci>K_Ca_i</ci>
+                            <ci>q_Ca_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>v_b1</ci>
+                <apply>
+                    <times/>
+                    <ci>kappa_b1</ci>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Af_b1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <ci>Ar_b1</ci>
+                                <apply>
+                                    <times/>
+                                    <ci>R</ci>
+                                    <ci>T</ci>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Af_b1</ci>
+                <apply>
+                    <plus/>
+                    <ci>mu_Ca_i</ci>
+                    <ci>mu_TRPN</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>Ar_b1</ci>
+                <ci>mu_TRPN_Ca</ci>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="TRPN_buffer" component_2="TRPN_parameters"/>
+        <map_variables variable_1="K_TRPN" variable_2="K_TRPN"/>
+        <map_variables variable_1="K_TRPN_Ca" variable_2="K_TRPN_Ca"/>
+        <map_variables variable_1="K_Ca_i" variable_2="K_Ca_i"/>
+        <map_variables variable_1="kappa_b1" variable_2="kappa_b1"/>
+    </connection>
+    <connection>
+        <map_components component_1="TRPN_buffer" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="t"/>
+        <map_variables variable_1="R" variable_2="R"/>
+        <map_variables variable_1="T" variable_2="T"/>
+        <map_variables variable_1="q_TRPN" variable_2="q_TRPN"/>
+        <map_variables variable_1="q_TRPN_Ca" variable_2="q_TRPN_Ca"/>
+        <map_variables variable_1="q_Ca_i" variable_2="q_Ca_i"/>
+        <map_variables variable_1="v_b1" variable_2="v_b1"/>
+    </connection>
+</model>
