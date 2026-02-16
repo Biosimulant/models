@@ -1,0 +1,26 @@
+# Layer 5 Continuous Accommodating Chandelier Cell (1)
+
+**Source**: [neuroml_db](https://neuroml-db.org/model_info?model_id=NMLCL000562)
+**Standard**: neuroml
+**Authors**: neuroml_db
+
+## Description
+
+Faithful wrapper of upstream NEUROML model.
+
+
+## Usage
+
+This model was auto-generated from the neuroml_db repository.
+
+```yaml
+# In a space.yaml wiring file:
+models:
+  - repo: Biosimulant/models
+    alias: model
+    manifest_path: models/neuroscience-neuroml-layer-5-continuous-accommodating-chandelier-cell-nmlcl000562-model/model.yaml
+```
+
+## Tags
+
+neuroscience, neuroml, neuroml_db, auto-generated, neuroml-db, cl
