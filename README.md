@@ -37,7 +37,7 @@ This repository is a lightweight index for the split `models-*` repositories.
 | [models-neuroscience-other-05](https://github.com/Biosimulant/models-neuroscience-other-05) | neuroscience (other shard 5/6) | Non-NeuroML neuroscience models, shard 5 of 6. |
 | [models-neuroscience-other-06](https://github.com/Biosimulant/models-neuroscience-other-06) | neuroscience (other shard 6/6) | Non-NeuroML neuroscience models, shard 6 of 6. |
 | [models-neuroscience-sbml-cellml](https://github.com/Biosimulant/models-neuroscience-sbml-cellml) | neuroscience (sbml + cellml standards) | Neuroscience models encoded in SBML/CellML standards. |
-| [models-observability](https://github.com/Biosimulant/models-observability) | observability (monitor bundle) | Reusable monitor/metrics/comparison modules for spaces. |
+| [models-observability](https://github.com/Biosimulant/models-observability) | observability | Cross-domain monitor models (state comparison and metrics) for wiring into any space. |
 | [models-oncology](https://github.com/Biosimulant/models-oncology) | oncology | Tumor biology, growth, and treatment-response models. |
 | [models-pharmacology](https://github.com/Biosimulant/models-pharmacology) | pharmacology | PK/PD and drug effect mechanism models. |
 | [models-physiology](https://github.com/Biosimulant/models-physiology) | physiology | Organ and whole-system physiological process models. |
