@@ -1,8 +1,6 @@
 # models (Meta Index)
 
-This repository is now a lightweight index for the split `models-*` repositories.
-
-It does not contain the old monolithic `models/` content anymore. Use the repositories below as the source of truth for model manifests and spaces.
+This repository is a lightweight index for the split `models-*` repositories.
 
 ## Repository Index
 
