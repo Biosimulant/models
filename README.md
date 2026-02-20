@@ -44,9 +44,3 @@ This repository is a lightweight index for the split `models-*` repositories.
 | [models-signaling](https://github.com/Biosimulant/models-signaling) | signaling | Intracellular signaling pathways and cascade dynamics. |
 | [models-systemsbiology](https://github.com/Biosimulant/models-systemsbiology) | systemsbiology | Broad mechanistic systems biology network models. |
 | [models-virtualcell](https://github.com/Biosimulant/models-virtualcell) | virtualcell | Virtual cell state/expression and perturbation pipelines. |
-
-## Clone Example
-
-```bash
-git clone git@github.com:Biosimulant/models-observability.git
-```
