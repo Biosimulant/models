@@ -2,6 +2,14 @@
 
 This repository is a lightweight index for the split `models-*` repositories.
 
+## Security Scanning
+
+- CI runs `gitleaks` on every push and pull request via `.github/workflows/security.yml`.
+- Local commits can be scanned with pre-commit:
+  - `pip install pre-commit detect-secrets`
+  - `pre-commit install`
+  - `pre-commit run -a`
+
 ## Repository Index
 
 | Repository | Domain | What it's about |
@@ -37,3 +45,8 @@ This repository is a lightweight index for the split `models-*` repositories.
 | [models-systemsbiology](https://github.com/Biosimulant/models-systemsbiology) | systemsbiology | Broad mechanistic systems biology network models. |
 | [models-virtualcell](https://github.com/Biosimulant/models-virtualcell) | virtualcell | Virtual cell state/expression and perturbation pipelines. |
 
+## Clone Example
+
+```bash
+git clone git@github.com:Biosimulant/models-observability.git
+```
